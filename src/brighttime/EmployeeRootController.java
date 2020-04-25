@@ -23,7 +23,7 @@ public class EmployeeRootController implements Initializable {
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
+        System.out.println("Test after gitignore update");
         label.setText("Hello World!");
     }
     
