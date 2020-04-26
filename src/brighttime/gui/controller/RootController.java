@@ -5,34 +5,85 @@
  */
 package brighttime.gui.controller;
 
+import brighttime.BrightTime;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 /**
  *
  * @author rados
  */
 public class RootController implements Initializable {
-    
+
+    private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
+    private final String CREATOR_MODULE = "/brighttime/gui/view/Creator.fxml";
+    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
+
     @FXML
-    private Label label;
+    private AnchorPane anchorPaneRoot;
     @FXML
-    private Button button;
-    
+    private BorderPane rootBorderPane;
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("Test after gitignore update");
-        label.setText("Hello World!");
-    }
-    
+    private Button btnTimeTracker;
+    @FXML
+    private Button btnCreator;
+    @FXML
+    private Button btnOverview;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        loadModule(TIME_TRACKER_MODULE);
+    }
+
+    public void loadModule(String module) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(BrightTime.class.getResource(module));
+            Parent root = fxmlLoader.load();
+
+            if (module.equals(TIME_TRACKER_MODULE)) {
+                TimeTrackerController controller = fxmlLoader.getController();
+                controller.initializeView();
+            } else if (module.equals(CREATOR_MODULE)) {
+                CreatorController controller = fxmlLoader.getController();
+                controller.initializeView();
+            } else if (module.equals(OVERVIEW_MODULE)) {
+                OverviewController controller3 = fxmlLoader.getController();
+                controller3.initializeView();
+            }
+            rootBorderPane.setCenter(root);
+        } catch (IOException ex) {
+            Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @FXML
+    private void loadTimeTrackerModule(ActionEvent event) {
+        loadModule(TIME_TRACKER_MODULE);
+    }
+
+    @FXML
+    private void loadCreatorModule(ActionEvent event) {
+        loadModule(CREATOR_MODULE);
+
+    }
+
+    @FXML
+    private void loadOverviewModule(ActionEvent event) {
+        loadModule(OVERVIEW_MODULE);
+    }
+
 }

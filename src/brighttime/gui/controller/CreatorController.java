@@ -23,5 +23,10 @@ public class CreatorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    void initializeView() {
+        System.out.println("in Creator page");
+        
+    }
     
 }

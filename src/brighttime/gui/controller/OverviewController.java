@@ -23,5 +23,10 @@ public class OverviewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    void initializeView() {
+        System.out.println("in Overview page");
+        
+    }
     
 }

@@ -24,4 +24,8 @@ public class TimeTrackerController implements Initializable {
         // TODO
     }    
     
+    public void initializeView(){
+        System.out.println("in Time Tracker page");
+    }
+    
 }
