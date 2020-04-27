@@ -49,18 +49,11 @@ public class TaskDAO implements ITaskDAO {
                 Time duration = rs.getTime("duration");
                 tasks.add(new Task(id, name, clientName, projectName, duration));
             }
-
+            // TODO: Exception handling.
         } catch (SQLServerException ex) {
             Logger.getLogger(TaskDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(TaskDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        for (Task task : tasks) {
-            System.out.println(task.getId());
-            System.out.println(task.getName());
-            System.out.println(task.getProjectName());
-            System.out.println(task.getClientName());
-            System.out.println(task.getDuration());
         }
         return tasks;
     }

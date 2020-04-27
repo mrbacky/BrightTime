@@ -9,6 +9,11 @@ import java.util.List;
  */
 public interface ITaskDAO {
 
+    /**
+     * Gets the tasks created on the current day.
+     *
+     * @return A list of tasks.
+     */
     List<Task> getTasksForCurrentDay();
 
 }
