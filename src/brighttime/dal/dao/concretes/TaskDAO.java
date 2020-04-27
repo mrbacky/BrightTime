@@ -2,9 +2,9 @@ package brighttime.dal.dao.concretes;
 
 import brighttime.be.Task;
 import brighttime.dal.ConnectionManager;
+import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.ITaskDAO;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -29,7 +27,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public List<Task> getTasksForCurrentDay() {
+    public List<Task> getTasksForCurrentDay() throws DalException {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT T.id, T.name, T.dateCreated, T.duration, P.name AS projectName, C.name AS clientName "
                 + "FROM Task AS T "
@@ -49,11 +47,9 @@ public class TaskDAO implements ITaskDAO {
                 Time duration = rs.getTime("duration");
                 tasks.add(new Task(id, name, clientName, projectName, duration));
             }
-            // TODO: Exception handling.
-        } catch (SQLServerException ex) {
-            Logger.getLogger(TaskDAO.class.getName()).log(Level.SEVERE, null, ex);
+            // TODO: Check exception handling.       
         } catch (SQLException ex) {
-            Logger.getLogger(TaskDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DalException("Could not get the tasks for today. " + ex.getMessage());
         }
         return tasks;
     }
