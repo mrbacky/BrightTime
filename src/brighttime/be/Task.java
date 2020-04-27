@@ -15,61 +15,95 @@ public class Task {
     private final StringProperty name = new SimpleStringProperty();
     private final StringProperty clientName = new SimpleStringProperty();
     private final StringProperty projectName = new SimpleStringProperty();
+    private final IntegerProperty duration = new SimpleIntegerProperty();
+    private final StringProperty stringDuration = new SimpleStringProperty();
+    
     // add duration property
-
-    public Task(int id, String name, String clientName, String projectName) {
+    public Task(int id, String name, String projectName, String clientName, int duration) {
         this.id.set(id);
         this.name.set(name);
-        this.clientName.set(clientName);
         this.projectName.set(projectName);
+        this.clientName.set(clientName);
+        this.duration.set(duration);
+        
     }
 
-    private int getId() {
+    @Override
+    public String toString() {
+        String output = id.get() + " " + name.get() + " " + projectName.get() + " " + clientName.get() + " " + duration.get();
+        return output;
+    }
+
+    public int getId() {
         return id.get();
     }
 
-    private void setId(int value) {
+    public void setId(int value) {
         id.set(value);
     }
 
-    private IntegerProperty idProperty() {
+    public IntegerProperty idProperty() {
         return id;
     }
 
-    private String getName() {
+    public String getName() {
         return name.get();
     }
 
-    private void setName(String value) {
+    public void setName(String value) {
         name.set(value);
     }
 
-    private StringProperty nameProperty() {
+    public StringProperty nameProperty() {
         return name;
     }
 
-    private String getClientName() {
+    public String getClientName() {
         return clientName.get();
     }
 
-    private void setClientName(String value) {
+    public void setClientName(String value) {
         clientName.set(value);
     }
 
-    private StringProperty clientNameProperty() {
+    public StringProperty clientNameProperty() {
         return clientName;
     }
 
-    private String getProjectName() {
+    public String getProjectName() {
         return projectName.get();
     }
 
-    private void setProjectName(String value) {
+    public void setProjectName(String value) {
         projectName.set(value);
     }
 
-    private StringProperty projectNameProperty() {
+    public StringProperty projectNameProperty() {
         return projectName;
+    }
+
+    public int getDuration() {
+        return duration.get();
+    }
+
+    public void setDuration(int value) {
+        duration.set(value);
+    }
+
+    public IntegerProperty durationProperty() {
+        return duration;
+    }
+
+    public String getStringDuration() {
+        return stringDuration.get();
+    }
+
+    public void setStringDuration(String value) {
+        stringDuration.set(value);
+    }
+
+    public StringProperty stringDurationProperty() {
+        return stringDuration;
     }
 
 }

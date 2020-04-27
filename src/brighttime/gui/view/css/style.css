@@ -4,13 +4,65 @@
     Author     : rados
 */
 
+#apTopBar{
+    -fx-background-color: #2368A2;
+    -fx-background-radius :  0 0 0 0;
+
+}
+
 .anchorPaneRoot{
-    
-    -fx-background-color: #66B2F1;
+
+    -fx-background-color: #2368A2;
+    -fx-border-top-color: black;
+    -fx-border-top: #F1C54C;
+    -fx-background-radius :  0 0 0 0;
+
+}
+
+hBoxExitButton{
+
 }
 
 .rootButtons{
     -fx-background-color: transparent;
-    
-    
+
+
 }
+
+#vBoxTasks{
+    -fx-background-color: #F1C54C;
+    -fx-alignment: TOP_CENTER;
+    -fx-padding: 20 ;
+
+}
+
+#lblAllTasks{
+    -fx-padding: 10px;
+
+}
+
+#hBoxTaskItem{
+    -fx-background-color: transparent;
+    -fx-background-radius :  10 10 10 10;
+    border-bottom-color: black; 
+
+}
+
+#btnPlayPause{
+    -fx-background-color: transparent;
+
+}
+
+.taskItemTextFields{
+    /*    -fx-background-color: #ffdc44;*/
+    -fx-background-radius :  10 10 10 10;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+
+
+
+
+
+

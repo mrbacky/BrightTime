@@ -10,18 +10,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
  * @author rados
  */
 public class BrightTime extends Application {
+
+    public static Stage stage = null;
     
+
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/brighttime/gui/view/Root.fxml"));
+        
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(BrightTime.class.getResource("/brighttime/gui/view/Root.fxml"));
+        Parent root = loader.load();
+
         Scene scene = new Scene(root);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.isResizable();
         stage.setScene(scene);
+        this.stage = stage;
         stage.show();
     }
 
@@ -31,5 +42,5 @@ public class BrightTime extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

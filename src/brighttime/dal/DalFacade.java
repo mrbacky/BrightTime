@@ -5,10 +5,19 @@
  */
 package brighttime.dal;
 
+import brighttime.be.Task;
+import java.util.List;
+
 /**
  *
  * @author rados
  */
 public interface DalFacade {
+
+    /**
+     *
+     * @return
+     */
+    public List<Task> loadTasks();
     
 }

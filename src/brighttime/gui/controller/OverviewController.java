@@ -5,6 +5,7 @@
  */
 package brighttime.gui.controller;
 
+import brighttime.gui.model.ModelFacade;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -16,17 +17,23 @@ import javafx.fxml.Initializable;
  */
 public class OverviewController implements Initializable {
 
+    private ModelFacade modelManager;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     void initializeView() {
         System.out.println("in Overview page");
-        
+
     }
-    
+
+    void injectModelManager(ModelFacade modelManager) {
+        this.modelManager = modelManager;
+    }
+
 }

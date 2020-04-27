@@ -5,10 +5,18 @@
  */
 package brighttime.bll;
 
+import brighttime.be.Task;
+import java.util.List;
+
 /**
  *
  * @author rados
  */
 public interface BllFacade {
+
+    public List<Task> loadTasks();
     
+    public String convertDuration(int duration);
+    
+    public int convertDuration(String duration);
 }

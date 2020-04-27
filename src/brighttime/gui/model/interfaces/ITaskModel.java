@@ -5,10 +5,17 @@
  */
 package brighttime.gui.model.interfaces;
 
+import brighttime.be.Task;
+import javafx.collections.ObservableList;
+
 /**
  *
  * @author rados
  */
 public interface ITaskModel {
-    
+
+    public void loadTasks();
+
+    public ObservableList<Task> getTasks();
+
 }
