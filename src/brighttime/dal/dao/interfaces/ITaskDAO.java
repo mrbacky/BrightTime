@@ -2,7 +2,6 @@ package brighttime.dal.dao.interfaces;
 
 import brighttime.be.Task;
 import brighttime.dal.DalException;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -12,12 +11,11 @@ import java.util.List;
 public interface ITaskDAO {
 
     /**
-     * Gets the tasks created on the current day.
+     * Gets the tasks logged between today and 30 days ago.
      *
-     * @param date The current date.
      * @return A list of tasks.
      * @throws brighttime.dal.DalException
      */
-    List<Task> getTasksForCurrentDay(LocalDate date) throws DalException;
+    List<Task> getTasks() throws DalException;
 
 }
