@@ -1,36 +1,31 @@
 package brighttime.be;
 
+import java.time.LocalDateTime;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import java.time.LocalDateTime;
-import java.util.List;
 import javafx.util.Duration;
 
 /**
  *
- * @author rado
+ * @author annem
  */
-public class Task {
+public class TaskEntry {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
-    private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
-    private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
 
-    public Task(int id, String description, Project project, LocalDateTime startTime, LocalDateTime endTime, List<TaskEntry> taskEntryList) {
+    public TaskEntry(int id, String description, LocalDateTime startTime, LocalDateTime endTime) {
         this.id.set(id);
         this.description.set(description);
-        this.project.set(project);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
-        this.taskEntryList.set(taskEntryList);
     }
 
     public int getId() {
@@ -57,18 +52,6 @@ public class Task {
         return description;
     }
 
-    public Project getProject() {
-        return project.get();
-    }
-
-    public void setProject(Project value) {
-        project.set(value);
-    }
-
-    public ObjectProperty projectProperty() {
-        return project;
-    }
-
     public LocalDateTime getStartTime() {
         return startTime.get();
     }
@@ -91,18 +74,6 @@ public class Task {
 
     public ObjectProperty endTimeProperty() {
         return endTime;
-    }
-
-    public List<TaskEntry> getTaskEntryList() {
-        return taskEntryList.get();
-    }
-
-    public void setTaskEntryList(List value) {
-        taskEntryList.set(value);
-    }
-
-    public ObjectProperty taskEntryListProperty() {
-        return taskEntryList;
     }
 
     public Duration getDuration() {
