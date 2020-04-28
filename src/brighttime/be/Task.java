@@ -24,10 +24,11 @@ public class Task {
     private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
 
-    public Task(int id, String description, Project project) {
+    public Task(int id, String description, Project project, List<TaskEntry> taskEntries) {
         this.id.set(id);
         this.description.set(description);
         this.project.set(project);
+        this.taskEntryList.set(taskEntries);
     }
 
     public int getId() {
