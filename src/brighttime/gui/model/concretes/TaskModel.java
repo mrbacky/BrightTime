@@ -24,9 +24,6 @@ public class TaskModel implements ITaskModel {
     @Override
     public void loadTasks() {
         List<Task> allTasks = bllManager.loadTasks();
-        for (Task task : allTasks) {
-            task.setStringDuration(bllManager.convertDuration(task.getDuration()));
-        }
         taskList.addAll(allTasks);
         
     }

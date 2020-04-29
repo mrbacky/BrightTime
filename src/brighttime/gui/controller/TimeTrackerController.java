@@ -6,6 +6,7 @@
 package brighttime.gui.controller;
 
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelFacade;
 import brighttime.gui.model.concretes.TaskModel;
 import brighttime.gui.model.interfaces.ITaskModel;
@@ -35,6 +36,7 @@ import javafx.scene.layout.VBox;
 public class TimeTrackerController implements Initializable {
 
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
+    private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
 
     @FXML
     private VBox vBoxTaskItems;
@@ -51,16 +53,39 @@ public class TimeTrackerController implements Initializable {
         this.modelManager = modelManager;
     }
 
-    public void initializeView() {
+    public void initTasks() {
         modelManager.loadTasks();
-        ObservableList<Task> taskList = modelManager.getTasks();
+        List<Task> taskList = modelManager.getTasks();
+
         for (Task singleTask : taskList) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
                 Parent root = fxmlLoader.load();
                 TaskItemController controller = fxmlLoader.getController();
                 controller.setTask(singleTask);
+
                 vBoxTaskItems.getChildren().add(root);
+                List<TaskEntry> taskEntryList = singleTask.getTaskEntryList();
+
+                initTaskEntries(taskEntryList);
+
+                controller.setTaskTotalInterval(singleTask);
+            } catch (IOException ex) {
+                Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void initTaskEntries(List<TaskEntry> taskEntryList) {
+
+        for (TaskEntry taskEntry : taskEntryList) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
+                Parent root = fxmlLoader.load();
+                TaskEntryItemController controller = fxmlLoader.getController();
+                controller.setTaskEntry(taskEntry);
+                vBoxTaskItems.getChildren().add(root);
+
             } catch (IOException ex) {
                 Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
             }

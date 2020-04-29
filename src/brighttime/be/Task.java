@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import java.time.LocalDateTime;
 import java.util.List;
-import javafx.util.Duration;
+import java.time.Duration;
 
 /**
  *
@@ -21,8 +21,8 @@ public class Task {
     private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
-    private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
+    private final StringProperty stringDuration = new SimpleStringProperty();
 
     public Task(int id, String description, Project project, LocalDateTime startTime, LocalDateTime endTime, List<TaskEntry> taskEntryList) {
         this.id.set(id);
@@ -105,16 +105,32 @@ public class Task {
         return taskEntryList;
     }
 
-    public Duration getDuration() {
-        return duration.get();
+    public String getStringDuration(List<TaskEntry> taskEntryList) {
+        int totalDuration = 0;
+        for (TaskEntry taskEntry : taskEntryList) {
+            totalDuration = (int) (totalDuration + taskEntry.getDuration().toSeconds());
+        }
+        return sec_To_Format(totalDuration);
     }
 
-    public void setDuration(Duration value) {
-        duration.set(value);
+    public void setStringDuration(String value) {
+        stringDuration.set(value);
     }
 
-    public ObjectProperty durationProperty() {
-        return duration;
+    public StringProperty stringDurationProperty() {
+        return stringDuration;
+    }
+
+    public String sec_To_Format(int sec) {
+        int hours, mins, secs;
+        mins = (int) (sec / 60);
+        while (mins >= 60) {
+            mins = mins % 60;
+        }
+        hours = (int) ((sec / 60) / 60);
+        secs = sec % 60;
+        String stringTime = String.format("%02d:%02d:%02d", hours, mins, secs);
+        return stringTime;
     }
 
 }

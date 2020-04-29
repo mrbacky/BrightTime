@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane prefHeight="50.0" prefWidth="550.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
+   <children>
+      <HBox fx:id="hBoxTaskEntryElements" alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="10.0" styleClass="hBoxTaskItem" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+         <children>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldTaskEntryDesc" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldStartTime" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldEndTime" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -4,11 +4,7 @@
     Author     : rados
 */
 
-#apTopBar{
-    -fx-background-color: #2368A2;
-    -fx-background-radius :  0 0 0 0;
 
-}
 
 .anchorPaneRoot{
 
@@ -19,9 +15,7 @@
 
 }
 
-hBoxExitButton{
 
-}
 
 .rootButtons{
     -fx-background-color: transparent;
@@ -41,9 +35,9 @@ hBoxExitButton{
 
 }
 
-#hBoxTaskItem{
-    -fx-background-color: transparent;
-    -fx-background-radius :  10 10 10 10;
+.hBoxTaskItem{
+    -fx-background-color: grey;
+    -fx-background-radius :  5 5 5 5;
     border-bottom-color: black; 
 
 }
@@ -55,7 +49,7 @@ hBoxExitButton{
 
 .taskItemTextFields{
     /*    -fx-background-color: #ffdc44;*/
-    -fx-background-radius :  10 10 10 10;
+    -fx-background-radius :  5 5 5 5;
     -fx-background-color: white;
     -fx-text-fill: black;
 }

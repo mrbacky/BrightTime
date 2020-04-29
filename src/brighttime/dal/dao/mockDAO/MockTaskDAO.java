@@ -1,9 +1,14 @@
 package brighttime.dal.dao.mockDAO;
 
+import brighttime.be.Client;
+import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.dal.dao.interfaces.ITaskDAO;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.util.Duration;
 
 /**
  *
@@ -11,29 +16,48 @@ import java.util.List;
  */
 public class MockTaskDAO implements ITaskDAO {
 
+    private List<TaskEntry> taskEntries1 = new ArrayList<>();
+    private List<TaskEntry> taskEntries2 = new ArrayList<>();
+    private Project brightTime;
+    private Client grumsen;
+
     public MockTaskDAO() {
+        createClient();
+        createProject();
+        createUITaskEntries();
+        sendEmailTaskEntries();
+
+    }
+
+    private void createClient() {
+        grumsen = new Client(0, "Grumsen Development");
+    }
+
+    private void createProject() {
+        brightTime = new Project(0, "BrightTime", grumsen);
+    }
+
+    private void createUITaskEntries() {
+
+        taskEntries1.add(new TaskEntry(0, "create UI for App", LocalDateTime.parse("2020-04-28T08:00:00"), LocalDateTime.parse("2020-04-28T09:00:00")));
+        taskEntries1.add(new TaskEntry(1, "create UI for App", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:20:00")));
+        taskEntries1.add(new TaskEntry(2, "create UI for App", LocalDateTime.parse("2020-04-28T15:00:00"), LocalDateTime.parse("2020-04-28T18:15:00")));
+
+    }
+
+    private void sendEmailTaskEntries() {
+        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:00:00")));
+        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T17:00:00"), LocalDateTime.parse("2020-04-28T17:00:12")));
+        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
+        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
 
     }
 
     @Override
     public List<Task> loadTasks() {
         List<Task> taskList = new ArrayList<>();
-        taskList.add(new Task(1, "create UI", "BrightTime", "Grumsen Development", 9819121));
-        taskList.add(new Task(2, "tidy up apartmen", "Home", "Me", 65111726));
-        taskList.add(new Task(3, "code all night", "BrightTime", "Grumsen Development", 15654));
-        taskList.add(new Task(4, "write email", "PROJECT X", "CLIENT X", 15654));
-        taskList.add(new Task(5, "create DB", "BrightTime", "Grumsen Development", 26281));
-        taskList.add(new Task(6, "buy newspapers", "Care+", "Housing Assocation", 15654));
-        taskList.add(new Task(7, "build project 74", "project 74", "Mike Wazowski", 15654));
-        taskList.add(new Task(8, "Hold my bear", "lets drink", "alcohol", 15654));
-        taskList.add(new Task(9, "Do homework", "exam", "easv", 125654));
-        taskList.add(new Task(10, "do dishes", "Home", "Me", 457501));
-        taskList.add(new Task(11, "do laundry", "Home", "Me", 154654));
-        taskList.add(new Task(12, "buy cat", "Home", "Me", 152654));
-        taskList.add(new Task(13, "barber visit", "Me", "Rado", 477878));
-        taskList.add(new Task(14, "buy groceries", "Food", "Me", 45752752));
-        taskList.add(new Task(15, "tidy up emails", "PC work", "Me", 4578));
-        taskList.add(new Task(16, "Buy new car", "Me", "Rado", 3725755));
+        taskList.add(new Task(0, "create UI for App", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries1));
+        taskList.add(new Task(1, "send email", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries2));
 
         return taskList;
     }

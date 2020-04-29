@@ -49,8 +49,6 @@ public class RootController implements Initializable {
 
     private double xOffSet = 0;
     private double yOffSet = 0;
-    @FXML
-    private AnchorPane apTopBar;
 
     public RootController() {
         modelManager = new ModelManager();
@@ -59,7 +57,6 @@ public class RootController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setStageDragable();
     }
 
     public void loadModule(String module) {
@@ -71,7 +68,7 @@ public class RootController implements Initializable {
             if (module.equals(TIME_TRACKER_MODULE)) {
                 TimeTrackerController controller = fxmlLoader.getController();
                 controller.injectModelManager(modelManager);
-                controller.initializeView();
+                controller.initTasks();
             } else if (module.equals(CREATOR_MODULE)) {
                 CreatorController controller = fxmlLoader.getController();
                 controller.initializeView();
@@ -106,34 +103,10 @@ public class RootController implements Initializable {
         loadModule(OVERVIEW_MODULE);
     }
 
-    @FXML
-    private void minimizeWindow(MouseEvent event) {
-        BrightTime.stage.setIconified(true);
-    }
+    
 
-    @FXML
-    private void exitWindow(MouseEvent event) {
-        System.exit(0);
-    }
+    
 
-    private void setStageDragable() {
-        apTopBar.setOnMousePressed((event) -> {
-            xOffSet = event.getSceneX();
-            yOffSet = event.getSceneY();
-        });
-        apTopBar.setOnMouseDragged(event -> {
-            BrightTime.stage.setX(event.getScreenX() - xOffSet);
-            BrightTime.stage.setY(event.getScreenY() - yOffSet);
-            BrightTime.stage.setOpacity(0.8f);
-        });
-        apTopBar.setOnDragDone(event -> {
-            BrightTime.stage.setOpacity(1.0f);
-
-        });
-        apTopBar.setOnMouseReleased(event -> {
-            BrightTime.stage.setOpacity(1.0f);
-        });
-
-    }
+    
 
 }

@@ -9,19 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-
 <AnchorPane prefHeight="50.0" prefWidth="550.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
    <children>
-      <HBox id="hBoxTaskItem" fx:id="hBoxItemElements" alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+      <HBox fx:id="hBoxItemElements" alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="5.0" styleClass="hBoxTaskItem" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
                   <TextField fx:id="textFieldTaskName" styleClass="taskItemTextFields" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="textFieldTaskProjectName" styleClass="taskItemTextFields" />
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
@@ -31,7 +25,22 @@
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="textFieldTaskDuration" styleClass="taskItemTextFields" />
+                  <TextField fx:id="textFieldTaskProjectName" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldStartTime" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldEndTime" styleClass="taskItemTextFields" />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" />
                </children>
             </StackPane>
             <StackPane prefHeight="30.0" prefWidth="80.0">
@@ -49,7 +58,7 @@
             </StackPane>
          </children>
          <padding>
-            <Insets left="10.0" />
+            <Insets left="5.0" right="5.0" />
          </padding>
       </HBox>
    </children>

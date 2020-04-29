@@ -6,7 +6,10 @@
 package brighttime.gui.controller;
 
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -23,6 +26,8 @@ import javafx.scene.layout.Region;
  */
 public class TaskItemController implements Initializable {
 
+    private static final String DATE_TIME_FORMAT = "HH:mm";
+
     @FXML
     private HBox hBoxItemElements;
     @FXML
@@ -32,9 +37,13 @@ public class TaskItemController implements Initializable {
     @FXML
     private TextField textFieldTaskClientName;
     @FXML
-    private TextField textFieldTaskDuration;
-    @FXML
     private Button btnPlayPause;
+    @FXML
+    private TextField textFieldStartTime;
+    @FXML
+    private TextField textFieldEndTime;
+    @FXML
+    private TextField textFieldDuration;
 
     /**
      * Initializes the controller class.
@@ -44,16 +53,42 @@ public class TaskItemController implements Initializable {
         textFieldTaskName.setEditable(false);
         textFieldTaskProjectName.setEditable(false);
         textFieldTaskClientName.setEditable(false);
-        textFieldTaskDuration.setEditable(false);
-
+        textFieldDuration.setEditable(false);
+        textFieldStartTime.setEditable(false);
+        textFieldEndTime.setEditable(false);
     }
 
     void setTask(Task task) {
 
-        textFieldTaskName.textProperty().bind(Bindings.createStringBinding(() -> task.getName(), task.nameProperty()));
-        textFieldTaskProjectName.textProperty().bind(Bindings.createStringBinding(() -> task.getProjectName(), task.projectNameProperty()));
-        textFieldTaskClientName.textProperty().bind(Bindings.createStringBinding(() -> task.getClientName(), task.clientNameProperty()));
-        textFieldTaskDuration.textProperty().bind(Bindings.createStringBinding(() -> task.getStringDuration(), task.stringDurationProperty()));
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+
+        textFieldTaskName.textProperty().bind(Bindings.createStringBinding(()
+                -> task.getDescription(), task.descriptionProperty()));
+        textFieldTaskClientName.textProperty().bind(Bindings.createStringBinding(()
+                -> task.getProject().getClient().getName(), task.getProject().getClient().nameProperty()));
+        textFieldTaskProjectName.textProperty().bind(Bindings.createStringBinding(()
+                -> task.getProject().getName(), task.getProject().nameProperty()));
+        textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(getTaskStartTime(task)), task.startTimeProperty()));
+        textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(getTaskEndTime(task)), task.endTimeProperty()));
+
+    }
+
+    private LocalDateTime getTaskStartTime(Task task) {
+        LocalDateTime taskStartTime = task.getTaskEntryList().get(0).getStartTime();
+        return taskStartTime;
+    }
+
+    private LocalDateTime getTaskEndTime(Task task) {
+        TaskEntry latestTaskEntry = (task.getTaskEntryList()).get(task.getTaskEntryList().size() - 1);
+        LocalDateTime taskEndTime = latestTaskEntry.getEndTime();
+        return taskEndTime;
+    }
+
+    void setTaskTotalInterval(Task task) {
+        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
+                -> task.getStringDuration(task.getTaskEntryList()), task.stringDurationProperty()));
 
     }
 

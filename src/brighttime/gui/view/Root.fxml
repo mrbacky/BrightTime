@@ -2,12 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="700.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
@@ -52,42 +50,6 @@
                   </Button>
                </children></AnchorPane>
          </left>
-         <top>
-            <AnchorPane id="apTopBar" fx:id="apTopBar" prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox id="hBoxExitButton" prefHeight="30.0" prefWidth="30.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <children>
-                        <Button contentDisplay="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onMouseClicked="#minimizeWindow" prefHeight="30.0" prefWidth="30.0" styleClass="rootButtons">
-                           <graphic>
-                              <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@assets/minimize_window_48px.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button contentDisplay="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onMouseClicked="#exitWindow" prefHeight="30.0" prefWidth="30.0" styleClass="rootButtons">
-                           <graphic>
-                              <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@assets/close_window_48px.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children></HBox>
-                  <HBox id="hBoxLogo" alignment="CENTER" prefHeight="30.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@assets/sun_48px.png" />
-                           </image>
-                        </ImageView>
-                        <Label text="BrightTime" textFill="WHITE" />
-                     </children></HBox>
-               </children>
-            </AnchorPane>
-         </top>
       </BorderPane>
    </children>
 </AnchorPane>

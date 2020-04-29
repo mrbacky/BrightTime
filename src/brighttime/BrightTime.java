@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -18,21 +19,19 @@ import javafx.stage.StageStyle;
  */
 public class BrightTime extends Application {
 
-    public static Stage stage = null;
-    
-
     @Override
     public void start(Stage stage) throws Exception {
-        
+
+        Image icon = new Image(getClass().getResourceAsStream("/brighttime/gui/view/assets/sun_48px.png"));
+        stage.getIcons().add(icon);
+        stage.setTitle("BrightTime");
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(BrightTime.class.getResource("/brighttime/gui/view/Root.fxml"));
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.isResizable();
         stage.setScene(scene);
-        this.stage = stage;
         stage.show();
     }
 
