@@ -11,6 +11,13 @@ import java.util.List;
  */
 public interface IProjectDAO {
 
+    /**
+     * Gets the projects for a selected client.
+     *
+     * @param client
+     * @return A list of projects.
+     * @throws DalException
+     */
     List<Project> getProjects(Client client) throws DalException;
 
 }

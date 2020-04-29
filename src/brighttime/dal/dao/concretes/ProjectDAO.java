@@ -45,10 +45,6 @@ public class ProjectDAO implements IProjectDAO {
         } catch (SQLException ex) {
             throw new DalException("Could not get the projects. " + ex.getMessage());
         }
-        for (Project project : projects) {
-            System.out.println("projects: " + project.getId());
-            System.out.println("projects: " + project.getName());
-        }
         return projects;
     }
 
