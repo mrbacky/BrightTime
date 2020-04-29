@@ -53,7 +53,7 @@ public class TaskDAO implements ITaskDAO {
                 String clientName = rs.getString("clientName");
                 String projectName = rs.getString("projectName");
                 Time duration = rs.getTime("duration");
-                tasks.add(new Task(id, name, clientName, projectName, duration));
+                //tasks.add(new Task(id, name, clientName, projectName, duration));
             }
             // TODO: Check exception handling.       
         } catch (SQLException ex) {
