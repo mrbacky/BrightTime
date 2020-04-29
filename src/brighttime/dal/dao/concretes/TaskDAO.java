@@ -8,7 +8,6 @@ import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.ITaskDAO;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,8 +16,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -67,7 +64,7 @@ public class TaskDAO implements ITaskDAO {
             }
             // TODO: Check exception handling.       
         } catch (SQLException ex) {
-            throw new DalException("Could not get the tasks for today. " + ex.getMessage());
+            throw new DalException("Could not get the tasks for the Time Tracker. " + ex.getMessage());
         }
         for (Task task : tasks) {
             System.out.println("test: " + task.getId());
@@ -84,7 +81,7 @@ public class TaskDAO implements ITaskDAO {
         return tasks;
     }
 
-    private List<TaskEntry> getTaskEntries(int taskId, String description) {
+    private List<TaskEntry> getTaskEntries(int taskId, String description) throws DalException {
         List<TaskEntry> entries = new ArrayList<>();
         String sql = "SELECT TE.id, TE.startTime, TE.endTime "
                 + "FROM TaskEntry TE "
@@ -99,10 +96,8 @@ public class TaskDAO implements ITaskDAO {
                 LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
                 entries.add(new TaskEntry(id, description, startTime, endTime));
             }
-        } catch (SQLServerException ex) {
-            Logger.getLogger(TaskDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(TaskDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DalException("Could not get the task entries for the Time Tracker. " + ex.getMessage());
         }
         return entries;
     }
