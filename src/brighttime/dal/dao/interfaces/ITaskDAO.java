@@ -1,8 +1,7 @@
 package brighttime.dal.dao.interfaces;
 
-import brighttime.be.Task;
 import brighttime.dal.DalException;
-import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,6 +15,6 @@ public interface ITaskDAO {
      * @return A list of tasks.
      * @throws brighttime.dal.DalException
      */
-    List<Task> getTasks() throws DalException;
+    Map getTasksWithTaskEntries() throws DalException;
 
 }

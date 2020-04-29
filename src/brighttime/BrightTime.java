@@ -21,7 +21,7 @@ public class BrightTime extends Application {
         stage.setScene(scene);
         stage.show();
         t = new TaskDAO();
-        t.getTasks();
+        t.getTasksWithTaskEntries();
     }
 
     /**
