@@ -53,13 +53,34 @@ public class TaskDAO implements ITaskDAO {
                 String clientName = rs.getString("clientName");
                 String projectName = rs.getString("projectName");
                 Time duration = rs.getTime("duration");
-                tasks.add(new Task(id, name, clientName, projectName, duration));
+                //tasks.add(new Task(id, name, clientName, projectName, duration));
             }
             // TODO: Check exception handling.       
         } catch (SQLException ex) {
             throw new DalException("Could not get the tasks for today. " + ex.getMessage());
         }
         return tasks;
+    }
+
+    @Override
+    public Task createTask(Task task) throws DalException {
+        String sql = "INSERT INTO Task (description, lastUpdate, projectId) "
+                + "VALUES (?, SYSDATETIME(), ?)";
+        
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, task.getDescription());
+            pstmt.setInt(2, task.getProject().getId());
+            pstmt.executeUpdate();
+            
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                task.setId(rs.getInt(1));
+            }
+            return task;
+        } catch (SQLException ex) {
+            throw new DalException("Could not create the task. " + ex.getMessage());
+        }
     }
 
 }
