@@ -17,7 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
@@ -28,7 +27,7 @@ import javafx.scene.layout.BorderPane;
 public class RootController implements Initializable {
 
     private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
-    private final String CREATOR_MODULE = "/brighttime/gui/view/Creator.fxml";
+    private final String CREATOR_MODULE = "/brighttime/gui/view/CreateTask.fxml";
     private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
 
     @FXML
@@ -57,7 +56,7 @@ public class RootController implements Initializable {
                 TimeTrackerController controller = fxmlLoader.getController();
                 controller.initializeView();
             } else if (module.equals(CREATOR_MODULE)) {
-                CreatorController controller = fxmlLoader.getController();
+                CreateTaskController controller = fxmlLoader.getController();
                 controller.initializeView();
             } else if (module.equals(OVERVIEW_MODULE)) {
                 OverviewController controller3 = fxmlLoader.getController();

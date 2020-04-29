@@ -5,12 +5,24 @@
 */
 
 .anchorPaneRoot{
-    
+
     -fx-background-color: #66B2F1;
 }
 
 .rootButtons{
     -fx-background-color: transparent;
-    
-    
+}
+
+.cboClient{
+    -jfx-unfocus-color: transparent;
+    -jfx-focus-color: red;
+}
+
+.cboProject{
+    -jfx-unfocus-color: transparent;
+    -jfx-focus-color: blue;
+}
+
+.jfx-combo-box .cell {
+    -fx-text-fill: red;
 }

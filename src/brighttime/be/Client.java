@@ -43,4 +43,9 @@ public class Client {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }
