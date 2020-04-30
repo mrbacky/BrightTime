@@ -48,3 +48,7 @@
 .cboProject .cell{
     -fx-text-fill: #00A99D;
 }
+
+.button{
+    -fx-background-color: transparent;
+}
