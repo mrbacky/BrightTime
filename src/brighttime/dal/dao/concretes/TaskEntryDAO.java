@@ -45,7 +45,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             }
             return taskEntry;
         } catch (SQLException ex) {
-            throw new DalException("Could not create the task entry. " + ex.getMessage());
+            throw new DalException(ex.getMessage());
         }
     }
 

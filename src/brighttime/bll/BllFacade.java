@@ -3,6 +3,7 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import java.util.List;
 
 /**
@@ -39,4 +40,12 @@ public interface BllFacade {
      */
     Task createTask(Task task) throws BllException;
 
+    /**
+     * Creates a task entry in the database.
+     *
+     * @param taskEntry The task entry to be created.
+     * @return The created task entry.
+     * @throws BllException
+     */
+    TaskEntry createTaskEntry(TaskEntry taskEntry) throws BllException;
 }

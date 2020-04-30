@@ -3,12 +3,15 @@ package brighttime.dal;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.dal.dao.concretes.ClientDAO;
 import brighttime.dal.dao.concretes.ProjectDAO;
 import brighttime.dal.dao.concretes.TaskDAO;
+import brighttime.dal.dao.concretes.TaskEntryDAO;
 import brighttime.dal.dao.interfaces.IClientDAO;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
+import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,12 +23,14 @@ public class DalManager implements DalFacade {
 
     private final IClientDAO clientDAO;
     private final IProjectDAO projectDAO;
-    private ITaskDAO taskDAO;
+    private final ITaskDAO taskDAO;
+    private final ITaskEntryDAO taskEntryDAO;
 
     public DalManager() throws IOException {
         clientDAO = new ClientDAO();
         projectDAO = new ProjectDAO();
         taskDAO = new TaskDAO();
+        taskEntryDAO = new TaskEntryDAO();
     }
 
     @Override
@@ -50,6 +55,15 @@ public class DalManager implements DalFacade {
     public Task createTask(Task task) throws DalException {
         try {
             return taskDAO.createTask(task);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException {
+        try {
+            return taskEntryDAO.createTaskEntry(taskEntry);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
