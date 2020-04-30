@@ -43,7 +43,7 @@ public class ProjectDAO implements IProjectDAO {
             }
 
         } catch (SQLException ex) {
-            throw new DalException("Could not get the projects. " + ex.getMessage());
+            throw new DalException(ex.getMessage());
         }
         return projects;
     }

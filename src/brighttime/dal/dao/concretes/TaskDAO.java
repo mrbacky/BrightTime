@@ -66,20 +66,20 @@ public class TaskDAO implements ITaskDAO {
     public Task createTask(Task task) throws DalException {
         String sql = "INSERT INTO Task (description, lastUpdate, projectId) "
                 + "VALUES (?, SYSDATETIME(), ?)";
-        
+
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, task.getDescription());
             pstmt.setInt(2, task.getProject().getId());
             pstmt.executeUpdate();
-            
+
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 task.setId(rs.getInt(1));
             }
             return task;
         } catch (SQLException ex) {
-            throw new DalException("Could not create the task. " + ex.getMessage());
+            throw new DalException(ex.getMessage());
         }
     }
 

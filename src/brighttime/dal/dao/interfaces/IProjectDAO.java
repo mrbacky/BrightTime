@@ -14,7 +14,7 @@ public interface IProjectDAO {
     /**
      * Gets the projects for a selected client.
      *
-     * @param client
+     * @param client The selected client.
      * @return A list of projects.
      * @throws DalException
      */
