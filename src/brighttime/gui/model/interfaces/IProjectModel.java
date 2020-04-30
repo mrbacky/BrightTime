@@ -11,8 +11,20 @@ import javafx.collections.ObservableList;
  */
 public interface IProjectModel {
 
+    /**
+     * Gets the projects for a selected client and adds them to an
+     * ObservableList.
+     *
+     * @param client The selected client.
+     * @throws ModelException
+     */
     void getProjects(Client client) throws ModelException;
 
+    /**
+     * Gets the ObservableList containing projects.
+     *
+     * @return The ObservableList of projects.
+     */
     ObservableList<Project> getProjectList();
 
 }

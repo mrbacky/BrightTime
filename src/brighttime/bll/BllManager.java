@@ -27,20 +27,29 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public List<Client> getClients() throws LogicException {
+    public List<Client> getClients() throws BllException {
         try {
             return dalManager.getClients();
         } catch (DalException ex) {
-            throw new LogicException(ex.getMessage());
+            throw new BllException(ex.getMessage());
         }
     }
 
     @Override
-    public List<Project> getProjects(Client client) throws LogicException {
+    public List<Project> getProjects(Client client) throws BllException {
         try {
             return dalManager.getProjects(client);
         } catch (DalException ex) {
-            throw new LogicException(ex.getMessage());
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Task createTask(Task task) throws BllException {
+        try {
+            return dalManager.createTask(task);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
         }
     }
 

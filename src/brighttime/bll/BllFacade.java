@@ -11,10 +11,32 @@ import java.util.List;
  */
 public interface BllFacade {
 
-    public List<Client> getClients() throws LogicException;
+    /**
+     * Gets the clients.
+     *
+     * @return A list of clients.
+     * @throws BllException
+     */
+    List<Client> getClients() throws BllException;
 
-    public List<Project> getProjects(Client client) throws LogicException;
+    /**
+     * Gets the projects for a selected client.
+     *
+     * @param client The selected client.
+     * @return A list of projects.
+     * @throws BllException
+     */
+    List<Project> getProjects(Client client) throws BllException;
 
-    public List<Task> loadTasks();
+    List<Task> loadTasks();
+
+    /**
+     * Creates a new task in the database.
+     *
+     * @param task The task to be created.
+     * @return The created task.
+     * @throws BllException
+     */
+    Task createTask(Task task) throws BllException;
 
 }

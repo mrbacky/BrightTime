@@ -4,9 +4,9 @@ package brighttime.bll;
  *
  * @author annem
  */
-public class LogicException extends Exception {
+public class BllException extends Exception {
 
-    public LogicException(String message) {
+    public BllException(String message) {
         super(message);
     }
 

@@ -3,7 +3,7 @@ package brighttime.gui.model.concretes;
 import brighttime.be.Client;
 import brighttime.bll.BllFacade;
 import brighttime.bll.BllManager;
-import brighttime.bll.LogicException;
+import brighttime.bll.BllException;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IClientModel;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ClientModel implements IClientModel {
             List<Client> allClients = bllManager.getClients();
             clientList.clear();
             clientList.addAll(allClients);
-        } catch (LogicException ex) {
+        } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
     }

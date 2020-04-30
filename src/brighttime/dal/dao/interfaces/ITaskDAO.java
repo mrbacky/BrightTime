@@ -16,7 +16,7 @@ public interface ITaskDAO {
      *
      * @param date The current date.
      * @return A list of tasks.
-     * @throws brighttime.dal.DalException
+     * @throws DalException
      */
     List<Task> getTasksForCurrentDay(LocalDate date) throws DalException;
 

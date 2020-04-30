@@ -13,20 +13,38 @@
     -fx-background-color: transparent;
 }
 
-.cboClient{
+.jfx-text-field{
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-color: #435A9A;
     -jfx-unfocus-color: transparent;
-    -jfx-focus-color: red;
+    -fx-text-fill: #435A9A;
+    -fx-padding: 3.5 10 3.5 10;
+    -jfx-label-float: true;    
+}
+
+.cboClient{
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20 20 20 20;
+    -fx-border-color: #F0C326;
+    -fx-padding: 0 10 0 10;
+    -jfx-unfocus-color: transparent;
+    -jfx-focus-color: #F0C326;
+    -jfx-label-float: true;
 }
 
 .cboClient .cell{
-    -fx-text-fill: red;
+    -fx-text-fill: #F0C326;
 }
 
 .cboProject{
+    -fx-border-radius: 20px;
+    -fx-border-color: #00A99D;
     -jfx-unfocus-color: transparent;
-    -jfx-focus-color: blue;
+    -jfx-focus-color: #00A99D;
+    -jfx-label-float: true;
 }
 
 .cboProject .cell{
-    -fx-text-fill: blue;
+    -fx-text-fill: #00A99D;
 }

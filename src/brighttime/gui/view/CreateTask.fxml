@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,22 +14,22 @@
    <children>
       <HBox id="hBoxTaskItem" fx:id="hBoxItemElements" alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefHeight="35.0" prefWidth="268.0">
                <children>
-                  <TextField fx:id="txtDescription" styleClass="taskItemTextFields" />
+                  <JFXTextField fx:id="txtDescription" prefHeight="27.0" prefWidth="120.0" promptText="Description of the new task." />
+               </children>
+            </StackPane>
+            <StackPane prefHeight="35.0" prefWidth="244.0">
+               <children>
+                  <JFXComboBox fx:id="cboClient" prefHeight="27.0" prefWidth="120.0" promptText="Select Client" styleClass="cboClient" />
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <JFXComboBox fx:id="cboClient" prefHeight="25.0" prefWidth="103.0" promptText="Select Client" styleClass="cboClient" />
+                  <JFXComboBox fx:id="cboProject" prefHeight="27.0" prefWidth="120.0" promptText="Select Project" styleClass="cboProject" />
                </children>
             </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <JFXComboBox fx:id="cboProject" prefHeight="25.0" prefWidth="103.0" promptText="Select Project" styleClass="cboProject" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" />
+            <StackPane prefHeight="35.0" prefWidth="117.0" />
             <StackPane prefHeight="30.0" prefWidth="80.0">
                <children>
                   <Button id="btnPlayPause" fx:id="btnAdd" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0">

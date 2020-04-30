@@ -4,7 +4,7 @@ import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.bll.BllFacade;
 import brighttime.bll.BllManager;
-import brighttime.bll.LogicException;
+import brighttime.bll.BllException;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IProjectModel;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class ProjectModel implements IProjectModel {
             List<Project> allProjects = bllManager.getProjects(client);
             projectList.clear();
             projectList.addAll(allProjects);
-        } catch (LogicException ex) {
+        } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
     }

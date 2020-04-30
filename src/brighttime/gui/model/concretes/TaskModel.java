@@ -3,6 +3,8 @@ package brighttime.gui.model.concretes;
 import brighttime.be.Task;
 import brighttime.bll.BllFacade;
 import brighttime.bll.BllManager;
+import brighttime.bll.BllException;
+import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +17,7 @@ import javafx.collections.ObservableList;
  */
 public class TaskModel implements ITaskModel {
 
-    private BllFacade bllManager;
+    private final BllFacade bllManager;
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
 
     public TaskModel() throws IOException {
@@ -26,16 +28,20 @@ public class TaskModel implements ITaskModel {
     public void loadTasks() {
         List<Task> allTasks = bllManager.loadTasks();
         taskList.addAll(allTasks);
-        
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public ObservableList<Task> getTasks() {
         return taskList;
+    }
+
+    @Override
+    public Task addTask(Task task) throws ModelException {
+        try {
+            return bllManager.createTask(task);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
 }
