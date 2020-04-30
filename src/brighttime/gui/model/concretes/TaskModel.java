@@ -24,6 +24,8 @@ public class TaskModel implements ITaskModel {
     @Override
     public void loadTasks() {
         List<Task> allTasks = bllManager.loadTasks();
+        
+        
         taskList.addAll(allTasks);
         
     }

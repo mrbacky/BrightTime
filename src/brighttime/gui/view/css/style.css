@@ -23,8 +23,8 @@
 
 }
 
-#vBoxTasks{
-    -fx-background-color: #F1C54C;
+#vBoxMain{
+    -fx-background-color: white;
     -fx-alignment: TOP_CENTER;
     -fx-padding: 20 ;
 
@@ -36,7 +36,7 @@
 }
 
 .hBoxTaskItem{
-    -fx-background-color: grey;
+    -fx-background-color: #F1C54C;
     -fx-background-radius :  5 5 5 5;
     border-bottom-color: black; 
 

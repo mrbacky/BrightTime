@@ -18,6 +18,8 @@ public class MockTaskDAO implements ITaskDAO {
 
     private List<TaskEntry> taskEntries1 = new ArrayList<>();
     private List<TaskEntry> taskEntries2 = new ArrayList<>();
+    private List<TaskEntry> taskEntries3 = new ArrayList<>();
+
     private Project brightTime;
     private Client grumsen;
 
@@ -26,6 +28,7 @@ public class MockTaskDAO implements ITaskDAO {
         createProject();
         createUITaskEntries();
         sendEmailTaskEntries();
+        eatTaskEntries();
 
     }
 
@@ -47,9 +50,19 @@ public class MockTaskDAO implements ITaskDAO {
 
     private void sendEmailTaskEntries() {
         taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:00:00")));
-        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T17:00:00"), LocalDateTime.parse("2020-04-28T17:00:12")));
-        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
-        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
+        taskEntries2.add(new TaskEntry(4, "send email", LocalDateTime.parse("2020-04-28T17:00:00"), LocalDateTime.parse("2020-04-28T17:00:12")));
+        taskEntries2.add(new TaskEntry(5, "send email", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
+        taskEntries2.add(new TaskEntry(6, "send email", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
+
+    }
+
+    private void eatTaskEntries() {
+        taskEntries3.add(new TaskEntry(7, "eat", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:00:00")));
+        taskEntries3.add(new TaskEntry(8, "eat", LocalDateTime.parse("2020-04-28T17:00:00"), LocalDateTime.parse("2020-04-28T17:00:12")));
+        taskEntries3.add(new TaskEntry(9, "eat", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
+        taskEntries3.add(new TaskEntry(10, "eat", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
+        taskEntries3.add(new TaskEntry(11, "eat", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
+        taskEntries3.add(new TaskEntry(12, "eat", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
 
     }
 
@@ -58,6 +71,7 @@ public class MockTaskDAO implements ITaskDAO {
         List<Task> taskList = new ArrayList<>();
         taskList.add(new Task(0, "create UI for App", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries1));
         taskList.add(new Task(1, "send email", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries2));
+        taskList.add(new Task(2, "eat", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries3));
 
         return taskList;
     }

@@ -7,17 +7,29 @@ package brighttime.gui.controller;
 
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -27,7 +39,9 @@ import javafx.scene.layout.Region;
 public class TaskItemController implements Initializable {
 
     private static final String DATE_TIME_FORMAT = "HH:mm";
+    private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
 
+    List<Node> taskEntries = new ArrayList<>();
     @FXML
     private HBox hBoxItemElements;
     @FXML
@@ -44,52 +58,91 @@ public class TaskItemController implements Initializable {
     private TextField textFieldEndTime;
     @FXML
     private TextField textFieldDuration;
+    @FXML
+    private ToggleButton btnExpandTask;
+    @FXML
+    private VBox vBoxTaskEntries;
+    private Task task;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         textFieldTaskName.setEditable(false);
         textFieldTaskProjectName.setEditable(false);
         textFieldTaskClientName.setEditable(false);
         textFieldDuration.setEditable(false);
         textFieldStartTime.setEditable(false);
         textFieldEndTime.setEditable(false);
+        /*
+        
+        task Helper class (util package)
+        Create task model
+        move all of the task dato from here to task Model
+        inject task model to this contr instead of setTask method
+            alt.    implement factory for injecting the model
+        move all of the logic for calculating duration from BEs to BLL
+        access this functionality through contr - model - bll
+        
+        what about main model ???
+        
+        
+        
+        */
     }
 
-    void setTask(Task task) {
+    public void setTask(Task task) {
+        this.task = task;
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
         textFieldTaskName.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getDescription(), task.descriptionProperty()));
+        
         textFieldTaskClientName.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getClient().getName(), task.getProject().getClient().nameProperty()));
+        
         textFieldTaskProjectName.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
+        
         textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(getTaskStartTime(task)), task.startTimeProperty()));
+                -> dtf.format(task.getTaskStartTime()), task.startTimeProperty()));
+        
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(getTaskEndTime(task)), task.endTimeProperty()));
-
-    }
-
-    private LocalDateTime getTaskStartTime(Task task) {
-        LocalDateTime taskStartTime = task.getTaskEntryList().get(0).getStartTime();
-        return taskStartTime;
-    }
-
-    private LocalDateTime getTaskEndTime(Task task) {
-        TaskEntry latestTaskEntry = (task.getTaskEntryList()).get(task.getTaskEntryList().size() - 1);
-        LocalDateTime taskEndTime = latestTaskEntry.getEndTime();
-        return taskEndTime;
-    }
-
-    void setTaskTotalInterval(Task task) {
+                -> dtf.format(task.getTaskEndTime()), task.endTimeProperty()));
+        
         textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> task.getStringDuration(task.getTaskEntryList()), task.stringDurationProperty()));
+                -> task.getStringDuration(), task.stringDurationProperty()));
 
+    }
+
+    @FXML
+    private void expandTaskItem(ActionEvent event) {
+
+        if (btnExpandTask.isSelected()) {
+            initTaskEntries();
+        } else {
+            vBoxTaskEntries.getChildren().clear();
+        }
+    }
+    
+     public void initTaskEntries() {
+
+        List<TaskEntry> taskEntries = task.getTaskEntryList();
+        for (TaskEntry taskEntry : taskEntries) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
+                Parent root = fxmlLoader.load();
+                TaskEntryItemController controller = fxmlLoader.getController();
+                controller.setTaskEntry(taskEntry);
+                vBoxTaskEntries.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(TimeTrackerController.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

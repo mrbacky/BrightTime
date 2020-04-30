@@ -23,7 +23,8 @@ public class Task {
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
-
+    
+    //  delete startime and endtime from constructor
     public Task(int id, String description, Project project, LocalDateTime startTime, LocalDateTime endTime, List<TaskEntry> taskEntryList) {
         this.id.set(id);
         this.description.set(description);
@@ -104,10 +105,25 @@ public class Task {
     public ObjectProperty taskEntryListProperty() {
         return taskEntryList;
     }
+    
+    //everything down should be deleted from here
+    public LocalDateTime getTaskStartTime() {
+        LocalDateTime taskStartTime = getTaskEntryList().get(0).getStartTime();
+        return taskStartTime;
+    }
+    
+    public LocalDateTime getTaskEndTime() {
+        TaskEntry latestTaskEntry = getTaskEntryList().get(getTaskEntryList().size() - 1);
+        LocalDateTime taskEndTime = latestTaskEntry.getEndTime();
+        return taskEndTime;
+    }
 
-    public String getStringDuration(List<TaskEntry> taskEntryList) {
+    public String getStringDuration() {
         int totalDuration = 0;
-        for (TaskEntry taskEntry : taskEntryList) {
+        for (TaskEntry taskEntry : taskEntryList.get()) {
+            
+            System.out.println(taskEntry);
+            System.out.println(taskEntry.getDuration());
             totalDuration = (int) (totalDuration + taskEntry.getDuration().toSeconds());
         }
         return sec_To_Format(totalDuration);
