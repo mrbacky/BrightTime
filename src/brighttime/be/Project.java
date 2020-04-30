@@ -59,4 +59,9 @@ public class Project {
         return client;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }

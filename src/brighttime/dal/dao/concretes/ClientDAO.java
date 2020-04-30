@@ -40,7 +40,7 @@ public class ClientDAO implements IClientDAO {
             }
 
         } catch (SQLException ex) {
-            throw new DalException("Could not get the clients. " + ex.getMessage());
+            throw new DalException(ex.getMessage());
         }
         return clients;
     }

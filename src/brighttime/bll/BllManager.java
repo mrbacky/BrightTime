@@ -1,6 +1,7 @@
 package brighttime.bll;
 
 import brighttime.be.Client;
+import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.dal.DalException;
 import brighttime.dal.DalFacade;
@@ -30,7 +31,16 @@ public class BllManager implements BllFacade {
         try {
             return dalManager.getClients();
         } catch (DalException ex) {
-            throw new LogicException("Could not get the clients. " + ex.getMessage());
+            throw new LogicException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<Project> getProjects(Client client) throws LogicException {
+        try {
+            return dalManager.getProjects(client);
+        } catch (DalException ex) {
+            throw new LogicException(ex.getMessage());
         }
     }
 

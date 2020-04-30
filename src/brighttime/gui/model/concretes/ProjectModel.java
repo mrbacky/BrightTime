@@ -1,11 +1,12 @@
 package brighttime.gui.model.concretes;
 
 import brighttime.be.Client;
+import brighttime.be.Project;
 import brighttime.bll.BllFacade;
 import brighttime.bll.BllManager;
 import brighttime.bll.LogicException;
 import brighttime.gui.model.ModelException;
-import brighttime.gui.model.interfaces.IClientModel;
+import brighttime.gui.model.interfaces.IProjectModel;
 import java.io.IOException;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -15,29 +16,29 @@ import javafx.collections.ObservableList;
  *
  * @author annem
  */
-public class ClientModel implements IClientModel {
+public class ProjectModel implements IProjectModel {
 
     private final BllFacade bllManager;
-    private final ObservableList<Client> clientList = FXCollections.observableArrayList();
+    private final ObservableList<Project> projectList = FXCollections.observableArrayList();
 
-    public ClientModel() throws IOException {
+    public ProjectModel() throws IOException {
         bllManager = new BllManager();
     }
 
     @Override
-    public void getClients() throws ModelException {
+    public void getProjects(Client client) throws ModelException {
         try {
-            List<Client> allClients = bllManager.getClients();
-            clientList.clear();
-            clientList.addAll(allClients);
+            List<Project> allProjects = bllManager.getProjects(client);
+            projectList.clear();
+            projectList.addAll(allProjects);
         } catch (LogicException ex) {
             throw new ModelException(ex.getMessage());
         }
     }
 
     @Override
-    public ObservableList<Client> getClientList() {
-        return clientList;
+    public ObservableList<Project> getProjectList() {
+        return projectList;
     }
 
 }

@@ -18,11 +18,15 @@
     -jfx-focus-color: red;
 }
 
+.cboClient .cell{
+    -fx-text-fill: red;
+}
+
 .cboProject{
     -jfx-unfocus-color: transparent;
     -jfx-focus-color: blue;
 }
 
-.jfx-combo-box .cell {
-    -fx-text-fill: red;
+.cboProject .cell{
+    -fx-text-fill: blue;
 }

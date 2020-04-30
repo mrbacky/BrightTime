@@ -4,7 +4,9 @@ import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.concretes.ClientModel;
+import brighttime.gui.model.concretes.ProjectModel;
 import brighttime.gui.model.interfaces.IClientModel;
+import brighttime.gui.model.interfaces.IProjectModel;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +39,7 @@ public class CreateTaskController implements Initializable {
     private JFXComboBox<Project> cboProject;
 
     private IClientModel clientModel;
+    private IProjectModel projectModel;
 
     /**
      * Initializes the controller class.
@@ -49,7 +52,10 @@ public class CreateTaskController implements Initializable {
     void initializeView() throws IOException {
         System.out.println("in Creator page");
         clientModel = new ClientModel();
+        projectModel = new ProjectModel();
         setClientsIntoComboBox();
+        setProjectsIntoComboBox();
+        addTask();
     }
 
     private void setClientsIntoComboBox() {
@@ -62,7 +68,22 @@ public class CreateTaskController implements Initializable {
                 showAlert(ex);
             }
         }
+    }
 
+    private void setProjectsIntoComboBox() {
+        cboClient.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
+            if (newVal != null) {
+                if (projectModel.getProjectList() != null) {
+                    try {
+                        projectModel.getProjects(newVal);
+                        cboProject.getItems().clear();
+                        cboProject.getItems().addAll(projectModel.getProjectList());
+                    } catch (ModelException ex) {
+                        showAlert(ex);
+                    }
+                }
+            }
+        });
     }
 
     private void showAlert(Exception ex) {
@@ -73,5 +94,11 @@ public class CreateTaskController implements Initializable {
         if (a.getResult() == ButtonType.OK) {
         }
     }
-    
+
+    private void addTask() {
+        btnAdd.setOnAction((event) -> {
+            System.out.println("action event is working!");
+            btnAdd.setDisable(true);
+        });
+    }
 }
