@@ -2,71 +2,96 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="50.0" prefWidth="550.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
+<AnchorPane minWidth="-Infinity" prefWidth="750.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
    <children>
-      <HBox fx:id="hBoxItemElements" alignment="CENTER" layoutX="10.0" layoutY="18.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="5.0" styleClass="hBoxTaskItem" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" styleClass="apTaskItem" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
          <children>
-            <ToggleButton fx:id="btnExpandTask" mnemonicParsing="false" onAction="#expandTaskItem" text="b" />
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldTaskName" styleClass="taskItemTextFields" />
+                  <ToggleButton fx:id="btnExpandTask" mnemonicParsing="false" onAction="#expandTaskItem" prefHeight="25.0" prefWidth="25.0" text="b" />
                </children>
             </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="550.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldTaskClientName" styleClass="taskItemTextFields" />
+                  <TextField fx:id="textFieldTaskDesc" styleClass="taskItemTextFields" />
                </children>
             </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldTaskProjectName" styleClass="taskItemTextFields" />
+                  <TextField fx:id="textFieldProject" styleClass="taskItemTextFields" />
                </children>
             </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldStartTime" styleClass="taskItemTextFields" />
+                  <TextField fx:id="textFieldClient" styleClass="taskItemTextFields" />
                </children>
             </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane layoutX="450.0" layoutY="9.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldEndTime" styleClass="taskItemTextFields" />
+                  <TextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" text="09:00">
+                     <StackPane.margin>
+                        <Insets right="95.0" />
+                     </StackPane.margin>
+                  </TextField>
+                  <TextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" text="10:00">
+                     <StackPane.margin>
+                        <Insets left="35.0" />
+                     </StackPane.margin>
+                  </TextField>
+                  <Label text="─" textFill="WHITE">
+                     <StackPane.margin>
+                        <Insets right="30.0" />
+                     </StackPane.margin>
+                  </Label>
                </children>
             </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" />
+                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" text="23:45:58" />
                </children>
             </StackPane>
-            <StackPane prefHeight="30.0" prefWidth="80.0">
+            <StackPane prefWidth="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button id="btnPlayPause" fx:id="btnPlayPause" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0">
+                  <Button fx:id="btnPlayTask" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="rootButtons">
                      <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@assets/play_button_circled_48px.png" />
+                              <Image url="@assets/circled_play_48px.png" />
                            </image>
                         </ImageView>
                      </graphic>
+                     <StackPane.margin>
+                        <Insets right="40.0" />
+                     </StackPane.margin>
+                  </Button>
+                  <Button fx:id="btnDeleteTask" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="rootButtons">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/delete_48px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <StackPane.margin>
+                        <Insets left="30.0" />
+                     </StackPane.margin>
                   </Button>
                </children>
             </StackPane>
          </children>
-         <padding>
-            <Insets left="5.0" right="5.0" />
-         </padding>
-      </HBox>
-      <AnchorPane prefWidth="550.0" AnchorPane.topAnchor="60.0">
+      </AnchorPane>
+      <AnchorPane prefWidth="700.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
          <children>
-            <VBox fx:id="vBoxTaskEntries" alignment="CENTER" minHeight="-Infinity" prefWidth="550.0" />
+            <VBox fx:id="vBoxTaskEntries" alignment="CENTER" minHeight="-Infinity" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          </children>
       </AnchorPane>
    </children>

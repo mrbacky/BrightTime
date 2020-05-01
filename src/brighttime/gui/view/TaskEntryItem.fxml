@@ -1,39 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="50.0" prefWidth="550.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
+<AnchorPane minWidth="-Infinity" prefHeight="40.0" prefWidth="700.0" styleClass="apTaskEntryItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
    <children>
-      <HBox fx:id="hBoxTaskEntryElements" alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="10.0" styleClass="hBoxTaskItem" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="5.0">
+      <StackPane layoutX="10.0" layoutY="10.0" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0.0">
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="textFieldTaskEntryDesc" styleClass="taskItemTextFields" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="textFieldStartTime" styleClass="taskItemTextFields" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="textFieldEndTime" styleClass="taskItemTextFields" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" />
-               </children>
-            </StackPane>
+            <TextField fx:id="textFieldTaskEntryDesc" styleClass="taskItemTextFields" text="create ui" />
          </children>
-         <padding>
-            <Insets left="10.0" right="10.0" />
-         </padding>
-      </HBox>
+      </StackPane>
+      <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField fx:id="textFieldDuration" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="60.0" styleClass="taskItemTextFields" text="01:45:15" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="460.0" layoutY="19.0" minWidth="90.0" prefWidth="120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" text="09:00">
+               <StackPane.margin>
+                  <Insets right="70.0" />
+               </StackPane.margin>
+            </TextField>
+            <TextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" text="10:00">
+               <StackPane.margin>
+                  <Insets left="70.0" />
+               </StackPane.margin>
+            </TextField>
+            <Label text="─">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </Label>
+         </children>
+      </StackPane>
+      <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="btnRemoveTask" mnemonicParsing="false" styleClass="rootButtons">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/delete_48px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </StackPane>
    </children>
+   <padding>
+      <Insets left="40.0" />
+   </padding>
 </AnchorPane>

@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
@@ -27,8 +28,6 @@ public class TaskEntryItemController implements Initializable {
     private static final String DATE_TIME_FORMAT = "HH:mm";
 
     @FXML
-    private HBox hBoxTaskEntryElements;
-    @FXML
     private TextField textFieldTaskEntryDesc;
     @FXML
     private TextField textFieldStartTime;
@@ -36,6 +35,8 @@ public class TaskEntryItemController implements Initializable {
     private TextField textFieldEndTime;
     @FXML
     private TextField textFieldDuration;
+    @FXML
+    private Button btnRemoveTask;
 
     /**
      * Initializes the controller class.
@@ -53,8 +54,8 @@ public class TaskEntryItemController implements Initializable {
                 -> dtf.format(taskEntry.getStartTime()), taskEntry.endTimeProperty()));
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskEntry.getEndTime()), taskEntry.endTimeProperty()));
-        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> taskEntry.getStringDuration(taskEntry.getStartTime(), taskEntry.getEndTime()), taskEntry.stringDurationProperty()));
+//        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
+//                -> taskEntry.getStringDuration(taskEntry.getStartTime(), taskEntry.getEndTime()), taskEntry.stringDurationProperty()));
 
     }
 

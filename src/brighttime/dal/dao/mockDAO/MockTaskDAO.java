@@ -69,9 +69,9 @@ public class MockTaskDAO implements ITaskDAO {
     @Override
     public List<Task> loadTasks() {
         List<Task> taskList = new ArrayList<>();
-        taskList.add(new Task(0, "create UI for App", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries1));
-        taskList.add(new Task(1, "send email", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries2));
-        taskList.add(new Task(2, "eat", brightTime, LocalDateTime.now(), LocalDateTime.now(), taskEntries3));
+        taskList.add(new Task(0, "create UI for App", brightTime, taskEntries1));
+        taskList.add(new Task(1, "send email", brightTime, taskEntries2));
+        taskList.add(new Task(2, "eat", brightTime, taskEntries3));
 
         return taskList;
     }

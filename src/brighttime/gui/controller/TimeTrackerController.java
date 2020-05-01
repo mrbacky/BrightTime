@@ -64,6 +64,7 @@ public class TimeTrackerController implements Initializable {
                 
                 TaskItemController controller = fxmlLoader.getController();
                 controller.setTask(task);
+                
                 vBoxMain.getChildren().add(root);
                 
                 

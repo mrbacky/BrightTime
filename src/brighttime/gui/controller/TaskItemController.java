@@ -5,6 +5,7 @@
  */
 package brighttime.gui.controller;
 
+import brighttime.be.Client;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
@@ -41,17 +43,6 @@ public class TaskItemController implements Initializable {
     private static final String DATE_TIME_FORMAT = "HH:mm";
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
 
-    List<Node> taskEntries = new ArrayList<>();
-    @FXML
-    private HBox hBoxItemElements;
-    @FXML
-    private TextField textFieldTaskName;
-    @FXML
-    private TextField textFieldTaskProjectName;
-    @FXML
-    private TextField textFieldTaskClientName;
-    @FXML
-    private Button btnPlayPause;
     @FXML
     private TextField textFieldStartTime;
     @FXML
@@ -63,6 +54,16 @@ public class TaskItemController implements Initializable {
     @FXML
     private VBox vBoxTaskEntries;
     private Task task;
+    @FXML
+    private TextField textFieldProject;
+    @FXML
+    private TextField textFieldClient;
+    @FXML
+    private TextField textFieldTaskDesc;
+    @FXML
+    private Button btnPlayTask;
+    @FXML
+    private Button btnDeleteTask;
 
     /**
      * Initializes the controller class.
@@ -70,12 +71,6 @@ public class TaskItemController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        textFieldTaskName.setEditable(false);
-        textFieldTaskProjectName.setEditable(false);
-        textFieldTaskClientName.setEditable(false);
-        textFieldDuration.setEditable(false);
-        textFieldStartTime.setEditable(false);
-        textFieldEndTime.setEditable(false);
         /*
         
         task Helper class (util package)
@@ -90,7 +85,10 @@ public class TaskItemController implements Initializable {
         
         
         
-        */
+        
+        
+        
+         */
     }
 
     public void setTask(Task task) {
@@ -98,24 +96,23 @@ public class TaskItemController implements Initializable {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-        textFieldTaskName.textProperty().bind(Bindings.createStringBinding(()
+        textFieldTaskDesc.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getDescription(), task.descriptionProperty()));
-        
-        textFieldTaskClientName.textProperty().bind(Bindings.createStringBinding(()
+
+        textFieldClient.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getClient().getName(), task.getProject().getClient().nameProperty()));
-        
-        textFieldTaskProjectName.textProperty().bind(Bindings.createStringBinding(()
+
+        textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
-        
+
         textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(task.getTaskStartTime()), task.startTimeProperty()));
-        
+
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(task.getTaskEndTime()), task.endTimeProperty()));
-        
-        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> task.getStringDuration(), task.stringDurationProperty()));
 
+//        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
+//                -> task.getStringDuration(), task.stringDurationProperty()));
     }
 
     @FXML
@@ -127,8 +124,8 @@ public class TaskItemController implements Initializable {
             vBoxTaskEntries.getChildren().clear();
         }
     }
-    
-     public void initTaskEntries() {
+
+    public void initTaskEntries() {
 
         List<TaskEntry> taskEntries = task.getTaskEntryList();
         for (TaskEntry taskEntry : taskEntries) {

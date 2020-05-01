@@ -47,9 +47,6 @@ public class RootController implements Initializable {
     private Button btnOverview;
     private ModelFacade modelManager;
 
-    private double xOffSet = 0;
-    private double yOffSet = 0;
-
     public RootController() {
         modelManager = new ModelManager();
 

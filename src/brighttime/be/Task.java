@@ -24,13 +24,10 @@ public class Task {
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
     
-    //  delete startime and endtime from constructor
-    public Task(int id, String description, Project project, LocalDateTime startTime, LocalDateTime endTime, List<TaskEntry> taskEntryList) {
+    public Task(int id, String description, Project project, List<TaskEntry> taskEntryList) {
         this.id.set(id);
         this.description.set(description);
         this.project.set(project);
-        this.startTime.set(startTime);
-        this.endTime.set(endTime);
         this.taskEntryList.set(taskEntryList);
     }
 
@@ -118,16 +115,16 @@ public class Task {
         return taskEndTime;
     }
 
-    public String getStringDuration() {
-        int totalDuration = 0;
-        for (TaskEntry taskEntry : taskEntryList.get()) {
-            
-            System.out.println(taskEntry);
-            System.out.println(taskEntry.getDuration());
-            totalDuration = (int) (totalDuration + taskEntry.getDuration().toSeconds());
-        }
-        return sec_To_Format(totalDuration);
-    }
+//    public String getStringDuration() {
+//        int totalDuration = 0;
+//        for (TaskEntry taskEntry : taskEntryList.get()) {
+//            
+//            System.out.println(taskEntry);
+//            System.out.println(taskEntry.getDuration());
+//            totalDuration = (int) (totalDuration + taskEntry.getDuration().toSeconds());
+//        }
+//        return sec_To_Format(totalDuration);
+//    }
 
     public void setStringDuration(String value) {
         stringDuration.set(value);
