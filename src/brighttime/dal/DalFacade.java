@@ -29,6 +29,15 @@ public interface DalFacade {
     List<Client> getClients() throws DalException;
 
     /**
+     * Creates a new project in the database.
+     *
+     * @param project The project to be created.
+     * @return The created project.
+     * @throws DalException
+     */
+    Project createProject(Project project) throws DalException;
+
+    /**
      * Gets the projects for a selected client.
      *
      * @param client The selected client.

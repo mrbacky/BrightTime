@@ -53,7 +53,7 @@ public class CreateTaskController implements Initializable {
     }
 
     void initializeView() throws IOException {
-        System.out.println("in CreateTask page");
+        System.out.println("in Creator page");
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
         setValidators();
@@ -99,7 +99,7 @@ public class CreateTaskController implements Initializable {
      */
     private void addTask() {
         btnAdd.setOnAction((event) -> {
-            if (!txtDescription.getText().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
+            if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
                     Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
                     modelManager.addTask(task);
@@ -107,7 +107,7 @@ public class CreateTaskController implements Initializable {
                 } catch (ModelException ex) {
                     showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                 }
-            } else if (txtDescription.getText().isEmpty()) {
+            } else if (txtDescription.getText().trim().isEmpty()) {
                 showAlert("No task description was entered.", "Please enter a description of the new task.");
             } else if (cboClient.getSelectionModel().isEmpty()) {
                 showAlert("No client is selected.", "Please select a client.");

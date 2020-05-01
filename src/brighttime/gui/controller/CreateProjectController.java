@@ -1,9 +1,11 @@
 package brighttime.gui.controller;
 
 import brighttime.be.Client;
+import brighttime.be.Project;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import java.io.IOException;
@@ -22,14 +24,16 @@ import javafx.scene.layout.Region;
  *
  * @author annem
  */
-public class CreateClientController implements Initializable {
+public class CreateProjectController implements Initializable {
 
     @FXML
     private HBox hBoxItemElements;
     @FXML
-    private JFXButton btnAdd;
-    @FXML
     private JFXTextField txtName;
+    @FXML
+    private JFXComboBox<Client> cboClient;
+    @FXML
+    private JFXButton btnAdd;
 
     private ModelFacade modelManager;
 
@@ -46,9 +50,26 @@ public class CreateClientController implements Initializable {
     }
 
     void initializeView() throws IOException {
-        System.out.println("in CreateClient page");
+        System.out.println("in CreateProject page");
+        setClientsIntoComboBox();
         inputValidation();
+        selectionValidation();
         addClient();
+    }
+
+    /**
+     * Sets the clients into the ComboBox.
+     */
+    private void setClientsIntoComboBox() {
+        if (modelManager.getClientList() != null) {
+            try {
+                modelManager.loadClients();
+                cboClient.getItems().clear();
+                cboClient.getItems().addAll(modelManager.getClientList());
+            } catch (ModelException ex) {
+                showAlert("Could not get the clients.", "An error occured: " + ex.getMessage());
+            }
+        }
     }
 
     /**
@@ -66,19 +87,35 @@ public class CreateClientController implements Initializable {
     }
 
     /**
-     * Adds a new client.
+     * Validates the selection of the ComboBox.
+     */
+    private void selectionValidation() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        cboClient.getValidators().add(validator);
+        validator.setMessage("No client selected.");
+        cboClient.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (!newValue) {
+                cboClient.validate();
+            }
+        });
+    }
+
+    /**
+     * Adds a new project.
      */
     private void addClient() {
         btnAdd.setOnAction((event) -> {
-            if (!txtName.getText().trim().isEmpty()) {
+            if (!txtName.getText().trim().isEmpty() && !cboClient.getSelectionModel().isEmpty()) {
                 try {
-                    modelManager.addClient(new Client(txtName.getText().trim()));
+                    modelManager.addProject(new Project(txtName.getText().trim(), cboClient.getSelectionModel().getSelectedItem()));
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
-                    showAlert("Could not create the client.", "An error occured: " + ex.getMessage());
+                    showAlert("Could not create the project.", "An error occured: " + ex.getMessage());
                 }
+            } else if (txtName.getText().trim().isEmpty()) {
+                showAlert("No project name was entered.", "Please enter a name for the new project.");
             } else {
-                showAlert("No client name was entered.", "Please enter a name for the new client.");
+                showAlert("No client is selected.", "Please select a client.");
             }
         });
     }

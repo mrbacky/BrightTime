@@ -18,9 +18,9 @@ import javafx.collections.ObservableList;
  */
 public class ModelManager implements ModelFacade {
 
-    private final IClientModel clientModel;
-    private final IProjectModel projectModel;
-    private final ITaskModel taskModel;
+    private IClientModel clientModel;
+    private IProjectModel projectModel;
+    private ITaskModel taskModel;
 
     public ModelManager() throws IOException {
         clientModel = new ClientModel();
@@ -49,6 +49,15 @@ public class ModelManager implements ModelFacade {
     @Override
     public ObservableList<Client> getClientList() {
         return clientModel.getClientList();
+    }
+
+    @Override
+    public Project addProject(Project project) throws ModelException {
+        try {
+            return projectModel.addProject(project);
+        } catch (ModelException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
     @Override

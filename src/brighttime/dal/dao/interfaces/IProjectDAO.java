@@ -12,6 +12,15 @@ import java.util.List;
 public interface IProjectDAO {
 
     /**
+     * Creates a new project in the database.
+     *
+     * @param project The project to be created.
+     * @return The created project.
+     * @throws DalException
+     */
+    Project createProject(Project project) throws DalException;
+    
+    /**
      * Gets the projects for a selected client.
      *
      * @param client The selected client.

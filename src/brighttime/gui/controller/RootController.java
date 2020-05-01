@@ -33,7 +33,7 @@ public class RootController implements Initializable {
 
     private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
     private final String CREATOR_MODULE = "/brighttime/gui/view/CreateTask.fxml";
-    private final String OVERVIEW_MODULE = "/brighttime/gui/view/CreateClient.fxml";
+    private final String OVERVIEW_MODULE = "/brighttime/gui/view/CreateProject.fxml";
 
     @FXML
     private AnchorPane anchorPaneRoot;
@@ -67,15 +67,13 @@ public class RootController implements Initializable {
                 controller.injectModelManager(modelManager);
                 controller.initTasks();
             } else if (module.equals(CREATOR_MODULE)) {
-                CreateTaskController controller = fxmlLoader.getController();                
+                CreateTaskController controller = fxmlLoader.getController();
                 controller.injectModelManager(modelManager);
-                controller.initializeView();
-
+                controller.initializeView();               
             } else if (module.equals(OVERVIEW_MODULE)) {
-                CreateClientController controller = fxmlLoader.getController();                
+                CreateProjectController controller = fxmlLoader.getController();
                 controller.injectModelManager(modelManager);
                 controller.initializeView();
-
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
@@ -99,11 +97,5 @@ public class RootController implements Initializable {
     private void loadOverviewModule(ActionEvent event) {
         loadModule(OVERVIEW_MODULE);
     }
-
-    
-
-    
-
-    
 
 }
