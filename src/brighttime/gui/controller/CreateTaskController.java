@@ -5,12 +5,6 @@ import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
-import brighttime.gui.model.concretes.ClientModel;
-import brighttime.gui.model.concretes.ProjectModel;
-import brighttime.gui.model.concretes.TaskModel;
-import brighttime.gui.model.interfaces.IClientModel;
-import brighttime.gui.model.interfaces.IProjectModel;
-import brighttime.gui.model.interfaces.ITaskModel;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -44,9 +38,6 @@ public class CreateTaskController implements Initializable {
     @FXML
     private JFXComboBox<Project> cboProject;
 
-    private IClientModel clientModel;
-    private IProjectModel projectModel;
-    private ITaskModel taskModel;
     private ModelFacade modelManager;
 
     /**
@@ -57,11 +48,12 @@ public class CreateTaskController implements Initializable {
         // TODO
     }
 
+    void injectModelManager(ModelFacade modelManager) {
+        this.modelManager = modelManager;
+    }
+
     void initializeView() throws IOException {
-        System.out.println("in Creator page");
-        clientModel = new ClientModel();
-        projectModel = new ProjectModel();
-        taskModel = new TaskModel();
+        System.out.println("in CreateTask page");
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
         setValidators();
@@ -72,11 +64,11 @@ public class CreateTaskController implements Initializable {
      * Sets the clients into the ComboBox.
      */
     private void setClientsIntoComboBox() {
-        if (clientModel.getClientList() != null) {
+        if (modelManager.getClientList() != null) {
             try {
-                clientModel.getClients();
+                modelManager.loadClients();
                 cboClient.getItems().clear();
-                cboClient.getItems().addAll(clientModel.getClientList());
+                cboClient.getItems().addAll(modelManager.getClientList());
             } catch (ModelException ex) {
                 showAlert("Could not get the clients.", "An error occured: " + ex.getMessage());
             }
@@ -89,11 +81,11 @@ public class CreateTaskController implements Initializable {
     private void setProjectsIntoComboBox() {
         cboClient.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
-                if (projectModel.getProjectList() != null) {
+                if (modelManager.getProjectList() != null) {
                     try {
-                        projectModel.getProjects(newVal);
+                        modelManager.loadProjects(newVal);
                         cboProject.getItems().clear();
-                        cboProject.getItems().addAll(projectModel.getProjectList());
+                        cboProject.getItems().addAll(modelManager.getProjectList());
                     } catch (ModelException ex) {
                         showAlert("Could not get the projects.", "An error occured: " + ex.getMessage());
                     }
@@ -110,7 +102,7 @@ public class CreateTaskController implements Initializable {
             if (!txtDescription.getText().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
                     Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
-                    taskModel.addTask(task);
+                    modelManager.addTask(task);
                     System.out.println("action event is working!");
                 } catch (ModelException ex) {
                     showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
@@ -177,10 +169,6 @@ public class CreateTaskController implements Initializable {
         alert.show();
         if (alert.getResult() == ButtonType.OK) {
         }
-    }
-
-    void injectModelManager(ModelFacade modelManager) {
-        this.modelManager = modelManager;
     }
 
 }

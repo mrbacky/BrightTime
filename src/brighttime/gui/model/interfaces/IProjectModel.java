@@ -18,7 +18,7 @@ public interface IProjectModel {
      * @param client The selected client.
      * @throws ModelException
      */
-    void getProjects(Client client) throws ModelException;
+    void loadProjects(Client client) throws ModelException;
 
     /**
      * Gets the ObservableList containing projects.

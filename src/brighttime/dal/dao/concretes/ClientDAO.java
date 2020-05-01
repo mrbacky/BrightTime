@@ -26,6 +26,26 @@ public class ClientDAO implements IClientDAO {
     }
 
     @Override
+    public Client createClient(Client client) throws DalException {
+        String sql = "INSERT INTO Client (name) "
+                + "VALUES (?)";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, client.getName());
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                client.setId(rs.getInt(1));
+            }
+            return client;
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
     public List<Client> getClients() throws DalException {
         List<Client> clients = new ArrayList<>();
         String sql = "SELECT id, name "

@@ -12,6 +12,15 @@ import java.util.List;
 public interface BllFacade {
 
     /**
+     * Creates a new client in the database.
+     *
+     * @param client The client to be created.
+     * @return The created client.
+     * @throws BllException
+     */
+    Client createClient(Client client) throws BllException;
+
+    /**
      * Gets the clients.
      *
      * @return A list of clients.
@@ -28,8 +37,6 @@ public interface BllFacade {
      */
     List<Project> getProjects(Client client) throws BllException;
 
-    List<Task> loadTasks();
-
     /**
      * Creates a new task in the database.
      *
@@ -38,6 +45,8 @@ public interface BllFacade {
      * @throws BllException
      */
     Task createTask(Task task) throws BllException;
+
+    List<Task> getTasks();
 
     String convertDuration(int duration);
 

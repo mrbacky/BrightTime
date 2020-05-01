@@ -20,12 +20,21 @@ public class DalManager implements DalFacade {
 
     private final IClientDAO clientDAO;
     private final IProjectDAO projectDAO;
-    private ITaskDAO taskDAO;
+    private final ITaskDAO taskDAO;
 
     public DalManager() throws IOException {
         clientDAO = new ClientDAO();
         projectDAO = new ProjectDAO();
         taskDAO = new TaskDAO();
+    }
+
+    @Override
+    public Client createClient(Client client) throws DalException {
+        try {
+            return clientDAO.createClient(client);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
     }
 
     @Override

@@ -16,8 +16,8 @@ import brighttime.dal.MockDalManager;
  * @author rado
  */
 public class BllManager implements BllFacade {
-    
-    private DurationConverter durationConverter;
+
+    private final DurationConverter durationConverter;
     private final DalFacade dalManager;
     private final DalFacade mockDalManager;
 
@@ -25,13 +25,15 @@ public class BllManager implements BllFacade {
         dalManager = new DalManager();
         durationConverter = new DurationConverter();
         mockDalManager = new MockDalManager();
-        
-        
     }
 
     @Override
-    public List<Task> loadTasks() {
-        return mockDalManager.getTasks();
+    public Client createClient(Client client) throws BllException {
+        try {
+            return dalManager.createClient(client);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
     @Override
@@ -62,13 +64,18 @@ public class BllManager implements BllFacade {
     }
 
     @Override
+    public List<Task> getTasks() {
+        return mockDalManager.getTasks();
+    }
+
+    @Override
     public String convertDuration(int duration) {
         return durationConverter.sec_To_Format(duration);
     }
+
     @Override
     public int convertDuration(String duration) {
         return durationConverter.format_To_Sec(duration);
     }
-       
-   
+
 }

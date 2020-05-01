@@ -10,10 +10,6 @@ import javafx.collections.ObservableList;
  */
 public interface ITaskModel {
 
-    void loadTasks();
-
-    public ObservableList<Task> getTasks();
-
     /**
      * Adds a new task.
      *
@@ -22,5 +18,9 @@ public interface ITaskModel {
      * @throws ModelException
      */
     Task addTask(Task task) throws ModelException;
+
+    void loadTasks();
+
+    ObservableList<Task> getTasks();
 
 }
