@@ -25,7 +25,16 @@ public class ClientModel implements IClientModel {
     }
 
     @Override
-    public void getClients() throws ModelException {
+    public Client addClient(Client client) throws ModelException {
+        try {
+            return bllManager.createClient(client);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void loadClients() throws ModelException {
         try {
             List<Client> allClients = bllManager.getClients();
             clientList.clear();

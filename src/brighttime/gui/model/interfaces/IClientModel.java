@@ -11,11 +11,20 @@ import javafx.collections.ObservableList;
 public interface IClientModel {
 
     /**
+     * Adds a new client.
+     *
+     * @param client The new client.
+     * @return The created client from the database.
+     * @throws ModelException
+     */
+    Client addClient(Client client) throws ModelException;
+
+    /**
      * Gets the clients and adds them to an ObservableList.
      *
      * @throws ModelException
      */
-    void getClients() throws ModelException;
+    void loadClients() throws ModelException;
 
     /**
      * Gets the ObservableList containing clients.

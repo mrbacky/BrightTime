@@ -12,6 +12,15 @@ import java.util.List;
 public interface DalFacade {
 
     /**
+     * Creates a new client in the database.
+     *
+     * @param client The client to be created.
+     * @return The created client.
+     * @throws DalException
+     */
+    Client createClient(Client client) throws DalException;
+
+    /**
      * Gets the clients.
      *
      * @return A list of clients.
@@ -37,11 +46,10 @@ public interface DalFacade {
      */
     Task createTask(Task task) throws DalException;
 
-
     /**
      *
      * @return
      */
     public List<Task> getTasks();
-    
+
 }

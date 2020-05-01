@@ -19,6 +19,10 @@ public class Client {
         this.name.set(name);
     }
 
+    public Client(String name) {
+        this.name.set(name);
+    }
+
     public int getId() {
         return id.get();
     }

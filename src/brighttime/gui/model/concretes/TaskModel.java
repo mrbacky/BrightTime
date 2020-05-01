@@ -25,23 +25,23 @@ public class TaskModel implements ITaskModel {
     }
 
     @Override
-    public void loadTasks() {
-        List<Task> allTasks = bllManager.loadTasks();
-        taskList.addAll(allTasks);
-    }
-
-    @Override
-    public ObservableList<Task> getTasks() {
-        return taskList;
-    }
-
-    @Override
     public Task addTask(Task task) throws ModelException {
         try {
             return bllManager.createTask(task);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
+    }
+
+    @Override
+    public void loadTasks() {
+        List<Task> allTasks = bllManager.getTasks();
+        taskList.addAll(allTasks);
+    }
+
+    @Override
+    public ObservableList<Task> getTasks() {
+        return taskList;
     }
 
 }
