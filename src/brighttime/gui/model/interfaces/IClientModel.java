@@ -15,7 +15,7 @@ public interface IClientModel {
      *
      * @throws ModelException
      */
-    void getClients() throws ModelException;
+    void loadClients() throws ModelException;
 
     /**
      * Gets the ObservableList containing clients.
@@ -23,5 +23,7 @@ public interface IClientModel {
      * @return The ObservableList of clients.
      */
     ObservableList<Client> getClientList();
+
+    public Client addClient(Client client) throws ModelException;
 
 }

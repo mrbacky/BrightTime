@@ -23,6 +23,11 @@ public class Project {
         this.client.set(client); //maybe change this
     }
 
+    public Project(String name, Client client) {
+        this.name.set(name);
+        this.client.set(client);
+    }
+
     public int getId() {
         return id.get();
     }

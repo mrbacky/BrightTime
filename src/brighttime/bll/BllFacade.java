@@ -20,6 +20,15 @@ public interface BllFacade {
     List<Client> getClients() throws BllException;
 
     /**
+     * Creates a new project in the database.
+     *
+     * @param project The project to be created.
+     * @return The created project.
+     * @throws BllException
+     */
+    Project createProject(Project project) throws BllException;
+
+    /**
      * Gets the projects for a selected client.
      *
      * @param client The selected client.

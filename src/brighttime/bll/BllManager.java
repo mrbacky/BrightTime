@@ -44,6 +44,15 @@ public class BllManager implements BllFacade {
     }
 
     @Override
+    public Project createProject(Project project) throws BllException {
+        try {
+            return dalManager.createProject(project);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
     public List<Project> getProjects(Client client) throws BllException {
         try {
             return dalManager.getProjects(client);

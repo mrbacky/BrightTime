@@ -25,7 +25,7 @@ public class ClientModel implements IClientModel {
     }
 
     @Override
-    public void getClients() throws ModelException {
+    public void loadClients() throws ModelException {
         try {
             List<Client> allClients = bllManager.getClients();
             clientList.clear();
@@ -38,6 +38,11 @@ public class ClientModel implements IClientModel {
     @Override
     public ObservableList<Client> getClientList() {
         return clientList;
+    }
+
+    @Override
+    public Client addClient(Client client) throws ModelException{
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

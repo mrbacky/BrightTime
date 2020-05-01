@@ -38,6 +38,15 @@ public class DalManager implements DalFacade {
     }
 
     @Override
+    public Project createProject(Project project) throws DalException {
+        try {
+            return projectDAO.createProject(project);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
     public List<Project> getProjects(Client client) throws DalException {
         try {
             return projectDAO.getProjects(client);

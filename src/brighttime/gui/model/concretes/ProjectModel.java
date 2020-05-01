@@ -26,7 +26,16 @@ public class ProjectModel implements IProjectModel {
     }
 
     @Override
-    public void getProjects(Client client) throws ModelException {
+    public Project addProject(Project project) throws ModelException {
+        try {
+            return bllManager.createProject(project);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void loadProjects(Client client) throws ModelException {
         try {
             List<Project> allProjects = bllManager.getProjects(client);
             projectList.clear();
