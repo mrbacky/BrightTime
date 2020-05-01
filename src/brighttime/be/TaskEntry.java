@@ -19,7 +19,7 @@ public class TaskEntry {
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
-    //private final StringProperty stringDuration = new SimpleStringProperty();
+    private final StringProperty stringDuration = new SimpleStringProperty();
     private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
 
     public TaskEntry(int id, String description, LocalDateTime startTime, LocalDateTime endTime) {
@@ -77,54 +77,6 @@ public class TaskEntry {
         return endTime;
     }
 
-//    public String getStringDuration(LocalDateTime startTime, LocalDateTime endTime) {
-//        Duration duration = Duration.between(startTime, endTime);
-//        this.duration.set(duration);
-//        return sec_To_Format((int) duration.getSeconds());
-//    }
 
-//    public void setStringDuration(String value) {
-//        stringDuration.set(value);
-//    }
-//
-//    public StringProperty stringDurationProperty() {
-//        return stringDuration;
-//    }
-
-//    public Duration getDuration() {
-//        return duration.get();
-//    }
-//
-//    public void setDuration(Duration value) {
-//        duration.set(value);
-//    }
-//
-//    public ObjectProperty durationProperty() {
-//        return duration;
-//    }
-
-//    public String sec_To_Format(int sec) {
-//        int hours, mins, secs;
-//        mins = (int) (sec / 60);
-//        while (mins >= 60) {
-//            mins = mins % 60;
-//        }
-//        hours = (int) ((sec / 60) / 60);
-//        secs = sec % 60;
-//        String stringTime = String.format("%02d:%02d:%02d", hours, mins, secs);
-//        return stringTime;
-//    }
-//
-//    public int format_To_Sec(String formatString) {
-//        String[] format = formatString.split(":");
-//        int hh, mm, ss, hours_In_Sec, mins_In_Sec, totalSec;
-//        hh = Integer.parseInt(format[0]);
-//        mm = Integer.parseInt(format[1]);
-//        ss = Integer.parseInt(format[2]);
-//        hours_In_Sec = hh * 3600;
-//        mins_In_Sec = mm * 60;
-//        totalSec = hours_In_Sec + mins_In_Sec + ss;
-//        return totalSec;
-//    }
 
 }

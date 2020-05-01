@@ -76,24 +76,5 @@ public class TimeTrackerController implements Initializable {
 
     }
 
-//    private void displayTaskEntries(Task task) {
-//
-//    }
 
-//    private void initTaskEntries(List<TaskEntry> taskEntryList) {
-//
-//        for (TaskEntry taskEntry : taskEntryList) {
-//            try {
-//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
-//                Parent root = fxmlLoader.load();
-//                TaskEntryItemController controller = fxmlLoader.getController();
-//                controller.setTaskEntry(taskEntry);
-//                vBoxMain.getChildren().add(root);
-//
-//            } catch (IOException ex) {
-//                Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//
-//    }
 }

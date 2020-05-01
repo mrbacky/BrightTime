@@ -103,47 +103,6 @@ public class Task {
         return taskEntryList;
     }
     
-    //everything down should be deleted from here
-    public LocalDateTime getTaskStartTime() {
-        LocalDateTime taskStartTime = getTaskEntryList().get(0).getStartTime();
-        return taskStartTime;
-    }
     
-    public LocalDateTime getTaskEndTime() {
-        TaskEntry latestTaskEntry = getTaskEntryList().get(getTaskEntryList().size() - 1);
-        LocalDateTime taskEndTime = latestTaskEntry.getEndTime();
-        return taskEndTime;
-    }
-
-//    public String getStringDuration() {
-//        int totalDuration = 0;
-//        for (TaskEntry taskEntry : taskEntryList.get()) {
-//            
-//            System.out.println(taskEntry);
-//            System.out.println(taskEntry.getDuration());
-//            totalDuration = (int) (totalDuration + taskEntry.getDuration().toSeconds());
-//        }
-//        return sec_To_Format(totalDuration);
-//    }
-
-    public void setStringDuration(String value) {
-        stringDuration.set(value);
-    }
-
-    public StringProperty stringDurationProperty() {
-        return stringDuration;
-    }
-
-    public String sec_To_Format(int sec) {
-        int hours, mins, secs;
-        mins = (int) (sec / 60);
-        while (mins >= 60) {
-            mins = mins % 60;
-        }
-        hours = (int) ((sec / 60) / 60);
-        secs = sec % 60;
-        String stringTime = String.format("%02d:%02d:%02d", hours, mins, secs);
-        return stringTime;
-    }
 
 }
