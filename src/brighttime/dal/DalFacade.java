@@ -37,4 +37,11 @@ public interface DalFacade {
      */
     Task createTask(Task task) throws DalException;
 
+
+    /**
+     *
+     * @return
+     */
+    public List<Task> getTasks();
+    
 }

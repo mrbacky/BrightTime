@@ -8,29 +8,15 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
    <children>
       <BorderPane fx:id="rootBorderPane" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <AnchorPane fx:id="anchorPaneRoot" prefHeight="200.0" prefWidth="50.0" styleClass="anchorPaneRoot" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/sunsmileupdated_48px.png" />
-                     </image>
-                  </ImageView>
                   <VBox AnchorPane.topAnchor="60.0">
                      <children>
-                        <Button fx:id="btnTimeTracker" mnemonicParsing="false" onAction="#loadTimeTrackerModule" styleClass="rootButtons">
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@assets/timer_48px.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="btnCreator" mnemonicParsing="false" onAction="#loadCreatorModule" styleClass="rootButtons">
+                        <Button fx:id="btnCreator" mnemonicParsing="false" onAction="#loadCreatorModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -42,7 +28,7 @@
                               <Insets />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnOverview" mnemonicParsing="false" onAction="#loadOverviewModule" styleClass="rootButtons">
+                        <Button fx:id="btnOverview" mnemonicParsing="false" onAction="#loadOverviewModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -53,6 +39,15 @@
                         </Button>
                      </children>
                   </VBox>
+                  <Button fx:id="btnTimeTracker" layoutY="7.0" mnemonicParsing="false" onAction="#loadTimeTrackerModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/timer_48px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children></AnchorPane>
          </left>
       </BorderPane>

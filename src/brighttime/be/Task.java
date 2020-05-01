@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import java.time.LocalDateTime;
 import java.util.List;
-import javafx.util.Duration;
+import java.time.Duration;
 
 /**
  *
@@ -21,18 +21,18 @@ public class Task {
     private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
-    private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
+    private final StringProperty stringDuration = new SimpleStringProperty();
     
-    public Task(int id, String description, Project project, LocalDateTime startTime, LocalDateTime endTime, List<TaskEntry> taskEntryList) {
+    public Task(int id, String description, Project project, List<TaskEntry> taskEntryList) {
         this.id.set(id);
         this.description.set(description);
         this.project.set(project);
-        this.startTime.set(startTime);
-        this.endTime.set(endTime);
         this.taskEntryList.set(taskEntryList);
     }
 
+    
+    
     public Task(String description, Project project) {
         this.description.set(description);
         this.project.set(project);
@@ -109,17 +109,7 @@ public class Task {
     public ObjectProperty taskEntryListProperty() {
         return taskEntryList;
     }
-
-    public Duration getDuration() {
-        return duration.get();
-    }
-
-    public void setDuration(Duration value) {
-        duration.set(value);
-    }
-
-    public ObjectProperty durationProperty() {
-        return duration;
-    }
+    
+    
 
 }

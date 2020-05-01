@@ -55,4 +55,9 @@ public class DalManager implements DalFacade {
         }
     }
 
+    @Override
+    public List<Task> getTasks() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -6,17 +6,22 @@
 package brighttime.gui.controller;
 
 import brighttime.BrightTime;
+import brighttime.gui.model.ModelFacade;
+import brighttime.gui.model.ModelManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
@@ -40,10 +45,15 @@ public class RootController implements Initializable {
     private Button btnCreator;
     @FXML
     private Button btnOverview;
+    private ModelFacade modelManager;
+
+    public RootController() throws IOException {
+        modelManager = new ModelManager();
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        loadModule(TIME_TRACKER_MODULE);
     }
 
     public void loadModule(String module) {
@@ -54,13 +64,18 @@ public class RootController implements Initializable {
 
             if (module.equals(TIME_TRACKER_MODULE)) {
                 TimeTrackerController controller = fxmlLoader.getController();
-                controller.initializeView();
+                controller.injectModelManager(modelManager);
+                controller.initTasks();
             } else if (module.equals(CREATOR_MODULE)) {
                 CreateTaskController controller = fxmlLoader.getController();
                 controller.initializeView();
+                controller.injectModelManager(modelManager);
+
             } else if (module.equals(OVERVIEW_MODULE)) {
-                OverviewController controller3 = fxmlLoader.getController();
-                controller3.initializeView();
+                OverviewController controller = fxmlLoader.getController();
+                controller.initializeView();
+                controller.injectModelManager(modelManager);
+
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
@@ -84,5 +99,11 @@ public class RootController implements Initializable {
     private void loadOverviewModule(ActionEvent event) {
         loadModule(OVERVIEW_MODULE);
     }
+
+    
+
+    
+
+    
 
 }

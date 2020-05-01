@@ -4,6 +4,7 @@ import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.gui.model.ModelException;
+import brighttime.gui.model.ModelFacade;
 import brighttime.gui.model.concretes.ClientModel;
 import brighttime.gui.model.concretes.ProjectModel;
 import brighttime.gui.model.concretes.TaskModel;
@@ -46,6 +47,7 @@ public class CreateTaskController implements Initializable {
     private IClientModel clientModel;
     private IProjectModel projectModel;
     private ITaskModel taskModel;
+    private ModelFacade modelManager;
 
     /**
      * Initializes the controller class.
@@ -175,6 +177,10 @@ public class CreateTaskController implements Initializable {
         alert.show();
         if (alert.getResult() == ButtonType.OK) {
         }
+    }
+
+    void injectModelManager(ModelFacade modelManager) {
+        this.modelManager = modelManager;
     }
 
 }

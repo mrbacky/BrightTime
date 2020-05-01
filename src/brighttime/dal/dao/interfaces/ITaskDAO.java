@@ -28,4 +28,6 @@ public interface ITaskDAO {
      * @throws DalException
      */
     Task createTask(Task task) throws DalException;
+
+    List<Task> getTasks();
 }

@@ -39,4 +39,8 @@ public interface BllFacade {
      */
     Task createTask(Task task) throws BllException;
 
+    String convertDuration(int duration);
+
+    int convertDuration(String duration);
+
 }

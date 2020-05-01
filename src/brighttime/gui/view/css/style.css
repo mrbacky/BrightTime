@@ -4,13 +4,30 @@
     Author     : rados
 */
 
+
+
 .anchorPaneRoot{
 
-    -fx-background-color: #66B2F1;
+    -fx-background-color: #2368A2;
+    -fx-border-top-color: black;
+    -fx-border-top: #F1C54C;
+    -fx-background-radius :  0 0 0 0;
+
 }
+
+
 
 .rootButtons{
     -fx-background-color: transparent;
+
+
+}
+
+#vBoxMain{
+    -fx-background-color: white;
+    -fx-alignment: TOP_CENTER;
+    
+
 }
 
 .jfx-text-field{
@@ -52,3 +69,58 @@
 .button{
     -fx-background-color: transparent;
 }
+
+#lblAllTasks{
+    -fx-padding: 10px;
+
+}
+
+
+
+.apTaskItem{
+    -fx-background-color: #2368A2;  /*blue*/
+    -fx-background-radius :  5 5 5 5;
+    border-bottom-color: black; 
+
+}
+
+.apTaskEntryItem{
+    -fx-background-color: #F1C54C;  /*yellow*/
+    -fx-background-radius :  5 5 5 5;
+    border-bottom-color: black; 
+
+}
+
+
+
+#btnPlayPause{
+    -fx-background-color: transparent;
+
+}
+
+.taskItemTextFields{
+    /*    -fx-background-color: #ffdc44;*/
+    -fx-background-radius :  5 5 5 5;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.taskEntryItemTextFields{
+    /*    -fx-background-color: #ffdc44;*/
+    -fx-background-radius :  5 5 5 5;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.comboBoxTaskItem{
+
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+}
+
+
+
+
+
+
+

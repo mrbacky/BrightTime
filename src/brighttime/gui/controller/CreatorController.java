@@ -5,6 +5,7 @@
  */
 package brighttime.gui.controller;
 
+import brighttime.gui.model.ModelFacade;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -16,6 +17,8 @@ import javafx.fxml.Initializable;
  */
 public class CreatorController implements Initializable {
 
+    ModelFacade modelManager;
+    
     /**
      * Initializes the controller class.
      */
@@ -27,6 +30,11 @@ public class CreatorController implements Initializable {
     void initializeView() {
         System.out.println("in Creator page");
         
+    }
+
+    
+    void injectModelManager(ModelFacade modelManager) {
+        this.modelManager = modelManager;
     }
     
 }
