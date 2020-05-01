@@ -10,6 +10,7 @@ import brighttime.gui.model.concretes.TaskModel;
 import brighttime.gui.model.interfaces.IClientModel;
 import brighttime.gui.model.interfaces.IProjectModel;
 import brighttime.gui.model.interfaces.ITaskModel;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -20,7 +21,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -37,7 +37,7 @@ public class CreateTaskController implements Initializable {
     @FXML
     private JFXTextField txtDescription;
     @FXML
-    private Button btnAdd;
+    private JFXButton btnAdd;
     @FXML
     private JFXComboBox<Client> cboClient;
     @FXML
