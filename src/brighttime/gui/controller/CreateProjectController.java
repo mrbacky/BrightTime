@@ -2,6 +2,7 @@ package brighttime.gui.controller;
 
 import brighttime.be.Client;
 import brighttime.be.Project;
+import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
 import com.jfoenix.controls.JFXButton;
@@ -14,10 +15,7 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 
 /**
  * FXML Controller class
@@ -36,6 +34,11 @@ public class CreateProjectController implements Initializable {
     private JFXButton btnAdd;
 
     private ModelFacade modelManager;
+    private final AlertManager alertManager;
+
+    public CreateProjectController() {
+        this.alertManager = new AlertManager();
+    }
 
     /**
      * Initializes the controller class.
@@ -67,7 +70,7 @@ public class CreateProjectController implements Initializable {
                 cboClient.getItems().clear();
                 cboClient.getItems().addAll(modelManager.getClientList());
             } catch (ModelException ex) {
-                showAlert("Could not get the clients.", "An error occured: " + ex.getMessage());
+                alertManager.showAlert("Could not get the clients.", "An error occured: " + ex.getMessage());
             }
         }
     }
@@ -110,28 +113,14 @@ public class CreateProjectController implements Initializable {
                     modelManager.addProject(new Project(txtName.getText().trim(), cboClient.getSelectionModel().getSelectedItem()));
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
-                    showAlert("Could not create the project.", "An error occured: " + ex.getMessage());
+                    alertManager.showAlert("Could not create the project.", "An error occured: " + ex.getMessage());
                 }
             } else if (txtName.getText().trim().isEmpty()) {
-                showAlert("No project name was entered.", "Please enter a name for the new project.");
+                alertManager.showAlert("No project name was entered.", "Please enter a name for the new project.");
             } else {
-                showAlert("No client is selected.", "Please select a client.");
+                alertManager.showAlert("No client is selected.", "Please select a client.");
             }
         });
-    }
-
-    /**
-     * Shows an error dialog.
-     */
-    private void showAlert(String headerText, String message) {
-        //TO DO: Alert is acceptable, but customize further if time permits.
-        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        //alert.setTitle("ERROR!");
-        alert.setHeaderText(headerText);
-        alert.show();
-        if (alert.getResult() == ButtonType.OK) {
-        }
     }
 
 }

@@ -1,6 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.be.Client;
+import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
 import com.jfoenix.controls.JFXButton;
@@ -12,10 +13,7 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 
 /**
  * FXML Controller class
@@ -32,6 +30,11 @@ public class CreateClientController implements Initializable {
     private JFXTextField txtName;
 
     private ModelFacade modelManager;
+    private final AlertManager alertManager;
+
+    public CreateClientController() {
+        this.alertManager = new AlertManager();
+    }
 
     /**
      * Initializes the controller class.
@@ -75,26 +78,12 @@ public class CreateClientController implements Initializable {
                     modelManager.addClient(new Client(txtName.getText().trim()));
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
-                    showAlert("Could not create the client.", "An error occured: " + ex.getMessage());
+                    alertManager.showAlert("Could not create the client.", "An error occured: " + ex.getMessage());
                 }
             } else {
-                showAlert("No client name was entered.", "Please enter a name for the new client.");
+                alertManager.showAlert("No client name was entered.", "Please enter a name for the new client.");
             }
         });
-    }
-
-    /**
-     * Shows an error dialog.
-     */
-    private void showAlert(String headerText, String message) {
-        //TO DO: Alert is acceptable, but customize further if time permits.
-        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        //alert.setTitle("ERROR!");
-        alert.setHeaderText(headerText);
-        alert.show();
-        if (alert.getResult() == ButtonType.OK) {
-        }
     }
 
 }
