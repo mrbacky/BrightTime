@@ -6,14 +6,13 @@ import brighttime.be.Task;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
+import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
@@ -38,9 +37,11 @@ public class CreateTaskController implements Initializable {
 
     private ModelFacade modelManager;
     private final AlertManager alertManager;
+    private final ValidationManager validationManager;
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
+        this.validationManager = new ValidationManager();
     }
 
     /**
@@ -98,6 +99,15 @@ public class CreateTaskController implements Initializable {
     }
 
     /**
+     * Sets all validator.
+     */
+    private void setValidators() {
+        validationManager.inputValidation(txtDescription, "No description added.");
+        validationManager.selectionValidation(cboClient, "No client selected.");
+        validationManager.selectionValidation(cboProject, "No project selected.");
+    }
+
+    /**
      * Adds a new task.
      */
     private void addTask() {
@@ -116,46 +126,6 @@ public class CreateTaskController implements Initializable {
                 alertManager.showAlert("No client is selected.", "Please select a client.");
             } else {
                 alertManager.showAlert("No project is selected.", "Please select a project.");
-            }
-        });
-    }
-
-    /**
-     * Sets all validator.
-     */
-    private void setValidators() {
-        inputValidation();
-        selectionValidation(cboClient, "No client selected.");
-        selectionValidation(cboProject, "No project selected.");
-    }
-
-    /**
-     * Validates the input of the task description text field.
-     */
-    private void inputValidation() {
-        RequiredFieldValidator validator = new RequiredFieldValidator();
-        txtDescription.getValidators().add(validator);
-        validator.setMessage("No description added.");
-        txtDescription.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                txtDescription.validate();
-            }
-        });
-    }
-
-    /**
-     * Validates the selection of a ComboBox.
-     *
-     * @param comboBox
-     * @param message
-     */
-    private void selectionValidation(JFXComboBox comboBox, String message) {
-        RequiredFieldValidator validator = new RequiredFieldValidator();
-        comboBox.getValidators().add(validator);
-        validator.setMessage(message);
-        comboBox.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                comboBox.validate();
             }
         });
     }

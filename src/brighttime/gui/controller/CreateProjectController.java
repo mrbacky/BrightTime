@@ -5,14 +5,13 @@ import brighttime.be.Project;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
+import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
@@ -35,9 +34,11 @@ public class CreateProjectController implements Initializable {
 
     private ModelFacade modelManager;
     private final AlertManager alertManager;
+    private final ValidationManager validationManager;
 
     public CreateProjectController() {
         this.alertManager = new AlertManager();
+        this.validationManager = new ValidationManager();
     }
 
     /**
@@ -55,8 +56,7 @@ public class CreateProjectController implements Initializable {
     void initializeView() throws IOException {
         System.out.println("in CreateProject page");
         setClientsIntoComboBox();
-        inputValidation();
-        selectionValidation();
+        setValidators();
         addClient();
     }
 
@@ -76,31 +76,11 @@ public class CreateProjectController implements Initializable {
     }
 
     /**
-     * Validates the input of the TextField.
+     * Sets all validator.
      */
-    private void inputValidation() {
-        RequiredFieldValidator validator = new RequiredFieldValidator();
-        txtName.getValidators().add(validator);
-        validator.setMessage("No name written.");
-        txtName.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                txtName.validate();
-            }
-        });
-    }
-
-    /**
-     * Validates the selection of the ComboBox.
-     */
-    private void selectionValidation() {
-        RequiredFieldValidator validator = new RequiredFieldValidator();
-        cboClient.getValidators().add(validator);
-        validator.setMessage("No client selected.");
-        cboClient.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                cboClient.validate();
-            }
-        });
+    private void setValidators() {
+        validationManager.inputValidation(txtName, "No name written.");
+        validationManager.selectionValidation(cboClient, "No client selected.");
     }
 
     /**
