@@ -105,14 +105,14 @@ public class CreateProjectController implements Initializable {
      */
     private void addClient() {
         btnAdd.setOnAction((event) -> {
-            if (!txtName.getText().isEmpty() && !cboClient.getSelectionModel().isEmpty()) {
+            if (!txtName.getText().trim().isEmpty() && !cboClient.getSelectionModel().isEmpty()) {
                 try {
                     modelManager.addProject(new Project(txtName.getText().trim(), cboClient.getSelectionModel().getSelectedItem()));
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
                     showAlert("Could not create the project.", "An error occured: " + ex.getMessage());
                 }
-            } else if (txtName.getText().isEmpty()) {
+            } else if (txtName.getText().trim().isEmpty()) {
                 showAlert("No project name was entered.", "Please enter a name for the new project.");
             } else {
                 showAlert("No client is selected.", "Please select a client.");
