@@ -11,6 +11,7 @@ import java.util.List;
 import brighttime.bll.util.DurationConverter;
 import brighttime.bll.util.EntryDurationCalculator;
 import brighttime.bll.util.TaskDurationCalculator;
+import brighttime.bll.util.TaskIntervalCalculator;
 import brighttime.dal.MockDalManager;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class BllManager implements BllFacade {
 
     private final EntryDurationCalculator entryDurationCalculator;
     private final TaskDurationCalculator taskDurationCalculator;
+    private final TaskIntervalCalculator taskIntervalCalculator;
 
     public BllManager() throws IOException {
         dalManager = new DalManager();
@@ -34,6 +36,7 @@ public class BllManager implements BllFacade {
         mockDalManager = new MockDalManager();
         entryDurationCalculator = new EntryDurationCalculator();
         taskDurationCalculator = new TaskDurationCalculator();
+        taskIntervalCalculator = new TaskIntervalCalculator();
     }
 
     @Override
@@ -104,6 +107,16 @@ public class BllManager implements BllFacade {
     @Override
     public long formatToSec(String formatString) {
         return durationConverter.formatToSec(formatString);
+    }
+
+    @Override
+    public LocalDateTime getStartTime(Task task) {
+        return taskIntervalCalculator.getStartTime(task);
+    }
+
+    @Override
+    public LocalDateTime getEndTime(Task task) {
+        return taskIntervalCalculator.getEndTime(task);
     }
 
 }

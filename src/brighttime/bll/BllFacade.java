@@ -67,4 +67,8 @@ public interface BllFacade {
 
     long formatToSec(String formatString);
 
+    LocalDateTime getStartTime(Task task);
+
+    LocalDateTime getEndTime(Task task);
+
 }
