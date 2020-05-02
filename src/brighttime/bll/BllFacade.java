@@ -3,6 +3,8 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -57,8 +59,12 @@ public interface BllFacade {
 
     List<Task> getTasks();
 
-    String convertDuration(int duration);
+    Duration calculateDuration(LocalDateTime startTime, LocalDateTime endTime);
 
-    int convertDuration(String duration);
+    Duration calculateDuration(Task task);
+
+    String secToFormat(long sec);
+
+    long formatToSec(String formatString);
 
 }

@@ -9,7 +9,11 @@ import brighttime.dal.DalManager;
 import java.io.IOException;
 import java.util.List;
 import brighttime.bll.util.DurationConverter;
+import brighttime.bll.util.EntryDurationCalculator;
+import brighttime.bll.util.TaskDurationCalculator;
 import brighttime.dal.MockDalManager;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -21,10 +25,15 @@ public class BllManager implements BllFacade {
     private final DalFacade dalManager;
     private final DalFacade mockDalManager;
 
+    private final EntryDurationCalculator entryDurationCalculator;
+    private final TaskDurationCalculator taskDurationCalculator;
+
     public BllManager() throws IOException {
         dalManager = new DalManager();
         durationConverter = new DurationConverter();
         mockDalManager = new MockDalManager();
+        entryDurationCalculator = new EntryDurationCalculator();
+        taskDurationCalculator = new TaskDurationCalculator();
     }
 
     @Override
@@ -78,13 +87,23 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public String convertDuration(int duration) {
-        return durationConverter.sec_To_Format(duration);
+    public Duration calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
+        return entryDurationCalculator.calculateDuration(startTime, endTime);
     }
 
     @Override
-    public int convertDuration(String duration) {
-        return durationConverter.format_To_Sec(duration);
+    public Duration calculateDuration(Task task) {
+        return taskDurationCalculator.calculateDuration(task);
+    }
+
+    @Override
+    public String secToFormat(long sec) {
+        return durationConverter.secToFormat(sec);
+    }
+
+    @Override
+    public long formatToSec(String formatString) {
+        return durationConverter.formatToSec(formatString);
     }
 
 }
