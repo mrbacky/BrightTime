@@ -3,6 +3,7 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.dal.DalException;
 import brighttime.dal.DalFacade;
 import brighttime.dal.DalManager;
@@ -30,13 +31,13 @@ public class BllManager implements BllFacade {
     private final TaskDurationCalculator taskDurationCalculator;
     private final TaskIntervalCalculator taskIntervalCalculator;
 
-    public BllManager() throws IOException {
-        dalManager = new DalManager();
+    public BllManager(DalFacade dalManager) throws IOException {
+        this.dalManager = dalManager;
         durationConverter = new DurationConverter();
-        mockDalManager = new MockDalManager();
         entryDurationCalculator = new EntryDurationCalculator();
         taskDurationCalculator = new TaskDurationCalculator();
         taskIntervalCalculator = new TaskIntervalCalculator();
+        mockDalManager = new MockDalManager();
     }
 
     @Override
@@ -90,8 +91,8 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Duration calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
-        return entryDurationCalculator.calculateDuration(startTime, endTime);
+    public Duration calculateDuration(TaskEntry taskEntry) {
+        return entryDurationCalculator.calculateDuration(taskEntry);
     }
 
     @Override

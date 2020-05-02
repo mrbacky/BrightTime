@@ -37,12 +37,12 @@
             </StackPane>
             <StackPane layoutX="450.0" layoutY="9.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" text="09:00">
+                  <TextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields">
                      <StackPane.margin>
                         <Insets right="95.0" />
                      </StackPane.margin>
                   </TextField>
-                  <TextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" text="10:00">
+                  <TextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields">
                      <StackPane.margin>
                         <Insets left="35.0" />
                      </StackPane.margin>
@@ -56,7 +56,7 @@
             </StackPane>
             <StackPane prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" text="23:45:58" />
+                  <TextField fx:id="textFieldDuration" styleClass="taskItemTextFields" />
                </children>
             </StackPane>
             <StackPane prefWidth="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

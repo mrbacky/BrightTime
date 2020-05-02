@@ -8,6 +8,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -53,7 +54,6 @@ public class TaskItemController implements Initializable {
     private ToggleButton btnExpandTask;
     @FXML
     private VBox vBoxTaskEntries;
-    private Task task;
     @FXML
     private TextField textFieldProject;
     @FXML
@@ -64,6 +64,7 @@ public class TaskItemController implements Initializable {
     private Button btnPlayTask;
     @FXML
     private Button btnDeleteTask;
+    private ITaskModel taskModel;
 
     /**
      * Initializes the controller class.
@@ -91,8 +92,12 @@ public class TaskItemController implements Initializable {
          */
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void injectModel(ITaskModel taskModel) {
+        this.taskModel = taskModel;
+        setTaskDetails(taskModel.getTask());
+    }
+
+    public void setTaskDetails(Task task) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
@@ -105,19 +110,22 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
-//        textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
-//                -> dtf.format(task.getTaskStartTime()), task.startTimeProperty()));
-//
-//        textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
-//                -> dtf.format(task.getTaskEndTime()), task.endTimeProperty()));
+        textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getStartTime()), task.startTimeProperty()));
 
-//        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-//                -> task.getStringDuration(), task.stringDurationProperty()));
+        textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getEndTime()), task.endTimeProperty()));
+
+        textFieldDuration.textProperty().bind(Bindings.createStringBinding(() 
+                -> taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()), task.stringDurationProperty()));
+        
+//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()));
+
     }
 
     @FXML
     private void expandTaskItem(ActionEvent event) {
-        
+
         if (btnExpandTask.isSelected()) {
             initTaskEntries();
         } else {
@@ -127,13 +135,15 @@ public class TaskItemController implements Initializable {
 
     public void initTaskEntries() {
 
-        List<TaskEntry> taskEntries = task.getTaskEntryList();
+        List<TaskEntry> taskEntries = taskModel.getTask().getTaskEntryList();
         for (TaskEntry taskEntry : taskEntries) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
                 Parent root = fxmlLoader.load();
                 TaskEntryItemController controller = fxmlLoader.getController();
+                controller.injectTaskModel(taskModel);
                 controller.setTaskEntry(taskEntry);
+
                 vBoxTaskEntries.getChildren().add(root);
             } catch (IOException ex) {
                 Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);

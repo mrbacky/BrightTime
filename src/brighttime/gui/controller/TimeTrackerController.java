@@ -7,8 +7,10 @@ package brighttime.gui.controller;
 
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelFacade;
 import brighttime.gui.model.concretes.TaskModel;
+import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import com.sun.source.util.TaskListener;
 import java.io.IOException;
@@ -40,7 +42,7 @@ public class TimeTrackerController implements Initializable {
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     @FXML
     private VBox vBoxMain;
-    private ModelFacade modelManager;
+    private IMainModel mainModel;
 
     /**
      * Initializes the controller class.
@@ -50,27 +52,29 @@ public class TimeTrackerController implements Initializable {
         
     }
 
-    void injectModelManager(ModelFacade modelManager) {
-        this.modelManager = modelManager;
+    void injectMainModel(IMainModel mainModel) {
+        this.mainModel = mainModel;
     }
 
     public void initTasks() {
         vBoxMain.getChildren().clear();
         System.out.println("yo");
-        modelManager.loadTasks();
-        List<Task> taskList = modelManager.getTasks();
+        mainModel.loadTasks();
+        List<Task> taskList = mainModel.getTasks();
         for (Task task : taskList) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
 
                 Parent root = fxmlLoader.load();
 
+                ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
+                taskModel.setTask(task);
+                
                 TaskItemController controller = fxmlLoader.getController();
-                controller.setTask(task);
+                controller.injectModel(taskModel);
 
                 vBoxMain.getChildren().add(root);
 
-//                controller.setTaskTotalInterval(task);
             } catch (IOException ex) {
                 Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -44,28 +44,24 @@ public class MockTaskDAO implements ITaskDAO {
 
     private void createUITaskEntries() {
 
-        taskEntries1.add(new TaskEntry(0, "create UI for App", LocalDateTime.parse("2020-04-28T08:00:00"), LocalDateTime.parse("2020-04-28T09:00:00")));
+        taskEntries1.add(new TaskEntry(0, "create UI for App", LocalDateTime.parse("2020-04-28T02:00:00"), LocalDateTime.parse("2020-04-28T09:00:00")));
         taskEntries1.add(new TaskEntry(1, "create UI for App", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:20:00")));
-        taskEntries1.add(new TaskEntry(2, "create UI for App", LocalDateTime.parse("2020-04-28T15:00:00"), LocalDateTime.parse("2020-04-28T18:15:00")));
+        taskEntries1.add(new TaskEntry(2, "create UI for App", LocalDateTime.parse("2020-04-28T15:00:00"), LocalDateTime.parse("2020-04-28T18:20:00")));
 
     }
 
     private void sendEmailTaskEntries() {
-        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:00:00")));
-        taskEntries2.add(new TaskEntry(4, "send email", LocalDateTime.parse("2020-04-28T17:00:00"), LocalDateTime.parse("2020-04-28T17:00:12")));
+        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T18:45:00"), LocalDateTime.parse("2020-04-28T19:00:00")));
+        taskEntries2.add(new TaskEntry(4, "send email", LocalDateTime.parse("2020-04-28T20:00:00"), LocalDateTime.parse("2020-04-28T20:00:12")));
         taskEntries2.add(new TaskEntry(5, "send email", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
         taskEntries2.add(new TaskEntry(6, "send email", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
 
     }
 
     private void eatTaskEntries() {
-        taskEntries3.add(new TaskEntry(7, "eat", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:00:00")));
-        taskEntries3.add(new TaskEntry(8, "eat", LocalDateTime.parse("2020-04-28T17:00:00"), LocalDateTime.parse("2020-04-28T17:00:12")));
-        taskEntries3.add(new TaskEntry(9, "eat", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
-        taskEntries3.add(new TaskEntry(10, "eat", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
-        taskEntries3.add(new TaskEntry(11, "eat", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
-        taskEntries3.add(new TaskEntry(12, "eat", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
-
+        taskEntries3.add(new TaskEntry(7, "eat", LocalDateTime.parse("2020-04-28T23:30:00"), LocalDateTime.parse("2020-04-28T23:40:00")));
+        taskEntries3.add(new TaskEntry(8, "eat", LocalDateTime.parse("2020-04-28T23:45:00"), LocalDateTime.parse("2020-04-28T23:48:12")));
+        
     }
 
     @Override

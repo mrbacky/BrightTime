@@ -7,6 +7,7 @@ import brighttime.gui.model.concretes.ClientModel;
 import brighttime.gui.model.concretes.ProjectModel;
 import brighttime.gui.model.concretes.TaskModel;
 import brighttime.gui.model.interfaces.IClientModel;
+import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.IProjectModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
@@ -21,11 +22,10 @@ public class ModelManager implements ModelFacade {
     private IClientModel clientModel;
     private IProjectModel projectModel;
     private ITaskModel taskModel;
+    private IMainModel mainModel;
 
     public ModelManager() throws IOException {
-        clientModel = new ClientModel();
-        projectModel = new ProjectModel();
-        taskModel = new TaskModel();
+        mainModel = ModelCreator.getInstance().createMainModel();
     }
 
     @Override
@@ -74,23 +74,38 @@ public class ModelManager implements ModelFacade {
         return projectModel.getProjectList();
     }
 
+//    @Override
+//    public Task addTask(Task task) throws ModelException {
+//        try {
+//            return taskModel.addTask(task);
+//        } catch (ModelException ex) {
+//            throw new ModelException(ex.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public void loadTasks() {
+//        taskModel.loadTasks();
+//    }
+//
+//    @Override
+//    public ObservableList<Task> getTasks() {
+//        return taskModel.getTasks();
+//    }
+
     @Override
     public Task addTask(Task task) throws ModelException {
-        try {
-            return taskModel.addTask(task);
-        } catch (ModelException ex) {
-            throw new ModelException(ex.getMessage());
-        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void loadTasks() {
-        taskModel.loadTasks();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public ObservableList<Task> getTasks() {
-        return taskModel.getTasks();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

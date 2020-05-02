@@ -23,7 +23,7 @@ public class Task {
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
-    
+
     public Task(int id, String description, Project project, List<TaskEntry> taskEntryList) {
         this.id.set(id);
         this.description.set(description);
@@ -31,8 +31,6 @@ public class Task {
         this.taskEntryList.set(taskEntryList);
     }
 
-    
-    
     public Task(String description, Project project) {
         this.description.set(description);
         this.project.set(project);
@@ -109,7 +107,17 @@ public class Task {
     public ObjectProperty taskEntryListProperty() {
         return taskEntryList;
     }
-    
-    
+
+    public String getStringDuration() {
+        return stringDuration.get();
+    }
+
+    public void setStringDuration(String value) {
+        stringDuration.set(value);
+    }
+
+    public StringProperty stringDurationProperty() {
+        return stringDuration;
+    }
 
 }
