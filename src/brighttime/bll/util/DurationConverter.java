@@ -1,7 +1,7 @@
 package brighttime.bll.util;
 
 /**
- * TimeConverter Class is used to convert the time value in seconds to the
+ * DurationConverter Class is used to convert the duration value in seconds to the
  * format hh:mm:ss and the other way around.
  *
  * @author Radoslav Backovsky

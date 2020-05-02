@@ -47,6 +47,7 @@ public class TimeTrackerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
     }
 
     void injectModelManager(ModelFacade modelManager) {
@@ -54,20 +55,21 @@ public class TimeTrackerController implements Initializable {
     }
 
     public void initTasks() {
+        vBoxMain.getChildren().clear();
+        System.out.println("yo");
         modelManager.loadTasks();
         List<Task> taskList = modelManager.getTasks();
         for (Task task : taskList) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
-                
+
                 Parent root = fxmlLoader.load();
-                
+
                 TaskItemController controller = fxmlLoader.getController();
                 controller.setTask(task);
-                
+
                 vBoxMain.getChildren().add(root);
-                
-                
+
 //                controller.setTaskTotalInterval(task);
             } catch (IOException ex) {
                 Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,6 +77,5 @@ public class TimeTrackerController implements Initializable {
         }
 
     }
-
 
 }

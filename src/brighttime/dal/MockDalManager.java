@@ -40,4 +40,14 @@ public class MockDalManager implements DalFacade {
         return MockTaskDAO.getTasks();
     }
 
+    @Override
+    public Client createClient(Client client) throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Project createProject(Project project) throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

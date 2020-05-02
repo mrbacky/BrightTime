@@ -117,7 +117,7 @@ public class TaskItemController implements Initializable {
 
     @FXML
     private void expandTaskItem(ActionEvent event) {
-
+        
         if (btnExpandTask.isSelected()) {
             initTaskEntries();
         } else {
@@ -136,8 +136,7 @@ public class TaskItemController implements Initializable {
                 controller.setTaskEntry(taskEntry);
                 vBoxTaskEntries.getChildren().add(root);
             } catch (IOException ex) {
-                Logger.getLogger(TimeTrackerController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
