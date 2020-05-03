@@ -57,6 +57,7 @@ public class RootController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        loadModule(TIME_TRACKER_MODULE);
     }
 
     public void loadModule(String module) {
@@ -68,7 +69,9 @@ public class RootController implements Initializable {
             if (module.equals(TIME_TRACKER_MODULE)) {
                 TimeTrackerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
-                controller.initTasks();
+                controller.initializeView();
+//                controller.setUpTaskCreator();
+//                controller.initTasks();
             } else if (module.equals(CREATOR_MODULE)) {
                 CreateTaskController controller = fxmlLoader.getController();
 //                controller.injectModelManager(modelManager);

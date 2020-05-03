@@ -30,5 +30,7 @@ public interface ITaskModel {
     LocalDateTime getStartTime();
 
     LocalDateTime getEndTime();
+
+    public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime);
     
 }

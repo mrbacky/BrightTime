@@ -49,7 +49,10 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public Duration calculateDuration(Task task) {
-        return bllManager.calculateDuration(task);
+        if (task.getTaskEntryList() != null) {
+            return bllManager.calculateDuration(task);
+        }
+        return Duration.ZERO;
     }
 
     @Override
@@ -63,12 +66,23 @@ public class TaskModel implements ITaskModel {
     }
 
     public LocalDateTime getEndTime() {
-        return bllManager.getEndTime(task);
+        if (task.getTaskEntryList() != null) {
+            return bllManager.getEndTime(task);
+        }
+        return LocalDateTime.now();
     }
 
     public LocalDateTime getStartTime() {
-        return bllManager.getStartTime(task);
+        if (task.getTaskEntryList() != null) {
+            return bllManager.getStartTime(task);
+        }
+        return LocalDateTime.now();
+    }
 
+    @Override
+    public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) {
+        TaskEntry newTaskEntry = new TaskEntry(task.getDescription(), tempStartTime, tempEndTime);
+        task.getTaskEntryList().add(newTaskEntry);
     }
 
 }

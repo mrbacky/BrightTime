@@ -10,7 +10,10 @@ import brighttime.dal.dao.interfaces.IClientDAO;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -75,7 +78,11 @@ public class DalManager implements DalFacade {
 
     @Override
     public List<Task> getTasks() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return taskDAO.getTasksForCurrentDay(LocalDate.now());
+        } catch (DalException ex) {
+            Logger.getLogger(DalManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-
 }

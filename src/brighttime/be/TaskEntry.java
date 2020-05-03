@@ -29,6 +29,12 @@ public class TaskEntry {
         this.endTime.set(endTime);
     }
 
+    public TaskEntry(String description, LocalDateTime startTime, LocalDateTime endTime) {
+        this.description.set(description);
+        this.startTime.set(startTime);
+        this.endTime.set(endTime);
+    }
+
     public int getId() {
         return id.get();
     }

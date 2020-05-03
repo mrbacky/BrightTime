@@ -79,7 +79,7 @@ public class BllManager implements BllFacade {
     @Override
     public Task createTask(Task task) throws BllException {
         try {
-            return dalManager.createTask(task);
+            return mockDalManager.createTask(task);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }

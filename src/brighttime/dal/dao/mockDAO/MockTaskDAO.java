@@ -21,6 +21,7 @@ public class MockTaskDAO implements ITaskDAO {
     private List<TaskEntry> taskEntries1 = new ArrayList<>();
     private List<TaskEntry> taskEntries2 = new ArrayList<>();
     private List<TaskEntry> taskEntries3 = new ArrayList<>();
+    private List<Task> taskList = new ArrayList<>();
 
     private Project brightTime;
     private Client grumsen;
@@ -28,10 +29,12 @@ public class MockTaskDAO implements ITaskDAO {
     public MockTaskDAO() {
         createClient();
         createProject();
+        
         createUITaskEntries();
         sendEmailTaskEntries();
         eatTaskEntries();
 
+        createInitialTasks();
     }
 
     private void createClient() {
@@ -61,16 +64,11 @@ public class MockTaskDAO implements ITaskDAO {
     private void eatTaskEntries() {
         taskEntries3.add(new TaskEntry(7, "eat", LocalDateTime.parse("2020-04-28T23:30:00"), LocalDateTime.parse("2020-04-28T23:40:00")));
         taskEntries3.add(new TaskEntry(8, "eat", LocalDateTime.parse("2020-04-28T23:45:00"), LocalDateTime.parse("2020-04-28T23:48:12")));
-        
+
     }
 
     @Override
     public List<Task> getTasks() {
-        List<Task> taskList = new ArrayList<>();
-        taskList.add(new Task(0, "create UI for App", brightTime, taskEntries1));
-        taskList.add(new Task(1, "send email", brightTime, taskEntries2));
-        taskList.add(new Task(2, "eat", brightTime, taskEntries3));
-
         return taskList;
     }
 
@@ -81,7 +79,15 @@ public class MockTaskDAO implements ITaskDAO {
 
     @Override
     public Task createTask(Task task) throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        taskList.add(task);
+        return task;
+    }
+
+    private void createInitialTasks() {
+        taskList.add(new Task(0, "create UI for App", brightTime, taskEntries1));
+        taskList.add(new Task(1, "send email", brightTime, taskEntries2));
+        taskList.add(new Task(2, "eat", brightTime, taskEntries3));
+
     }
 
 }

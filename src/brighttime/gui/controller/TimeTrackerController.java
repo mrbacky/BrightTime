@@ -28,7 +28,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javax.lang.model.util.Elements;
 
@@ -40,46 +42,67 @@ import javax.lang.model.util.Elements;
 public class TimeTrackerController implements Initializable {
 
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
+    private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
+
     @FXML
     private VBox vBoxMain;
     private IMainModel mainModel;
+    @FXML
+    private StackPane spTaskCreator;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
 
-    void injectMainModel(IMainModel mainModel) {
+    public void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
     }
 
-    public void initTasks() {
-        vBoxMain.getChildren().clear();
-        System.out.println("yo");
+    public void initializeView() {
         mainModel.loadTasks();
+        setUpTaskCreator();
+        initTasks();
+    }
+
+    private void setUpTaskCreator() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_CREATOR_FXML));
+
+            Parent root = fxmlLoader.load();
+            CreateTaskController controller = fxmlLoader.getController();
+            controller.injectMainModel(mainModel);
+            controller.initializeView();
+            spTaskCreator.getChildren().add(root);
+
+        } catch (IOException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void initTasks() {
+        vBoxMain.getChildren().clear();
         List<Task> taskList = mainModel.getTasks();
         for (Task task : taskList) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
-
-                Parent root = fxmlLoader.load();
-
-                ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
-                taskModel.setTask(task);
-                
-                TaskItemController controller = fxmlLoader.getController();
-                controller.injectModel(taskModel);
-
-                vBoxMain.getChildren().add(root);
-
-            } catch (IOException ex) {
-                Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            addTaskItem(task);
         }
+    }
 
+    private void addTaskItem(Task task) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
+            Parent root = fxmlLoader.load();
+            ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
+            taskModel.setTask(task);
+            TaskItemController controller = fxmlLoader.getController();
+            controller.injectModel(taskModel);
+            vBoxMain.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

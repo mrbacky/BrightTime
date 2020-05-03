@@ -32,7 +32,7 @@ public class MockDalManager implements DalFacade {
 
     @Override
     public Task createTask(Task task) throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return MockTaskDAO.createTask(task);
     }
 
     @Override

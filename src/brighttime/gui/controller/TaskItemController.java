@@ -30,6 +30,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -43,6 +45,12 @@ public class TaskItemController implements Initializable {
 
     private static final String DATE_TIME_FORMAT = "HH:mm";
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
+
+//    private ImageView PLAY_ICON_IMAGE = new ImageView("/brighttime/gui/view/assets/play.png");
+    private final Image PLAY_ICON_IMAGE = new Image("/brighttime/gui/view/assets/play.png");
+    private final Image PAUSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/pause.png");
+    private final Image EXPAND_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
+    private final Image COLLAPSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
 
     @FXML
     private TextField textFieldStartTime;
@@ -61,10 +69,17 @@ public class TaskItemController implements Initializable {
     @FXML
     private TextField textFieldTaskDesc;
     @FXML
-    private Button btnPlayTask;
-    @FXML
     private Button btnDeleteTask;
     private ITaskModel taskModel;
+    @FXML
+    private ToggleButton btnPlayPause;
+    @FXML
+    private ImageView imgPlayPause;
+
+    private LocalDateTime tempStartTime;
+    private LocalDateTime tempEndTime;
+    @FXML
+    private ImageView imgExpandCollapse;
 
     /**
      * Initializes the controller class.
@@ -116,19 +131,22 @@ public class TaskItemController implements Initializable {
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getEndTime()), task.endTimeProperty()));
 
-        textFieldDuration.textProperty().bind(Bindings.createStringBinding(() 
+        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
                 -> taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()), task.stringDurationProperty()));
-        
-//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()));
 
+//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()));
     }
 
     @FXML
     private void expandTaskItem(ActionEvent event) {
 
         if (btnExpandTask.isSelected()) {
-            initTaskEntries();
+            imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
+            if (taskModel.getTask().getTaskEntryList() != null) {
+                initTaskEntries();
+            }
         } else {
+            imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
             vBoxTaskEntries.getChildren().clear();
         }
     }
@@ -151,4 +169,22 @@ public class TaskItemController implements Initializable {
         }
     }
 
+    private void createTaskEntry() {
+
+        Task task = taskModel.getTask();
+        List<TaskEntry> taskEntries = task.getTaskEntryList();
+//        TaskEntry newTaskEntry = new TaskEntry(task.getDescription(), LocalDateTime.MIN, LocalDateTime.MIN)
+    }
+
+    @FXML
+    private void handlePlayPauseTask(ActionEvent event) {
+        if (btnPlayPause.isSelected()) {
+            imgPlayPause.setImage(PAUSE_ICON_IMAGE);
+            tempStartTime = LocalDateTime.now();
+        } else {
+            imgPlayPause.setImage(PLAY_ICON_IMAGE);
+            tempEndTime = LocalDateTime.now();
+            taskModel.createTaskEntry(tempStartTime, tempEndTime);
+        }
+    }
 }

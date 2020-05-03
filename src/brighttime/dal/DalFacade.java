@@ -59,6 +59,6 @@ public interface DalFacade {
      *
      * @return
      */
-    public List<Task> getTasks();
+    List<Task> getTasks();
 
 }
