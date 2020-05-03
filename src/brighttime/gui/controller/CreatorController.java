@@ -45,8 +45,8 @@ public class CreatorController implements Initializable {
     void initializeView() {
         System.out.println("in Creator page");
         centervBox();
-        manageClients();
-        manageProjects();
+        showAdminClientModule();
+        showAdminProjectModule();
     }
 
     public void setContr(RootController con) {
@@ -57,13 +57,13 @@ public class CreatorController implements Initializable {
         vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
     }
 
-    private void manageClients() {
+    private void showAdminClientModule() {
         btnClients.setOnAction((event) -> {
             rootContr.loadAdminClientModule();
         });
     }
 
-    private void manageProjects() {
+    private void showAdminProjectModule() {
         btnProjects.setOnAction((event) -> {
             rootContr.loadAdminProjectModule();
         });

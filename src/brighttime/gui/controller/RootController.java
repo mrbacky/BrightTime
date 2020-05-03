@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -59,11 +60,12 @@ public class RootController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        setToolTipsForButtons();
         listen();
         //showAdminMenu();
         //hideAdminMenu();
-        handleClientsButton();
-        handleProjectsButton();
+        showAdminClientModule();
+        showAdminProjectModule();
     }
 
     public void loadModule(String module) {
@@ -151,13 +153,13 @@ public class RootController implements Initializable {
         nodesList.animateList(false);
     }
 
-    private void handleClientsButton() {
+    private void showAdminClientModule() {
         btnClients.setOnAction((event) -> {
             loadAdminClientModule();
         });
     }
 
-    private void handleProjectsButton() {
+    private void showAdminProjectModule() {
         btnProjects.setOnAction((event) -> {
             loadAdminProjectModule();
         });
@@ -166,6 +168,18 @@ public class RootController implements Initializable {
     @FXML
     private void loadOverviewModule(ActionEvent event) {
         loadModule(OVERVIEW_MODULE);
+    }
+
+    private void setToolTipsForButtons() {
+        setToolTipForOneButton(btnTimeTracker, "Time Tracker");
+        setToolTipForOneButton(btnOverview, "Overview");
+        setToolTipForOneButton(btnCreator, "Administration");
+        setToolTipForOneButton(btnClients, "Manage Clients");
+        setToolTipForOneButton(btnProjects, "Manage Projects");
+    }
+
+    private void setToolTipForOneButton(JFXButton button, String tip) {
+        button.setTooltip(new Tooltip(tip));
     }
 
 }
