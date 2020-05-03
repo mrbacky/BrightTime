@@ -8,7 +8,7 @@
 
 .anchorPaneRoot{
 
-    -fx-background-color: #2368A2;
+    -fx-background-color: #435A9A;
     -fx-border-top-color: black;
     -fx-border-top: #F1C54C;
     -fx-background-radius :  0 0 0 0;
@@ -19,14 +19,16 @@
 
 .rootButtons{
     -fx-background-color: transparent;
-
+    /*-fx-background-color: #435A9A;*/
+    -fx-background-radius: 20 20 20 20;
+    -fx-padding: 0 0 0 -1;
 
 }
 
 #vBoxMain{
     -fx-background-color: white;
     -fx-alignment: TOP_CENTER;
-    
+
 
 }
 
@@ -66,8 +68,31 @@
     -fx-text-fill: #00A99D;
 }
 
-.button{
-    -fx-background-color: transparent;
+.scroll-pane{
+    -fx-background: white;
+    -fx-border-color: purple;
+}
+
+.grid-pane{
+    -fx-grid-lines-visible: false;
+}
+
+.adminTitleLabel{
+    -fx-padding: 10 0 0 0;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
+}
+
+.adminButtons{    
+    -fx-background-color: #435A9A;
+    -fx-background-radius: 30 30 30 30;
+    -fx-padding: 0 0 0 -1;
+}
+
+.adminMenuItemLabel{
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
 }
 
 #lblAllTasks{

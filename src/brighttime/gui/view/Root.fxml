@@ -1,45 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXNodesList?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
    <children>
       <BorderPane fx:id="rootBorderPane" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane fx:id="anchorPaneRoot" prefHeight="200.0" prefWidth="50.0" styleClass="anchorPaneRoot" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="anchorPaneRoot" prefHeight="200.0" prefWidth="50.0" styleClass="anchorPaneRoot">
                <children>
-                  <VBox AnchorPane.topAnchor="60.0">
-                     <children>
-                        <Button fx:id="btnCreator" mnemonicParsing="false" onAction="#loadCreatorModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@assets/plus_48px.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="btnOverview" mnemonicParsing="false" onAction="#loadOverviewModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@assets/combo_chart_48px.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </VBox>
-                  <Button fx:id="btnTimeTracker" layoutY="7.0" mnemonicParsing="false" onAction="#loadTimeTrackerModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                  <JFXButton fx:id="btnTimeTracker" contentDisplay="GRAPHIC_ONLY" layoutY="7.0" mnemonicParsing="false" onAction="#loadTimeTrackerModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -47,8 +22,62 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </Button>
-               </children></AnchorPane>
+                  </JFXButton>
+                  <VBox AnchorPane.topAnchor="60.0">
+                     <children>
+                        <JFXButton fx:id="btnOverview" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#loadOverviewModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/combo_chart_48px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXNodesList fx:id="nodesList">
+                           <children>
+                              <JFXButton fx:id="btnCreator" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#loadCreatorModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@assets/icons8_settings_90px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnClients" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@assets/icons8_salary_male_96px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnProjects" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@assets/icons8_folder_104px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnUsers" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="110.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@assets/icons8_user_groups_96px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                        </JFXNodesList>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
          </left>
       </BorderPane>
    </children>

@@ -1,30 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreatorController">
-   <children>
-      <Label text="Creator" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutY="371.0" text="Creator" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="534.0" text="Creator" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="534.0" layoutY="370.0" text="Creator" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-   </children>
-</AnchorPane>
+<ScrollPane fx:id="scrollPane" pannable="true" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreatorController">
+   <content>
+      <VBox fx:id="vBox" alignment="CENTER" fillWidth="false">
+         <children>
+            <Label styleClass="adminTitleLabel" text="Administration" />
+            <GridPane prefHeight="251.0" prefWidth="221.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.66665649414062" minWidth="10.0" prefWidth="30.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.66665649414062" minWidth="10.0" prefWidth="190.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <JFXButton contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="20.0" prefWidth="20.0" styleClass="adminButtons" GridPane.rowIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/icons8_salary_male_96px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="20.0" prefWidth="20.0" styleClass="adminButtons" GridPane.rowIndex="4">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/icons8_folder_104px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="20.0" prefWidth="20.0" styleClass="adminButtons" GridPane.rowIndex="7">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/icons8_user_groups_96px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create, update and delete clients. Set the hourly rate for each client." wrappingWidth="186.2298583984375" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets left="8.0" />
+                     </GridPane.margin></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create, update and delete project. Set the hourly rate for each project." wrappingWidth="189.5462188720703" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets left="8.0" />
+                     </GridPane.margin></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create, update and delete users." GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets left="8.0" />
+                     </GridPane.margin></Text>
+                  <JFXButton fx:id="btnClients" styleClass="adminMenuItemLabel" text="Manage Clients" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <JFXButton fx:id="btnProjects" styleClass="adminMenuItemLabel" text="Manage Projects" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <JFXButton fx:id="btnUsers" styleClass="adminMenuItemLabel" text="Manage Users" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>
