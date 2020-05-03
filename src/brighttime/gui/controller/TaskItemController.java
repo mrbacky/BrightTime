@@ -169,12 +169,7 @@ public class TaskItemController implements Initializable {
         }
     }
 
-    private void createTaskEntry() {
-
-        Task task = taskModel.getTask();
-        List<TaskEntry> taskEntries = task.getTaskEntryList();
-//        TaskEntry newTaskEntry = new TaskEntry(task.getDescription(), LocalDateTime.MIN, LocalDateTime.MIN)
-    }
+    
 
     @FXML
     private void handlePlayPauseTask(ActionEvent event) {

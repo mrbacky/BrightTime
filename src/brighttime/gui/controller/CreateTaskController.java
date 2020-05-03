@@ -114,7 +114,7 @@ public class CreateTaskController implements Initializable {
     private void addTask() {
         btnAdd.setOnAction((event) -> {
             if (!textFieldTaskDescInput.getText().trim().isEmpty() && !comboBoxProject.getSelectionModel().isEmpty()) {
-                Task task = new Task(textFieldTaskDescInput.getText().trim(), comboBoxProject.getSelectionModel().getSelectedItem());
+                Task task = new Task(textFieldTaskDescInput.getText().trim(), comboBoxProject.getSelectionModel().getSelectedItem(), null);
                 System.out.println("all tasks before: + " + mainModel.getTasks());
                 mainModel.addTask(task);
                 System.out.println("all tasks before: + " + mainModel.getTasks());

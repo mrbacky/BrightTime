@@ -31,9 +31,10 @@ public class Task {
         this.taskEntryList.set(taskEntryList);
     }
 
-    public Task(String description, Project project) {
+    public Task(String description, Project project, List<TaskEntry> taskEntryList) {
         this.description.set(description);
         this.project.set(project);
+        this.taskEntryList.set(taskEntryList);
     }
 
     public int getId() {

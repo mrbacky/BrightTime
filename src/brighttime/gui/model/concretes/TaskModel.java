@@ -10,6 +10,7 @@ import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -82,7 +83,12 @@ public class TaskModel implements ITaskModel {
     @Override
     public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) {
         TaskEntry newTaskEntry = new TaskEntry(task.getDescription(), tempStartTime, tempEndTime);
-        task.getTaskEntryList().add(newTaskEntry);
+        if (task.getTaskEntryList() == null) {
+            List<TaskEntry> entryList = new ArrayList<>();
+            entryList.add(newTaskEntry);
+            task.setTaskEntryList(entryList);
+        } else {
+            task.getTaskEntryList().add(newTaskEntry);
+        }
     }
-
 }
