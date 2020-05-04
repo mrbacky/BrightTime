@@ -79,9 +79,9 @@ public class MockTaskDAO implements ITaskDAO {
     }
 
     private void createInitialTasks() {
-        taskList.add(new Task(0, "create UI for App", brightTime, taskEntries1));
-        taskList.add(new Task(1, "send email", brightTime, taskEntries2));
-        taskList.add(new Task(2, "eat", brightTime, taskEntries3));
+//        taskList.add(new Task(0, "create UI for App", brightTime, taskEntries1));
+//        taskList.add(new Task(1, "send email", brightTime, taskEntries2));
+//        taskList.add(new Task(2, "eat", brightTime, taskEntries3));
 
     }
 

@@ -7,11 +7,14 @@ import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  *
@@ -20,9 +23,9 @@ import javafx.collections.ObservableList;
 public class MainModel implements IMainModel {
 
     private BllFacade bllManager;
-    private final ObservableList<Task> taskList = FXCollections.observableArrayList();
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
+    private final ObservableMap<Integer, Task> taskMap = FXCollections.observableHashMap();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -30,14 +33,18 @@ public class MainModel implements IMainModel {
 
     @Override
     public void loadTasks() {
-        List<Task> allTasks = bllManager.getTasks();
-        taskList.clear();
-        taskList.addAll(allTasks);
+        try {
+            Map<Integer, Task> allTasks = bllManager.getTasksWithTaskEntries();
+            taskMap.clear();
+            taskMap.putAll(allTasks);
+        } catch (BllException ex) {
+            Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public ObservableList<Task> getTasks() {
-        return taskList;
+    public ObservableMap<Integer, Task> getTasks() {
+        return taskMap;
     }
 
     @Override
@@ -92,9 +99,10 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(Task task) {
-        taskList.add(task);
+//        taskList.add(task);
         try {
-            bllManager.createTask(task);
+            Task taskToPut = bllManager.createTask(task);
+            taskMap.put(taskToPut.getId(), taskToPut);
         } catch (BllException ex) {
             Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
         }

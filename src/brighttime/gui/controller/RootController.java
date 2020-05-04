@@ -70,16 +70,15 @@ public class RootController implements Initializable {
                 TimeTrackerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
-//                controller.setUpTaskCreator();
-//                controller.initTasks();
-            } else if (module.equals(CREATOR_MODULE)) {
-                CreateTaskController controller = fxmlLoader.getController();
-//                controller.injectModelManager(modelManager);
-                controller.initializeView();               
-            } else if (module.equals(OVERVIEW_MODULE)) {
-                CreateProjectController controller = fxmlLoader.getController();
-//                controller.injectModelManager(modelManager);
-                controller.initializeView();
+                
+//            } else if (module.equals(CREATOR_MODULE)) {
+//                CreateTaskController controller = fxmlLoader.getController();
+////                controller.injectModelManager(modelManager);
+//                controller.initializeView();               
+//            } else if (module.equals(OVERVIEW_MODULE)) {
+//                CreateProjectController controller = fxmlLoader.getController();
+////                controller.injectModelManager(modelManager);
+//                controller.initializeView();
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {

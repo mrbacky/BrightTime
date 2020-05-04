@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,9 +86,10 @@ public class TimeTrackerController implements Initializable {
 
     private void initTasks() {
         vBoxMain.getChildren().clear();
-        List<Task> taskList = mainModel.getTasks();
-        for (Task task : taskList) {
-            addTaskItem(task);
+        Map<Integer, Task> taskList = mainModel.getTasks();
+        for (Map.Entry<Integer, Task> task : taskList.entrySet()) {
+            
+            addTaskItem(task.getValue());
         }
     }
 

@@ -10,7 +10,9 @@ import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.gui.model.ModelException;
 import java.util.List;
+import java.util.Map;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  *
@@ -20,7 +22,7 @@ public interface IMainModel {
     
     void loadTasks();
     
-    ObservableList<Task> getTasks();
+    ObservableMap<Integer,Task> getTasks();
     
     /**
      * Adds a new client.

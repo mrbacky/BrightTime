@@ -23,18 +23,19 @@ public class Task {
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
+    private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
 
-    public Task(int id, String description, Project project, List<TaskEntry> taskEntryList) {
+    public Task(int id, String description, Project project, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
         this.id.set(id);
         this.description.set(description);
         this.project.set(project);
         this.taskEntryList.set(taskEntryList);
+        this.creationTime.set(creationTime);
     }
 
-    public Task(String description, Project project, List<TaskEntry> taskEntryList) {
+    public Task(String description, Project project) {
         this.description.set(description);
         this.project.set(project);
-        this.taskEntryList.set(taskEntryList);
     }
 
     public int getId() {
@@ -119,6 +120,18 @@ public class Task {
 
     public StringProperty stringDurationProperty() {
         return stringDuration;
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime.get();
+    }
+
+    public void setCreationTime(LocalDateTime value) {
+        creationTime.set(value);
+    }
+
+    public ObjectProperty creationTimeProperty() {
+        return creationTime;
     }
 
 }

@@ -90,7 +90,7 @@ public class TaskDAO implements ITaskDAO {
                 String description = rs.getString("description");
                 List<TaskEntry> entries = new ArrayList<>();
 
-                Task t = new Task(taskId, description, project, entries);
+                Task t = new Task(taskId, description, project, entries, LocalDateTime.now());
                 if (!tasks.containsKey(t.getId())) {
                     tasks.put(taskId, t);
                 }

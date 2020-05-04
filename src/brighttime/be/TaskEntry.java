@@ -30,14 +30,9 @@ public class TaskEntry {
         this.endTime.set(endTime);
     }
 
-    public TaskEntry(String description, LocalDateTime startTime, LocalDateTime endTime) {
-        this.description.set(description);
-        this.startTime.set(startTime);
-        this.endTime.set(endTime);
-    }
-
-    public TaskEntry(int taskId, LocalDateTime startTime, LocalDateTime endTime) {
+    public TaskEntry(int taskId, String description, LocalDateTime startTime, LocalDateTime endTime) {
         this.taskId.set(taskId);
+        this.description.set(description);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
     }

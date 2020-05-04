@@ -12,6 +12,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -67,28 +69,36 @@ public class TaskModel implements ITaskModel {
     }
 
     public LocalDateTime getEndTime() {
-        if (task.getTaskEntryList() != null) {
+        if (!task.getTaskEntryList().isEmpty()) {
             return bllManager.getEndTime(task);
         }
-        return LocalDateTime.now();
+        return task.getCreationTime();
     }
 
     public LocalDateTime getStartTime() {
-        if (task.getTaskEntryList() != null) {
+        if (!task.getTaskEntryList().isEmpty()) {
             return bllManager.getStartTime(task);
         }
-        return LocalDateTime.now();
+        return task.getCreationTime();
     }
 
     @Override
     public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) {
-        TaskEntry newTaskEntry = new TaskEntry(task.getDescription(), tempStartTime, tempEndTime);
-        if (task.getTaskEntryList() == null) {
-            List<TaskEntry> entryList = new ArrayList<>();
-            entryList.add(newTaskEntry);
-            task.setTaskEntryList(entryList);
-        } else {
+        try {
+            TaskEntry newTaskEntry = new TaskEntry(task.getId(), task.getDescription(), tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
+            bllManager.createTaskEntry(newTaskEntry);
+//  call createTaskEntry from DB here
+//  TODO: create entryList in task OBJ if the list does not exist
+//        if (task.getTaskEntryList().isEmpty()) {
+//            List<TaskEntry> entryList = new ArrayList<>();
+//            entryList.add(newTaskEntry);
+//            task.setTaskEntryList(entryList);
+//        } else {
+//            task.getTaskEntryList().add(newTaskEntry);
+//        }
+        } catch (BllException ex) {
+            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
