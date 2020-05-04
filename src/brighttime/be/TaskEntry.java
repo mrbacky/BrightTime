@@ -16,15 +16,16 @@ import java.time.Duration;
 public class TaskEntry {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
+    private final IntegerProperty taskId = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
 
-    public TaskEntry(int id, String description, LocalDateTime startTime, LocalDateTime endTime) {
+    public TaskEntry(int id, int taskId, LocalDateTime startTime, LocalDateTime endTime) {
         this.id.set(id);
-        this.description.set(description);
+        this.taskId.set(taskId);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
     }
@@ -45,6 +46,18 @@ public class TaskEntry {
 
     public IntegerProperty idProperty() {
         return id;
+    }
+
+    public int getTaskId() {
+        return taskId.get();
+    }
+
+    public void setTaskId(int value) {
+        taskId.set(value);
+    }
+
+    public IntegerProperty taskIdProperty() {
+        return taskId;
     }
 
     public String getDescription() {

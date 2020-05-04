@@ -1,20 +1,24 @@
 package brighttime.dal.dao.concretes;
 
+import brighttime.be.Client;
+import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -28,40 +32,130 @@ public class TaskDAO implements ITaskDAO {
         this.connection = new ConnectionManager();
     }
 
+    //2.4 hours.
     @Override
-    public List<Task> getTasksForCurrentDay(LocalDate date) throws DalException {
-        List<Task> tasks = new ArrayList<>();
+    public Map getTasksWithTaskEntries() throws DalException {
+        Map<Integer, Task> tasksMap = getTasks();
+        List<TaskEntry> taskEntries = getTaskEntries(tasksMap);
 
-        String sql = "SELECT T.id, T.name, T.dateCreated, T.duration, P.name AS projectName, C.name AS clientName "
+        for (Map.Entry<Integer, Task> mapEntry : tasksMap.entrySet()) {
+            int key = mapEntry.getKey();
+            for (TaskEntry taskEntry : taskEntries) {
+                if (taskEntry.getTaskId() == key) {
+                    Task task = tasksMap.get(taskEntry.getTaskId());
+                    taskEntry.setDescription(task.getDescription()); //OR get it from database with JOIN?
+                    task.getTaskEntryList().add(taskEntry);
+                }
+            }
+        }
+
+        for (Integer name : tasksMap.keySet()) {
+            String key = name.toString();
+            int value = tasksMap.get(name).getTaskEntryList().size();
+            System.out.println("key is: " + key);
+            System.out.println("entry size is:" + value);
+        }
+        System.out.println("Final Map size: " + tasksMap.size());
+        return tasksMap;
+    }
+
+    private Map getTasks() throws DalException {
+        Map<Integer, Task> tasks = new HashMap<>();
+
+        String sql = "SELECT T.id AS taskId, T.description, "
+                + "P.id AS projectId, P.name AS projectName, "
+                + "C.id AS clientId, C.name AS clientName "
                 + "FROM Task AS T "
                 + "JOIN Project AS P "
                 + "ON T.projectId = P.id "
                 + "JOIN Client AS C "
                 + "ON P.clientId = C.id "
-                + "WHERE T.dateCreated >= ? AND T.dateCreated < ? "
-                + "ORDER BY T.dateCreated DESC";
+                + "WHERE T.lastUpdate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
 
+        System.out.println("getTasks() " + sql);
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setDate(1, Date.valueOf(date));
-            pstmt.setDate(2, Date.valueOf(date.plusDays(1)));
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int clientId = rs.getInt("clientId");
+                String clientName = rs.getString("clientName");
+                Client client = new Client(clientId, clientName);
+
+                int projectId = rs.getInt("projectId");
+                String projectName = rs.getString("projectName");
+                Project project = new Project(projectId, projectName, client);
+
+                int taskId = rs.getInt("taskId");
+                String description = rs.getString("description");
+                List<TaskEntry> entries = new ArrayList<>();
+
+                Task t = new Task(taskId, description, project, entries);
+                if (!tasks.containsKey(t.getId())) {
+                    tasks.put(taskId, t);
+                }
+                System.out.println("Map size: " + tasks.size());
+            }
+            // TODO: Check exception handling.       
+        } catch (SQLException ex) {
+            throw new DalException("Could not get the tasks for the Time Tracker. " + ex.getMessage());
+        }
+        for (Integer name : tasks.keySet()) {
+            String key = name.toString();
+            String value = tasks.get(name).getDescription();
+            System.out.println("key is: " + key);
+            System.out.println("value is:" + value);
+        }
+        System.out.println("Final Map size: " + tasks.size());
+        return tasks;
+    }
+
+    private List<TaskEntry> getTaskEntries(Map tasks) throws DalException {
+        List<TaskEntry> entries = new ArrayList<>();
+        String sql = "SELECT TE.id, TE.startTime, TE.endTime, TE.taskId "
+                + "FROM TaskEntry TE "
+                + "WHERE "; //taskId = ?;
+        String sqlFinal = prepStatement(sql, tasks);
+        System.out.println("sqlFinal: " + sqlFinal);
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sqlFinal);
+
+            Iterator iterator = tasks.entrySet().iterator();
+            int i = 0;
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                Integer key = (Integer) entry.getKey(); //Get key from HashMap and store as local variable.
+                pstmt.setInt(i + 1, key);
+                i++;
+            }
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String clientName = rs.getString("clientName");
-                String projectName = rs.getString("projectName");
-                Time duration = rs.getTime("duration");
-                //tasks.add(new Task(id, name, clientName, projectName, duration));
+                int taskId = rs.getInt("taskId");
+                LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
+                LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
+                entries.add(new TaskEntry(id, taskId, startTime, endTime));
             }
-            // TODO: Check exception handling.       
         } catch (SQLException ex) {
-            throw new DalException("Could not get the tasks for today. " + ex.getMessage());
+            throw new DalException("Could not get the task entries for the Time Tracker. " + ex.getMessage());
         }
-        return tasks;
+        return entries;
     }
 
+    private String prepStatement(String sql, Map tasks) {
+        Map<Integer, Task> taskMap = tasks;
+        boolean firstItem = true;
+        for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
+            if (firstItem) {
+                sql += "taskId = ? ";
+                firstItem = false;
+            } else {
+                sql += "OR taskId = ? ";
+            }
+        }
+        return sql;
+    }
     @Override
     public Task createTask(Task task) throws DalException {
         String sql = "INSERT INTO Task (description, lastUpdate, projectId) "
@@ -84,7 +178,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public List<Task> getTasks() {
+    public List<Task> getTasksList() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

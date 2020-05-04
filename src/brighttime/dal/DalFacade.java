@@ -4,6 +4,7 @@ import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -55,10 +56,8 @@ public interface DalFacade {
      */
     Task createTask(Task task) throws DalException;
 
-    /**
-     *
-     * @return
-     */
-    List<Task> getTasks();
+    Map getTasksWithTaskEntries() throws DalException;
+
+    List<Task> getTasksList();
 
 }

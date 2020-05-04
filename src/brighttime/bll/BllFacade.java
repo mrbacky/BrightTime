@@ -7,6 +7,7 @@ import brighttime.be.TaskEntry;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -57,6 +58,8 @@ public interface BllFacade {
      * @throws BllException
      */
     Task createTask(Task task) throws BllException;
+
+    Map getTasksWithTaskEntries() throws BllException;
 
     List<Task> getTasks();
 
