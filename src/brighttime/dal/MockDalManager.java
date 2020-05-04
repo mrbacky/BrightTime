@@ -3,6 +3,7 @@ package brighttime.dal;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.mockDAO.MockTaskDAO;
 import java.util.List;
@@ -53,6 +54,11 @@ public class MockDalManager implements DalFacade {
 
     @Override
     public Project createProject(Project project) throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

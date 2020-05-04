@@ -75,4 +75,12 @@ public interface BllFacade {
 
     LocalDateTime getEndTime(Task task);
 
+    /**
+     * Creates a task entry in the database.
+     *
+     * @param taskEntry The task entry to be created.
+     * @return The created task entry.
+     * @throws BllException
+     */
+    TaskEntry createTaskEntry(TaskEntry taskEntry) throws BllException;
 }

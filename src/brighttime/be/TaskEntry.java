@@ -36,6 +36,12 @@ public class TaskEntry {
         this.endTime.set(endTime);
     }
 
+    public TaskEntry(int taskId, LocalDateTime startTime, LocalDateTime endTime) {
+        this.taskId.set(taskId);
+        this.startTime.set(startTime);
+        this.endTime.set(endTime);
+    }
+
     public int getId() {
         return id.get();
     }

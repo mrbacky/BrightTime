@@ -6,7 +6,6 @@ import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import brighttime.dal.DalException;
 import brighttime.dal.DalFacade;
-import brighttime.dal.DalManager;
 import java.io.IOException;
 import java.util.List;
 import brighttime.bll.util.DurationConverter;
@@ -128,6 +127,15 @@ public class BllManager implements BllFacade {
     @Override
     public LocalDateTime getEndTime(Task task) {
         return taskIntervalCalculator.getEndTime(task);
+    }
+
+    @Override
+    public TaskEntry createTaskEntry(TaskEntry taskEntry) throws BllException {
+        try {
+            return dalManager.createTaskEntry(taskEntry);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
 }
