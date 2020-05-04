@@ -49,13 +49,6 @@ public class TaskDAO implements ITaskDAO {
             }
         }
 
-        for (Integer name : tasksMap.keySet()) {
-            String key = name.toString();
-            int value = tasksMap.get(name).getTaskEntryList().size();
-            System.out.println("key is: " + key);
-            System.out.println("entry size is:" + value);
-        }
-        System.out.println("Final Map size: " + tasksMap.size());
         return tasksMap;
     }
 
@@ -72,7 +65,6 @@ public class TaskDAO implements ITaskDAO {
                 + "ON P.clientId = C.id "
                 + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
 
-        System.out.println("getTasks() " + sql);
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -95,7 +87,6 @@ public class TaskDAO implements ITaskDAO {
                 if (!tasks.containsKey(t.getId())) {
                     tasks.put(taskId, t);
                 }
-                System.out.println("Map size: " + tasks.size());
             }
             // TODO: Redo exception handling!       
         } catch (SQLException ex) {
@@ -104,10 +95,7 @@ public class TaskDAO implements ITaskDAO {
         for (Integer name : tasks.keySet()) {
             String key = name.toString();
             String value = tasks.get(name).getDescription();
-            System.out.println("key is: " + key);
-            System.out.println("value is:" + value);
         }
-        System.out.println("Final Map size: " + tasks.size());
         return tasks;
     }
 
@@ -118,7 +106,6 @@ public class TaskDAO implements ITaskDAO {
                 + "WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
                 + "AND "; //taskId = ?;
         String sqlFinal = prepStatement(sql, tasks);
-        System.out.println("sqlFinal: " + sqlFinal);
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sqlFinal);
 

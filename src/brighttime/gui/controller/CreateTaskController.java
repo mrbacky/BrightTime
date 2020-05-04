@@ -40,6 +40,7 @@ public class CreateTaskController implements Initializable {
     private ComboBox<Client> comboBoxClient;
     @FXML
     private ComboBox<Project> comboBoxProject;
+    private TimeTrackerController timeTrackerController;
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -64,6 +65,10 @@ public class CreateTaskController implements Initializable {
 
     void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
+    }
+
+    public void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
+        this.timeTrackerController = timeTrackerController;
     }
 
     /**
@@ -117,9 +122,7 @@ public class CreateTaskController implements Initializable {
                 Task task = new Task(textFieldTaskDescInput.getText().trim(), comboBoxProject.getSelectionModel().getSelectedItem());
                 System.out.println("all tasks before: + " + mainModel.getTasks());
                 mainModel.addTask(task);
-                System.out.println("all tasks before: + " + mainModel.getTasks());
-
-                System.out.println("action event is working!");
+                timeTrackerController.initializeView();
             } else if (textFieldTaskDescInput.getText().trim().isEmpty()) {
                 alertManager.showAlert("No task description was entered.", "Please enter a description of the new task.");
             } else if (comboBoxClient.getSelectionModel().isEmpty()) {

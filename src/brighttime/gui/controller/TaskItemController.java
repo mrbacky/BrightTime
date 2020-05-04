@@ -80,12 +80,14 @@ public class TaskItemController implements Initializable {
     private LocalDateTime tempEndTime;
     @FXML
     private ImageView imgExpandCollapse;
+    private TimeTrackerController timeTrackerController;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
 
         /*
         
@@ -105,6 +107,10 @@ public class TaskItemController implements Initializable {
         
         
          */
+    }
+
+    public void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
+        this.timeTrackerController = timeTrackerController;
     }
 
     public void injectModel(ITaskModel taskModel) {
@@ -142,34 +148,40 @@ public class TaskItemController implements Initializable {
 
         if (btnExpandTask.isSelected()) {
             imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
-            if (taskModel.getTask().getTaskEntryList() != null) {
+            if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
                 initTaskEntries();
             }
         } else {
             imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
             vBoxTaskEntries.getChildren().clear();
         }
+//        if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
+//
+//        }
+
     }
 
     public void initTaskEntries() {
-
+        vBoxTaskEntries.getChildren().clear();
         List<TaskEntry> taskEntries = taskModel.getTask().getTaskEntryList();
         for (TaskEntry taskEntry : taskEntries) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
-                Parent root = fxmlLoader.load();
-                TaskEntryItemController controller = fxmlLoader.getController();
-                controller.injectTaskModel(taskModel);
-                controller.setTaskEntry(taskEntry);
-
-                vBoxTaskEntries.getChildren().add(root);
-            } catch (IOException ex) {
-                Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            addEntryItem(taskEntry);
         }
     }
 
-    
+    private void addEntryItem(TaskEntry taskEntry) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
+            Parent root = fxmlLoader.load();
+            TaskEntryItemController controller = fxmlLoader.getController();
+            controller.injectTaskModel(taskModel);
+            controller.setTaskEntry(taskEntry);
+
+            vBoxTaskEntries.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @FXML
     private void handlePlayPauseTask(ActionEvent event) {
@@ -180,6 +192,10 @@ public class TaskItemController implements Initializable {
             imgPlayPause.setImage(PLAY_ICON_IMAGE);
             tempEndTime = LocalDateTime.now();
             taskModel.createTaskEntry(tempStartTime, tempEndTime);
+            //  refresh
+            timeTrackerController.initializeView();
+
         }
     }
+
 }

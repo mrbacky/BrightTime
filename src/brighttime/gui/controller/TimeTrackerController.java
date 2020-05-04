@@ -75,6 +75,7 @@ public class TimeTrackerController implements Initializable {
 
             Parent root = fxmlLoader.load();
             CreateTaskController controller = fxmlLoader.getController();
+            controller.injectTimeTrackerController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();
             spTaskCreator.getChildren().add(root);
@@ -88,7 +89,6 @@ public class TimeTrackerController implements Initializable {
         vBoxMain.getChildren().clear();
         Map<Integer, Task> taskList = mainModel.getTasks();
         for (Map.Entry<Integer, Task> task : taskList.entrySet()) {
-            
             addTaskItem(task.getValue());
         }
     }
@@ -100,6 +100,7 @@ public class TimeTrackerController implements Initializable {
             ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
             taskModel.setTask(task);
             TaskItemController controller = fxmlLoader.getController();
+            controller.injectTimeTrackerController(this);
             controller.injectModel(taskModel);
             vBoxMain.getChildren().add(root);
         } catch (IOException ex) {
