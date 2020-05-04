@@ -28,7 +28,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
         String sql = "INSERT INTO TaskEntry(startTime, endTime, taskId) "
                 + "VALUES (?, ?, ?) "
                 + "UPDATE Task "
-                + "SET lastUpdate = SYSDATETIME() "
+                + "SET modifiedDate = SYSDATETIME() "
                 + "WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {

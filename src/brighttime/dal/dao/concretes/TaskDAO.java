@@ -62,7 +62,7 @@ public class TaskDAO implements ITaskDAO {
     private Map getTasks() throws DalException {
         Map<Integer, Task> tasks = new HashMap<>();
 
-        String sql = "SELECT T.id AS taskId, T.description, "
+        String sql = "SELECT T.id AS taskId, T.description, T.createdDate, "
                 + "P.id AS projectId, P.name AS projectName, "
                 + "C.id AS clientId, C.name AS clientName "
                 + "FROM Task AS T "
@@ -70,7 +70,7 @@ public class TaskDAO implements ITaskDAO {
                 + "ON T.projectId = P.id "
                 + "JOIN Client AS C "
                 + "ON P.clientId = C.id "
-                + "WHERE T.lastUpdate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
+                + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
 
         System.out.println("getTasks() " + sql);
         try (Connection con = connection.getConnection()) {
@@ -89,14 +89,15 @@ public class TaskDAO implements ITaskDAO {
                 int taskId = rs.getInt("taskId");
                 String description = rs.getString("description");
                 List<TaskEntry> entries = new ArrayList<>();
+                LocalDateTime creationTime = rs.getTimestamp("createdDate").toLocalDateTime();
 
-                Task t = new Task(taskId, description, project, entries, LocalDateTime.now());
+                Task t = new Task(taskId, description, project, entries, creationTime);
                 if (!tasks.containsKey(t.getId())) {
                     tasks.put(taskId, t);
                 }
                 System.out.println("Map size: " + tasks.size());
             }
-            // TODO: Check exception handling.       
+            // TODO: Redo exception handling!       
         } catch (SQLException ex) {
             throw new DalException("Could not get the tasks for the Time Tracker. " + ex.getMessage());
         }
@@ -114,7 +115,8 @@ public class TaskDAO implements ITaskDAO {
         List<TaskEntry> entries = new ArrayList<>();
         String sql = "SELECT TE.id, TE.startTime, TE.endTime, TE.taskId "
                 + "FROM TaskEntry TE "
-                + "WHERE "; //taskId = ?;
+                + "WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
+                + "AND "; //taskId = ?;
         String sqlFinal = prepStatement(sql, tasks);
         System.out.println("sqlFinal: " + sqlFinal);
         try (Connection con = connection.getConnection()) {
@@ -156,10 +158,11 @@ public class TaskDAO implements ITaskDAO {
         }
         return sql;
     }
+
     @Override
     public Task createTask(Task task) throws DalException {
-        String sql = "INSERT INTO Task (description, lastUpdate, projectId) "
-                + "VALUES (?, SYSDATETIME(), ?)";
+        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId) "
+                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?)";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
