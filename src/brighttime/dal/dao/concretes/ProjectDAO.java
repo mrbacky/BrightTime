@@ -28,13 +28,14 @@ public class ProjectDAO implements IProjectDAO {
 
     @Override
     public Project createProject(Project project) throws DalException {
-        String sql = "INSERT INTO Project (name, clientId) "
-                + "VALUES (?, ?)";
+        String sql = "INSERT INTO Project (name, clientId, hourlyRate) "
+                + "VALUES (?, ?, ?)";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, project.getName());
             pstmt.setInt(2, project.getClient().getId());
+            pstmt.setInt(3, project.getHourlyRate());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();

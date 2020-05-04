@@ -20,7 +20,7 @@ public class ValidationManager {
     public void inputValidation(JFXTextField textField, String message) {
         RequiredFieldValidator validator = new RequiredFieldValidator();
         textField.getValidators().add(validator);
-        validator.setMessage("No description added.");
+        validator.setMessage(message);
         textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (!newValue) {
                 textField.validate();
