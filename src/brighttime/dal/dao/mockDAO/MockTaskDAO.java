@@ -9,6 +9,7 @@ import brighttime.dal.dao.interfaces.ITaskDAO;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Duration;
@@ -22,20 +23,20 @@ public class MockTaskDAO implements ITaskDAO {
     private List<TaskEntry> taskEntries1 = new ArrayList<>();
     private List<TaskEntry> taskEntries2 = new ArrayList<>();
     private List<TaskEntry> taskEntries3 = new ArrayList<>();
+
     private List<Task> taskList = new ArrayList<>();
+
+    private Map<LocalDate, List<Task>> taskMap = new HashMap<>();
 
     private Project brightTime;
     private Client grumsen;
 
     public MockTaskDAO() {
-        createClient();
-        createProject();
-
-        createUITaskEntries();
-        sendEmailTaskEntries();
-        eatTaskEntries();
-
-        createInitialTasks();
+//        createClient();
+//        createProject();
+//        createInitialTasks();
+//        createUITaskEntries();
+//        createInitialTaskMap();
     }
 
     private void createClient() {
@@ -48,46 +49,44 @@ public class MockTaskDAO implements ITaskDAO {
 
     private void createUITaskEntries() {
 
-//        taskEntries1.add(new TaskEntry(0, "create UI for App", LocalDateTime.parse("2020-04-28T02:00:00"), LocalDateTime.parse("2020-04-28T09:00:00")));
-//        taskEntries1.add(new TaskEntry(1, "create UI for App", LocalDateTime.parse("2020-04-28T10:00:00"), LocalDateTime.parse("2020-04-28T11:20:00")));
-//        taskEntries1.add(new TaskEntry(2, "create UI for App", LocalDateTime.parse("2020-04-28T15:00:00"), LocalDateTime.parse("2020-04-28T18:20:00")));
+        taskEntries1.add(new TaskEntry(0, 0, LocalDateTime.parse("2020-04-25T02:00:00"), LocalDateTime.parse("2020-05-25T09:00:00")));
+        taskEntries1.add(new TaskEntry(1, 0, LocalDateTime.parse("2020-04-25T10:00:00"), LocalDateTime.parse("2020-04-25T11:20:00")));
+
+        taskEntries2.add(new TaskEntry(2, 0, LocalDateTime.parse("2020-04-26T15:00:00"), LocalDateTime.parse("2020-04-28T18:20:00")));
+        taskEntries2.add(new TaskEntry(3, 0, LocalDateTime.parse("2020-04-26T18:30:00"), LocalDateTime.parse("2020-04-28T18:40:00")));
+        taskEntries2.add(new TaskEntry(4, 0, LocalDateTime.parse("2020-04-26T20:00:00"), LocalDateTime.parse("2020-04-28T21:20:00")));
+        taskEntries2.add(new TaskEntry(5, 0, LocalDateTime.parse("2020-04-26T22:00:00"), LocalDateTime.parse("2020-04-28T23:20:00")));
+
+        taskEntries3.add(new TaskEntry(6, 0, LocalDateTime.parse("2020-04-28T15:00:00"), LocalDateTime.parse("2020-04-28T18:20:00")));
+
     }
 
-    private void sendEmailTaskEntries() {
-//        taskEntries2.add(new TaskEntry(3, "send email", LocalDateTime.parse("2020-04-28T18:45:00"), LocalDateTime.parse("2020-04-28T19:00:00")));
-//        taskEntries2.add(new TaskEntry(4, "send email", LocalDateTime.parse("2020-04-28T20:00:00"), LocalDateTime.parse("2020-04-28T20:00:12")));
-//        taskEntries2.add(new TaskEntry(5, "send email", LocalDateTime.parse("2020-04-28T20:45:00"), LocalDateTime.parse("2020-04-28T22:00:00")));
-//        taskEntries2.add(new TaskEntry(6, "send email", LocalDateTime.parse("2020-04-28T22:30:00"), LocalDateTime.parse("2020-04-28T23:00:03")));
-
-    }
-
-    private void eatTaskEntries() {
-//        taskEntries3.add(new TaskEntry(7, "eat", LocalDateTime.parse("2020-04-28T23:30:00"), LocalDateTime.parse("2020-04-28T23:40:00")));
-//        taskEntries3.add(new TaskEntry(8, "eat", LocalDateTime.parse("2020-04-28T23:45:00"), LocalDateTime.parse("2020-04-28T23:48:12")));
+    public void createInitialTasks() {
+        taskList.add(new Task(0, "create UI", brightTime, taskEntries1, LocalDateTime.parse("2020-02-25T02:00:00")));
+        taskList.add(new Task(1, "create UI", brightTime, taskEntries1, LocalDateTime.parse("2020-02-25T02:00:00")));
+        taskList.add(new Task(2, "create UI", brightTime, taskEntries3, LocalDateTime.parse("2020-02-01T02:00:00")));
 
     }
 
     @Override
     public List<Task> getTasksList() {
-        return taskList;
+//        return taskList;
+        return null;
     }
 
     @Override
     public Task createTask(Task task) throws DalException {
-        taskList.add(task);
         return task;
     }
 
-    private void createInitialTasks() {
-//        taskList.add(new Task(0, "create UI for App", brightTime, taskEntries1));
-//        taskList.add(new Task(1, "send email", brightTime, taskEntries2));
-//        taskList.add(new Task(2, "eat", brightTime, taskEntries3));
+    private void createInitialTaskMap() {
+        taskMap.put(LocalDate.parse("2020-04-1"), taskList);
 
     }
 
     @Override
     public Map getTasksWithTaskEntries() throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return taskMap;
     }
 
 }

@@ -15,10 +15,10 @@ import java.util.Map;
  */
 public class MockDalManager implements DalFacade {
 
-    private ITaskDAO MockTaskDAO;
+    private ITaskDAO mockTaskDAO;
 
     public MockDalManager() {
-        MockTaskDAO = new MockTaskDAO();
+        mockTaskDAO = new MockTaskDAO();
 
     }
 
@@ -34,17 +34,17 @@ public class MockDalManager implements DalFacade {
 
     @Override
     public Task createTask(Task task) throws DalException {
-        return MockTaskDAO.createTask(task);
+        return mockTaskDAO.createTask(task);
     }
 
     @Override
     public Map getTasksWithTaskEntries() throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mockTaskDAO.getTasksWithTaskEntries();
     }
 
     @Override
     public List<Task> getTasksList() {
-        return MockTaskDAO.getTasksList();
+        return mockTaskDAO.getTasksList();
     }
 
     @Override

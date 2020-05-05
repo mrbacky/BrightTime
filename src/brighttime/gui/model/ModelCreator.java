@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * 
  * @author rado
- * - inspiration by Greg
+ * @inspiration Greg
  */
 public class ModelCreator {
     
