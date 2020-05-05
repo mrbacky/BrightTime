@@ -42,7 +42,8 @@ public class TaskDAO implements ITaskDAO {
     public List<TaskEntry> getTaskEntries() throws DalException {
         List<TaskEntry> entries = new ArrayList<>();
         Map<Integer, Task> taskMap = getTasks();
-        String sql = "SELECT TE.id, TE.startTime, TE.endTime, TE.taskId "
+        String sql = "SELECT CONVERT(DATE, TE.startTime) AS date, "
+                + "TE.id, TE.startTime, TE.endTime, TE.taskId "
                 + "FROM TaskEntry TE "
                 + "WHERE TE.startTime BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()"
                 + "AND ";
@@ -133,7 +134,7 @@ public class TaskDAO implements ITaskDAO {
                 sql += " OR taskId = ? ";
             }
         }
-        sql += ") ORDER BY TE.startTime";
+        sql += ") ORDER BY date DESC, TE.taskId DESC";
         return sql;
     }
 

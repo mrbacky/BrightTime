@@ -5,16 +5,14 @@
  */
 package brighttime.gui.controller;
 
-import brighttime.be.Client;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -24,16 +22,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
@@ -165,7 +159,9 @@ public class TaskItemController implements Initializable {
         vBoxTaskEntries.getChildren().clear();
         List<TaskEntry> taskEntries = taskModel.getTask().getTaskEntryList();
         for (TaskEntry taskEntry : taskEntries) {
-            addEntryItem(taskEntry);
+            if (taskEntry.getStartTime().toLocalDate().isEqual(taskModel.getDate())) {
+                addEntryItem(taskEntry);
+            }
         }
     }
 
@@ -184,7 +180,7 @@ public class TaskItemController implements Initializable {
     }
 
     @FXML
-    private void handlePlayPauseTask(ActionEvent event) {
+    private void handlePlayPauseTask(ActionEvent event) throws ModelException {
         if (btnPlayPause.isSelected()) {
             imgPlayPause.setImage(PAUSE_ICON_IMAGE);
             tempStartTime = LocalDateTime.now();

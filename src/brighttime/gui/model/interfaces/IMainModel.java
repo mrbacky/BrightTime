@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelException;
-import java.util.List;
-import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
@@ -19,11 +13,11 @@ import javafx.collections.ObservableMap;
  * @author rados
  */
 public interface IMainModel {
-    
+
     void loadTasks();
-    
-    ObservableMap<Integer,Task> getTasks();
-    
+
+    ObservableMap<Integer, Task> getTasks();
+
     /**
      * Adds a new client.
      *
@@ -46,7 +40,7 @@ public interface IMainModel {
      * @return The ObservableList of clients.
      */
     ObservableList<Client> getClientList();
-    
+
     /**
      * Adds a new project.
      *
@@ -73,6 +67,9 @@ public interface IMainModel {
     ObservableList<Project> getProjectList();
 
     void addTask(Task task);
-    
-    
+
+    void loadTaskEntries() throws ModelException;
+
+    ObservableList<TaskEntry> getTaskEntryList();
+
 }

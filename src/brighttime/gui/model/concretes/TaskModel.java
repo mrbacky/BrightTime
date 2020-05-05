@@ -9,6 +9,7 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class TaskModel implements ITaskModel {
 
     private final BllFacade bllManager;
     private Task task;
+    private LocalDate date;
 
     public TaskModel(BllFacade bllManager) throws IOException {
         this.bllManager = bllManager;
@@ -101,4 +103,15 @@ public class TaskModel implements ITaskModel {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public LocalDate getDate() {
+        return date;
+    }
+
+    @Override
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
 }

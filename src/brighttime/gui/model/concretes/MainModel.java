@@ -3,11 +3,11 @@ package brighttime.gui.model.concretes;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -26,6 +26,7 @@ public class MainModel implements IMainModel {
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
     private final ObservableMap<Integer, Task> taskMap = FXCollections.observableHashMap();
+    private final ObservableList<TaskEntry> entryList = FXCollections.observableArrayList();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -107,6 +108,22 @@ public class MainModel implements IMainModel {
             Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    @Override
+    public void loadTaskEntries() throws ModelException {
+        try {
+            List<TaskEntry> allEntries = bllManager.getTaskEntries();
+            entryList.clear();
+            entryList.addAll(allEntries);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public ObservableList<TaskEntry> getTaskEntryList() {
+        return entryList;
     }
 
 }

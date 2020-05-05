@@ -138,4 +138,13 @@ public class BllManager implements BllFacade {
         }
     }
 
+    @Override
+    public List<TaskEntry> getTaskEntries() throws BllException {
+        try {
+            return dalManager.getTaskEntries();
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
 }
