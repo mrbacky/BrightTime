@@ -21,8 +21,8 @@ public class ProjectModel implements IProjectModel {
     private final BllFacade bllManager;
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
 
-    public ProjectModel() throws IOException {
-        bllManager = new BllManager();
+    public ProjectModel(BllFacade bllManager) throws IOException {
+        this.bllManager = bllManager;
     }
 
     @Override

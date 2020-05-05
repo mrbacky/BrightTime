@@ -1,7 +1,10 @@
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import javafx.collections.ObservableList;
 
 /**
@@ -10,17 +13,24 @@ import javafx.collections.ObservableList;
  */
 public interface ITaskModel {
 
-    /**
-     * Adds a new task.
-     *
-     * @param task The new task.
-     * @return The created task from the database.
-     * @throws ModelException
-     */
-    Task addTask(Task task) throws ModelException;
+    
 
-    void loadTasks();
+    void setTask(Task task);
 
-    ObservableList<Task> getTasks();
+    Task getTask();
 
+    Duration calculateDuration(TaskEntry taskEntry);
+
+    Duration calculateDuration(Task task);
+
+    String secToFormat(long sec);
+
+    long formatToSec(String formatString);
+
+    LocalDateTime getStartTime();
+
+    LocalDateTime getEndTime();
+
+    public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime);
+    
 }

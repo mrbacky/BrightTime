@@ -10,7 +10,7 @@ import javafx.stage.StageStyle;
 
 /**
  *
- * @author rados
+ * @author rado
  */
 public class BrightTime extends Application {
 
@@ -24,7 +24,8 @@ public class BrightTime extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(BrightTime.class.getResource("/brighttime/gui/view/Root.fxml"));
         Parent root = loader.load();
-
+        stage.setMinWidth(850);
+        stage.setMinHeight(400);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

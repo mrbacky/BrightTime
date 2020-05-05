@@ -3,9 +3,11 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -57,9 +59,11 @@ public interface BllFacade {
      */
     Task createTask(Task task) throws BllException;
 
+    Map getTasksWithTaskEntries() throws BllException;
+
     List<Task> getTasks();
 
-    Duration calculateDuration(LocalDateTime startTime, LocalDateTime endTime);
+    Duration calculateDuration(TaskEntry taskEntry);
 
     Duration calculateDuration(Task task);
 
@@ -71,4 +75,12 @@ public interface BllFacade {
 
     LocalDateTime getEndTime(Task task);
 
+    /**
+     * Creates a task entry in the database.
+     *
+     * @param taskEntry The task entry to be created.
+     * @return The created task entry.
+     * @throws BllException
+     */
+    TaskEntry createTaskEntry(TaskEntry taskEntry) throws BllException;
 }

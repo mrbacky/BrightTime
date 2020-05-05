@@ -6,8 +6,11 @@
 package brighttime.gui.controller;
 
 import brighttime.BrightTime;
+import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelFacade;
 import brighttime.gui.model.ModelManager;
+import brighttime.gui.model.concretes.MainModel;
+import brighttime.gui.model.interfaces.IMainModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,15 +48,16 @@ public class RootController implements Initializable {
     private Button btnCreator;
     @FXML
     private Button btnOverview;
-    private ModelFacade modelManager;
+    private IMainModel mainModel;
 
     public RootController() throws IOException {
-        modelManager = new ModelManager();
+        mainModel = ModelCreator.getInstance().createMainModel();
 
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        loadModule(TIME_TRACKER_MODULE);
     }
 
     public void loadModule(String module) {
@@ -64,16 +68,17 @@ public class RootController implements Initializable {
 
             if (module.equals(TIME_TRACKER_MODULE)) {
                 TimeTrackerController controller = fxmlLoader.getController();
-                controller.injectModelManager(modelManager);
-                controller.initTasks();
-            } else if (module.equals(CREATOR_MODULE)) {
-                CreateTaskController controller = fxmlLoader.getController();
-                controller.injectModelManager(modelManager);
-                controller.initializeView();               
-            } else if (module.equals(OVERVIEW_MODULE)) {
-                CreateProjectController controller = fxmlLoader.getController();
-                controller.injectModelManager(modelManager);
+                controller.injectMainModel(mainModel);
                 controller.initializeView();
+                
+//            } else if (module.equals(CREATOR_MODULE)) {
+//                CreateTaskController controller = fxmlLoader.getController();
+////                controller.injectModelManager(modelManager);
+//                controller.initializeView();               
+//            } else if (module.equals(OVERVIEW_MODULE)) {
+//                CreateProjectController controller = fxmlLoader.getController();
+////                controller.injectModelManager(modelManager);
+//                controller.initializeView();
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {

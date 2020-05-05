@@ -3,9 +3,9 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.dal.DalException;
 import brighttime.dal.DalFacade;
-import brighttime.dal.DalManager;
 import java.io.IOException;
 import java.util.List;
 import brighttime.bll.util.DurationConverter;
@@ -15,6 +15,7 @@ import brighttime.bll.util.TaskIntervalCalculator;
 import brighttime.dal.MockDalManager;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  *
@@ -30,13 +31,13 @@ public class BllManager implements BllFacade {
     private final TaskDurationCalculator taskDurationCalculator;
     private final TaskIntervalCalculator taskIntervalCalculator;
 
-    public BllManager() throws IOException {
-        dalManager = new DalManager();
+    public BllManager(DalFacade dalManager) throws IOException {
+        this.dalManager = dalManager;
         durationConverter = new DurationConverter();
-        mockDalManager = new MockDalManager();
         entryDurationCalculator = new EntryDurationCalculator();
         taskDurationCalculator = new TaskDurationCalculator();
         taskIntervalCalculator = new TaskIntervalCalculator();
+        mockDalManager = new MockDalManager();
     }
 
     @Override
@@ -85,13 +86,22 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public List<Task> getTasks() {
-        return mockDalManager.getTasks();
+    public Map getTasksWithTaskEntries() throws BllException {
+        try {
+            return dalManager.getTasksWithTaskEntries();
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
     @Override
-    public Duration calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
-        return entryDurationCalculator.calculateDuration(startTime, endTime);
+    public List<Task> getTasks() {
+        return mockDalManager.getTasksList();
+    }
+
+    @Override
+    public Duration calculateDuration(TaskEntry taskEntry) {
+        return entryDurationCalculator.calculateDuration(taskEntry);
     }
 
     @Override
@@ -117,6 +127,15 @@ public class BllManager implements BllFacade {
     @Override
     public LocalDateTime getEndTime(Task task) {
         return taskIntervalCalculator.getEndTime(task);
+    }
+
+    @Override
+    public TaskEntry createTaskEntry(TaskEntry taskEntry) throws BllException {
+        try {
+            return dalManager.createTaskEntry(taskEntry);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
 }

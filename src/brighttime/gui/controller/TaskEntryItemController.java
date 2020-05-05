@@ -7,6 +7,7 @@ package brighttime.gui.controller;
 
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.interfaces.ITaskModel;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,13 +38,18 @@ public class TaskEntryItemController implements Initializable {
     private TextField textFieldDuration;
     @FXML
     private Button btnRemoveTask;
+    private ITaskModel taskModel;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        textFieldStartTime.setEditable(true);
+    }
+
+    void injectTaskModel(ITaskModel taskModel) {
+        this.taskModel = taskModel;
     }
 
     void setTaskEntry(TaskEntry taskEntry) {
@@ -54,9 +60,10 @@ public class TaskEntryItemController implements Initializable {
                 -> dtf.format(taskEntry.getStartTime()), taskEntry.endTimeProperty()));
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskEntry.getEndTime()), taskEntry.endTimeProperty()));
-//        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-//                -> taskEntry.getStringDuration(taskEntry.getStartTime(), taskEntry.getEndTime()), taskEntry.stringDurationProperty()));
+        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
+                -> taskModel.secToFormat(taskModel.calculateDuration(taskEntry).toSeconds()), taskEntry.stringDurationProperty()));
 
+//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(taskEntry).toSeconds()));
     }
 
 }

@@ -20,8 +20,8 @@ public class ClientModel implements IClientModel {
     private final BllFacade bllManager;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
 
-    public ClientModel() throws IOException {
-        bllManager = new BllManager();
+    public ClientModel(BllFacade bllManager) throws IOException {
+        this.bllManager = bllManager;
     }
 
     @Override

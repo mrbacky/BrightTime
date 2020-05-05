@@ -8,6 +8,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -29,6 +30,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -43,6 +46,12 @@ public class TaskItemController implements Initializable {
     private static final String DATE_TIME_FORMAT = "HH:mm";
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
 
+//    private ImageView PLAY_ICON_IMAGE = new ImageView("/brighttime/gui/view/assets/play.png");
+    private final Image PLAY_ICON_IMAGE = new Image("/brighttime/gui/view/assets/play.png");
+    private final Image PAUSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/pause.png");
+    private final Image EXPAND_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
+    private final Image COLLAPSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
+
     @FXML
     private TextField textFieldStartTime;
     @FXML
@@ -53,7 +62,6 @@ public class TaskItemController implements Initializable {
     private ToggleButton btnExpandTask;
     @FXML
     private VBox vBoxTaskEntries;
-    private Task task;
     @FXML
     private TextField textFieldProject;
     @FXML
@@ -61,15 +69,25 @@ public class TaskItemController implements Initializable {
     @FXML
     private TextField textFieldTaskDesc;
     @FXML
-    private Button btnPlayTask;
-    @FXML
     private Button btnDeleteTask;
+    private ITaskModel taskModel;
+    @FXML
+    private ToggleButton btnPlayPause;
+    @FXML
+    private ImageView imgPlayPause;
+
+    private LocalDateTime tempStartTime;
+    private LocalDateTime tempEndTime;
+    @FXML
+    private ImageView imgExpandCollapse;
+    private TimeTrackerController timeTrackerController;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
 
         /*
         
@@ -91,8 +109,16 @@ public class TaskItemController implements Initializable {
          */
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
+        this.timeTrackerController = timeTrackerController;
+    }
+
+    public void injectModel(ITaskModel taskModel) {
+        this.taskModel = taskModel;
+        setTaskDetails(taskModel.getTask());
+    }
+
+    public void setTaskDetails(Task task) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
@@ -105,39 +131,70 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
-//        textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
-//                -> dtf.format(task.getTaskStartTime()), task.startTimeProperty()));
-//
-//        textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
-//                -> dtf.format(task.getTaskEndTime()), task.endTimeProperty()));
+        textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getStartTime()), task.startTimeProperty()));
 
-//        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-//                -> task.getStringDuration(), task.stringDurationProperty()));
+        textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getEndTime()), task.endTimeProperty()));
+
+        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
+                -> taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()), task.stringDurationProperty()));
+
+//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()));
     }
 
     @FXML
     private void expandTaskItem(ActionEvent event) {
-        
+
         if (btnExpandTask.isSelected()) {
-            initTaskEntries();
+            imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
+            if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
+                initTaskEntries();
+            }
         } else {
+            imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
             vBoxTaskEntries.getChildren().clear();
         }
+//        if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
+//
+//        }
+
     }
 
     public void initTaskEntries() {
-
-        List<TaskEntry> taskEntries = task.getTaskEntryList();
+        vBoxTaskEntries.getChildren().clear();
+        List<TaskEntry> taskEntries = taskModel.getTask().getTaskEntryList();
         for (TaskEntry taskEntry : taskEntries) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
-                Parent root = fxmlLoader.load();
-                TaskEntryItemController controller = fxmlLoader.getController();
-                controller.setTaskEntry(taskEntry);
-                vBoxTaskEntries.getChildren().add(root);
-            } catch (IOException ex) {
-                Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            addEntryItem(taskEntry);
+        }
+    }
+
+    private void addEntryItem(TaskEntry taskEntry) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
+            Parent root = fxmlLoader.load();
+            TaskEntryItemController controller = fxmlLoader.getController();
+            controller.injectTaskModel(taskModel);
+            controller.setTaskEntry(taskEntry);
+
+            vBoxTaskEntries.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handlePlayPauseTask(ActionEvent event) {
+        if (btnPlayPause.isSelected()) {
+            imgPlayPause.setImage(PAUSE_ICON_IMAGE);
+            tempStartTime = LocalDateTime.now();
+        } else {
+            imgPlayPause.setImage(PLAY_ICON_IMAGE);
+            tempEndTime = LocalDateTime.now();
+            taskModel.createTaskEntry(tempStartTime, tempEndTime);
+            //  refresh
+            timeTrackerController.initializeView();
+
         }
     }
 

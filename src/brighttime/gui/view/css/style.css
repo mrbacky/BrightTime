@@ -79,14 +79,14 @@
 
 .apTaskItem{
     -fx-background-color: #2368A2;  /*blue*/
-    -fx-background-radius :  5 5 5 5;
+    -fx-background-radius :  10 10 10 10;
     border-bottom-color: black; 
 
 }
 
 .apTaskEntryItem{
     -fx-background-color: #F1C54C;  /*yellow*/
-    -fx-background-radius :  5 5 5 5;
+    -fx-background-radius :  10 10 10 10;
     border-bottom-color: black; 
 
 }
