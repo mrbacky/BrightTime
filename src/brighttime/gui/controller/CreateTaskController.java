@@ -14,6 +14,8 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -119,10 +121,14 @@ public class CreateTaskController implements Initializable {
     private void addTask() {
         btnAdd.setOnAction((event) -> {
             if (!textFieldTaskDescInput.getText().trim().isEmpty() && !comboBoxProject.getSelectionModel().isEmpty()) {
-                Task task = new Task(textFieldTaskDescInput.getText().trim(), comboBoxProject.getSelectionModel().getSelectedItem());
-                System.out.println("all tasks before: + " + mainModel.getTasks());
-                mainModel.addTask(task);
-                timeTrackerController.initializeView();
+                try {
+                    Task task = new Task(textFieldTaskDescInput.getText().trim(), comboBoxProject.getSelectionModel().getSelectedItem());
+                    System.out.println("all tasks before: + " + mainModel.getTasks());
+                    mainModel.addTask(task);
+                    timeTrackerController.initializeView();
+                } catch (ModelException ex) {
+                    Logger.getLogger(CreateTaskController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else if (textFieldTaskDescInput.getText().trim().isEmpty()) {
                 alertManager.showAlert("No task description was entered.", "Please enter a description of the new task.");
             } else if (comboBoxClient.getSelectionModel().isEmpty()) {

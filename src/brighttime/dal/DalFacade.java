@@ -57,6 +57,8 @@ public interface DalFacade {
      */
     Task createTask(Task task) throws DalException;
 
+    List<TaskEntry> getTaskEntries() throws DalException;
+
     Map getTasksWithTaskEntries() throws DalException;
 
     List<Task> getTasksList();

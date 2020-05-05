@@ -4,6 +4,7 @@ import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javafx.collections.ObservableList;
 
@@ -12,8 +13,6 @@ import javafx.collections.ObservableList;
  * @author rados
  */
 public interface ITaskModel {
-
-    
 
     void setTask(Task task);
 
@@ -31,6 +30,10 @@ public interface ITaskModel {
 
     LocalDateTime getEndTime();
 
-    public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime);
-    
+    void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime);
+
+    void setDate(LocalDate date);
+
+    LocalDate getDate();
+
 }

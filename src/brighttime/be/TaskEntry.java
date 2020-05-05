@@ -16,12 +16,12 @@ import java.time.Duration;
 public class TaskEntry {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
+    private final ObjectProperty<Task> task = new SimpleObjectProperty<>();
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
-    private final ObjectProperty<Task> task = new SimpleObjectProperty<>();
 
     // put calculated properties inside the TaskModel
     public TaskEntry(int id, Task task, LocalDateTime startTime, LocalDateTime endTime) {
@@ -48,6 +48,18 @@ public class TaskEntry {
 
     public IntegerProperty idProperty() {
         return id;
+    }
+
+    public Task getTask() {
+        return task.get();
+    }
+
+    public void setTask(Task value) {
+        task.set(value);
+    }
+
+    public ObjectProperty taskProperty() {
+        return task;
     }
 
     public String getDescription() {
@@ -108,18 +120,6 @@ public class TaskEntry {
 
     public StringProperty stringDurationProperty() {
         return stringDuration;
-    }
-
-    public Task getTask() {
-        return task.get();
-    }
-
-    public void setTask(Task value) {
-        task.set(value);
-    }
-
-    public ObjectProperty taskProperty() {
-        return task;
     }
 
 }

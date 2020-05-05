@@ -63,6 +63,8 @@ public interface BllFacade {
 
     List<Task> getTasks();
 
+    List<TaskEntry> getTaskEntries() throws BllException;
+
     Duration calculateDuration(TaskEntry taskEntry);
 
     Duration calculateDuration(Task task);

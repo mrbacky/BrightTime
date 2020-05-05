@@ -81,8 +81,13 @@ public class DalManager implements DalFacade {
 
     @Override
     public Map getTasksWithTaskEntries() throws DalException {
+        return taskDAO.getTasksWithTaskEntries();
+    }
+
+    @Override
+    public List<TaskEntry> getTaskEntries() throws DalException {
         try {
-            return taskDAO.getTasksWithTaskEntries();
+            return taskDAO.getTaskEntries();
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }

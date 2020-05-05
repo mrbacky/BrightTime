@@ -7,6 +7,7 @@ package brighttime.gui.controller;
 
 import brighttime.BrightTime;
 import brighttime.gui.model.ModelCreator;
+import brighttime.gui.model.ModelException;
 import brighttime.gui.model.ModelFacade;
 import brighttime.gui.model.ModelManager;
 import brighttime.gui.model.concretes.MainModel;
@@ -69,8 +70,9 @@ public class RootController implements Initializable {
             if (module.equals(TIME_TRACKER_MODULE)) {
                 TimeTrackerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
-                controller.initializeView();
-                
+                try {
+                    controller.initializeView();
+                    
 //            } else if (module.equals(CREATOR_MODULE)) {
 //                CreateTaskController controller = fxmlLoader.getController();
 ////                controller.injectModelManager(modelManager);
@@ -79,6 +81,9 @@ public class RootController implements Initializable {
 //                CreateProjectController controller = fxmlLoader.getController();
 ////                controller.injectModelManager(modelManager);
 //                controller.initializeView();
+                } catch (ModelException ex) {
+                    Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
