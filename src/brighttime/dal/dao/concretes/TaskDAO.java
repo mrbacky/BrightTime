@@ -34,22 +34,48 @@ public class TaskDAO implements ITaskDAO {
 
     //2.4 hours.
     @Override
-    public Map getTasksWithTaskEntries() throws DalException {
-        Map<Integer, Task> tasksMap = getTasks();
-        List<TaskEntry> taskEntries = getTaskEntries(tasksMap);
+    public Map getTasksWithTaskEntries() {
+        return null;
+    }
 
-        for (Map.Entry<Integer, Task> mapEntry : tasksMap.entrySet()) {
-            int key = mapEntry.getKey();
-            for (TaskEntry taskEntry : taskEntries) {
-                if (taskEntry.getTaskId() == key) {
-                    Task task = tasksMap.get(taskEntry.getTaskId());
-                    taskEntry.setDescription(task.getDescription()); //OR get it from database with JOIN?
-                    task.getTaskEntryList().add(taskEntry);
-                }
+    @Override
+    public List<TaskEntry> getTaskEntries() throws DalException {
+        List<TaskEntry> entries = new ArrayList<>();
+        Map<Integer, Task> taskMap = getTasks();
+        String sql = "SELECT TE.id, TE.startTime, TE.endTime, TE.taskId "
+                + "FROM TaskEntry TE "
+                + "WHERE TE.startTime BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()"
+                + "AND ";
+        String sqlFinal = prepStatement(sql, taskMap);
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sqlFinal);
+
+            Iterator iterator = taskMap.entrySet().iterator();
+            int i = 0;
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                Integer key = (Integer) entry.getKey(); //Get key from HashMap and store as local variable.
+                pstmt.setInt(i + 1, key);
+                i++;
             }
-        }
 
-        return tasksMap;
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int taskId = rs.getInt("taskId");
+                Task task = taskMap.get(taskId);
+                LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
+                LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
+
+                TaskEntry taskEntry = new TaskEntry(id, task, startTime, endTime);
+
+                task.getTaskEntryList().add(taskEntry);
+                entries.add(taskEntry);
+            }
+        } catch (SQLException ex) {
+            throw new DalException("Could not get the task entries for the Time Tracker. " + ex.getMessage());
+        }
+        return entries;
     }
 
     private Map getTasks() throws DalException {
@@ -63,13 +89,14 @@ public class TaskDAO implements ITaskDAO {
                 + "ON T.projectId = P.id "
                 + "JOIN Client AS C "
                 + "ON P.clientId = C.id "
-                + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
+                + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
+                //TODO: Should the clients and projects also be the same instance?
                 int clientId = rs.getInt("clientId");
                 String clientName = rs.getString("clientName");
                 Client client = new Client(clientId, clientName);
@@ -88,48 +115,11 @@ public class TaskDAO implements ITaskDAO {
                     tasks.put(taskId, t);
                 }
             }
-            // TODO: Redo exception handling!       
+            // TODO: Redo exception handling! The message should be in the controller.       
         } catch (SQLException ex) {
             throw new DalException("Could not get the tasks for the Time Tracker. " + ex.getMessage());
         }
-        for (Integer name : tasks.keySet()) {
-            String key = name.toString();
-            String value = tasks.get(name).getDescription();
-        }
         return tasks;
-    }
-
-    private List<TaskEntry> getTaskEntries(Map tasks) throws DalException {
-        List<TaskEntry> entries = new ArrayList<>();
-        String sql = "SELECT TE.id, TE.startTime, TE.endTime, TE.taskId "
-                + "FROM TaskEntry TE "
-                + "WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
-                + "AND "; //taskId = ?;
-        String sqlFinal = prepStatement(sql, tasks);
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sqlFinal);
-
-            Iterator iterator = tasks.entrySet().iterator();
-            int i = 0;
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                Integer key = (Integer) entry.getKey(); //Get key from HashMap and store as local variable.
-                pstmt.setInt(i + 1, key);
-                i++;
-            }
-
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int taskId = rs.getInt("taskId");
-                LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
-                LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
-                entries.add(new TaskEntry(id, taskId, startTime, endTime));
-            }
-        } catch (SQLException ex) {
-            throw new DalException("Could not get the task entries for the Time Tracker. " + ex.getMessage());
-        }
-        return entries;
     }
 
     private String prepStatement(String sql, Map tasks) {
@@ -137,12 +127,13 @@ public class TaskDAO implements ITaskDAO {
         boolean firstItem = true;
         for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
             if (firstItem) {
-                sql += "taskId = ? ";
+                sql += " (taskId = ?";
                 firstItem = false;
             } else {
-                sql += "OR taskId = ? ";
+                sql += " OR taskId = ? ";
             }
         }
+        sql += ") ORDER BY TE.startTime";
         return sql;
     }
 

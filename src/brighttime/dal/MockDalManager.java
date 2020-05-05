@@ -41,6 +41,11 @@ public class MockDalManager implements DalFacade {
     public Map getTasksWithTaskEntries() throws DalException {
         return mockTaskDAO.getTasksWithTaskEntries();
     }
+    
+    @Override
+    public List<TaskEntry> getTaskEntries() throws DalException {
+        return null;
+    }
 
     @Override
     public List<Task> getTasksList() {

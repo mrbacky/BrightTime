@@ -35,8 +35,8 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setObject(1, taskEntry.getStartTime());
             pstmt.setObject(2, taskEntry.getEndTime());
-            pstmt.setInt(3, taskEntry.getTaskId());
-            pstmt.setInt(4, taskEntry.getTaskId());
+            pstmt.setInt(3, taskEntry.getTask().getId());
+            pstmt.setInt(4, taskEntry.getTask().getId());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();

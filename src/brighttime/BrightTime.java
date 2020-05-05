@@ -1,5 +1,6 @@
 package brighttime;
 
+import brighttime.dal.dao.concretes.TaskDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,9 +15,12 @@ import javafx.stage.StageStyle;
  */
 public class BrightTime extends Application {
 
+    private TaskDAO t;
     @Override
     public void start(Stage stage) throws Exception {
-
+        t = new TaskDAO();
+        t.getTaskEntries();
+        
         Image icon = new Image(getClass().getResourceAsStream("/brighttime/gui/view/assets/sun_48px.png"));
         stage.getIcons().add(icon);
         stage.setTitle("BrightTime");

@@ -85,7 +85,7 @@ public class TaskModel implements ITaskModel {
     @Override
     public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) {
         try {
-            TaskEntry newTaskEntry = new TaskEntry(task.getId(), task.getDescription(), tempStartTime, tempEndTime);
+            TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
             bllManager.createTaskEntry(newTaskEntry);
 //  call createTaskEntry from DB here
