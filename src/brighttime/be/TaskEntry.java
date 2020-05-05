@@ -16,22 +16,23 @@ import java.time.Duration;
 public class TaskEntry {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
-    private final IntegerProperty taskId = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
     private final StringProperty stringDuration = new SimpleStringProperty();
+    private final ObjectProperty<Task> task = new SimpleObjectProperty<>();
 
-    public TaskEntry(int id, int taskId, LocalDateTime startTime, LocalDateTime endTime) {
+    // put calculated properties inside the TaskModel
+    public TaskEntry(int id, Task task, LocalDateTime startTime, LocalDateTime endTime) {
         this.id.set(id);
-        this.taskId.set(taskId);
+        this.task.set(task);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
     }
 
-    public TaskEntry(int taskId, String description, LocalDateTime startTime, LocalDateTime endTime) {
-        this.taskId.set(taskId);
+    public TaskEntry(Task task, String description, LocalDateTime startTime, LocalDateTime endTime) {
+        this.task.set(task);
         this.description.set(description);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
@@ -47,18 +48,6 @@ public class TaskEntry {
 
     public IntegerProperty idProperty() {
         return id;
-    }
-
-    public int getTaskId() {
-        return taskId.get();
-    }
-
-    public void setTaskId(int value) {
-        taskId.set(value);
-    }
-
-    public IntegerProperty taskIdProperty() {
-        return taskId;
     }
 
     public String getDescription() {
@@ -119,6 +108,18 @@ public class TaskEntry {
 
     public StringProperty stringDurationProperty() {
         return stringDuration;
+    }
+
+    public Task getTask() {
+        return task.get();
+    }
+
+    public void setTask(Task value) {
+        task.set(value);
+    }
+
+    public ObjectProperty taskProperty() {
+        return task;
     }
 
 }
