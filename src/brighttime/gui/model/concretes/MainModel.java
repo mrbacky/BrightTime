@@ -9,12 +9,8 @@ import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 /**
  *
@@ -22,30 +18,13 @@ import javafx.collections.ObservableMap;
  */
 public class MainModel implements IMainModel {
 
-    private BllFacade bllManager;
+    private final BllFacade bllManager;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
-    private final ObservableMap<Integer, Task> taskMap = FXCollections.observableHashMap();
     private final ObservableList<TaskEntry> entryList = FXCollections.observableArrayList();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
-    }
-
-    @Override
-    public void loadTasks() {
-        try {
-            Map<Integer, Task> allTasks = bllManager.getTasksWithTaskEntries();
-            taskMap.clear();
-            taskMap.putAll(allTasks);
-        } catch (BllException ex) {
-            Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public ObservableMap<Integer, Task> getTasks() {
-        return taskMap;
     }
 
     @Override
@@ -99,13 +78,12 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void addTask(Task task) {
+    public void addTask(Task task) throws ModelException {
 //        taskList.add(task);
         try {
-            Task taskToPut = bllManager.createTask(task);
-            taskMap.put(taskToPut.getId(), taskToPut);
+            bllManager.createTask(task);
         } catch (BllException ex) {
-            Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ModelException(ex.getMessage());
         }
 
     }

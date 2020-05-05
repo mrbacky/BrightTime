@@ -58,7 +58,6 @@ public class MockTaskDAO implements ITaskDAO {
 //        taskEntries2.add(new TaskEntry(5, 0, LocalDateTime.parse("2020-04-26T22:00:00"), LocalDateTime.parse("2020-04-28T23:20:00")));
 //
 //        taskEntries3.add(new TaskEntry(6, 0, LocalDateTime.parse("2020-04-28T15:00:00"), LocalDateTime.parse("2020-04-28T18:20:00")));
-
     }
 
     public void createInitialTasks() {
@@ -68,7 +67,6 @@ public class MockTaskDAO implements ITaskDAO {
 
     }
 
-    @Override
     public List<Task> getTasksList() {
 //        return taskList;
         return null;
@@ -84,7 +82,6 @@ public class MockTaskDAO implements ITaskDAO {
 
     }
 
-    @Override
     public Map getTasksWithTaskEntries() throws DalException {
         return taskMap;
     }

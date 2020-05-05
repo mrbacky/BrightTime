@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brighttime.gui.controller;
 
 import brighttime.be.Task;
@@ -14,7 +9,6 @@ import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,16 +27,16 @@ import javafx.scene.layout.VBox;
  * @author rados
  */
 public class TimeTrackerController implements Initializable {
-    
+
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
-    
+
     @FXML
     private VBox vBoxMain;
     private IMainModel mainModel;
     @FXML
     private StackPane spTaskCreator;
-    
+
     private LocalDate date = LocalDate.MIN;
     private Task task = null;
 
@@ -51,37 +45,35 @@ public class TimeTrackerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
     }
-    
+
     public void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
     }
-    
+
     public void initializeView() throws ModelException {
         mainModel.loadTaskEntries();
         //mainModel.loadTasks();
-        //setUpTaskCreator();
-        //initTasks();
+        setUpTaskCreator();
         displayTasks();
     }
-    
+
     private void setUpTaskCreator() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_CREATOR_FXML));
-            
+
             Parent root = fxmlLoader.load();
             CreateTaskController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();
             spTaskCreator.getChildren().add(root);
-            
+
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void displayTasks() {
         vBoxMain.getChildren().clear();
         ObservableList<TaskEntry> list = mainModel.getTaskEntryList();
@@ -102,15 +94,7 @@ public class TimeTrackerController implements Initializable {
             date = entryDate;
         }
     }
-    
-    private void initTasks() {
-        vBoxMain.getChildren().clear();
-        Map<Integer, Task> taskList = mainModel.getTasks();
-        for (Map.Entry<Integer, Task> task : taskList.entrySet()) {
-            addTaskItem(task.getValue());
-        }
-    }
-    
+
     private void addTaskItem(Task task) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
@@ -126,5 +110,5 @@ public class TimeTrackerController implements Initializable {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

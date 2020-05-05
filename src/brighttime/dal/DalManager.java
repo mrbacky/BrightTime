@@ -14,7 +14,6 @@ import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -80,22 +79,12 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public Map getTasksWithTaskEntries() throws DalException {
-        return taskDAO.getTasksWithTaskEntries();
-    }
-
-    @Override
     public List<TaskEntry> getTaskEntries() throws DalException {
         try {
             return taskDAO.getTaskEntries();
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
-    }
-
-    @Override
-    public List<Task> getTasksList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

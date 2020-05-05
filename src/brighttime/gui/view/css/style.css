@@ -8,7 +8,7 @@
 
 .anchorPaneRoot{
 
-    -fx-background-color: #2368A2;
+    -fx-background-color: #435A9A;
     -fx-border-top-color: black;
     -fx-border-top: #F1C54C;
     -fx-background-radius :  0 0 0 0;
@@ -19,34 +19,45 @@
 
 .rootButtons{
     -fx-background-color: transparent;
-
+    /*-fx-background-color: #435A9A;*/
+    -fx-background-radius: 20 20 20 20;
+    -fx-padding: 0 0 0 -1;
 
 }
 
 #vBoxMain{
     -fx-background-color: white;
     -fx-alignment: TOP_CENTER;
-    
 
+
+}
+
+.createItem{
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20 20 20 20;
+    -fx-background-color: #435A9A;
 }
 
 .jfx-text-field{
     -fx-border-radius: 20px;
+    -fx-border-color: #F0C326;
     -fx-background-radius: 20 20 20 20;
-    -fx-border-color: #435A9A;
+    -fx-background-color: white;
     -jfx-unfocus-color: transparent;
-    -fx-text-fill: #435A9A;
+    -jfx-focus-color: #F0C326;
     -fx-padding: 3.5 10 3.5 10;
     -jfx-label-float: true;    
 }
 
 .cboClient{
     -fx-border-radius: 20px;
+    /*or this color #E40066*/
+    -fx-border-color: #ED6A5A;
     -fx-background-radius: 20 20 20 20;
-    -fx-border-color: #F0C326;
-    -fx-padding: 0 10 0 10;
+    -fx-background-color: white;
     -jfx-unfocus-color: transparent;
-    -jfx-focus-color: #F0C326;
+    -jfx-focus-color: #ED6A5A;
+    -fx-padding: 0 10 0 10;
     -jfx-label-float: true;
 }
 
@@ -57,8 +68,11 @@
 .cboProject{
     -fx-border-radius: 20px;
     -fx-border-color: #00A99D;
+    -fx-background-radius: 20 20 20 20;
+    -fx-background-color: white;    
     -jfx-unfocus-color: transparent;
     -jfx-focus-color: #00A99D;
+    -fx-padding: 0 10 0 10;
     -jfx-label-float: true;
 }
 
@@ -66,8 +80,37 @@
     -fx-text-fill: #00A99D;
 }
 
-.button{
-    -fx-background-color: transparent;
+.error-label {
+    -fx-padding: -7 0 0 00;
+    -fx-text-fill: white;
+    -fx-font-size: 8pt;
+}
+
+.scroll-pane{
+    -fx-background: white;
+    -fx-border-color: purple;
+}
+
+.grid-pane{
+    -fx-grid-lines-visible: false;
+}
+
+.adminTitleLabel{
+    -fx-padding: 10 0 0 0;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
+}
+
+.adminButtons{    
+    -fx-background-color: #435A9A;
+    -fx-background-radius: 30 30 30 30;
+    -fx-padding: 0 0 0 -1;
+}
+
+.adminMenuItemLabel{
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
 }
 
 #lblAllTasks{

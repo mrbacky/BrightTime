@@ -10,51 +10,51 @@
 <?import javafx.scene.layout.StackPane?>
 
 <AnchorPane minWidth="-Infinity" prefHeight="40.0" prefWidth="700.0" styleClass="apTaskEntryItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
-   <children>
-      <StackPane layoutX="10.0" layoutY="10.0" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TextField fx:id="textFieldTaskEntryDesc" styleClass="taskItemTextFields" />
-         </children>
-      </StackPane>
-      <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TextField fx:id="textFieldDuration" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="60.0" styleClass="taskItemTextFields" />
-         </children>
-      </StackPane>
-      <StackPane layoutX="460.0" layoutY="19.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" StackPane.alignment="CENTER_LEFT">
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </TextField>
-            <TextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" StackPane.alignment="CENTER_RIGHT">
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </TextField>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0" text="─">
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </Label>
-         </children>
-      </StackPane>
-      <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Button fx:id="btnRemoveTask" mnemonicParsing="false" styleClass="rootButtons">
-               <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/delete_48px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </StackPane>
-   </children>
-   <padding>
-      <Insets left="40.0" />
-   </padding>
+    <children>
+        <StackPane layoutX="10.0" layoutY="10.0" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <TextField fx:id="textFieldTaskEntryDesc" styleClass="taskItemTextFields" />
+            </children>
+        </StackPane>
+        <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <TextField fx:id="textFieldDuration" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="60.0" styleClass="taskItemTextFields" />
+            </children>
+        </StackPane>
+        <StackPane layoutX="460.0" layoutY="19.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <TextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" StackPane.alignment="CENTER_LEFT">
+                    <StackPane.margin>
+                        <Insets />
+                    </StackPane.margin>
+                </TextField>
+                <TextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" styleClass="taskItemTextFields" StackPane.alignment="CENTER_RIGHT">
+                    <StackPane.margin>
+                        <Insets />
+                    </StackPane.margin>
+                </TextField>
+                <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0" text="─">
+                    <StackPane.margin>
+                        <Insets />
+                    </StackPane.margin>
+                </Label>
+            </children>
+        </StackPane>
+        <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Button fx:id="btnRemoveTask" mnemonicParsing="false" styleClass="rootButtons">
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/delete_48px.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </StackPane>
+    </children>
+    <padding>
+        <Insets left="40.0" />
+    </padding>
 </AnchorPane>

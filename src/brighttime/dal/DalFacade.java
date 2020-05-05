@@ -5,7 +5,6 @@ import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -58,10 +57,6 @@ public interface DalFacade {
     Task createTask(Task task) throws DalException;
 
     List<TaskEntry> getTaskEntries() throws DalException;
-
-    Map getTasksWithTaskEntries() throws DalException;
-
-    List<Task> getTasksList();
 
     /**
      * Creates a task entry in the database.

@@ -32,12 +32,6 @@ public class TaskDAO implements ITaskDAO {
         this.connection = new ConnectionManager();
     }
 
-    //2.4 hours.
-    @Override
-    public Map getTasksWithTaskEntries() {
-        return null;
-    }
-
     @Override
     public List<TaskEntry> getTaskEntries() throws DalException {
         List<TaskEntry> entries = new ArrayList<>();
@@ -74,6 +68,7 @@ public class TaskDAO implements ITaskDAO {
                 entries.add(taskEntry);
             }
         } catch (SQLException ex) {
+            // TODO: Redo exception handling! The message should be in the controller.    
             throw new DalException("Could not get the task entries for the Time Tracker. " + ex.getMessage());
         }
         return entries;
@@ -157,11 +152,6 @@ public class TaskDAO implements ITaskDAO {
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
         }
-    }
-
-    @Override
-    public List<Task> getTasksList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

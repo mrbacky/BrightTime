@@ -3,7 +3,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
-import brighttime.gui.model.ModelFacade;
+import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -28,7 +28,7 @@ public class CreateClientController implements Initializable {
     @FXML
     private JFXTextField txtName;
 
-    private ModelFacade modelManager;
+    private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
 
@@ -45,8 +45,8 @@ public class CreateClientController implements Initializable {
         // TODO
     }
 
-    void injectModelManager(ModelFacade modelManager) {
-        this.modelManager = modelManager;
+    public void injectMainModel(IMainModel mainModel) {
+        this.mainModel = mainModel;
     }
 
     void initializeView() throws IOException {
@@ -62,7 +62,7 @@ public class CreateClientController implements Initializable {
         btnAdd.setOnAction((event) -> {
             if (!txtName.getText().trim().isEmpty()) {
                 try {
-                    modelManager.addClient(new Client(txtName.getText().trim()));
+                    mainModel.addClient(new Client(txtName.getText().trim()));
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the client.", "An error occured: " + ex.getMessage());

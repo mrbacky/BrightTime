@@ -6,17 +6,12 @@ import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelException;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 /**
  *
  * @author rados
  */
 public interface IMainModel {
-
-    void loadTasks();
-
-    ObservableMap<Integer, Task> getTasks();
 
     /**
      * Adds a new client.
@@ -66,7 +61,7 @@ public interface IMainModel {
      */
     ObservableList<Project> getProjectList();
 
-    void addTask(Task task);
+    void addTask(Task task) throws ModelException;
 
     void loadTaskEntries() throws ModelException;
 

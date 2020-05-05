@@ -1,52 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="50.0" prefWidth="550.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
-   <children>
-      <HBox id="hBoxTaskItem" fx:id="hBoxItemElements" alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-         <children>
-            <StackPane prefHeight="35.0" prefWidth="268.0">
-               <children>
-                  <JFXTextField fx:id="txtDescription" prefHeight="27.0" prefWidth="120.0" promptText="Description of the new task." />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="35.0" prefWidth="244.0">
-               <children>
-                  <JFXComboBox fx:id="cboClient" prefHeight="27.0" prefWidth="120.0" promptText="Select Client" styleClass="cboClient" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <JFXComboBox fx:id="cboProject" prefHeight="27.0" prefWidth="120.0" promptText="Select Project" styleClass="cboProject" />
-               </children>
-            </StackPane>
-            <StackPane prefHeight="35.0" prefWidth="117.0" />
-            <StackPane prefHeight="30.0" prefWidth="0.0">
-               <children>
-                  <JFXButton fx:id="btnAdd" ellipsisString="" prefHeight="33.0" prefWidth="18.0">
-                     <graphic>
+<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="40.0" prefWidth="750.0" styleClass="apTaskItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
+    <children>
+        <StackPane prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <TextField fx:id="textFieldTaskDescInput" promptText="Please type description of your task" styleClass="taskItemTextFields" />
+            </children>
+        </StackPane>
+        <StackPane prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="340.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <ComboBox fx:id="comboBoxClient" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" promptText="select Client" styleClass="comboBoxTaskItem" />
+            </children>
+        </StackPane>
+        <StackPane prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <ComboBox fx:id="comboBoxProject" maxWidth="1.7976931348623157E308" promptText="select Project" styleClass="comboBoxTaskItem" />
+            </children>
+        </StackPane>
+        <StackPane prefHeight="30.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <JFXButton fx:id="btnAdd" ellipsisString="" prefHeight="33.0" prefWidth="18.0">
+                    <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@assets/summer_64px.png" />
-                           </image>
+                            <image>
+                                <Image url="@assets/plus_48px.png" />
+                            </image>
                         </ImageView>
-                     </graphic>
-                  </JFXButton>
-               </children>
-            </StackPane>
-         </children>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </HBox>
-   </children>
+                    </graphic>
+                </JFXButton>
+            </children>
+        </StackPane>
+    </children>
 </AnchorPane>

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brighttime.gui.controller;
 
 import brighttime.gui.model.ModelFacade;
+import brighttime.gui.model.interfaces.IMainModel;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -17,7 +13,7 @@ import javafx.fxml.Initializable;
  */
 public class OverviewController implements Initializable {
 
-    private ModelFacade modelManager;
+    private IMainModel mainModel;
 
     /**
      * Initializes the controller class.
@@ -32,8 +28,8 @@ public class OverviewController implements Initializable {
 
     }
 
-    void injectModelManager(ModelFacade modelManager) {
-        this.modelManager = modelManager;
+    public void injectMainModel(IMainModel mainModel) {
+        this.mainModel = mainModel;
     }
 
 }
