@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 
 /**
  *
@@ -41,7 +40,7 @@ public interface ITaskModel {
 
     ObjectProperty startTimeProperty();
 
-    void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime);
+    void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException;
 
     void setDate(LocalDate date);
 

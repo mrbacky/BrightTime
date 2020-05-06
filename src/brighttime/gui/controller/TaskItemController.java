@@ -6,6 +6,7 @@ import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
+import brighttime.gui.util.AlertManager;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -61,17 +62,22 @@ public class TaskItemController implements Initializable {
     private TextField textFieldTaskDesc;
     @FXML
     private Button btnDeleteTask;
-    private ITaskModel taskModel;
     @FXML
     private ToggleButton btnPlayPause;
     @FXML
     private ImageView imgPlayPause;
-
-    private LocalDateTime tempStartTime;
-    private LocalDateTime tempEndTime;
     @FXML
     private ImageView imgExpandCollapse;
+
     private TimeTrackerController timeTrackerController;
+    private ITaskModel taskModel;
+    private final AlertManager alertManager;
+    private LocalDateTime tempStartTime;
+    private LocalDateTime tempEndTime;
+
+    public TaskItemController() {
+        this.alertManager = new AlertManager();
+    }
 
     /**
      * Initializes the controller class.
@@ -182,16 +188,20 @@ public class TaskItemController implements Initializable {
     }
 
     @FXML
-    private void handlePlayPauseTask(ActionEvent event) throws ModelException {
+    private void handlePlayPauseTask(ActionEvent event) {
         if (btnPlayPause.isSelected()) {
             imgPlayPause.setImage(PAUSE_ICON_IMAGE);
             tempStartTime = LocalDateTime.now().withNano(0);
         } else {
-            imgPlayPause.setImage(PLAY_ICON_IMAGE);
-            tempEndTime = LocalDateTime.now().withNano(0);
-            taskModel.createTaskEntry(tempStartTime, tempEndTime);
-            //  refresh
-            timeTrackerController.initializeView();
+            try {
+                imgPlayPause.setImage(PLAY_ICON_IMAGE);
+                tempEndTime = LocalDateTime.now().withNano(0);
+                taskModel.addTaskEntry(tempStartTime, tempEndTime);
+                //  refresh
+                timeTrackerController.initializeView();
+            } catch (ModelException ex) {
+                alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
+            }
 
         }
     }

@@ -168,7 +168,7 @@ public class TaskModel implements ITaskModel {
 //        return task.getCreationTime();
 //    }
     @Override
-    public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) {
+    public void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException {
         try {
             TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
@@ -183,7 +183,7 @@ public class TaskModel implements ITaskModel {
 //            task.getTaskEntryList().add(newTaskEntry);
 //        }
         } catch (BllException ex) {
-            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ModelException(ex.getMessage());
         }
     }
 
