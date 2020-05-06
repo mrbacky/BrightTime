@@ -36,6 +36,8 @@ public class TaskEntryItemController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -49,7 +51,7 @@ public class TaskEntryItemController implements Initializable {
     public void setTaskEntry(TaskEntry taskEntry) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         textFieldTaskEntryDesc.textProperty().bind(Bindings.createStringBinding(()
-                -> taskEntry.getDescription(), taskEntry.descriptionProperty()));
+                -> taskEntry.getTask().getDescription(), taskEntryModel.descriptionProperty()));
         textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskEntry.getStartTime()), taskEntry.endTimeProperty()));
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()

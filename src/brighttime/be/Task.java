@@ -71,8 +71,6 @@ public class Task {
         return project;
     }
 
-   
-
     public List<TaskEntry> getTaskEntryList() {
         return taskEntryList.get();
     }
@@ -84,12 +82,6 @@ public class Task {
     public ObjectProperty taskEntryListProperty() {
         return taskEntryList;
     }
-
-   
-
-    
-
-   
 
     public LocalDateTime getCreationTime() {
         return creationTime.get();

@@ -53,12 +53,15 @@ public class RootController implements Initializable {
     private JFXButton btnUsers;
     private IMainModel mainModel;
 
-    public RootController() throws IOException {
-        mainModel = ModelCreator.getInstance().createMainModel();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    }
+
+    public void injectMainModel(IMainModel mainModel) {
+        this.mainModel = mainModel;
+    }
+
+    public void initializeView() {
         loadModule(TIME_TRACKER_MODULE);
         setToolTipsForButtons();
         displayAdminMenuItems();
@@ -77,6 +80,7 @@ public class RootController implements Initializable {
             if (module.equals(TIME_TRACKER_MODULE)) {
                 TimeTrackerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
+                controller.injectRootController(this);
                 controller.initializeView();
             } else if (module.equals(ADMIN_MENU_MODULE)) {
                 CreatorController controller = fxmlLoader.getController();
@@ -143,7 +147,6 @@ public class RootController implements Initializable {
             nodesList.animateList(false);
         });
     }
-
 
     private void showAdminClientModule() {
         btnClients.setOnAction((event) -> {

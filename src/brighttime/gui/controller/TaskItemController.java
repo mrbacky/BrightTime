@@ -34,7 +34,7 @@ import javafx.scene.layout.VBox;
  */
 public class TaskItemController implements Initializable {
 
-    private static final String DATE_TIME_FORMAT = "HH:mm";
+    private static final String TIME_FORMAT = "HH:mm";
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
 
 //    private ImageView PLAY_ICON_IMAGE = new ImageView("/brighttime/gui/view/assets/play.png");
@@ -79,25 +79,6 @@ public class TaskItemController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-
-        /*
-        
-        task Helper class (util package)
-        Create task model
-        move all of the task dato from here to task Model
-        inject task model to this contr instead of setTask method
-            alt.    implement factory for injecting the model
-        move all of the logic for calculating duration from BEs to BLL
-        access this functionality through contr - model - bll
-        
-        what about main model ???
-        
-        
-        
-        
-        
-        
-         */
     }
 
     public void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
@@ -107,35 +88,34 @@ public class TaskItemController implements Initializable {
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
         setTaskDetails(taskModel.getTask());
-        if (taskModel.getDayEntryList().isEmpty()) {
-            btnExpandTask.setDisable(true);
-            imgExpandCollapse.setImage(null);
-        }
+        restrictExpandButton();
     }
 
     public void setTaskDetails(Task task) {
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TIME_FORMAT);
 
         textFieldTaskDesc.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getDescription(), task.descriptionProperty()));
-
         textFieldClient.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getClient().getName(), task.getProject().getClient().nameProperty()));
-
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
-
         textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
-
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
-
         textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
+                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()),
+                taskModel.stringDurationProperty()));
 
-//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(task).toSeconds()));
+    }
+
+    private void restrictExpandButton() {
+        if (taskModel.getDayEntryList().isEmpty()) {
+            btnExpandTask.setDisable(true);
+            imgExpandCollapse.setImage(null);
+        }
     }
 
     @FXML
@@ -150,9 +130,6 @@ public class TaskItemController implements Initializable {
             imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
             vBoxTaskEntries.getChildren().clear();
         }
-//        if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
-//
-//        }
 
     }
 
@@ -191,7 +168,7 @@ public class TaskItemController implements Initializable {
             tempEndTime = LocalDateTime.now().withNano(0);
             taskModel.createTaskEntry(tempStartTime, tempEndTime);
             //  refresh
-            timeTrackerController.initializeView();
+            timeTrackerController.lazyRefresh();
 
         }
     }

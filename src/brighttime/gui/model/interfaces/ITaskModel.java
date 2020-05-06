@@ -21,8 +21,6 @@ public interface ITaskModel {
 
     Task getTask();
 
-    Duration calculateDuration(TaskEntry taskEntry);
-
     Duration calculateTaskDuration(List<TaskEntry> entryList);
 
     String secToFormat(long sec);

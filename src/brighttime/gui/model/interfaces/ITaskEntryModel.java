@@ -26,4 +26,10 @@ public interface ITaskEntryModel {
 
     public String secToFormat(long sec);
 
+    String getDescription();
+
+    void setDescription(String value);
+
+    StringProperty descriptionProperty();
+
 }

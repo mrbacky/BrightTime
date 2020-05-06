@@ -104,7 +104,10 @@ public class TaskModel implements ITaskModel {
     public List getDayEntryList() {
         List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
                 -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
-        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+        
+
+//        dayEntries.sort(Comparator.comparing(e -> e.getStartTime()));
+        
         return dayEntries;
     }
 
@@ -130,11 +133,6 @@ public class TaskModel implements ITaskModel {
     }
 
     @Override
-    public Duration calculateDuration(TaskEntry taskEntry) {
-        return bllManager.calculateDuration(taskEntry);
-    }
-
-    @Override
     public Duration calculateTaskDuration(List<TaskEntry> entryList) {
         if (task.getTaskEntryList() != null) {
             return bllManager.calculateTaskDuration(entryList);
@@ -152,36 +150,24 @@ public class TaskModel implements ITaskModel {
         return bllManager.formatToSec(formatString);
     }
 
-//    @Override
-//    public LocalDateTime getEndTime() {
-//        if (!getDayEntryList().isEmpty()) {
-//            return bllManager.getEndTime(task);
-//        }
-//        return task.getCreationTime();
-//    }
-//
-//    @Override
-//    public LocalDateTime getStartTime() {
-//        if (!getDayEntryList().isEmpty()) {
-//            return bllManager.getStartTime(task);
-//        }
-//        return task.getCreationTime();
-//    }
     @Override
     public void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) {
         try {
-            TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
+            TaskEntry newTaskEntry = new TaskEntry(task, tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
             bllManager.createTaskEntry(newTaskEntry);
-//  call createTaskEntry from DB here
-//  TODO: create entryList in task OBJ if the list does not exist
-//        if (task.getTaskEntryList().isEmpty()) {
-//            List<TaskEntry> entryList = new ArrayList<>();
-//            entryList.add(newTaskEntry);
-//            task.setTaskEntryList(entryList);
-//        } else {
-//            task.getTaskEntryList().add(newTaskEntry);
-//        }
+
+            /*    
+  call createTaskEntry from DB here
+  TODO: create entryList in task OBJ if the list does not exist
+        if (task.getTaskEntryList().isEmpty()) {
+            List<TaskEntry> entryList = new ArrayList<>();
+            entryList.add(newTaskEntry);
+            task.setTaskEntryList(entryList);
+        } else {
+            task.getTaskEntryList().add(newTaskEntry);
+        }
+             */
         } catch (BllException ex) {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }

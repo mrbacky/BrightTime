@@ -32,6 +32,9 @@ import javafx.scene.layout.VBox;
  */
 public class TimeTrackerController implements Initializable {
 
+    // lazy refresh - bad approach 
+    private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
+
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
 
@@ -43,6 +46,7 @@ public class TimeTrackerController implements Initializable {
 
     private LocalDate date = LocalDate.MIN;
     private Task task = null;
+    private RootController rootController;
 
     /**
      * Initializes the controller class.
@@ -55,18 +59,19 @@ public class TimeTrackerController implements Initializable {
         this.mainModel = mainModel;
     }
 
+    void injectRootController(RootController rootController) {
+        this.rootController = rootController;
+    }
+
     public void initializeView() throws ModelException {
-        //mainModel.loadTaskEntries();
         mainModel.loadTasks();
         setUpTaskCreator();
-        //displayTasks();
         initTasks();
     }
 
     private void setUpTaskCreator() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_CREATOR_FXML));
-
             Parent root = fxmlLoader.load();
             CreateTaskController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
@@ -79,27 +84,6 @@ public class TimeTrackerController implements Initializable {
         }
     }
 
-    private void displayTasks() {
-        vBoxMain.getChildren().clear();
-        ObservableList<TaskEntry> list = mainModel.getTaskEntryList();
-        for (TaskEntry taskEntry : list) {
-            LocalDate entryDate = taskEntry.getStartTime().toLocalDate();
-            Task entryTask = taskEntry.getTask();
-            if (!entryDate.equals(date)) {
-                Label label = new Label(entryDate.toString());
-                vBoxMain.getChildren().add(label);
-            }
-            if (entryDate.equals(date) && entryTask != task) {
-                task = entryTask;
-                addTaskItem(task);
-            } else if (!entryDate.equals(date)) {
-                task = entryTask;
-                addTaskItem(task);
-            }
-            date = entryDate;
-        }
-    }
-
     private void initTasks() {
         vBoxMain.getChildren().clear();
         Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
@@ -108,7 +92,6 @@ public class TimeTrackerController implements Initializable {
         for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
             LocalDate dateKey = entry.getKey();
             List<Task> taskListValue = entry.getValue();
-            System.out.println("dateKey: " + dateKey + " List of Tasks: ");
             if (!dateKey.equals(date)) {
                 Label label = new Label(dateKey.toString());
                 vBoxMain.getChildren().add(label);
@@ -118,7 +101,6 @@ public class TimeTrackerController implements Initializable {
                 addTaskItem(task);
             }
         }
-
     }
 
     private void addTaskItem(Task task) {
@@ -135,6 +117,10 @@ public class TimeTrackerController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    void lazyRefresh() {
+        rootController.loadModule(TIME_TRACKER_MODULE);
     }
 
 }

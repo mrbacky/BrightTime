@@ -42,7 +42,7 @@ public class CreatorController implements Initializable {
         this.mainModel = mainModel;
     }
 
-    void initializeView() {
+    public void initializeView() {
         System.out.println("in Creator page");
         centervBox();
         showAdminClientModule();

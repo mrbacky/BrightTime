@@ -1,5 +1,8 @@
 package brighttime;
 
+import brighttime.gui.controller.RootController;
+import brighttime.gui.model.ModelCreator;
+import brighttime.gui.model.interfaces.IMainModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +27,12 @@ public class BrightTime extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(BrightTime.class.getResource("/brighttime/gui/view/Root.fxml"));
         Parent root = loader.load();
+
+        IMainModel mainModel = ModelCreator.getInstance().createMainModel();
+        RootController controller = loader.getController();
+        controller.injectMainModel(mainModel);
+        controller.initializeView();
+
         stage.setMinWidth(850);
         stage.setMinHeight(400);
         Scene scene = new Scene(root);

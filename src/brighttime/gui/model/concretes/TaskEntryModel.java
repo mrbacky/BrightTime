@@ -15,11 +15,27 @@ import javafx.beans.property.StringProperty;
 public class TaskEntryModel implements ITaskEntryModel {
 
     private BllFacade bllManager;
+    private final StringProperty description = new SimpleStringProperty();
+    private final StringProperty stringDuration = new SimpleStringProperty();
 
     public TaskEntryModel(BllFacade bllManager) {
         this.bllManager = bllManager;
     }
-    private final StringProperty stringDuration = new SimpleStringProperty();
+
+    @Override
+    public String getDescription() {
+        return description.get();
+    }
+
+    @Override
+    public void setDescription(String value) {
+        description.set(value);
+    }
+
+    @Override
+    public StringProperty descriptionProperty() {
+        return description;
+    }
 
     @Override
     public String getStringDuration() {
