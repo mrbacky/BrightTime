@@ -37,7 +37,8 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public Map<LocalDate, List<Task>> Tasks() throws DalException {
-        dateMap = new HashMap();
+        dateMap = new HashMap<>();
+
         getEntries();
         List<Task> newTasks = findTasksWithoutEntries();
         for (Task newTask : newTasks) {
@@ -51,7 +52,7 @@ public class TaskDAO implements ITaskDAO {
                 List<Task> lst = dateMap.get(date);
                 if (!lst.contains(newTask)) {
                     List<Task> list = dateMap.get(date);
-                    list.add(newTask);
+                    list.add(0, newTask);
                 }
             }
         }
@@ -64,7 +65,7 @@ public class TaskDAO implements ITaskDAO {
         String sql = "SELECT CONVERT(DATE, TE.startTime) AS date, "
                 + "TE.id, TE.startTime, TE.endTime, TE.taskId "
                 + "FROM TaskEntry TE "
-                + "WHERE TE.startTime BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()"
+                + "WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
                 + "AND ";
         String sqlFinal = prepStatement(sql, tasks);
         try (Connection con = connection.getConnection()) {
@@ -124,7 +125,7 @@ public class TaskDAO implements ITaskDAO {
                 + "ON T.projectId = P.id "
                 + "JOIN Client AS C "
                 + "ON P.clientId = C.id "
-                + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()";
+                + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -167,7 +168,7 @@ public class TaskDAO implements ITaskDAO {
                 sql += " OR taskId = ? ";
             }
         }
-        sql += ") ORDER BY date DESC, TE.taskId DESC";
+        sql += ") ORDER BY TE.startTime DESC";
         return sql;
     }
 
@@ -197,7 +198,7 @@ public class TaskDAO implements ITaskDAO {
         String sql = "SELECT id "
                 + "  FROM Task "
                 + "  WHERE createdDate = modifiedDate "
-                + "  AND createdDate BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()"
+                + "  AND createdDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
                 + "  ORDER BY createdDate DESC";
 
         try (Connection con = connection.getConnection()) {

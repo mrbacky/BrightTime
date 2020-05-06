@@ -9,9 +9,11 @@ import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -101,7 +103,9 @@ public class TimeTrackerController implements Initializable {
     private void initTasks() {
         vBoxMain.getChildren().clear();
         Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
-        for (Map.Entry<LocalDate, List<Task>> entry : taskList.entrySet()) {
+        Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+        orderedMap.putAll(taskList);
+        for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
             LocalDate dateKey = entry.getKey();
             List<Task> taskListValue = entry.getValue();
             if (!dateKey.equals(date)) {
