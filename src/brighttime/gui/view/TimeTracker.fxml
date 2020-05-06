@@ -22,6 +22,9 @@
                     <padding>
                         <Insets top="10.0" />
                     </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
                 </VBox>
             </content>
         </ScrollPane>

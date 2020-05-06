@@ -1,6 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +32,7 @@ public class TaskEntryItemController implements Initializable {
     @FXML
     private Button btnRemoveTask;
     private ITaskModel taskModel;
+    private ITaskEntryModel taskEntryModel;
 
     /**
      * Initializes the controller class.
@@ -40,11 +42,11 @@ public class TaskEntryItemController implements Initializable {
         textFieldStartTime.setEditable(true);
     }
 
-    void injectTaskModel(ITaskModel taskModel) {
-        this.taskModel = taskModel;
+    public void injectTaskEntryModel(ITaskEntryModel taskEntryModel) {
+        this.taskEntryModel = taskEntryModel;
     }
 
-    void setTaskEntry(TaskEntry taskEntry) {
+    public void setTaskEntry(TaskEntry taskEntry) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         textFieldTaskEntryDesc.textProperty().bind(Bindings.createStringBinding(()
                 -> taskEntry.getDescription(), taskEntry.descriptionProperty()));
@@ -53,9 +55,9 @@ public class TaskEntryItemController implements Initializable {
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskEntry.getEndTime()), taskEntry.endTimeProperty()));
         textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> taskModel.secToFormat(taskModel.calculateDuration(taskEntry).toSeconds()), taskEntry.stringDurationProperty()));
+                -> taskEntryModel.secToFormat(taskEntryModel.calculateDuration(taskEntry).toSeconds()), taskEntryModel.stringDurationProperty()));
 
-//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(taskEntry).toSeconds()));
+//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(taskEntry).toSeconds()));
     }
 
 }

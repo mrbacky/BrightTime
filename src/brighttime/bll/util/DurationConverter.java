@@ -17,7 +17,7 @@ public class DurationConverter {
     public String secToFormat(long sec) {
         long hours, mins, secs;
         mins = (sec / 60);
-        while (mins > 60) {
+        while (mins >= 60) {
             mins = mins % 60;
         }
         hours = ((sec / 60) / 60);

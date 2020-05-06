@@ -3,6 +3,7 @@ package brighttime.bll.util;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -10,14 +11,14 @@ import java.time.LocalDateTime;
  */
 public class TaskIntervalCalculator {
 
-    public LocalDateTime getStartTime(Task task) {
-        TaskEntry firstTaskEntry = task.getTaskEntryList().get(0);
+    public LocalDateTime getStartTime(List<TaskEntry> specificEntryList) {
+        TaskEntry firstTaskEntry = specificEntryList.get(0);
         LocalDateTime taskStartTime = firstTaskEntry.getStartTime();
         return taskStartTime;
     }
 
-    public LocalDateTime getEndTime(Task task) {
-        TaskEntry latestTaskEntry = task.getTaskEntryList().get(task.getTaskEntryList().size() - 1);
+    public LocalDateTime getEndTime(List<TaskEntry> specificEntryList) {
+        TaskEntry latestTaskEntry = specificEntryList.get(specificEntryList.size() - 1);
         LocalDateTime taskEndTime = latestTaskEntry.getEndTime();
         return taskEndTime;
     }

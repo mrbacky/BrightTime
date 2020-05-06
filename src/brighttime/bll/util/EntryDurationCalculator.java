@@ -12,6 +12,7 @@ public class EntryDurationCalculator {
 
     public Duration calculateDuration(TaskEntry taskEntry) {
         return Duration.between(taskEntry.getStartTime(), taskEntry.getEndTime());
+
     }
 
 }

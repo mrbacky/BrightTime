@@ -8,9 +8,11 @@ import brighttime.dal.DalFacade;
 import brighttime.dal.DalManager;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.gui.model.concretes.MainModel;
+import brighttime.gui.model.concretes.TaskEntryModel;
 import brighttime.gui.model.concretes.TaskModel;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.IProjectModel;
+import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 
@@ -41,6 +43,10 @@ public class ModelCreator {
     
     public IMainModel createMainModel(){
         return new MainModel(bllManager);
+    }
+    
+    public ITaskEntryModel createTaskEntryModel(){
+        return new TaskEntryModel(bllManager);
     }
     
 }

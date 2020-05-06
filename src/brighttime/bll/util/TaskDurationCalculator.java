@@ -3,23 +3,24 @@ package brighttime.bll.util;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import java.time.Duration;
+import java.util.List;
 
 /**
  *
  * @author rado
  */
 public class TaskDurationCalculator {
-        
+
     private EntryDurationCalculator entryDurationCalculator;
-    
+
     public TaskDurationCalculator() {
         entryDurationCalculator = new EntryDurationCalculator();
     }
 
-    public Duration calculateDuration(Task task) {
+    public Duration calculateTaskDuration(List<TaskEntry> entryList) {
         Duration totalDuration = Duration.ZERO;
-        for (TaskEntry taskEntry : task.getTaskEntryList()) {
-            totalDuration = totalDuration.plus(entryDurationCalculator.calculateDuration(taskEntry));
+        for (TaskEntry entry : entryList) {
+            totalDuration = totalDuration.plus(entryDurationCalculator.calculateDuration(entry));
         }
         return totalDuration;
     }

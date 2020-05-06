@@ -19,10 +19,7 @@ public class Task {
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
-    private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
-    private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
-    private final StringProperty stringDuration = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
 
     public Task(int id, String description, Project project, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
@@ -74,29 +71,7 @@ public class Task {
         return project;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime.get();
-    }
-
-    public void setStartTime(LocalDateTime value) {
-        startTime.set(value);
-    }
-
-    public ObjectProperty startTimeProperty() {
-        return startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime.get();
-    }
-
-    public void setEndTime(LocalDateTime value) {
-        endTime.set(value);
-    }
-
-    public ObjectProperty endTimeProperty() {
-        return endTime;
-    }
+   
 
     public List<TaskEntry> getTaskEntryList() {
         return taskEntryList.get();
@@ -110,17 +85,11 @@ public class Task {
         return taskEntryList;
     }
 
-    public String getStringDuration() {
-        return stringDuration.get();
-    }
+   
 
-    public void setStringDuration(String value) {
-        stringDuration.set(value);
-    }
+    
 
-    public StringProperty stringDurationProperty() {
-        return stringDuration;
-    }
+   
 
     public LocalDateTime getCreationTime() {
         return creationTime.get();

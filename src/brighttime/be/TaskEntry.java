@@ -20,8 +20,6 @@ public class TaskEntry {
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
-    private final ObjectProperty<Duration> duration = new SimpleObjectProperty<>();
-    private final StringProperty stringDuration = new SimpleStringProperty();
 
     // put calculated properties inside the TaskModel
     public TaskEntry(int id, Task task, LocalDateTime startTime, LocalDateTime endTime) {
@@ -96,30 +94,6 @@ public class TaskEntry {
 
     public ObjectProperty endTimeProperty() {
         return endTime;
-    }
-
-    public Duration getDuration() {
-        return duration.get();
-    }
-
-    public void setDuration(Duration value) {
-        duration.set(value);
-    }
-
-    public ObjectProperty durationProperty() {
-        return duration;
-    }
-
-    public String getStringDuration() {
-        return stringDuration.get();
-    }
-
-    public void setStringDuration(String value) {
-        stringDuration.set(value);
-    }
-
-    public StringProperty stringDurationProperty() {
-        return stringDuration;
     }
 
 }

@@ -66,15 +66,15 @@ public interface BllFacade {
 
     Duration calculateDuration(TaskEntry taskEntry);
 
-    Duration calculateDuration(Task task);
+    Duration calculateTaskDuration(List<TaskEntry> entryList);
 
     String secToFormat(long sec);
 
     long formatToSec(String formatString);
 
-    LocalDateTime getStartTime(Task task);
+    LocalDateTime getStartTime(List<TaskEntry> taskEntries);
 
-    LocalDateTime getEndTime(Task task);
+    LocalDateTime getEndTime(List<TaskEntry> taskEntries);
 
     /**
      * Creates a task entry in the database.

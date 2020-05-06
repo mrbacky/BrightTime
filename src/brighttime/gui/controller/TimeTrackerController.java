@@ -108,6 +108,7 @@ public class TimeTrackerController implements Initializable {
         for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
             LocalDate dateKey = entry.getKey();
             List<Task> taskListValue = entry.getValue();
+            System.out.println("dateKey: " + dateKey + " List of Tasks: ");
             if (!dateKey.equals(date)) {
                 Label label = new Label(dateKey.toString());
                 vBoxMain.getChildren().add(label);

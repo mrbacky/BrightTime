@@ -2,7 +2,9 @@ package brighttime.gui.controller;
 
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
+import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import java.io.IOException;
 import java.net.URL;
@@ -105,6 +107,10 @@ public class TaskItemController implements Initializable {
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
         setTaskDetails(taskModel.getTask());
+        if (taskModel.getDayEntryList().isEmpty()) {
+            btnExpandTask.setDisable(true);
+            imgExpandCollapse.setImage(null);
+        }
     }
 
     public void setTaskDetails(Task task) {
@@ -121,15 +127,15 @@ public class TaskItemController implements Initializable {
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
         textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getStartTime()), task.startTimeProperty()));
+                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 
         textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getEndTime()), task.endTimeProperty()));
+                -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
 
         textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()), task.stringDurationProperty()));
+                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
 
-//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateDuration(task).toSeconds()));
+//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(task).toSeconds()));
     }
 
     @FXML
@@ -137,7 +143,7 @@ public class TaskItemController implements Initializable {
 
         if (btnExpandTask.isSelected()) {
             imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
-            if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
+            if (!taskModel.getDayEntryList().isEmpty()) {
                 initTaskEntries();
             }
         } else {
@@ -152,14 +158,9 @@ public class TaskItemController implements Initializable {
 
     public void initTaskEntries() {
         vBoxTaskEntries.getChildren().clear();
-        List<TaskEntry> taskEntries = taskModel.getTask().getTaskEntryList();
-        for (TaskEntry taskEntry : taskEntries) {
-            if (taskEntry.getStartTime().toLocalDate().isEqual(taskModel.getDate())) {
-                addEntryItem(taskEntry);
-                System.out.println("" + taskEntry.getStartTime());
-                System.out.println("" + taskEntry.getId());
-                System.out.println("" + taskEntries.size());
-            }
+        List<TaskEntry> dayEntries = taskModel.getDayEntryList();
+        for (TaskEntry entry : dayEntries) {
+            addEntryItem(entry);
         }
     }
 
@@ -167,8 +168,11 @@ public class TaskItemController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
             Parent root = fxmlLoader.load();
+            ITaskEntryModel taskEntryModel = ModelCreator.getInstance().createTaskEntryModel();
+
             TaskEntryItemController controller = fxmlLoader.getController();
-            controller.injectTaskModel(taskModel);
+
+            controller.injectTaskEntryModel(taskEntryModel);
             controller.setTaskEntry(taskEntry);
 
             vBoxTaskEntries.getChildren().add(root);
@@ -181,10 +185,10 @@ public class TaskItemController implements Initializable {
     private void handlePlayPauseTask(ActionEvent event) throws ModelException {
         if (btnPlayPause.isSelected()) {
             imgPlayPause.setImage(PAUSE_ICON_IMAGE);
-            tempStartTime = LocalDateTime.now();
+            tempStartTime = LocalDateTime.now().withNano(0);
         } else {
             imgPlayPause.setImage(PLAY_ICON_IMAGE);
-            tempEndTime = LocalDateTime.now();
+            tempEndTime = LocalDateTime.now().withNano(0);
             taskModel.createTaskEntry(tempStartTime, tempEndTime);
             //  refresh
             timeTrackerController.initializeView();

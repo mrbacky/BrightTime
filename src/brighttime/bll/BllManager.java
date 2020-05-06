@@ -92,8 +92,8 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Duration calculateDuration(Task task) {
-        return taskDurationCalculator.calculateDuration(task);
+    public Duration calculateTaskDuration(List<TaskEntry> entryList) {
+        return taskDurationCalculator.calculateTaskDuration(entryList);
     }
 
     @Override
@@ -107,13 +107,13 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public LocalDateTime getStartTime(Task task) {
-        return taskIntervalCalculator.getStartTime(task);
+    public LocalDateTime getStartTime(List<TaskEntry> taskEntries) {
+        return taskIntervalCalculator.getStartTime(taskEntries);
     }
 
     @Override
-    public LocalDateTime getEndTime(Task task) {
-        return taskIntervalCalculator.getEndTime(task);
+    public LocalDateTime getEndTime(List<TaskEntry> taskEntries) {
+        return taskIntervalCalculator.getEndTime(taskEntries);
     }
 
     @Override

@@ -6,6 +6,9 @@ import brighttime.gui.model.ModelException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 /**
@@ -20,7 +23,7 @@ public interface ITaskModel {
 
     Duration calculateDuration(TaskEntry taskEntry);
 
-    Duration calculateDuration(Task task);
+    Duration calculateTaskDuration(List<TaskEntry> entryList);
 
     String secToFormat(long sec);
 
@@ -30,10 +33,30 @@ public interface ITaskModel {
 
     LocalDateTime getEndTime();
 
+    void setStartTime(LocalDateTime value);
+
+    void setEndTime(LocalDateTime value);
+
+    ObjectProperty endTimeProperty();
+
+    ObjectProperty startTimeProperty();
+
     void createTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime);
 
     void setDate(LocalDate date);
 
     LocalDate getDate();
+
+    List getDayEntryList();
+
+    void setDayEntryList(List value);
+
+    ObjectProperty dayEntryListProperty();
+
+    String getStringDuration();
+
+    void setStringDuration(String value);
+
+    StringProperty stringDurationProperty();
 
 }
