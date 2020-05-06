@@ -14,16 +14,6 @@ import java.util.Map;
 public interface ITaskDAO {
 
     /**
-     * Gets the tasks logged between today and 30 days ago.
-     *
-     * @return A list of tasks.
-     * @throws DalException
-     */
-    List<TaskEntry> getTaskEntries() throws DalException;
-
-    Map<LocalDate, List<Task>> Tasks() throws DalException;
-
-    /**
      * Creates a new task in the database.
      *
      * @param task The task to be created.
@@ -31,5 +21,13 @@ public interface ITaskDAO {
      * @throws DalException
      */
     Task createTask(Task task) throws DalException;
+
+    /**
+     * Gets the tasks logged between today and 30 days ago.
+     *
+     * @return A map with a list of tasks (containing entries) for each day.
+     * @throws DalException
+     */
+    Map<LocalDate, List<Task>> Tasks() throws DalException;
 
 }

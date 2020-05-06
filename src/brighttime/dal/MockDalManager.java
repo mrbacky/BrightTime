@@ -39,8 +39,8 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public List<TaskEntry> getTaskEntries() throws DalException {
-        return null;
+    public Map<LocalDate, List<Task>> Tasks() throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -55,11 +55,6 @@ public class MockDalManager implements DalFacade {
 
     @Override
     public TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<LocalDate, List<Task>> Tasks() throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

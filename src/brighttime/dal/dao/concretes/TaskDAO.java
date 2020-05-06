@@ -36,46 +36,83 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<Task>> Tasks() throws DalException {
-        dateMap = new HashMap<>();
+    public Task createTask(Task task) throws DalException {
+        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId) "
+                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?)";
 
-        getEntries();
-        List<Task> newTasks = findTasksWithoutEntries();
-        for (Task newTask : newTasks) {
-            LocalDate date = newTask.getCreationTime().toLocalDate();
-            if (!dateMap.containsKey(date)) {
-                List<Task> list = new ArrayList<>();
-                list.add(newTask);
-                dateMap.put(date, list);
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, task.getDescription());
+            pstmt.setInt(2, task.getProject().getId());
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                task.setId(rs.getInt(1));
             }
-            if (dateMap.containsKey(date)) {
-                List<Task> lst = dateMap.get(date);
-                if (!lst.contains(newTask)) {
-                    List<Task> list = dateMap.get(date);
-                    list.add(0, newTask);
-                }
-            }
+            return task;
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
         }
-        return dateMap;
     }
 
+    @Override
+    public Map<LocalDate, List<Task>> Tasks() throws DalException {
+        try {
+            dateMap = new HashMap<>();
+
+            getEntries();
+
+            List<Task> emptyTasksList = getTasksWithoutEntries();
+            for (Task emptyTask : emptyTasksList) {
+                LocalDate date = emptyTask.getCreationTime().toLocalDate();
+                if (!dateMap.containsKey(date)) {
+                    List<Task> list = new ArrayList<>();
+                    list.add(emptyTask);
+                    dateMap.put(date, list);
+                }
+                if (dateMap.containsKey(date)) {
+                    List<Task> tasks = dateMap.get(date);
+                    if (!tasks.contains(emptyTask)) {
+                        tasks.add(0, emptyTask);
+                    }
+                }
+            }
+
+            return dateMap;
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Gets the task entries logged between the current day and 30 days ago.
+     * Uses the getTasks() to set each TaskEntry's connection to its Task. Also,
+     * adds the Task to the dateMap (data structure) for the View, so the Task
+     * gets added to a date to show it has entries for the particular date.
+     *
+     * @return A list of all entries.
+     * @throws DalException
+     */
     private List<TaskEntry> getEntries() throws DalException {
         List<TaskEntry> entries = new ArrayList<>();
-        Map<Integer, Task> tasks = getTasks();
+
+        Map<Integer, Task> map = getTasks();
+
         String sql = "SELECT CONVERT(DATE, TE.startTime) AS date, "
                 + "TE.id, TE.startTime, TE.endTime, TE.taskId "
                 + "FROM TaskEntry TE "
                 + "WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
                 + "AND ";
-        String sqlFinal = prepStatement(sql, tasks);
+        String sqlFinal = prepStatement(sql, map);
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sqlFinal);
 
-            Iterator iterator = tasks.entrySet().iterator();
+            Iterator iterator = map.entrySet().iterator();
             int i = 0;
             while (iterator.hasNext()) {
                 Map.Entry entry = (Map.Entry) iterator.next();
-                Integer key = (Integer) entry.getKey(); //Get key from HashMap and store as local variable.
+                Integer key = (Integer) entry.getKey();
                 pstmt.setInt(i + 1, key);
                 i++;
             }
@@ -84,7 +121,7 @@ public class TaskDAO implements ITaskDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int taskId = rs.getInt("taskId");
-                Task task = tasks.get(taskId);
+                Task task = map.get(taskId);
                 LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
                 LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
 
@@ -94,7 +131,6 @@ public class TaskDAO implements ITaskDAO {
                 entries.add(taskEntry);
 
                 LocalDate date = startTime.toLocalDate();
-
                 if (!dateMap.containsKey(date)) {
                     List<Task> list = new ArrayList<>();
                     list.add(taskEntry.getTask());
@@ -108,12 +144,18 @@ public class TaskDAO implements ITaskDAO {
                 }
             }
         } catch (SQLException ex) {
-            // TODO: Redo exception handling! The message should be in the controller.    
-            throw new DalException("Could not get the task entries for the Time Tracker. " + ex.getMessage());
+            throw new DalException(ex.getMessage());
         }
         return entries;
     }
 
+    /**
+     * Gets the tasks which have been modified between the current day and 30
+     * days ago and stores it in a HashMap.
+     *
+     * @return A map with a Task instance as a value and its taskId as the key.
+     * @throws DalException
+     */
     private Map getTasks() throws DalException {
         taskMap = new HashMap<>();
 
@@ -151,13 +193,20 @@ public class TaskDAO implements ITaskDAO {
                     taskMap.put(taskId, t);
                 }
             }
-            // TODO: Redo exception handling! The message should be in the controller.       
         } catch (SQLException ex) {
-            throw new DalException("Could not get the tasks for the Time Tracker. " + ex.getMessage());
+            throw new DalException(ex.getMessage());
         }
         return taskMap;
     }
 
+    /**
+     * Prepares the rest of the SQL statement, which will change depending on
+     * the number of tasks.
+     *
+     * @param sql The constant part of the SQL statement.
+     * @param tasks The map of tasks.
+     * @return The complete SQL query.
+     */
     private String prepStatement(String sql, Map<Integer, Task> tasks) {
         boolean firstItem = true;
         for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
@@ -172,28 +221,14 @@ public class TaskDAO implements ITaskDAO {
         return sql;
     }
 
-    @Override
-    public Task createTask(Task task) throws DalException {
-        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId) "
-                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?)";
-
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, task.getDescription());
-            pstmt.setInt(2, task.getProject().getId());
-            pstmt.executeUpdate();
-
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs != null && rs.next()) {
-                task.setId(rs.getInt(1));
-            }
-            return task;
-        } catch (SQLException ex) {
-            throw new DalException(ex.getMessage());
-        }
-    }
-
-    private List<Task> findTasksWithoutEntries() throws DalException {
+    /**
+     * Gets the tasks logged between the current day and 30 days ago, which do
+     * not have any entries.
+     *
+     * @return A list of tasks.
+     * @throws DalException
+     */
+    private List<Task> getTasksWithoutEntries() throws DalException {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT id "
                 + "  FROM Task "
@@ -214,11 +249,6 @@ public class TaskDAO implements ITaskDAO {
             throw new DalException(ex.getMessage());
         }
         return tasks;
-    }
-
-    @Override
-    public List<TaskEntry> getTaskEntries() throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -24,7 +24,6 @@ public class MainModel implements IMainModel {
     private final BllFacade bllManager;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
-    private final ObservableList<TaskEntry> entryList = FXCollections.observableArrayList();
     private final ObservableMap<LocalDate, List<Task>> taskMap = FXCollections.observableHashMap();
 
     public MainModel(BllFacade bllManager) {
@@ -90,22 +89,6 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
 
-    }
-
-    @Override
-    public void loadTaskEntries() throws ModelException {
-        try {
-            List<TaskEntry> allEntries = bllManager.getTaskEntries();
-            entryList.clear();
-            entryList.addAll(allEntries);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public ObservableList<TaskEntry> getTaskEntryList() {
-        return entryList;
     }
 
     @Override

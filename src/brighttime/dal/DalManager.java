@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -81,15 +83,6 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public List<TaskEntry> getTaskEntries() throws DalException {
-        try {
-            return taskDAO.getTaskEntries();
-        } catch (DalException ex) {
-            throw new DalException(ex.getMessage());
-        }
-    }
-
-    @Override
     public TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException {
         try {
             return taskEntryDAO.createTaskEntry(taskEntry);
@@ -100,7 +93,11 @@ public class DalManager implements DalFacade {
 
     @Override
     public Map<LocalDate, List<Task>> Tasks() throws DalException {
-        return taskDAO.Tasks();
+        try {
+            return taskDAO.Tasks();
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
     }
 
 }

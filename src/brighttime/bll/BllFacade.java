@@ -60,8 +60,12 @@ public interface BllFacade {
      */
     Task createTask(Task task) throws BllException;
 
-    List<TaskEntry> getTaskEntries() throws BllException;
-
+    /**
+     * Gets the tasks logged between today and 30 days ago.
+     *
+     * @return A map with a list of tasks (containing entries) for each day.
+     * @throws BllException
+     */
     Map<LocalDate, List<Task>> Tasks() throws BllException;
 
     Duration calculateDuration(TaskEntry taskEntry);

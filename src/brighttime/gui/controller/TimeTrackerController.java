@@ -1,11 +1,11 @@
 package brighttime.gui.controller;
 
 import brighttime.be.Task;
-import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.ITaskModel;
+import brighttime.gui.util.AlertManager;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,17 +31,21 @@ import javafx.scene.layout.VBox;
  */
 public class TimeTrackerController implements Initializable {
 
-    private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
-    private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
-
     @FXML
     private VBox vBoxMain;
-    private IMainModel mainModel;
     @FXML
     private StackPane spTaskCreator;
 
+    private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
+    private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
+
+    private IMainModel mainModel;
+    private final AlertManager alertManager;
     private LocalDate date = LocalDate.MIN;
-    private Task task = null;
+
+    public TimeTrackerController() {
+        this.alertManager = new AlertManager();
+    }
 
     /**
      * Initializes the controller class.
@@ -55,11 +58,8 @@ public class TimeTrackerController implements Initializable {
         this.mainModel = mainModel;
     }
 
-    public void initializeView() throws ModelException {
-        //mainModel.loadTaskEntries();
-        mainModel.loadTasks();
+    public void initializeView() {
         setUpTaskCreator();
-        //displayTasks();
         initTasks();
     }
 
@@ -79,44 +79,27 @@ public class TimeTrackerController implements Initializable {
         }
     }
 
-    private void displayTasks() {
-        vBoxMain.getChildren().clear();
-        ObservableList<TaskEntry> list = mainModel.getTaskEntryList();
-        for (TaskEntry taskEntry : list) {
-            LocalDate entryDate = taskEntry.getStartTime().toLocalDate();
-            Task entryTask = taskEntry.getTask();
-            if (!entryDate.equals(date)) {
-                Label label = new Label(entryDate.toString());
-                vBoxMain.getChildren().add(label);
-            }
-            if (entryDate.equals(date) && entryTask != task) {
-                task = entryTask;
-                addTaskItem(task);
-            } else if (!entryDate.equals(date)) {
-                task = entryTask;
-                addTaskItem(task);
-            }
-            date = entryDate;
-        }
-    }
-
     private void initTasks() {
-        vBoxMain.getChildren().clear();
-        Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
-        Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
-        orderedMap.putAll(taskList);
-        for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
-            LocalDate dateKey = entry.getKey();
-            List<Task> taskListValue = entry.getValue();
-            System.out.println("dateKey: " + dateKey + " List of Tasks: ");
-            if (!dateKey.equals(date)) {
-                Label label = new Label(dateKey.toString());
-                vBoxMain.getChildren().add(label);
-                date = dateKey;
+        try {
+            mainModel.loadTasks();
+            vBoxMain.getChildren().clear();
+            Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
+            Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+            orderedMap.putAll(taskList);
+            for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
+                LocalDate dateKey = entry.getKey();
+                List<Task> taskListValue = entry.getValue();
+                if (!dateKey.equals(date)) {
+                    Label label = new Label(dateKey.toString());
+                    vBoxMain.getChildren().add(label);
+                    date = dateKey;
+                }
+                for (Task task : taskListValue) {
+                    addTaskItem(task);
+                }
             }
-            for (Task task : taskListValue) {
-                addTaskItem(task);
-            }
+        } catch (ModelException ex) {
+            alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
         }
 
     }
