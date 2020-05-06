@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,25 +28,49 @@ import java.util.Map;
 public class TaskDAO implements ITaskDAO {
 
     private final IConnectionManager connection;
+    private Map<LocalDate, List<Task>> dateMap;
+    private Map<Integer, Task> taskMap;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
     }
 
     @Override
-    public List<TaskEntry> getTaskEntries() throws DalException {
+    public Map<LocalDate, List<Task>> Tasks() throws DalException {
+        dateMap = new HashMap();
+        getEntries();
+        List<Task> newTasks = findTasksWithoutEntries();
+        for (Task newTask : newTasks) {
+            LocalDate date = newTask.getCreationTime().toLocalDate();
+            if (!dateMap.containsKey(date)) {
+                List<Task> list = new ArrayList<>();
+                list.add(newTask);
+                dateMap.put(date, list);
+            }
+            if (dateMap.containsKey(date)) {
+                List<Task> lst = dateMap.get(date);
+                if (!lst.contains(newTask)) {
+                    List<Task> list = dateMap.get(date);
+                    list.add(newTask);
+                }
+            }
+        }
+        return dateMap;
+    }
+
+    private List<TaskEntry> getEntries() throws DalException {
         List<TaskEntry> entries = new ArrayList<>();
-        Map<Integer, Task> taskMap = getTasks();
+        Map<Integer, Task> tasks = getTasks();
         String sql = "SELECT CONVERT(DATE, TE.startTime) AS date, "
                 + "TE.id, TE.startTime, TE.endTime, TE.taskId "
                 + "FROM TaskEntry TE "
                 + "WHERE TE.startTime BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()"
                 + "AND ";
-        String sqlFinal = prepStatement(sql, taskMap);
+        String sqlFinal = prepStatement(sql, tasks);
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sqlFinal);
 
-            Iterator iterator = taskMap.entrySet().iterator();
+            Iterator iterator = tasks.entrySet().iterator();
             int i = 0;
             while (iterator.hasNext()) {
                 Map.Entry entry = (Map.Entry) iterator.next();
@@ -58,7 +83,7 @@ public class TaskDAO implements ITaskDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int taskId = rs.getInt("taskId");
-                Task task = taskMap.get(taskId);
+                Task task = tasks.get(taskId);
                 LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
                 LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
 
@@ -66,6 +91,20 @@ public class TaskDAO implements ITaskDAO {
 
                 task.getTaskEntryList().add(taskEntry);
                 entries.add(taskEntry);
+
+                LocalDate date = startTime.toLocalDate();
+
+                if (!dateMap.containsKey(date)) {
+                    List<Task> list = new ArrayList<>();
+                    list.add(taskEntry.getTask());
+                    dateMap.put(date, list);
+                }
+                if (dateMap.containsKey(date)) {
+                    List<Task> list = dateMap.get(date);
+                    if (!list.contains(taskEntry.getTask())) {
+                        list.add(taskEntry.getTask());
+                    }
+                }
             }
         } catch (SQLException ex) {
             // TODO: Redo exception handling! The message should be in the controller.    
@@ -75,9 +114,9 @@ public class TaskDAO implements ITaskDAO {
     }
 
     private Map getTasks() throws DalException {
-        Map<Integer, Task> tasks = new HashMap<>();
+        taskMap = new HashMap<>();
 
-        String sql = "SELECT T.id AS taskId, T.description, T.createdDate, "
+        String sql = "SELECT T.id AS taskId, T.description, T.modifiedDate, "
                 + "P.id AS projectId, P.name AS projectName, "
                 + "C.id AS clientId, C.name AS clientName "
                 + "FROM Task AS T "
@@ -104,24 +143,23 @@ public class TaskDAO implements ITaskDAO {
                 int taskId = rs.getInt("taskId");
                 String description = rs.getString("description");
                 List<TaskEntry> entries = new ArrayList<>();
-                LocalDateTime creationTime = rs.getTimestamp("createdDate").toLocalDateTime();
+                LocalDateTime creationTime = rs.getTimestamp("modifiedDate").toLocalDateTime();
 
                 Task t = new Task(taskId, description, project, entries, creationTime);
-                if (!tasks.containsKey(t.getId())) {
-                    tasks.put(taskId, t);
+                if (!taskMap.containsKey(t.getId())) {
+                    taskMap.put(taskId, t);
                 }
             }
             // TODO: Redo exception handling! The message should be in the controller.       
         } catch (SQLException ex) {
             throw new DalException("Could not get the tasks for the Time Tracker. " + ex.getMessage());
         }
-        return tasks;
+        return taskMap;
     }
 
-    private String prepStatement(String sql, Map tasks) {
-        Map<Integer, Task> taskMap = tasks;
+    private String prepStatement(String sql, Map<Integer, Task> tasks) {
         boolean firstItem = true;
-        for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
+        for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
             if (firstItem) {
                 sql += " (taskId = ?";
                 firstItem = false;
@@ -152,6 +190,34 @@ public class TaskDAO implements ITaskDAO {
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
         }
+    }
+
+    private List<Task> findTasksWithoutEntries() throws DalException {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT id "
+                + "  FROM Task "
+                + "  WHERE createdDate = modifiedDate "
+                + "  AND createdDate BETWEEN DATEADD(DD, -4, CONVERT(DATE,GETDATE())) AND GETDATE()"
+                + "  ORDER BY createdDate DESC";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Task task = taskMap.get(rs.getInt("id"));
+                tasks.add(task);
+            }
+
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+        return tasks;
+    }
+
+    @Override
+    public List<TaskEntry> getTaskEntries() throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

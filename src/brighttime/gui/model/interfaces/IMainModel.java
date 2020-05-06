@@ -5,7 +5,10 @@ import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import brighttime.gui.model.ModelException;
+import java.time.LocalDate;
+import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  *
@@ -66,5 +69,9 @@ public interface IMainModel {
     void loadTaskEntries() throws ModelException;
 
     ObservableList<TaskEntry> getTaskEntryList();
+
+    ObservableMap<LocalDate, List<Task>> getTasks();
+
+    void loadTasks() throws ModelException;
 
 }

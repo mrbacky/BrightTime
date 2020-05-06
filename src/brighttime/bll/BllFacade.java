@@ -5,8 +5,10 @@ import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -59,6 +61,8 @@ public interface BllFacade {
     Task createTask(Task task) throws BllException;
 
     List<TaskEntry> getTaskEntries() throws BllException;
+
+    Map<LocalDate, List<Task>> Tasks() throws BllException;
 
     Duration calculateDuration(TaskEntry taskEntry);
 

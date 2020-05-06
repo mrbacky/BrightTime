@@ -3,6 +3,7 @@ package brighttime.dal.dao.interfaces;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import brighttime.dal.DalException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,8 @@ public interface ITaskDAO {
      * @throws DalException
      */
     List<TaskEntry> getTaskEntries() throws DalException;
+
+    Map<LocalDate, List<Task>> Tasks() throws DalException;
 
     /**
      * Creates a new task in the database.

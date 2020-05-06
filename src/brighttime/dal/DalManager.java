@@ -13,7 +13,9 @@ import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -94,6 +96,11 @@ public class DalManager implements DalFacade {
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
+    }
+
+    @Override
+    public Map<LocalDate, List<Task>> Tasks() throws DalException {
+        return taskDAO.Tasks();
     }
 
 }

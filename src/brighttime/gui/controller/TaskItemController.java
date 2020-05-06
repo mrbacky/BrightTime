@@ -156,6 +156,9 @@ public class TaskItemController implements Initializable {
         for (TaskEntry taskEntry : taskEntries) {
             if (taskEntry.getStartTime().toLocalDate().isEqual(taskModel.getDate())) {
                 addEntryItem(taskEntry);
+                System.out.println("" + taskEntry.getStartTime());
+                System.out.println("" + taskEntry.getId());
+                System.out.println("" + taskEntries.size());
             }
         }
     }

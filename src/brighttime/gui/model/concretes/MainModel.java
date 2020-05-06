@@ -8,9 +8,12 @@ import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  *
@@ -22,6 +25,7 @@ public class MainModel implements IMainModel {
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
     private final ObservableList<TaskEntry> entryList = FXCollections.observableArrayList();
+    private final ObservableMap<LocalDate, List<Task>> taskMap = FXCollections.observableHashMap();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -102,6 +106,22 @@ public class MainModel implements IMainModel {
     @Override
     public ObservableList<TaskEntry> getTaskEntryList() {
         return entryList;
+    }
+
+    @Override
+    public ObservableMap<LocalDate, List<Task>> getTasks() {
+        return taskMap;
+    }
+
+    @Override
+    public void loadTasks() throws ModelException {
+        try {
+            Map<LocalDate, List<Task>> allTasks = bllManager.Tasks();
+            taskMap.clear();
+            taskMap.putAll(allTasks);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
 }

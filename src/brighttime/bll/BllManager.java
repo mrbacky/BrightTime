@@ -14,7 +14,9 @@ import brighttime.bll.util.TaskDurationCalculator;
 import brighttime.bll.util.TaskIntervalCalculator;
 import brighttime.dal.MockDalManager;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  *
@@ -127,6 +129,15 @@ public class BllManager implements BllFacade {
     public List<TaskEntry> getTaskEntries() throws BllException {
         try {
             return dalManager.getTaskEntries();
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Map<LocalDate, List<Task>> Tasks() throws BllException {
+        try {
+            return dalManager.Tasks();
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
