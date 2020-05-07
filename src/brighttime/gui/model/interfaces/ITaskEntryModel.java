@@ -16,14 +16,20 @@ import javafx.beans.property.StringProperty;
  */
 public interface ITaskEntryModel {
 
-    public String getStringDuration();
+    String getStringDuration();
 
-    public void setStringDuration(String value);
+    void setStringDuration(String value);
 
-    public StringProperty stringDurationProperty();
+    StringProperty stringDurationProperty();
 
     Duration calculateDuration(TaskEntry taskEntry);
 
-    public String secToFormat(long sec);
+    String secToFormat(long sec);
+
+    String getEntryDescription();
+
+    void setEntryDescription(String value);
+
+    StringProperty entryDescriptionProperty();
 
 }

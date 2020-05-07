@@ -16,10 +16,12 @@ public class TaskEntryModel implements ITaskEntryModel {
 
     private BllFacade bllManager;
 
+    private final StringProperty stringDuration = new SimpleStringProperty();
+    private final StringProperty entryDescription = new SimpleStringProperty();
+
     public TaskEntryModel(BllFacade bllManager) {
         this.bllManager = bllManager;
     }
-    private final StringProperty stringDuration = new SimpleStringProperty();
 
     @Override
     public String getStringDuration() {
@@ -47,4 +49,18 @@ public class TaskEntryModel implements ITaskEntryModel {
 
     }
 
+    @Override
+    public String getEntryDescription() {
+        return entryDescription.get();
+    }
+
+    @Override
+    public void setEntryDescription(String value) {
+        entryDescription.set(value);
+    }
+
+    @Override
+    public StringProperty entryDescriptionProperty() {
+        return entryDescription;
+    }
 }
