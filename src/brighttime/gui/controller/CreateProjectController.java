@@ -32,6 +32,7 @@ public class CreateProjectController implements Initializable {
     private JFXButton btnAdd;
 
     private IMainModel mainModel;
+    private ManageProjectsController contr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
 
@@ -46,6 +47,10 @@ public class CreateProjectController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    }
+
+    void injectManageProjectsController(ManageProjectsController contr) {
+        this.contr = contr;
     }
 
     public void injectMainModel(IMainModel mainModel) {

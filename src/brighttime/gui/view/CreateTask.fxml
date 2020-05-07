@@ -3,50 +3,77 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="50.0" prefWidth="550.0" styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
-    <children>
-        <HBox alignment="CENTER" layoutY="8.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="550.0" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-            <children>
-                <StackPane prefHeight="35.0" prefWidth="268.0">
-                    <children>
-                        <JFXTextField fx:id="txtDescription" prefHeight="27.0" prefWidth="120.0" promptText="Description of the new task." />
-                    </children>
-                </StackPane>
-                <StackPane prefHeight="35.0" prefWidth="200.0">
-                    <children>
-                        <JFXComboBox fx:id="cboClient" prefHeight="27.0" prefWidth="120.0" promptText="Select Client" styleClass="cboClient" />
-                    </children>
-                </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0">
-                    <children>
-                        <JFXComboBox fx:id="cboProject" prefHeight="27.0" prefWidth="120.0" promptText="Select Project" styleClass="cboProject" />
-                    </children>
-                </StackPane>
-                <StackPane prefHeight="35.0" prefWidth="20.0" />
-                <StackPane prefHeight="30.0" prefWidth="0.0">
-                    <children>
-                        <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="30.0" prefWidth="30.0">
-                            <graphic>
-                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@assets/plus_48px.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </JFXButton>
-                    </children>
-                </StackPane>
-            </children>
-            <padding>
-                <Insets left="10.0" />
-            </padding>
-        </HBox>
-    </children>
-</AnchorPane>
+
+<GridPane styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+          <StackPane prefHeight="35.0" prefWidth="270.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+              <children>
+                  <JFXTextField fx:id="txtDescription" prefHeight="27.0" prefWidth="300.0" promptText="Add Description">
+               <styleClass>
+                  <String fx:value="txtCommon" />
+                  <String fx:value="txtName" />
+                  <String fx:value="txtNameSpecial" />
+               </styleClass>
+            </JFXTextField>
+              </children>
+         <GridPane.margin>
+            <Insets bottom="9.0" left="15.0" right="20.0" top="8.0" />
+         </GridPane.margin>
+          </StackPane>
+          <StackPane prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+              <children>
+                  <JFXComboBox fx:id="cboClient" prefHeight="27.0" prefWidth="300.0" promptText="Select Client">
+               <styleClass>
+                  <String fx:value="cboCommon" />
+                  <String fx:value="cboClient" />
+               </styleClass>
+            </JFXComboBox>
+              </children>
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin>
+          </StackPane>
+          <StackPane prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+              <children>
+                  <JFXComboBox fx:id="cboProject" prefHeight="27.0" prefWidth="300.0" promptText="Select Project">
+               <styleClass>
+                  <String fx:value="cboCommon" />
+                  <String fx:value="cboProject" />
+               </styleClass>
+            </JFXComboBox>
+              </children>
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin>
+          </StackPane>
+          <StackPane prefHeight="35.0" prefWidth="20.0" GridPane.columnIndex="3" />
+            <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="4">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@assets/plus_48px.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </JFXButton>
+   </children>
+</GridPane>

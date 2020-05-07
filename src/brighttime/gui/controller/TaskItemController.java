@@ -7,6 +7,9 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import brighttime.gui.util.AlertManager;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -45,23 +48,23 @@ public class TaskItemController implements Initializable {
     private final Image COLLAPSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
 
     @FXML
-    private TextField textFieldStartTime;
+    private JFXTextField textFieldStartTime;
     @FXML
-    private TextField textFieldEndTime;
+    private JFXTextField textFieldEndTime;
     @FXML
-    private TextField textFieldDuration;
+    private JFXTextField textFieldDuration;
     @FXML
     private ToggleButton btnExpandTask;
     @FXML
     private VBox vBoxTaskEntries;
     @FXML
-    private TextField textFieldProject;
+    private JFXTextField textFieldProject;
     @FXML
-    private TextField textFieldClient;
+    private JFXTextField textFieldClient;
     @FXML
-    private TextField textFieldTaskDesc;
+    private JFXTextField textFieldTaskDesc;
     @FXML
-    private Button btnDeleteTask;
+    private JFXButton btnDeleteTask;
     @FXML
     private ToggleButton btnPlayPause;
     @FXML

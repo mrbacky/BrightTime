@@ -7,73 +7,104 @@
 
 
 .anchorPaneRoot{
-
     -fx-background-color: #435A9A;
     -fx-border-top-color: black;
     -fx-border-top: #F1C54C;
     -fx-background-radius :  0 0 0 0;
-
 }
-
-
 
 .rootButtons{
     -fx-background-color: transparent;
     /*-fx-background-color: #435A9A;*/
     -fx-background-radius: 20 20 20 20;
     -fx-padding: 0 0 0 -1;
-
 }
 
 #vBoxMain{
     -fx-background-color: white;
     -fx-alignment: TOP_LEFT;
-
-
 }
 
 .createItem{
-    -fx-border-radius: 20px;
     -fx-background-radius: 20 20 20 20;
     -fx-background-color: #435A9A;
 }
 
-.jfx-text-field{
+.viewItem{
+    -fx-background-radius: 15 15 15 15;
+    -fx-background-color: #435A9A;    
+}
+
+.viewSubItem{
+    -fx-background-color: #F0C326;
+    -fx-background-radius :  10 10 10 10;
+}
+
+.txtCommon{
     -fx-border-radius: 20px;
-    -fx-border-color: #F0C326;
-    -fx-background-radius: 20 20 20 20;
+    -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;
-    -jfx-unfocus-color: transparent;
-    -jfx-focus-color: #F0C326;
-    -fx-padding: 3.5 10 3.5 10;
+    -jfx-unfocus-color: transparent;    
+    -fx-padding: 3.5 5 3.5 5;
     -jfx-label-float: true;    
+    -fx-prompt-text-fill: #435A9A;
 }
 
-.cboClient{
-    -fx-border-radius: 20px;
-    /*or this color #E40066*/
-    -fx-border-color: #ED6A5A;
-    -fx-background-radius: 20 20 20 20;
-    -fx-background-color: white;
-    -jfx-unfocus-color: transparent;
-    -jfx-focus-color: #ED6A5A;
-    -fx-padding: 0 10 0 10;
-    -jfx-label-float: true;
+.txtName{
+    -jfx-focus-color: #F0C326;
 }
 
-.cboClient .cell{
+.txtNameSpecial{
+    -fx-border-radius: 10px;
+    -fx-border-color: #F0C326;
     -fx-text-fill: #F0C326;
 }
 
-.cboProject{
-    -fx-border-radius: 20px;
+.txtClient{    
+    -jfx-focus-color: #F17105;  
+}
+
+.txtProject{    
+    -jfx-focus-color: #00A99D; 
+}
+
+.txtProjectSpecial{
+    -fx-border-radius: 10px;
     -fx-border-color: #00A99D;
-    -fx-background-radius: 20 20 20 20;
+    -fx-text-fill: #00A99D;
+}
+
+.txtTime{
+    -jfx-focus-color: #D11149;   
+}
+
+.txtDuration{
+    -jfx-focus-color: #963484;    
+}
+
+.cboCommon{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;    
-    -jfx-unfocus-color: transparent;
-    -jfx-focus-color: #00A99D;
+    -jfx-unfocus-color: transparent;    
     -fx-padding: 0 10 0 10;
-    -jfx-label-float: true;
+    -jfx-label-float: true;  
+    -fx-prompt-text-fill: #435A9A;
+}
+
+.cboClient{    
+    /*or this color #E40066*/
+    -fx-border-color: #F17105;
+    -jfx-focus-color: #F17105;
+}
+
+.cboClient .cell{
+    -fx-text-fill: #F17105;
+}
+
+.cboProject{
+    -fx-border-color: #00A99D;
+    -jfx-focus-color: #00A99D;
 }
 
 .cboProject .cell{
@@ -81,82 +112,43 @@
 }
 
 .error-label {
-    -fx-padding: -7 0 0 00;
+    -fx-padding: -8 0 0 00;
     -fx-text-fill: white;
     -fx-font-size: 8pt;
 }
 
 .scroll-pane{
-    -fx-background: white;
-    -fx-border-color: purple;
+    /*-fx-background: white;
+    -fx-border-color: purple;*/
 }
 
 .grid-pane{
     -fx-grid-lines-visible: false;
 }
 
-.adminTitleLabel{
+.labelHeaderTitle{
     -fx-padding: 10 0 0 0;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #435A9A;
 }
 
-.adminButtons{    
+.buttonAdmin{    
     -fx-background-color: #435A9A;
     -fx-background-radius: 30 30 30 30;
     -fx-padding: 0 0 0 -1;
 }
 
-.adminMenuItemLabel{
+.labelMenuItem{
     -fx-font-weight: bold;
     -fx-text-fill: #435A9A;
 }
 
-#lblAllTasks{
-    -fx-padding: 10px;
-
-}
-
-
-
-.apTaskItem{
-    -fx-background-color: #2368A2;  /*blue*/
-    -fx-background-radius :  10 10 10 10;
-    border-bottom-color: black; 
-
-}
-
-.apTaskEntryItem{
-    -fx-background-color: #F1C54C;  /*yellow*/
-    -fx-background-radius :  10 10 10 10;
-    border-bottom-color: black; 
-
-}
-
-
-
 #btnPlayPause{
     -fx-background-color: transparent;
-
-}
-
-.taskItemTextFields{
-    /*    -fx-background-color: #ffdc44;*/
-    -fx-background-radius :  5 5 5 5;
-    -fx-background-color: white;
-    -fx-text-fill: black;
-}
-
-.taskEntryItemTextFields{
-    /*    -fx-background-color: #ffdc44;*/
-    -fx-background-radius :  5 5 5 5;
-    -fx-background-color: white;
-    -fx-text-fill: black;
 }
 
 .comboBoxTaskItem{
-
     -fx-background-color: white;
     -fx-background-radius: 5;
 }

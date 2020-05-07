@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.HBox;
 
 /**
  * FXML Controller class
@@ -22,12 +21,11 @@ import javafx.scene.layout.HBox;
 public class CreateClientController implements Initializable {
 
     @FXML
-    private HBox hBoxItemElements;
-    @FXML
     private JFXButton btnAdd;
     @FXML
     private JFXTextField txtName;
 
+    private ManageClientsController contr;
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
@@ -43,6 +41,10 @@ public class CreateClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    }
+
+    void injectManageClientsController(ManageClientsController contr) {
+        this.contr = contr;
     }
 
     public void injectMainModel(IMainModel mainModel) {

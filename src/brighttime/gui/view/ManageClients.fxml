@@ -7,18 +7,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TimeTrackerController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.ManageClientsController">
     <children>
-        <Label alignment="CENTER" layoutY="-2.0" styleClass="labelHeaderTitle" text="Time Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-        <Label layoutX="26.0" layoutY="54.0" styleClass="labelMenuItem" text="New Task" AnchorPane.leftAnchor="26.0" />
+        <Label alignment="CENTER" layoutY="-2.0" styleClass="labelHeaderTitle" text="Manage Clients" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <Label layoutX="26.0" layoutY="54.0" styleClass="labelMenuItem" text="New  Client" AnchorPane.leftAnchor="26.0" />
         <AnchorPane layoutY="75.0" prefHeight="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="75.0">
             <children>
-                <StackPane fx:id="spTaskCreator" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
         <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="550.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
             <content>
-                <VBox id="vBoxMain" fx:id="vBoxMain">
+                <VBox id="vBoxMain" fx:id="vBox">
                     <padding>
                         <Insets top="10.0" />
                     </padding>

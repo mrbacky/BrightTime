@@ -2,7 +2,6 @@ package brighttime.gui.controller;
 
 import brighttime.BrightTime;
 import brighttime.gui.model.ModelCreator;
-import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
@@ -29,8 +28,8 @@ public class RootController implements Initializable {
 
     private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
     private final String ADMIN_MENU_MODULE = "/brighttime/gui/view/Creator.fxml";
-    private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/CreateClient.fxml";
-    private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/CreateProject.fxml";
+    private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/ManageClients.fxml";
+    private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/ManageProjects.fxml";
     private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
 
     @FXML
@@ -84,11 +83,11 @@ public class RootController implements Initializable {
                 controller.initializeView();
                 controller.setContr(this);
             } else if (module.equals(ADMIN_CLIENTS_MODULE)) {
-                CreateClientController controller = fxmlLoader.getController();
+                ManageClientsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
             } else if (module.equals(ADMIN_PROJECTS_MODULE)) {
-                CreateProjectController controller = fxmlLoader.getController();
+                ManageProjectsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
             } else if (module.equals(OVERVIEW_MODULE)) {
@@ -97,7 +96,7 @@ public class RootController implements Initializable {
                 controller.initializeView();
             }
             rootBorderPane.setCenter(root);
-        } catch (IOException | ModelException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

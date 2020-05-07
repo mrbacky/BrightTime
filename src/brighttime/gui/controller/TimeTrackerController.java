@@ -9,6 +9,8 @@ import brighttime.gui.util.AlertManager;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -90,8 +93,11 @@ public class TimeTrackerController implements Initializable {
                 LocalDate dateKey = entry.getKey();
                 List<Task> taskListValue = entry.getValue();
                 if (!dateKey.equals(date)) {
-                    Label label = new Label(dateKey.toString());
+                    String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+                    Label label = new Label(formatted);
+                    label.getStyleClass().add("labelMenuItem");
                     vBoxMain.getChildren().add(label);
+                    label.translateXProperty().set(25);
                     date = dateKey;
                 }
                 for (Task task : taskListValue) {

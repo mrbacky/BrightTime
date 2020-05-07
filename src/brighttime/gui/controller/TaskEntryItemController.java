@@ -3,14 +3,14 @@ package brighttime.gui.controller;
 import brighttime.be.TaskEntry;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -22,15 +22,15 @@ public class TaskEntryItemController implements Initializable {
     private static final String DATE_TIME_FORMAT = "HH:mm";
 
     @FXML
-    private TextField textFieldTaskEntryDesc;
+    private JFXTextField textFieldTaskEntryDesc;
     @FXML
-    private TextField textFieldStartTime;
+    private JFXTextField textFieldStartTime;
     @FXML
-    private TextField textFieldEndTime;
+    private JFXTextField textFieldEndTime;
     @FXML
-    private TextField textFieldDuration;
+    private JFXTextField textFieldDuration;
     @FXML
-    private Button btnRemoveTask;
+    private JFXButton btnRemoveTask;
     private ITaskModel taskModel;
     private ITaskEntryModel taskEntryModel;
 
