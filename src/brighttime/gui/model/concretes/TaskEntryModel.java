@@ -18,6 +18,7 @@ public class TaskEntryModel implements ITaskEntryModel {
 
     private final StringProperty stringDuration = new SimpleStringProperty();
     private final StringProperty entryDescription = new SimpleStringProperty();
+    private TaskEntry taskEntry;
 
     public TaskEntryModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -62,5 +63,15 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public StringProperty entryDescriptionProperty() {
         return entryDescription;
+    }
+
+    @Override
+    public void setTaskEntry(TaskEntry taskEntry) {
+        this.taskEntry = taskEntry;
+    }
+
+    @Override
+    public TaskEntry getTaskEntry() {
+        return taskEntry;
     }
 }

@@ -178,12 +178,9 @@ public class TaskItemController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
             Parent root = fxmlLoader.load();
             ITaskEntryModel taskEntryModel = ModelCreator.getInstance().createTaskEntryModel();
-
+            taskEntryModel.setTaskEntry(taskEntry);
             TaskEntryItemController controller = fxmlLoader.getController();
-
             controller.injectTaskEntryModel(taskEntryModel);
-            controller.setTaskEntry(taskEntry);
-
             vBoxTaskEntries.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);

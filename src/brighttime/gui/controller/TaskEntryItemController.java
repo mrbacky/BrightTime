@@ -43,9 +43,10 @@ public class TaskEntryItemController implements Initializable {
 
     public void injectTaskEntryModel(ITaskEntryModel taskEntryModel) {
         this.taskEntryModel = taskEntryModel;
+        setTaskEntryDetails(taskEntryModel.getTaskEntry());
     }
 
-    public void setTaskEntry(TaskEntry taskEntry) {
+    public void setTaskEntryDetails(TaskEntry taskEntry) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         textFieldTaskEntryDesc.textProperty().bind(Bindings.createStringBinding(()
                 -> taskEntry.getTask().getDescription(), taskEntryModel.entryDescriptionProperty()));

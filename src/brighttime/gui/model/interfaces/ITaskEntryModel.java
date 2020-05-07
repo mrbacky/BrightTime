@@ -32,4 +32,8 @@ public interface ITaskEntryModel {
 
     StringProperty entryDescriptionProperty();
 
+    public void setTaskEntry(TaskEntry taskEntry);
+    
+    TaskEntry getTaskEntry();
+
 }
