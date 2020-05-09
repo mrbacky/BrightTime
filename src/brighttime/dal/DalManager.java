@@ -100,4 +100,15 @@ public class DalManager implements DalFacade {
         }
     }
 
+    @Override
+    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) {
+        return taskEntryDAO.updateTaskEntryStartTime(taskEntry);
+
+    }
+
+    @Override
+    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) {
+        return taskEntryDAO.updateTaskEntryEndTime(taskEntry);
+    }
+
 }

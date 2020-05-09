@@ -20,6 +20,7 @@ public class TaskEntry {
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
+    
 
     // put calculated properties inside the TaskModel
     public TaskEntry(int id, Task task, LocalDateTime startTime, LocalDateTime endTime) {

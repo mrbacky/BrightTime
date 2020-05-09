@@ -18,4 +18,8 @@ public interface ITaskEntryDAO {
      */
     TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException;
 
+    TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry);
+
+    TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry);
+
 }

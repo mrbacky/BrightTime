@@ -12,7 +12,9 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -25,6 +27,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
@@ -47,12 +50,6 @@ public class TaskItemController implements Initializable {
     private final Image EXPAND_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
     private final Image COLLAPSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
 
-    @FXML
-    private JFXTextField textFieldStartTime;
-    @FXML
-    private JFXTextField textFieldEndTime;
-    @FXML
-    private JFXTextField textFieldDuration;
     @FXML
     private ToggleButton btnExpandTask;
     @FXML
@@ -77,6 +74,12 @@ public class TaskItemController implements Initializable {
     private final AlertManager alertManager;
     private LocalDateTime tempStartTime;
     private LocalDateTime tempEndTime;
+    @FXML
+    private Label lblEndTime;
+    @FXML
+    private Label lblStartTime;
+    @FXML
+    private Label lblDuration;
 
     public TaskItemController() {
         this.alertManager = new AlertManager();
@@ -135,13 +138,13 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
-        textFieldStartTime.textProperty().bind(Bindings.createStringBinding(()
+        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 
-        textFieldEndTime.textProperty().bind(Bindings.createStringBinding(()
+        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
 
-        textFieldDuration.textProperty().bind(Bindings.createStringBinding(()
+        lblDuration.textProperty().bind(Bindings.createStringBinding(()
                 -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
 
 //        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(task).toSeconds()));
@@ -177,8 +180,13 @@ public class TaskItemController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
             Parent root = fxmlLoader.load();
+
             ITaskEntryModel taskEntryModel = ModelCreator.getInstance().createTaskEntryModel();
             taskEntryModel.setTaskEntry(taskEntry);
+            taskEntryModel.setStartTime(taskEntry.getStartTime().toLocalTime());
+            taskEntryModel.setEndTime(taskEntry.getEndTime().toLocalTime());
+            taskEntryModel.setStringDuration(taskEntryModel.secToFormat(taskEntryModel.calculateDuration(taskEntry).toSeconds()));
+
             TaskEntryItemController controller = fxmlLoader.getController();
             controller.injectTaskEntryModel(taskEntryModel);
             vBoxTaskEntries.getChildren().add(root);
@@ -191,6 +199,11 @@ public class TaskItemController implements Initializable {
     private void handlePlayPauseTask(ActionEvent event) {
         if (btnPlayPause.isSelected()) {
             imgPlayPause.setImage(PAUSE_ICON_IMAGE);
+            LocalDate date = LocalDate.now();
+            LocalTime startTime = LocalTime.now();
+
+            LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
+
             tempStartTime = LocalDateTime.now().withNano(0);
         } else {
             try {

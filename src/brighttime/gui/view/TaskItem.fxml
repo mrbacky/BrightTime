@@ -13,35 +13,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minWidth="-Infinity" prefWidth="750.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
+<AnchorPane minWidth="-Infinity" prefWidth="750.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
     <children>
         <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" styleClass="viewItem" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
             <children>
                 <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <JFXTextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" StackPane.alignment="CENTER_LEFT">
-                            <StackPane.margin>
-                                <Insets />
-                            </StackPane.margin>
-                     <styleClass>
-                        <String fx:value="txtCommon" />
-                        <String fx:value="txtTime" />
-                     </styleClass>
-                        </JFXTextField>
-                        <JFXTextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" StackPane.alignment="CENTER_RIGHT">
-                            <StackPane.margin>
-                                <Insets />
-                            </StackPane.margin>
-                     <styleClass>
-                        <String fx:value="txtCommon" />
-                        <String fx:value="txtTime" />
-                     </styleClass>
-                        </JFXTextField>
                         <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0" text="─" textFill="WHITE">
                             <StackPane.margin>
                                 <Insets />
                             </StackPane.margin>
                         </Label>
+                  <Label fx:id="lblEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" text="99:88" StackPane.alignment="CENTER_RIGHT" />
+                  <Label fx:id="lblStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" text="88:99" StackPane.alignment="CENTER_LEFT" />
                     </children>
                 </StackPane>
                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
@@ -85,13 +69,9 @@
                     </children>
                 </StackPane>
                 <StackPane prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
-                    <children>
-                        <JFXTextField fx:id="textFieldDuration">
-                     <styleClass>
-                        <String fx:value="txtCommon" />
-                        <String fx:value="txtDuration" />
-                     </styleClass></JFXTextField>
-                    </children>
+               <children>
+                  <Label fx:id="lblDuration" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="55.0" styleClass="txtCommon" text="59:03:77" />
+               </children>
                 </StackPane>
                 <StackPane prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
                     <children>

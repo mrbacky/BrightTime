@@ -49,4 +49,40 @@ public class TaskEntryDAO implements ITaskEntryDAO {
         }
     }
 
+    @Override
+    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) {
+        String sql = "UPDATE TaskEntry "
+                + "SET startTime = ?  "
+                + "WHERE id = ? ";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setObject(1, taskEntry.getStartTime());
+            ps.setInt(2, taskEntry.getId());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+        }
+
+        return taskEntry;
+    }
+
+    @Override
+    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) {
+        String sql = "UPDATE TaskEntry "
+                + "SET endTime = ?  "
+                + "WHERE id = ? ";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setObject(1, taskEntry.getEndTime());
+            ps.setInt(2, taskEntry.getId());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+        }
+
+        return taskEntry;
+    }
+
 }

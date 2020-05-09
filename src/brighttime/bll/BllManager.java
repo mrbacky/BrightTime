@@ -134,4 +134,15 @@ public class BllManager implements BllFacade {
         }
     }
 
+    @Override
+    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) {
+        return dalManager.updateTaskEntryStartTime(taskEntry);
+    }
+
+    @Override
+    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) {
+        return dalManager.updateTaskEntryEndTime(taskEntry);
+        
+    }
+
 }
