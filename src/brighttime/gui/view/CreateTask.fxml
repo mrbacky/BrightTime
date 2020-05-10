@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleNode?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
@@ -11,7 +12,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
-
 
 <GridPane styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
    <columnConstraints>
@@ -65,7 +65,18 @@
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
           </StackPane>
-          <StackPane prefHeight="35.0" prefWidth="20.0" GridPane.columnIndex="3" />
+          <StackPane prefHeight="35.0" prefWidth="20.0" GridPane.columnIndex="3">
+         <children>
+            <JFXToggleNode fx:id="tglBillability" contentDisplay="GRAPHIC_ONLY" selected="true">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/icons8_money_bag_krona_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXToggleNode>
+         </children></StackPane>
             <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="4">
                 <graphic>
                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
