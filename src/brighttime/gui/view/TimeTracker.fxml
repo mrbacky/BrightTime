@@ -11,12 +11,12 @@
     <children>
         <Label alignment="CENTER" layoutY="-2.0" styleClass="labelHeaderTitle" text="Time Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
         <Label layoutX="26.0" layoutY="54.0" styleClass="labelMenuItem" text="New Task" AnchorPane.leftAnchor="26.0" />
-        <AnchorPane layoutY="75.0" prefHeight="89.0" prefWidth="580.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="75.0">
+        <AnchorPane layoutY="78.0" prefHeight="103.0" prefWidth="580.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="78.0">
             <children>
-            <VBox fx:id="vBoxCreator" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <VBox fx:id="vBoxCreator" prefHeight="104.0" prefWidth="580.0" AnchorPane.bottomAnchor="-11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
-        <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="168.0" prefHeight="232.0" prefWidth="600.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="168.0">
+        <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="185.0" prefHeight="215.0" prefWidth="600.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="185.0">
             <content>
                 <VBox id="vBoxMain" fx:id="vBoxMain">
                     <padding>

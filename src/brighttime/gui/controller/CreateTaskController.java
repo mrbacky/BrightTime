@@ -41,10 +41,10 @@ public class CreateTaskController implements Initializable {
     @FXML
     private JFXComboBox<Project> cboProject;
     @FXML
-    private HBox hBox;
+    private HBox hBoxDateTime;
 
     private final String TASK_MANUAL_FXML = "/brighttime/gui/view/CreateTaskManually.fxml";
-    
+
     private IMainModel mainModel;
     private TimeTrackerController timeTrackerContr;
     private CreateTaskManuallyController createTaskManuallyContr;
@@ -161,7 +161,7 @@ public class CreateTaskController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_MANUAL_FXML));
             Parent root = fxmlLoader.load();
             createTaskManuallyContr = fxmlLoader.getController();
-            hBox.getChildren().add(root);
+            hBoxDateTime.getChildren().add(root);
             manualMode = true;
 
         } catch (IOException ex) {
@@ -170,7 +170,7 @@ public class CreateTaskController implements Initializable {
     }
 
     void normalMode() {
-        hBox.getChildren().clear();
+        hBoxDateTime.getChildren().clear();
     }
 
 }

@@ -18,8 +18,8 @@
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -36,7 +36,7 @@
             </JFXTextField>
               </children>
          <GridPane.margin>
-            <Insets bottom="9.0" left="15.0" right="20.0" top="8.0" />
+            <Insets bottom="9.0" left="15.0" right="5.0" top="8.0" />
          </GridPane.margin>
           </StackPane>
           <StackPane prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -49,7 +49,7 @@
             </JFXComboBox>
               </children>
          <GridPane.margin>
-            <Insets left="20.0" right="20.0" />
+            <Insets left="5.0" right="5.0" />
          </GridPane.margin>
           </StackPane>
           <StackPane prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -62,11 +62,14 @@
             </JFXComboBox>
               </children>
          <GridPane.margin>
-            <Insets left="20.0" right="20.0" />
+            <Insets left="5.0" right="5.0" />
          </GridPane.margin>
           </StackPane>
-      <HBox fx:id="hBox" GridPane.columnIndex="3" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="4">
+      <HBox fx:id="hBoxDateTime" GridPane.columnIndex="3" GridPane.vgrow="ALWAYS">
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding></HBox>
+            <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="4">
                 <graphic>
                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -74,6 +77,12 @@
                         </image>
                     </ImageView>
                 </graphic>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
             </JFXButton>
    </children>
 </GridPane>
