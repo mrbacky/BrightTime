@@ -1,7 +1,6 @@
 package brighttime.dal.dao.interfaces;
 
 import brighttime.be.Task;
-import brighttime.be.TaskEntry;
 import brighttime.dal.DalException;
 import java.time.LocalDate;
 import java.util.List;

@@ -8,6 +8,7 @@ import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.ITaskDAO;
+import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,11 +29,13 @@ import java.util.Map;
 public class TaskDAO implements ITaskDAO {
 
     private final IConnectionManager connection;
+    private final ITaskEntryDAO taskEntryDAO;
     private Map<LocalDate, List<Task>> dateMap;
     private Map<Integer, Task> taskMap;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
+        this.taskEntryDAO = new TaskEntryDAO();
     }
 
     @Override
@@ -48,8 +51,13 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
-                task.setId(rs.getInt(1));
+                int taskId = rs.getInt(1);
+                task.setId(taskId);
+                if (!task.getTaskEntryList().isEmpty()) {
+                    taskEntryDAO.createTaskEntry(task.getTaskEntryList().get(0));
+                }
             }
+
             return task;
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
@@ -64,17 +72,19 @@ public class TaskDAO implements ITaskDAO {
             getEntries();
 
             List<Task> emptyTasksList = getTasksWithoutEntries();
-            for (Task emptyTask : emptyTasksList) {
-                LocalDate date = emptyTask.getCreationTime().toLocalDate();
-                if (!dateMap.containsKey(date)) {
-                    List<Task> list = new ArrayList<>();
-                    list.add(emptyTask);
-                    dateMap.put(date, list);
-                }
-                if (dateMap.containsKey(date)) {
-                    List<Task> tasks = dateMap.get(date);
-                    if (!tasks.contains(emptyTask)) {
-                        tasks.add(0, emptyTask);
+            if (!emptyTasksList.isEmpty()) {
+                for (Task emptyTask : emptyTasksList) {
+                    LocalDate date = emptyTask.getCreationTime().toLocalDate();
+                    if (!dateMap.containsKey(date)) {
+                        List<Task> list = new ArrayList<>();
+                        list.add(emptyTask);
+                        dateMap.put(date, list);
+                    }
+                    if (dateMap.containsKey(date)) {
+                        List<Task> tasks = dateMap.get(date);
+                        if (!tasks.contains(emptyTask)) {
+                            tasks.add(0, emptyTask);
+                        }
                     }
                 }
             }

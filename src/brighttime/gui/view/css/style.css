@@ -144,6 +144,12 @@
     -fx-text-fill: #435A9A;
 }
 
+.buttonSwitchMode{
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
+}
+
 #btnPlayPause{
     -fx-background-color: transparent;
 }

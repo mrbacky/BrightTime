@@ -3,6 +3,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskEntry;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
@@ -12,9 +13,17 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
 
 /**
  * FXML Controller class
@@ -31,11 +40,17 @@ public class CreateTaskController implements Initializable {
     private JFXComboBox<Client> cboClient;
     @FXML
     private JFXComboBox<Project> cboProject;
+    @FXML
+    private HBox hBox;
 
+    private final String TASK_MANUAL_FXML = "/brighttime/gui/view/CreateTaskManually.fxml";
+    
     private IMainModel mainModel;
     private TimeTrackerController timeTrackerContr;
+    private CreateTaskManuallyController createTaskManuallyContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
+    private Boolean manualMode;
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -60,6 +75,7 @@ public class CreateTaskController implements Initializable {
         setProjectsIntoComboBox();
         setValidators();
         addTask();
+        timeTrackerContr.injectCreateTaskController(this);
     }
 
     public void injectTimeTrackerController(TimeTrackerController timeTrackerContr) {
@@ -117,9 +133,16 @@ public class CreateTaskController implements Initializable {
             if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
                     Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
+                    if (manualMode) {
+                        LocalDateTime startDateTime = createTaskManuallyContr.getStartTime();
+                        LocalDateTime endDateTime = createTaskManuallyContr.getEndTime();
+                        TaskEntry entry = new TaskEntry(task, task.getDescription(), startDateTime, endDateTime);
+                        List<TaskEntry> list = new ArrayList();
+                        list.add(entry);
+                        task.setTaskEntryList(list);
+                    }
                     mainModel.addTask(task);
                     timeTrackerContr.initializeView();
-                    System.out.println("action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                 }
@@ -131,6 +154,23 @@ public class CreateTaskController implements Initializable {
                 alertManager.showAlert("No project is selected.", "Please select a project.");
             }
         });
+    }
+
+    void manualMode() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_MANUAL_FXML));
+            Parent root = fxmlLoader.load();
+            createTaskManuallyContr = fxmlLoader.getController();
+            hBox.getChildren().add(root);
+            manualMode = true;
+
+        } catch (IOException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void normalMode() {
+        hBox.getChildren().clear();
     }
 
 }
