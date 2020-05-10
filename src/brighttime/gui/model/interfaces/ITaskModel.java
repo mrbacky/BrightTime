@@ -58,4 +58,8 @@ public interface ITaskModel {
 
     StringProperty stringDurationProperty();
 
+    void setupStartTimeListener();
+
+    void setupEndTimeListener();
+
 }

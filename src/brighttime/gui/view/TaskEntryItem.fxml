@@ -34,8 +34,8 @@
                         <Insets />
                     </StackPane.margin>
                 </Label>
-            <JFXTimePicker fx:id="timePickerStartTime" defaultColor="#435a9a" nodeOrientation="LEFT_TO_RIGHT" prefWidth="95.0" styleClass="timePicker" StackPane.alignment="CENTER_LEFT" />
-            <JFXTimePicker fx:id="timePickerEndTime" defaultColor="#435a9a" nodeOrientation="LEFT_TO_RIGHT" prefWidth="95.0" styleClass="timePicker" StackPane.alignment="CENTER_RIGHT" />
+            <JFXTimePicker fx:id="timePickerStartTime" defaultColor="#435a9a" nodeOrientation="LEFT_TO_RIGHT" onHiding="#handleEditStartTime" prefWidth="95.0" styleClass="timePicker" StackPane.alignment="CENTER_LEFT" />
+            <JFXTimePicker fx:id="timePickerEndTime" defaultColor="#435a9a" nodeOrientation="LEFT_TO_RIGHT" onHiding="#handleEditEndTime" prefWidth="95.0" styleClass="timePicker" StackPane.alignment="CENTER_RIGHT" />
             </children>
         </StackPane>
         <StackPane layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">

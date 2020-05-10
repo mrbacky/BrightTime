@@ -38,7 +38,6 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             pstmt.setInt(3, taskEntry.getTask().getId());
             pstmt.setInt(4, taskEntry.getTask().getId());
             pstmt.executeUpdate();
-
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 taskEntry.setId(rs.getInt(1));
@@ -60,6 +59,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setObject(1, taskEntry.getStartTime());
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
+            System.out.println("edited start Time in DAO");
 
         } catch (Exception e) {
         }
@@ -78,7 +78,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setObject(1, taskEntry.getEndTime());
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
-
+            System.out.println("edited endTime in DAO");
         } catch (Exception e) {
         }
 

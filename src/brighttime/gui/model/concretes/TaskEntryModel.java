@@ -32,10 +32,8 @@ public class TaskEntryModel implements ITaskEntryModel {
 
     public TaskEntryModel(BllFacade bllManager) {
         this.bllManager = bllManager;
-
-        updateStartTimeListener();
-        updateEndTimeListener();
-        durationListener();
+        setupStartTimeListener();
+        setupEndTimeListener();
     }
 
     @Override
@@ -135,46 +133,35 @@ public class TaskEntryModel implements ITaskEntryModel {
     }
 
     @Override
-    public LocalDateTime convertLTandLDtoLDT(LocalTime time, LocalDate date) {
-        return null;
-    }
-
-    @Override
-    public void updateStartTimeListener() {
+    public void setupStartTimeListener() {
         startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
-
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
                 LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeLDT);
-                bllManager.updateTaskEntryStartTime(taskEntry);
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
-
         });
-
     }
 
     @Override
-    public void updateEndTimeListener() {
+    public void setupEndTimeListener() {
         endTime.addListener((observable, oldValue, newValue) -> {
             if (newValue.isAfter(taskEntry.getStartTime().toLocalTime())) {
                 LocalDateTime endTimeLDT = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setEndTime(endTimeLDT);
-                bllManager.updateTaskEntryEndTime(taskEntry);
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
-
         });
     }
 
     @Override
-    public void durationListener() {
-        stringDuration.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            
-        });
-        
+    public void updateTaskEntryStartTime(TaskEntry taskEntry) {
+        bllManager.updateTaskEntryStartTime(taskEntry);
     }
-    
-    
+
+    @Override
+    public void updateTaskEntryEndTime(TaskEntry taskEntry) {
+        bllManager.updateTaskEntryEndTime(taskEntry);
+    }
 
 }

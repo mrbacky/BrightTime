@@ -138,6 +138,8 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
+        
+        
         lblStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 

@@ -46,8 +46,6 @@ public interface ITaskEntryModel {
 
     ObjectProperty startTimeProperty();
 
-    LocalDateTime convertLTandLDtoLDT(LocalTime time, LocalDate date);
-
     ObjectProperty dateProperty();
 
     void setDate(LocalDate value);
@@ -60,10 +58,13 @@ public interface ITaskEntryModel {
 
     ObjectProperty endTimeProperty();
 
-    void updateStartTimeListener();
+    void setupStartTimeListener();
 
-    void updateEndTimeListener();
+    void setupEndTimeListener();
 
-    void durationListener();
+    void updateTaskEntryStartTime(TaskEntry taskEntry);
+
+    void updateTaskEntryEndTime(TaskEntry taskEntry);
+    
 
 }
