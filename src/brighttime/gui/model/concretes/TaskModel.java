@@ -23,6 +23,8 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -44,13 +46,14 @@ public class TaskModel implements ITaskModel {
 
     public TaskModel(BllFacade bllManager) throws IOException {
         this.bllManager = bllManager;
+        setupStartTimeListener();
+        setupEndTimeListener();
 
     }
 
     @Override
     public LocalDateTime getEndTime() {
         if (!getDayEntryList().isEmpty()) {
-
             return bllManager.getEndTime(getDayEntryList());
         }
         return task.getCreationTime();
@@ -195,6 +198,21 @@ public class TaskModel implements ITaskModel {
     @Override
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public void setupStartTimeListener() {
+        startTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
+
+        });
+    }
+
+    @Override
+    public void setupEndTimeListener() {
+        endTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
+            System.out.println("in start time listener");
+            endTime.set(newValue);
+        });
     }
 
 }

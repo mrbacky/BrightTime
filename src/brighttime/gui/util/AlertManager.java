@@ -22,7 +22,7 @@ public class AlertManager {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         //alert.setTitle("ERROR!");
         alert.setHeaderText(headerText);
-        alert.show();
+        alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
         }
     }

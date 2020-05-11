@@ -38,7 +38,6 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             pstmt.setInt(3, taskEntry.getTask().getId());
             pstmt.setInt(4, taskEntry.getTask().getId());
             pstmt.executeUpdate();
-
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 taskEntry.setId(rs.getInt(1));
@@ -47,6 +46,45 @@ public class TaskEntryDAO implements ITaskEntryDAO {
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
         }
+    }
+
+    @Override
+    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException {
+        String sql = "UPDATE TaskEntry "
+                + "SET startTime = ?  "
+                + "WHERE id = ? ";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setObject(1, taskEntry.getStartTime());
+            ps.setInt(2, taskEntry.getId());
+            ps.executeUpdate();
+            System.out.println("edited start Time in DAO");
+
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+
+        return taskEntry;
+    }
+
+    @Override
+    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
+        String sql = "UPDATE TaskEntry "
+                + "SET endTime = ?  "
+                + "WHERE id = ? ";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setObject(1, taskEntry.getEndTime());
+            ps.setInt(2, taskEntry.getId());
+            ps.executeUpdate();
+            System.out.println("edited endTime in DAO");
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+
+        return taskEntry;
     }
 
 }

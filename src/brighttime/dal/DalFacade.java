@@ -75,4 +75,8 @@ public interface DalFacade {
      */
     TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException;
 
+    TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
+
+    TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
+
 }

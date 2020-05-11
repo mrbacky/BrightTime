@@ -37,8 +37,8 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public Task createTask(Task task) throws DalException {
-        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId) "
-                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?)";
+        String sql = "INSERT INTO Task (description, projectId, createdDate, modifiedDate ) "
+                + "VALUES (?, ?, SYSDATETIME(), SYSDATETIME())";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -64,17 +64,19 @@ public class TaskDAO implements ITaskDAO {
             getEntries();
 
             List<Task> emptyTasksList = getTasksWithoutEntries();
-            for (Task emptyTask : emptyTasksList) {
-                LocalDate date = emptyTask.getCreationTime().toLocalDate();
-                if (!dateMap.containsKey(date)) {
-                    List<Task> list = new ArrayList<>();
-                    list.add(emptyTask);
-                    dateMap.put(date, list);
-                }
-                if (dateMap.containsKey(date)) {
-                    List<Task> tasks = dateMap.get(date);
-                    if (!tasks.contains(emptyTask)) {
-                        tasks.add(0, emptyTask);
+            if (!emptyTasksList.isEmpty()) {
+                for (Task emptyTask : emptyTasksList) {
+                    LocalDate date = emptyTask.getCreationTime().toLocalDate();
+                    if (!dateMap.containsKey(date)) {
+                        List<Task> list = new ArrayList<>();
+                        list.add(emptyTask);
+                        dateMap.put(date, list);
+                    }
+                    if (dateMap.containsKey(date)) {
+                        List<Task> tasks = dateMap.get(date);
+                        if (!tasks.contains(emptyTask)) {
+                            tasks.add(0, emptyTask);
+                        }
                     }
                 }
             }

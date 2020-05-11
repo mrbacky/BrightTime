@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -10,9 +11,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane minWidth="-Infinity" prefHeight="40.0" prefWidth="700.0" styleClass="viewSubItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
+<AnchorPane minWidth="-Infinity" prefHeight="40.0" prefWidth="700.0" styleClass="viewSubItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
     <children>
-        <StackPane layoutX="10.0" layoutY="10.0" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="0.0">
+        <StackPane layoutX="10.0" layoutY="10.0" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="370.0" AnchorPane.topAnchor="0.0">
             <children>
                 <JFXTextField fx:id="textFieldTaskEntryDesc">
                <styleClass>
@@ -21,40 +22,20 @@
                </styleClass></JFXTextField>
             </children>
         </StackPane>
-        <StackPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <JFXTextField fx:id="textFieldDuration" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="60.0">
-               <styleClass>
-                  <String fx:value="txtCommon" />
-                  <String fx:value="txtDuration" />
-               </styleClass></JFXTextField>
-            </children>
+        <StackPane layoutX="10.0" layoutY="10.0" prefWidth="55.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="lblDuration" maxWidth="1.7976931348623157E308" styleClass="txtCommon" text="13:50:03" />
+         </children>
         </StackPane>
-        <StackPane layoutX="460.0" layoutY="19.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
+        <StackPane layoutX="460.0" layoutY="19.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
             <children>
-                <JFXTextField fx:id="textFieldStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" StackPane.alignment="CENTER_LEFT">
-                    <StackPane.margin>
-                        <Insets />
-                    </StackPane.margin>
-               <styleClass>
-                  <String fx:value="txtCommon" />
-                  <String fx:value="txtTime" />
-               </styleClass>
-                </JFXTextField>
-                <JFXTextField fx:id="textFieldEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="45.0" StackPane.alignment="CENTER_RIGHT">
-                    <StackPane.margin>
-                        <Insets />
-                    </StackPane.margin>
-               <styleClass>
-                  <String fx:value="txtCommon" />
-                  <String fx:value="txtTime" />
-               </styleClass>
-                </JFXTextField>
                 <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0" text="─" textFill="WHITE">
                     <StackPane.margin>
                         <Insets />
                     </StackPane.margin>
                 </Label>
+            <JFXTimePicker fx:id="timePickerStartTime" defaultColor="#435a9a" nodeOrientation="LEFT_TO_RIGHT" onHiding="#handleEditStartTime" prefWidth="95.0" styleClass="timePicker" StackPane.alignment="CENTER_LEFT" />
+            <JFXTimePicker fx:id="timePickerEndTime" defaultColor="#435a9a" nodeOrientation="LEFT_TO_RIGHT" onHiding="#handleEditEndTime" prefWidth="95.0" styleClass="timePicker" StackPane.alignment="CENTER_RIGHT" />
             </children>
         </StackPane>
         <StackPane layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="0.0">
