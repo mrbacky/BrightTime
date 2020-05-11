@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -118,7 +119,10 @@ public class CreateTaskController implements Initializable {
                 try {
                     Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
                     mainModel.addTask(task);
-                    timeTrackerContr.initializeView();
+                    Platform.runLater(() -> {
+                        timeTrackerContr.initializeView();
+                    });
+
                     System.out.println("action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());

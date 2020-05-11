@@ -17,6 +17,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -135,14 +137,22 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) {
-        return dalManager.updateTaskEntryStartTime(taskEntry);
+    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws BllException {
+        try {
+            return dalManager.updateTaskEntryStartTime(taskEntry);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
     @Override
-    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) {
-        return dalManager.updateTaskEntryEndTime(taskEntry);
-        
+    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws BllException {
+        try {
+            return dalManager.updateTaskEntryEndTime(taskEntry);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+
     }
 
 }

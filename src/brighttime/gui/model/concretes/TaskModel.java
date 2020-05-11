@@ -54,7 +54,6 @@ public class TaskModel implements ITaskModel {
     @Override
     public LocalDateTime getEndTime() {
         if (!getDayEntryList().isEmpty()) {
-
             return bllManager.getEndTime(getDayEntryList());
         }
         return task.getCreationTime();
@@ -204,7 +203,7 @@ public class TaskModel implements ITaskModel {
     @Override
     public void setupStartTimeListener() {
         startTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
-            
+
         });
     }
 

@@ -37,8 +37,8 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public Task createTask(Task task) throws DalException {
-        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId) "
-                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?)";
+        String sql = "INSERT INTO Task (description, projectId, createdDate, modifiedDate ) "
+                + "VALUES (?, ?, SYSDATETIME(), SYSDATETIME())";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

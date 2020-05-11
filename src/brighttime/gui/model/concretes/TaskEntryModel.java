@@ -1,12 +1,16 @@
 package brighttime.gui.model.concretes;
 
 import brighttime.be.TaskEntry;
+import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
+import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -155,13 +159,21 @@ public class TaskEntryModel implements ITaskEntryModel {
     }
 
     @Override
-    public void updateTaskEntryStartTime(TaskEntry taskEntry) {
-        bllManager.updateTaskEntryStartTime(taskEntry);
+    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException {
+        try {
+            bllManager.updateTaskEntryStartTime(taskEntry);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
     @Override
-    public void updateTaskEntryEndTime(TaskEntry taskEntry) {
-        bllManager.updateTaskEntryEndTime(taskEntry);
+    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException {
+        try {
+            bllManager.updateTaskEntryEndTime(taskEntry);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
 }

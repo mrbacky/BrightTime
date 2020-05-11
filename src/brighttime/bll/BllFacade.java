@@ -89,8 +89,8 @@ public interface BllFacade {
      */
     TaskEntry createTaskEntry(TaskEntry taskEntry) throws BllException;
 
-    TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry);
+    TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws BllException;
 
-    TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry);
+    TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws BllException;
 
 }

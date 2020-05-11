@@ -6,6 +6,7 @@
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.TaskEntry;
+import brighttime.gui.model.ModelException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,9 +63,8 @@ public interface ITaskEntryModel {
 
     void setupEndTimeListener();
 
-    void updateTaskEntryStartTime(TaskEntry taskEntry);
+    void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException;
 
-    void updateTaskEntryEndTime(TaskEntry taskEntry);
-    
+    void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException;
 
 }

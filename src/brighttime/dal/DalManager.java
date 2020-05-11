@@ -101,14 +101,22 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) {
-        return taskEntryDAO.updateTaskEntryStartTime(taskEntry);
+    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException {
+        try {
+            return taskEntryDAO.updateTaskEntryStartTime(taskEntry);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
 
     }
 
     @Override
-    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) {
-        return taskEntryDAO.updateTaskEntryEndTime(taskEntry);
+    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
+        try {
+            return taskEntryDAO.updateTaskEntryEndTime(taskEntry);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
     }
 
 }
