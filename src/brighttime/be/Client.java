@@ -13,10 +13,16 @@ public class Client {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty name = new SimpleStringProperty();
+    private final IntegerProperty hourlyRate = new SimpleIntegerProperty();
 
     public Client(int id, String name) {
         this.id.set(id);
         this.name.set(name);
+    }
+
+    public Client(String name, int hourlyRate) {
+        this.name.set(name);
+        this.hourlyRate.set(hourlyRate);
     }
 
     public Client(String name) {
@@ -50,6 +56,18 @@ public class Client {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public int getHourlyRate() {
+        return hourlyRate.get();
+    }
+
+    public void setHourlyRate(int value) {
+        hourlyRate.set(value);
+    }
+
+    public IntegerProperty hourlyRateProperty() {
+        return hourlyRate;
     }
 
 }

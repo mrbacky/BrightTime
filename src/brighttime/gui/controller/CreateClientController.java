@@ -29,6 +29,8 @@ public class CreateClientController implements Initializable {
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
+    @FXML
+    private JFXTextField txtHourlyRate;
 
     public CreateClientController() {
         this.alertManager = new AlertManager();
@@ -64,7 +66,11 @@ public class CreateClientController implements Initializable {
         btnAdd.setOnAction((event) -> {
             if (!txtName.getText().trim().isEmpty()) {
                 try {
-                    mainModel.addClient(new Client(txtName.getText().trim()));
+                    int hourlyRate = 0;
+                    if (!txtHourlyRate.getText().trim().isEmpty()) {
+                        hourlyRate = Integer.parseInt(txtHourlyRate.getText().trim());
+                    }
+                    mainModel.addClient(new Client(txtName.getText().trim(), hourlyRate));
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the client.", "An error occured: " + ex.getMessage());

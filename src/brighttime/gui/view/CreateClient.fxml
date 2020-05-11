@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<GridPane styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateClientController">
+<GridPane styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateClientController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="495.0" minWidth="10.0" prefWidth="244.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="328.0" minWidth="0.0" prefWidth="299.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="102.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -42,12 +42,6 @@
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
           </StackPane>
-          <StackPane prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-         <GridPane.margin>
-            <Insets left="20.0" right="20.0" />
-         </GridPane.margin>
-          </StackPane>
-          <StackPane prefHeight="35.0" prefWidth="20.0" GridPane.columnIndex="3" />
             <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="4">
                 <graphic>
                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -57,5 +51,16 @@
                     </ImageView>
                 </graphic>
             </JFXButton>
+      <StackPane prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="2">
+         <children>
+            <JFXTextField fx:id="txtHourlyRate" prefHeight="27.0" prefWidth="300.0" promptText="Add Hourly Rate">
+               <styleClass>
+                  <String fx:value="txtCommon" />
+                  <String fx:value="txtProject" />
+                  <String fx:value="txtProjectSpecial" />
+               </styleClass>
+            </JFXTextField>
+         </children>
+      </StackPane>
    </children>
 </GridPane>
