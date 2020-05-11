@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.time.Duration;
 
 /**
  *
@@ -21,18 +20,21 @@ public class Task {
     private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
+    private Billability billability;
 
-    public Task(int id, String description, Project project, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
+    public Task(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
         this.id.set(id);
         this.description.set(description);
         this.project.set(project);
+        this.billability = billability;
         this.taskEntryList.set(taskEntryList);
         this.creationTime.set(creationTime);
     }
 
-    public Task(String description, Project project) {
+    public Task(String description, Project project, Billability billability) {
         this.description.set(description);
         this.project.set(project);
+        this.billability = billability;
     }
 
     public int getId() {
@@ -71,7 +73,17 @@ public class Task {
         return project;
     }
 
-   
+    public enum Billability {
+        BILLABLE, NON_BILLABLE
+    }
+
+    public Billability getBillability() {
+        return billability;
+    }
+
+    public void setBillability(Billability billability) {
+        this.billability = billability;
+    }
 
     public List<TaskEntry> getTaskEntryList() {
         return taskEntryList.get();
@@ -84,12 +96,6 @@ public class Task {
     public ObjectProperty taskEntryListProperty() {
         return taskEntryList;
     }
-
-   
-
-    
-
-   
 
     public LocalDateTime getCreationTime() {
         return creationTime.get();

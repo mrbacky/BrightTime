@@ -61,9 +61,9 @@ public class MockTaskDAO implements ITaskDAO {
     }
 
     public void createInitialTasks() {
-        taskList.add(new Task(0, "create UI", brightTime, taskEntries1, LocalDateTime.parse("2020-02-25T02:00:00")));
-        taskList.add(new Task(1, "create UI", brightTime, taskEntries1, LocalDateTime.parse("2020-02-25T02:00:00")));
-        taskList.add(new Task(2, "create UI", brightTime, taskEntries3, LocalDateTime.parse("2020-02-01T02:00:00")));
+//        taskList.add(new Task(0, "create UI", brightTime, taskEntries1, LocalDateTime.parse("2020-02-25T02:00:00")));
+//        taskList.add(new Task(1, "create UI", brightTime, taskEntries1, LocalDateTime.parse("2020-02-25T02:00:00")));
+//        taskList.add(new Task(2, "create UI", brightTime, taskEntries3, LocalDateTime.parse("2020-02-01T02:00:00")));
 
     }
 

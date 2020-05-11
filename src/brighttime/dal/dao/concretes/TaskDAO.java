@@ -30,6 +30,7 @@ public class TaskDAO implements ITaskDAO {
     private final IConnectionManager connection;
     private Map<LocalDate, List<Task>> dateMap;
     private Map<Integer, Task> taskMap;
+    private Task task;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
@@ -37,13 +38,20 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public Task createTask(Task task) throws DalException {
-        String sql = "INSERT INTO Task (description, projectId, createdDate, modifiedDate ) "
-                + "VALUES (?, ?, SYSDATETIME(), SYSDATETIME())";
+        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId, billability) "
+                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?, ?)";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, task.getDescription());
             pstmt.setInt(2, task.getProject().getId());
+
+            if (task.getBillability() == Task.Billability.BILLABLE) {
+                pstmt.setString(3, String.valueOf('B'));
+            } else if (task.getBillability() == Task.Billability.NON_BILLABLE) {
+                pstmt.setString(3, String.valueOf('N'));
+            }
+
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -123,13 +131,13 @@ public class TaskDAO implements ITaskDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int taskId = rs.getInt("taskId");
-                Task task = map.get(taskId);
+                Task taskFromMap = map.get(taskId);
                 LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
                 LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
 
-                TaskEntry taskEntry = new TaskEntry(id, task, startTime, endTime);
+                TaskEntry taskEntry = new TaskEntry(id, taskFromMap, startTime, endTime);
 
-                task.getTaskEntryList().add(taskEntry);
+                taskFromMap.getTaskEntryList().add(taskEntry);
                 entries.add(taskEntry);
 
                 LocalDate date = startTime.toLocalDate();
@@ -161,7 +169,7 @@ public class TaskDAO implements ITaskDAO {
     private Map getTasks() throws DalException {
         taskMap = new HashMap<>();
 
-        String sql = "SELECT T.id AS taskId, T.description, T.modifiedDate, "
+        String sql = "SELECT T.id AS taskId, T.description, T.modifiedDate, T.billability, "
                 + "P.id AS projectId, P.name AS projectName, "
                 + "C.id AS clientId, C.name AS clientName "
                 + "FROM Task AS T "
@@ -190,9 +198,16 @@ public class TaskDAO implements ITaskDAO {
                 List<TaskEntry> entries = new ArrayList<>();
                 LocalDateTime creationTime = rs.getTimestamp("modifiedDate").toLocalDateTime();
 
-                Task t = new Task(taskId, description, project, entries, creationTime);
-                if (!taskMap.containsKey(t.getId())) {
-                    taskMap.put(taskId, t);
+                String billability = rs.getString("billability");
+
+                if (billability.equals("B")) {
+                    task = new Task(taskId, description, project, Task.Billability.BILLABLE, entries, creationTime);
+                } else if (billability.equals("N")) {
+                    task = new Task(taskId, description, project, Task.Billability.NON_BILLABLE, entries, creationTime);
+                }
+
+                if (!taskMap.containsKey(task.getId())) {
+                    taskMap.put(taskId, task);
                 }
             }
         } catch (SQLException ex) {
@@ -243,8 +258,8 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Task task = taskMap.get(rs.getInt("id"));
-                tasks.add(task);
+                Task taskWithoutEntry = taskMap.get(rs.getInt("id"));
+                tasks.add(taskWithoutEntry);
             }
 
         } catch (SQLException ex) {

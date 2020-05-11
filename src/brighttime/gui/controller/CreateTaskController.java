@@ -10,6 +10,7 @@ import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleNode;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,11 +33,14 @@ public class CreateTaskController implements Initializable {
     private JFXComboBox<Client> cboClient;
     @FXML
     private JFXComboBox<Project> cboProject;
+    @FXML
+    private JFXToggleNode tglBillability;
 
     private IMainModel mainModel;
     private TimeTrackerController timeTrackerContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
+    private Task task;
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -117,7 +121,11 @@ public class CreateTaskController implements Initializable {
         btnAdd.setOnAction((event) -> {
             if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
-                    Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
+                    if (tglBillability.isSelected()) {
+                        task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), Task.Billability.BILLABLE);
+                    } else {
+                        task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), Task.Billability.NON_BILLABLE);
+                    }
                     mainModel.addTask(task);
                     Platform.runLater(() -> {
                         timeTrackerContr.initializeView();
