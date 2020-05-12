@@ -9,6 +9,7 @@ import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
@@ -84,6 +85,20 @@ public class MainModel implements IMainModel {
     public void addTask(Task task) throws ModelException {
 //        taskList.add(task);
         try {
+            List<Task> taskList = taskMap.get(task.getCreationTime().toLocalDate());
+            if (taskList == null) {
+                taskList = new ArrayList<>();
+                taskList.add(task);
+                taskMap.put(task.getCreationTime().toLocalDate(), taskList);
+                System.out.println("task List in this key: " + taskList);
+            } else {
+                if (!taskList.contains(task)) {
+                    taskList.add(task);
+                    for (Task task1 : taskList) {
+                        System.out.println("task from list: " + task1);
+                    }
+                }
+            }
             bllManager.createTask(task);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());

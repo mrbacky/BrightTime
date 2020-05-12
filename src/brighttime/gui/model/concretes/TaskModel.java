@@ -105,10 +105,13 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public List getDayEntryList() {
-        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
-                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
-        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
-        return dayEntries;
+        if (!task.getTaskEntryList().isEmpty()) {
+            List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
+                    -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+            dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+            return dayEntries;
+        }
+        return new ArrayList();
     }
 
     @Override
@@ -213,6 +216,14 @@ public class TaskModel implements ITaskModel {
             System.out.println("in start time listener");
             endTime.set(newValue);
         });
+    }
+
+    @Override
+    public void setTaskEntryListIfNewTask() {
+        if (task.getTaskEntryList() == null) {
+            List<TaskEntry> taskEntryList = new ArrayList<>();
+            task.setTaskEntryList(taskEntryList);
+        }
     }
 
 }

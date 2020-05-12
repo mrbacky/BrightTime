@@ -109,4 +109,9 @@ public class Task {
         return creationTime;
     }
 
+    @Override
+    public String toString() {
+        return "Task{" + "description=" + description + '}';
+    }
+
 }

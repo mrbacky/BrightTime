@@ -62,4 +62,6 @@ public interface ITaskModel {
 
     void setupEndTimeListener();
 
+    public void setTaskEntryListIfNewTask();
+
 }

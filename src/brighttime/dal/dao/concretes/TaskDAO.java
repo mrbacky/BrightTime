@@ -72,8 +72,9 @@ public class TaskDAO implements ITaskDAO {
             getEntries();
 
             List<Task> emptyTasksList = getTasksWithoutEntries();
-            if (!emptyTasksList.isEmpty()) {
-                for (Task emptyTask : emptyTasksList) {
+//            if (!emptyTasksList.isEmpty()) {
+            for (Task emptyTask : emptyTasksList) {
+                if (emptyTask != null) {
                     LocalDate date = emptyTask.getCreationTime().toLocalDate();
                     if (!dateMap.containsKey(date)) {
                         List<Task> list = new ArrayList<>();
@@ -87,7 +88,9 @@ public class TaskDAO implements ITaskDAO {
                         }
                     }
                 }
+
             }
+//            }
 
             return dateMap;
         } catch (DalException ex) {

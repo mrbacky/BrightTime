@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -22,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -45,6 +47,8 @@ public class TimeTrackerController implements Initializable {
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private LocalDate date = LocalDate.MIN;
+
+    private Map<LocalDate, Node> taskItems = new HashMap<>();
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -84,11 +88,14 @@ public class TimeTrackerController implements Initializable {
 
     private void initTasks() {
         try {
+            long start = System.currentTimeMillis();
+
             mainModel.loadTasks();
             vBoxMain.getChildren().clear();
             Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
             Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
             orderedMap.putAll(taskList);
+
             for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
                 LocalDate dateKey = entry.getKey();
                 List<Task> taskListValue = entry.getValue();
@@ -102,25 +109,32 @@ public class TimeTrackerController implements Initializable {
                 }
                 for (Task task : taskListValue) {
                     addTaskItem(task);
+
                 }
             }
+
+            System.out.println("time passed: " + (System.currentTimeMillis() - start));
         } catch (ModelException ex) {
             alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
         }
 
     }
 
-    private void addTaskItem(Task task) {
+    public void addTaskItem(Task task) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
             Parent root = fxmlLoader.load();
             ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
             taskModel.setTask(task);
             taskModel.setDate(date);
+
+            taskModel.setTaskEntryListIfNewTask();
             TaskItemController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
             controller.injectModel(taskModel);
             vBoxMain.getChildren().add(root);
+
+            taskItems.put(LocalDate.parse("2020-05-05"), root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }

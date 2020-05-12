@@ -13,7 +13,10 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleNode;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,7 +27,7 @@ import javafx.fxml.Initializable;
  * @author annem
  */
 public class CreateTaskController implements Initializable {
-
+    
     @FXML
     private JFXTextField txtDescription;
     @FXML
@@ -35,13 +38,13 @@ public class CreateTaskController implements Initializable {
     private JFXComboBox<Project> cboProject;
     @FXML
     private JFXToggleNode tglBillability;
-
+    
     private IMainModel mainModel;
     private TimeTrackerController timeTrackerContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
     private Task task;
-
+    
     public CreateTaskController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
@@ -54,11 +57,11 @@ public class CreateTaskController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-
+    
     void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
     }
-
+    
     void initializeView() throws IOException {
         System.out.println("in Creator page");
         setClientsIntoComboBox();
@@ -66,7 +69,7 @@ public class CreateTaskController implements Initializable {
         setValidators();
         addTask();
     }
-
+    
     public void injectTimeTrackerController(TimeTrackerController timeTrackerContr) {
         this.timeTrackerContr = timeTrackerContr;
     }
@@ -126,12 +129,18 @@ public class CreateTaskController implements Initializable {
                     } else {
                         task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), Task.Billability.NON_BILLABLE);
                     }
+                    task.setCreationTime(LocalDateTime.now());
                     mainModel.addTask(task);
-                    Platform.runLater(() -> {
-                        timeTrackerContr.initializeView();
-                    });
+                    timeTrackerContr.addTaskItem(task);
+//                    Platform.runLater(() -> {
+//                        try {
+//                            Thread.sleep(500);
+//                            timeTrackerContr.initializeView();
+//                        } catch (InterruptedException ex) {
+//                            Logger.getLogger(CreateTaskController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    });
 
-                    System.out.println("action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                 }
@@ -144,5 +153,5 @@ public class CreateTaskController implements Initializable {
             }
         });
     }
-
+    
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -138,8 +139,6 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
-        
-        
         lblStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 
@@ -213,7 +212,14 @@ public class TaskItemController implements Initializable {
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
                 //  refresh
-                timeTrackerController.initializeView();
+                Platform.runLater(() -> {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    timeTrackerController.initializeView();
+                });
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
             }
