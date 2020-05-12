@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
    <children>
-      <Label text="Overview">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutY="371.0" text="Overview" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="468.0" text="Overview" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="468.0" layoutY="371.0" text="Overview" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
+      <ScrollPane layoutX="199.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <content>
+          <AnchorPane fx:id="apOverview" minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="750.0">
+               <children>
+                  <TableView fx:id="tbvTasks" layoutX="219.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0">
+                    <columns>
+                      <TableColumn fx:id="colTaskDesc" prefWidth="345.0" text="Task description" />
+                      <TableColumn fx:id="colProject" prefWidth="228.0" text="Project" />
+                        <TableColumn fx:id="colHours" maxWidth="186.0" minWidth="50.0" prefWidth="69.0" text="Hours" />
+                    </columns>
+                  </TableView>
+                  <JFXComboBox layoutX="50.0" layoutY="102.0" prefHeight="25.0" prefWidth="220.0" promptText="Username" />
+                  <JFXComboBox layoutX="302.0" layoutY="102.0" prefHeight="25.0" prefWidth="188.0" promptText="Client" />
+                  <JFXComboBox layoutX="562.0" layoutY="102.0" prefHeight="25.0" prefWidth="115.0" promptText="Project" />
+                  <JFXComboBox layoutX="84.0" layoutY="68.0" prefHeight="25.0" prefWidth="154.0" promptText="Username" />
+                  <JFXButton layoutX="50.0" layoutY="68.0" text="&lt;" />
+                  <JFXButton layoutX="238.0" layoutY="68.0" text="&gt;" />
+                  <JFXDatePicker layoutX="359.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
+                  <JFXDatePicker layoutX="546.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
