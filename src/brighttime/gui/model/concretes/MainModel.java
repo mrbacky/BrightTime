@@ -1,9 +1,9 @@
 package brighttime.gui.model.concretes;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
-import brighttime.be.TaskEntry;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
@@ -25,6 +25,7 @@ public class MainModel implements IMainModel {
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
     private final ObservableMap<LocalDate, List<Task>> taskMap = FXCollections.observableHashMap();
+    private final ObservableList<Task> taskList = FXCollections.observableArrayList();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -102,6 +103,33 @@ public class MainModel implements IMainModel {
             Map<LocalDate, List<Task>> allTasks = bllManager.Tasks();
             taskMap.clear();
             taskMap.putAll(allTasks);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public ObservableList<Task> getTaskList() {
+        return taskList;
+    }
+
+    @Override
+    public void getAllTasks() throws ModelException {
+        try {
+            List<Task> allTasks = bllManager.getAllTasks();
+            taskList.clear();
+            taskList.addAll(allTasks);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void getAllTasksFiltered(Filter filter) throws ModelException {
+        try {
+            List<Task> temp = bllManager.getAllTasksFiltered(filter);
+            taskList.clear();
+            taskList.addAll(temp);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }

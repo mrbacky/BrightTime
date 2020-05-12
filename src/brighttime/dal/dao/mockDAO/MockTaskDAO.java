@@ -1,6 +1,7 @@
 package brighttime.dal.dao.mockDAO;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
@@ -88,6 +89,21 @@ public class MockTaskDAO implements ITaskDAO {
 
     @Override
     public Map<LocalDate, List<Task>> Tasks() throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Task> getAllTasks() throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<Integer, Integer> getRate() throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Task> getAllTasksFiltered(Filter filter) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

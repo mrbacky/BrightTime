@@ -1,6 +1,7 @@
 package brighttime.bll;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
@@ -92,5 +93,9 @@ public interface BllFacade {
     TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws BllException;
 
     TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws BllException;
+
+    List<Task> getAllTasks() throws BllException;
+
+    List<Task> getAllTasksFiltered(Filter filter) throws BllException;
 
 }
