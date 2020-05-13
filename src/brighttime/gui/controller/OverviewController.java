@@ -2,6 +2,9 @@ package brighttime.gui.controller;
 
 import brighttime.gui.model.ModelFacade;
 import brighttime.gui.model.interfaces.IMainModel;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -28,6 +31,24 @@ public class OverviewController implements Initializable {
     private TableColumn<?, ?> colProject;
     @FXML
     private TableColumn<?, ?> colHours;
+    @FXML
+    private JFXComboBox<?> cboUsers;
+    @FXML
+    private JFXComboBox<?> cboClients;
+    @FXML
+    private JFXComboBox<?> cboProjects;
+    @FXML
+    private JFXButton btnThisWeek;
+    @FXML
+    private JFXButton btnThisMonth;
+    @FXML
+    private JFXDatePicker dpStartDate;
+    @FXML
+    private JFXDatePicker dpEndDate;
+    @FXML
+    private JFXButton btnLastWeek;
+    @FXML
+    private JFXButton btnLastMonth;
 
     /**
      * Initializes the controller class.

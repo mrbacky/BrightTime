@@ -21,14 +21,15 @@
                         <TableColumn fx:id="colHours" maxWidth="186.0" minWidth="50.0" prefWidth="69.0" text="Hours" />
                     </columns>
                   </TableView>
-                  <JFXComboBox layoutX="50.0" layoutY="102.0" prefHeight="25.0" prefWidth="220.0" promptText="Username" />
-                  <JFXComboBox layoutX="302.0" layoutY="102.0" prefHeight="25.0" prefWidth="188.0" promptText="Client" />
-                  <JFXComboBox layoutX="562.0" layoutY="102.0" prefHeight="25.0" prefWidth="115.0" promptText="Project" />
-                  <JFXComboBox layoutX="84.0" layoutY="68.0" prefHeight="25.0" prefWidth="154.0" promptText="Username" />
-                  <JFXButton layoutX="50.0" layoutY="68.0" text="&lt;" />
-                  <JFXButton layoutX="238.0" layoutY="68.0" text="&gt;" />
-                  <JFXDatePicker layoutX="359.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
-                  <JFXDatePicker layoutX="546.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
+                  <JFXComboBox fx:id="cboUsers" layoutX="50.0" layoutY="102.0" prefHeight="25.0" prefWidth="220.0" promptText="Username" />
+                  <JFXComboBox fx:id="cboClients" layoutX="302.0" layoutY="102.0" prefHeight="25.0" prefWidth="188.0" promptText="Client" />
+                  <JFXComboBox fx:id="cboProjects" layoutX="562.0" layoutY="102.0" prefHeight="25.0" prefWidth="115.0" promptText="Project" />
+                  <JFXButton fx:id="btnThisWeek" layoutX="194.0" layoutY="43.0" text="This week" />
+                  <JFXButton fx:id="btnThisMonth" layoutX="50.0" layoutY="43.0" text="This month" />
+                  <JFXDatePicker fx:id="dpStartDate" layoutX="359.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
+                  <JFXDatePicker fx:id="dpEndDate" layoutX="546.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
+                  <JFXButton fx:id="btnLastWeek" layoutX="194.0" layoutY="68.0" text="Last week" />
+                  <JFXButton fx:id="btnLastMonth" layoutX="50.0" layoutY="68.0" text="Last month" />
                </children>
             </AnchorPane>
         </content>
