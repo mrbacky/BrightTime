@@ -5,6 +5,8 @@ import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.be.TaskType1;
+import brighttime.be.TaskType2;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
@@ -30,16 +32,16 @@ import java.util.Map;
 public class TaskDAO implements ITaskDAO {
 
     private final IConnectionManager connection;
-    private Map<LocalDate, List<Task>> dateMap;
-    private Map<Integer, Task> taskMap;
-    private Task task;
+    private Map<LocalDate, List<TaskType1>> dateMap;
+    private Map<Integer, TaskType1> taskMap;
+    private TaskType1 task;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
     }
 
     @Override
-    public Task createTask(Task task) throws DalException {
+    public TaskType1 createTask(TaskType1 task) throws DalException {
         String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId, billability) "
                 + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?, ?)";
 
@@ -67,23 +69,23 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<Task>> Tasks() throws DalException {
+    public Map<LocalDate, List<TaskType1>> Tasks() throws DalException {
         try {
             dateMap = new HashMap<>();
 
             getEntries();
 
-            List<Task> emptyTasksList = getTasksWithoutEntries();
+            List<TaskType1> emptyTasksList = getTasksWithoutEntries();
             if (!emptyTasksList.isEmpty()) {
-                for (Task emptyTask : emptyTasksList) {
+                for (TaskType1 emptyTask : emptyTasksList) {
                     LocalDate date = emptyTask.getCreationTime().toLocalDate();
                     if (!dateMap.containsKey(date)) {
-                        List<Task> list = new ArrayList<>();
+                        List<TaskType1> list = new ArrayList<>();
                         list.add(emptyTask);
                         dateMap.put(date, list);
                     }
                     if (dateMap.containsKey(date)) {
-                        List<Task> tasks = dateMap.get(date);
+                        List<TaskType1> tasks = dateMap.get(date);
                         if (!tasks.contains(emptyTask)) {
                             tasks.add(0, emptyTask);
                         }
@@ -109,7 +111,7 @@ public class TaskDAO implements ITaskDAO {
     private List<TaskEntry> getEntries() throws DalException {
         List<TaskEntry> entries = new ArrayList<>();
 
-        Map<Integer, Task> map = getTasks();
+        Map<Integer, TaskType1> map = getTasks();
 
         String sql = "SELECT CONVERT(DATE, TE.startTime) AS date, "
                 + "TE.id, TE.startTime, TE.endTime, TE.taskId "
@@ -133,7 +135,7 @@ public class TaskDAO implements ITaskDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int taskId = rs.getInt("taskId");
-                Task taskFromMap = map.get(taskId);
+                TaskType1 taskFromMap = map.get(taskId);
                 LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
                 LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
 
@@ -144,12 +146,12 @@ public class TaskDAO implements ITaskDAO {
 
                 LocalDate date = startTime.toLocalDate();
                 if (!dateMap.containsKey(date)) {
-                    List<Task> list = new ArrayList<>();
+                    List<TaskType1> list = new ArrayList<>();
                     list.add(taskEntry.getTask());
                     dateMap.put(date, list);
                 }
                 if (dateMap.containsKey(date)) {
-                    List<Task> list = dateMap.get(date);
+                    List<TaskType1> list = dateMap.get(date);
                     if (!list.contains(taskEntry.getTask())) {
                         list.add(taskEntry.getTask());
                     }
@@ -203,9 +205,9 @@ public class TaskDAO implements ITaskDAO {
                 String billability = rs.getString("billability");
 
                 if (billability.equals("B")) {
-                    task = new Task(taskId, description, project, Task.Billability.BILLABLE, entries, creationTime);
+                    task = new TaskType1(taskId, description, Task.Billability.BILLABLE, project, entries, creationTime);
                 } else if (billability.equals("N")) {
-                    task = new Task(taskId, description, project, Task.Billability.NON_BILLABLE, entries, creationTime);
+                    task = new TaskType1(taskId, description, Task.Billability.NON_BILLABLE, project, entries, creationTime);
                 }
 
                 if (!taskMap.containsKey(task.getId())) {
@@ -226,9 +228,9 @@ public class TaskDAO implements ITaskDAO {
      * @param tasks The map of tasks.
      * @return The complete SQL query.
      */
-    private String prepStatement(String sql, Map<Integer, Task> tasks) {
+    private String prepStatement(String sql, Map<Integer, TaskType1> tasks) {
         boolean firstItem = true;
-        for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
+        for (Map.Entry<Integer, TaskType1> entry : tasks.entrySet()) {
             if (firstItem) {
                 sql += " (taskId = ?";
                 firstItem = false;
@@ -247,8 +249,8 @@ public class TaskDAO implements ITaskDAO {
      * @return A list of tasks.
      * @throws DalException
      */
-    private List<Task> getTasksWithoutEntries() throws DalException {
-        List<Task> tasks = new ArrayList<>();
+    private List<TaskType1> getTasksWithoutEntries() throws DalException {
+        List<TaskType1> tasks = new ArrayList<>();
         String sql = "SELECT id "
                 + "  FROM Task "
                 + "  WHERE createdDate = modifiedDate "
@@ -260,7 +262,7 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Task taskWithoutEntry = taskMap.get(rs.getInt("id"));
+                TaskType1 taskWithoutEntry = taskMap.get(rs.getInt("id"));
                 tasks.add(taskWithoutEntry);
             }
 
@@ -271,16 +273,33 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public List<Task> getAllTasks() throws DalException {
-        List<Task> allTasks = new ArrayList<>();
+    public List<TaskType2> getAllTasks() throws DalException {
+        List<TaskType2> allTasks = new ArrayList<>();
         //TODO: Make one method like getAllTasksFiltered(), so there is only one database call. 
-        String sql = "SELECT T.id, T.description, "
-                + "	SUM(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
+        String sql = "SELECT A2.id, A2.description, "
+                + "	SUM(A2.totalDuration) AS totalDuration, "
+                + "	A2.billability, A1.clientRate, A1.projectRate "
+                + "FROM "
+                + "	( "
+                + "	SELECT C.hourlyRate AS clientRate, P.hourlyRate AS projectRate, P.id AS projectId "
+                + "	FROM Client C "
+                + "	JOIN Project P "
+                + "	ON C.id = P.clientId "
+                + "	) "
+                + "	AS A1 "
+                + "JOIN "
+                + "	( "
+                + "	SELECT T.id, T.description, "
+                + "	(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
                 + "	T.billability, T.projectId "
-                + "FROM Task T "
-                + "JOIN TaskEntry TE "
+                + "	FROM Task T "
+                + "	LEFT JOIN TaskEntry TE "
                 + "	ON T.id = TE.taskId "
-                + "GROUP BY T.id, T.description, T.billability, T.projectId";
+                + "	) "
+                + "	AS A2 "
+                + "ON A1.projectId = A2.projectId "
+                + "GROUP BY A2.id, A2.description, A2.billability, "
+                + "	A1.clientRate, A1.projectRate";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -288,22 +307,28 @@ public class TaskDAO implements ITaskDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 //TODO: Is it necessary to get unused info?
+                String rsBillability = rs.getString("billability");
 
-                String billability = rs.getString("billability");
+                int rate;
+                Task.Billability billability;
 
-                if (billability.equals("B")) {
-                    allTasks.add(new Task(rs.getInt("id"),
-                            rs.getString("description"),
-                            rs.getInt("totalDuration"),
-                            Task.Billability.BILLABLE,
-                            rs.getInt("projectId")));
-                } else if (billability.equals("N")) {
-                    allTasks.add(new Task(rs.getInt("id"),
-                            rs.getString("description"),
-                            rs.getInt("totalDuration"),
-                            Task.Billability.NON_BILLABLE,
-                            rs.getInt("projectId")));
+                if (rsBillability.equals("B")) {
+                    billability = Task.Billability.BILLABLE;
+                    rate = rs.getInt("projectRate");
+                    if (rate == 0) {
+                        rate = rs.getInt("clientRate");
+                    };
+                } else {
+                    billability = Task.Billability.NON_BILLABLE;
+                    rate = 0;
                 }
+
+                allTasks.add(new TaskType2(rs.getInt("id"),
+                        rs.getString("description"),
+                        billability,
+                        rs.getInt("totalDuration"),
+                        rate
+                ));
             }
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
@@ -312,33 +337,8 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<Integer, Integer> getRate() throws DalException {
-        Map<Integer, Integer> map = new HashMap<>();
-        String sql = "SELECT P.id AS projectId, P.hourlyRate AS rate "
-                + "	FROM Project P "
-                + "	WHERE P.hourlyRate > 0 "
-                + "UNION "
-                + "SELECT P2.id AS projectId, C.hourlyRate AS rate "
-                + "FROM "
-                + "	Project P2 "
-                + "	JOIN Client C "
-                + "		ON P2.clientId = C.id "
-                + "	WHERE P2.hourlyRate = 0";
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                map.put(rs.getInt("projectId"), rs.getInt("rate"));
-            }
-        } catch (SQLException ex) {
-            throw new DalException(ex.getMessage());
-        }
-        return map;
-    }
-
-    @Override
-    public List<Task> getAllTasksFiltered(Filter filter) throws DalException {
-        List<Task> filtered = new ArrayList<>();
+    public List<TaskType2> getAllTasksFiltered(Filter filter) throws DalException {
+        List<TaskType2> filtered = new ArrayList<>();
 
         String sql = "SELECT A2.id, A2.description, "
                 + "	SUM(A2.totalDuration) AS totalDuration, "
@@ -397,11 +397,12 @@ public class TaskDAO implements ITaskDAO {
                     rate = 0;
                 }
 
-                filtered.add(new Task(rs.getInt("id"),
+                filtered.add(new TaskType2(rs.getInt("id"),
                         rs.getString("description"),
+                        billability,
                         rs.getInt("totalDuration"),
-                        rate,
-                        billability));
+                        rate
+                ));
             }
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());

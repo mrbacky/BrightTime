@@ -5,6 +5,8 @@ import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.be.TaskType1;
+import brighttime.be.TaskType2;
 import brighttime.dal.DalException;
 import brighttime.dal.DalFacade;
 import java.io.IOException;
@@ -79,7 +81,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Task createTask(Task task) throws BllException {
+    public TaskType1 createTask(TaskType1 task) throws BllException {
         try {
             return dalManager.createTask(task);
         } catch (DalException ex) {
@@ -127,7 +129,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Map<LocalDate, List<Task>> Tasks() throws BllException {
+    public Map<LocalDate, List<TaskType1>> Tasks() throws BllException {
         try {
             return dalManager.Tasks();
         } catch (DalException ex) {
@@ -155,16 +157,15 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public List<Task> getAllTasks() throws BllException {
+    public List<TaskType2> getAllTasks() throws BllException {
         try {
-            List<Task> allTasks = dalManager.getAllTasks();
-            Map<Integer, Integer> rateMap = dalManager.getRate();
-            for (Task allTask : allTasks) {
-                if (allTask.getBillability() == Task.Billability.BILLABLE) {
-                    int totalCost = calculateTotalCost(allTask.getTotalDuration(), rateMap.get(allTask.getProjectId()));
-                    allTask.setTotalCost(totalCost);
+            List<TaskType2> allTasks = dalManager.getAllTasks();
+            for (TaskType2 task : allTasks) {
+                if (task.getBillability() == Task.Billability.BILLABLE) {
+                    double totalCost = calculateTotalCost(task.getTotalDurationSeconds(), task.getRate());
+                    task.setTotalCost(totalCost);
                 } else {
-                    allTask.setTotalCost(0);
+                    task.setTotalCost(0);
                 }
             }
             return allTasks;
@@ -176,19 +177,18 @@ public class BllManager implements BllFacade {
     //TODO: Make a utility class with this method.
     //It's here now, because it is more convenient to code in one class.
     //TODO: Change the calculation method and data type, so the rounding is correct.
-    private int calculateTotalCost(int durationSeconds, int rate) {
-        int d = (durationSeconds * rate) / (60 * 60);
-        //double durationHours = durationSeconds / (60 * 60);
-        return d;
+    private double calculateTotalCost(int durationSeconds, int rate) {
+        double durationHours = (double) (durationSeconds * rate) / (60 * 60);
+        return durationHours;
     }
 
     @Override
-    public List<Task> getAllTasksFiltered(Filter filter) throws BllException {
+    public List<TaskType2> getAllTasksFiltered(Filter filter) throws BllException {
         try {
-            List<Task> filtered = dalManager.getAllTasksFiltered(filter);
-            for (Task task : filtered) {
+            List<TaskType2> filtered = dalManager.getAllTasksFiltered(filter);
+            for (TaskType2 task : filtered) {
                 if (task.getBillability() == Task.Billability.BILLABLE) {
-                    int totalCost = calculateTotalCost(task.getTotalDuration(), task.getRate());
+                    double totalCost = calculateTotalCost(task.getTotalDurationSeconds(), task.getRate());
                     task.setTotalCost(totalCost);
                 } else {
                     task.setTotalCost(0);

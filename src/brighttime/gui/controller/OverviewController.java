@@ -3,7 +3,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.Task;
+import brighttime.be.TaskType2;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
@@ -24,20 +24,20 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * @author rados
  */
 public class OverviewController implements Initializable {
-
+    
     @FXML
-    private TableView<Task> tblTasks;
+    private TableView<TaskType2> tblTasks;
     @FXML
-    private TableColumn<Task, String> colName;
+    private TableColumn<TaskType2, String> colName;
     @FXML
-    private TableColumn<Task, Integer> colHours;
+    private TableColumn<TaskType2, String> colHours;
     @FXML
-    private TableColumn<Task, Integer> colCost;
+    private TableColumn<TaskType2, String> colCost;
     @FXML
     private JFXComboBox<Client> cboClient;
     @FXML
     private JFXComboBox<Project> cboProject;
-
+    
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
@@ -59,7 +59,7 @@ public class OverviewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-
+    
     void initializeView() {
         System.out.println("in Overview page");
         setClientsIntoComboBox();
@@ -70,7 +70,7 @@ public class OverviewController implements Initializable {
         listenDatePickerStart();
         listenDatePickerEnd();
     }
-
+    
     void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
     }
@@ -108,16 +108,17 @@ public class OverviewController implements Initializable {
             }
         });
     }
-
+    
     private void setValidators() {
         validationManager.selectionValidation(cboClient, "No client selected.");
         validationManager.selectionValidation(cboProject, "No project selected.");
     }
-
+    
     private void setTable() {
         colName.setCellValueFactory(new PropertyValueFactory<>("description"));
-        colHours.setCellValueFactory(new PropertyValueFactory<>("totalDuration"));
-        colCost.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
+        colHours.setCellValueFactory(new PropertyValueFactory<>("totalDurationString"));
+        colCost.setCellValueFactory(new PropertyValueFactory<>("totalCostString"));
+        colCost.setStyle("-fx-alignment: CENTER-RIGHT;");
         tblTasks.setItems(mainModel.getTaskList());
         try {
             mainModel.getAllTasks();
@@ -125,7 +126,7 @@ public class OverviewController implements Initializable {
             alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
         }
     }
-
+    
     private void selectProject() {
         cboProject.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
@@ -137,7 +138,7 @@ public class OverviewController implements Initializable {
             }
         });
     }
-
+    
     private void listenDatePickerStart() {
         datePickerStart.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && datePickerEnd.getValue() != null) {
@@ -149,7 +150,7 @@ public class OverviewController implements Initializable {
             }
         });
     }
-
+    
     private void listenDatePickerEnd() {
         datePickerEnd.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && datePickerStart.getValue() != null) {
@@ -161,5 +162,5 @@ public class OverviewController implements Initializable {
             }
         });
     }
-
+    
 }

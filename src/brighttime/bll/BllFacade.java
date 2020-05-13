@@ -3,8 +3,9 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.be.TaskType1;
+import brighttime.be.TaskType2;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -59,7 +60,7 @@ public interface BllFacade {
      * @return The created task.
      * @throws BllException
      */
-    Task createTask(Task task) throws BllException;
+    TaskType1 createTask(TaskType1 task) throws BllException;
 
     /**
      * Gets the tasks logged between today and 30 days ago.
@@ -67,7 +68,7 @@ public interface BllFacade {
      * @return A map with a list of tasks (containing entries) for each day.
      * @throws BllException
      */
-    Map<LocalDate, List<Task>> Tasks() throws BllException;
+    Map<LocalDate, List<TaskType1>> Tasks() throws BllException;
 
     Duration calculateDuration(TaskEntry taskEntry);
 
@@ -94,8 +95,8 @@ public interface BllFacade {
 
     TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws BllException;
 
-    List<Task> getAllTasks() throws BllException;
+    List<TaskType2> getAllTasks() throws BllException;
 
-    List<Task> getAllTasksFiltered(Filter filter) throws BllException;
+    List<TaskType2> getAllTasksFiltered(Filter filter) throws BllException;
 
 }

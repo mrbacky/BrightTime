@@ -3,6 +3,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.Task;
+import brighttime.be.TaskType1;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
@@ -40,7 +41,7 @@ public class CreateTaskController implements Initializable {
     private TimeTrackerController timeTrackerContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
-    private Task task;
+    private TaskType1 task;
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -122,9 +123,9 @@ public class CreateTaskController implements Initializable {
             if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
                     if (tglBillability.isSelected()) {
-                        task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), Task.Billability.BILLABLE);
+                        task = new TaskType1(txtDescription.getText().trim(), Task.Billability.BILLABLE, cboProject.getSelectionModel().getSelectedItem());
                     } else {
-                        task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), Task.Billability.NON_BILLABLE);
+                        task = new TaskType1(txtDescription.getText().trim(), Task.Billability.NON_BILLABLE, cboProject.getSelectionModel().getSelectedItem());
                     }
                     mainModel.addTask(task);
                     Platform.runLater(() -> {
