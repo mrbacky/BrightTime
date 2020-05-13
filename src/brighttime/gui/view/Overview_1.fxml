@@ -3,6 +3,9 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -30,6 +33,14 @@
                   <JFXDatePicker fx:id="dpEndDate" layoutX="546.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
                   <JFXButton fx:id="btnLastWeek" layoutX="194.0" layoutY="68.0" onAction="#handleLastWeek" text="Last week" />
                   <JFXButton fx:id="btnLastMonth" layoutX="50.0" layoutY="68.0" onAction="#handleLastMonth" text="Last month" />
+                  <StackedBarChart fx:id="chartTasks" layoutX="50.0" layoutY="413.0" prefHeight="400.0" prefWidth="651.0">
+                    <xAxis>
+                      <CategoryAxis label="Days" side="BOTTOM" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" label="Hours" side="LEFT" />
+                    </yAxis>
+                  </StackedBarChart>
                </children>
             </AnchorPane>
         </content>
