@@ -28,6 +28,7 @@ public class Task {
     private int rate;
 
     public int getTotalDuration() {
+
         return totalDuration.get();
     }
 

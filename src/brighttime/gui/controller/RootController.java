@@ -30,7 +30,7 @@ public class RootController implements Initializable {
     private final String ADMIN_MENU_MODULE = "/brighttime/gui/view/Creator.fxml";
     private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/ManageClients.fxml";
     private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/ManageProjects.fxml";
-    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
+    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview_1.fxml";
 
     @FXML
     private AnchorPane anchorPaneRoot;

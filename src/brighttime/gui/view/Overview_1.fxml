@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController1">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
    <children>
       <ScrollPane layoutX="199.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
@@ -16,20 +16,20 @@
                <children>
                   <TableView fx:id="tbvTasks" layoutX="219.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0">
                     <columns>
-                      <TableColumn fx:id="colTaskDesc" prefWidth="345.0" text="Task description" />
-                      <TableColumn fx:id="colProject" prefWidth="228.0" text="Project" />
-                        <TableColumn fx:id="colHours" maxWidth="186.0" minWidth="50.0" prefWidth="69.0" text="Hours" />
+                      <TableColumn fx:id="colTaskDesc" prefWidth="452.0" text="Task description" />
+                      <TableColumn fx:id="colHours" prefWidth="101.0" text="Hours" />
+                        <TableColumn fx:id="colCost" maxWidth="186.0" minWidth="50.0" prefWidth="89.0" text="Cost" />
                     </columns>
                   </TableView>
                   <JFXComboBox fx:id="cboUsers" layoutX="50.0" layoutY="102.0" prefHeight="25.0" prefWidth="220.0" promptText="Username" />
                   <JFXComboBox fx:id="cboClients" layoutX="302.0" layoutY="102.0" prefHeight="25.0" prefWidth="188.0" promptText="Client" />
                   <JFXComboBox fx:id="cboProjects" layoutX="562.0" layoutY="102.0" prefHeight="25.0" prefWidth="115.0" promptText="Project" />
-                  <JFXButton fx:id="btnThisWeek" layoutX="194.0" layoutY="43.0" text="This week" />
-                  <JFXButton fx:id="btnThisMonth" layoutX="50.0" layoutY="43.0" text="This month" />
+                  <JFXButton fx:id="btnThisWeek" layoutX="194.0" layoutY="43.0" onAction="#handleThisWeek" text="This week" />
+                  <JFXButton fx:id="btnThisMonth" layoutX="50.0" layoutY="43.0" onAction="#handleThisMonth" text="This month" />
                   <JFXDatePicker fx:id="dpStartDate" layoutX="359.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
                   <JFXDatePicker fx:id="dpEndDate" layoutX="546.0" layoutY="68.0" prefHeight="25.0" prefWidth="131.0" />
-                  <JFXButton fx:id="btnLastWeek" layoutX="194.0" layoutY="68.0" text="Last week" />
-                  <JFXButton fx:id="btnLastMonth" layoutX="50.0" layoutY="68.0" text="Last month" />
+                  <JFXButton fx:id="btnLastWeek" layoutX="194.0" layoutY="68.0" onAction="#handleLastWeek" text="Last week" />
+                  <JFXButton fx:id="btnLastMonth" layoutX="50.0" layoutY="68.0" onAction="#handleLastMonth" text="Last month" />
                </children>
             </AnchorPane>
         </content>
