@@ -14,6 +14,7 @@ import java.util.List;
  * @author rado
  */
 public class Task {
+//TODO: Make one abstract class and two contrete classes.
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();

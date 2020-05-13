@@ -173,10 +173,12 @@ public class BllManager implements BllFacade {
         }
     }
 
-    //TODO: Make a utility class with this method. Where to round to closest quarter?
+    //TODO: Make a utility class with this method.
+    //It's here now, because it is more convenient to code in one class.
+    //TODO: Change the calculation method and data type, so the rounding is correct.
     private int calculateTotalCost(int durationSeconds, int rate) {
         int d = (durationSeconds * rate) / (60 * 60);
-        double durationHours = durationSeconds / (60 * 60);
+        //double durationHours = durationSeconds / (60 * 60);
         return d;
     }
 

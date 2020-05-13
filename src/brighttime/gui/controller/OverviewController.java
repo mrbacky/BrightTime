@@ -46,6 +46,7 @@ public class OverviewController implements Initializable {
     @FXML
     private JFXDatePicker datePickerEnd;
 
+    //TODO: Very basic and lacking implementation made to check the connection between the view and database.
     public OverviewController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();

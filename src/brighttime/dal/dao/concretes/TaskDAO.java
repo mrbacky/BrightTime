@@ -273,7 +273,7 @@ public class TaskDAO implements ITaskDAO {
     @Override
     public List<Task> getAllTasks() throws DalException {
         List<Task> allTasks = new ArrayList<>();
-
+        //TODO: Make one method like getAllTasksFiltered(), so there is only one database call. 
         String sql = "SELECT T.id, T.description, "
                 + "	SUM(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
                 + "	T.billability, T.projectId "
