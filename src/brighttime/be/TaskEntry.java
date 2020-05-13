@@ -15,20 +15,20 @@ import javafx.beans.property.StringProperty;
 public class TaskEntry {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
-    private final ObjectProperty<TaskType1> task = new SimpleObjectProperty<>();
+    private final ObjectProperty<TaskConcrete1> task = new SimpleObjectProperty<>();
     private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
 
     // put calculated properties inside the TaskModel
-    public TaskEntry(int id, TaskType1 task, LocalDateTime startTime, LocalDateTime endTime) {
+    public TaskEntry(int id, TaskConcrete1 task, LocalDateTime startTime, LocalDateTime endTime) {
         this.id.set(id);
         this.task.set(task);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
     }
 
-    public TaskEntry(TaskType1 task, String description, LocalDateTime startTime, LocalDateTime endTime) {
+    public TaskEntry(TaskConcrete1 task, String description, LocalDateTime startTime, LocalDateTime endTime) {
         this.task.set(task);
         this.description.set(description);
         this.startTime.set(startTime);
@@ -47,11 +47,11 @@ public class TaskEntry {
         return id;
     }
 
-    public TaskType1 getTask() {
+    public TaskConcrete1 getTask() {
         return task.get();
     }
 
-    public void setTask(TaskType1 value) {
+    public void setTask(TaskConcrete1 value) {
         task.set(value);
     }
 

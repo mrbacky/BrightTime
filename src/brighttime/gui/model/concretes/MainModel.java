@@ -3,8 +3,8 @@ package brighttime.gui.model.concretes;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.TaskType1;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
@@ -26,8 +26,8 @@ public class MainModel implements IMainModel {
     private final BllFacade bllManager;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
-    private final ObservableMap<LocalDate, List<TaskType1>> taskMap = FXCollections.observableHashMap();
-    private final ObservableList<TaskType2> taskList = FXCollections.observableArrayList();
+    private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
+    private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -84,7 +84,7 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void addTask(TaskType1 task) throws ModelException {
+    public void addTask(TaskConcrete1 task) throws ModelException {
 //        taskList.add(task);
         try {
             bllManager.createTask(task);
@@ -95,14 +95,14 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public ObservableMap<LocalDate, List<TaskType1>> getTasks() {
+    public ObservableMap<LocalDate, List<TaskConcrete1>> getTasks() {
         return taskMap;
     }
 
     @Override
     public void loadTasks() throws ModelException {
         try {
-            Map<LocalDate, List<TaskType1>> allTasks = bllManager.Tasks();
+            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.Tasks();
             taskMap.clear();
             taskMap.putAll(allTasks);
         } catch (BllException ex) {
@@ -111,15 +111,15 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public ObservableList<TaskType2> getTaskList() {
+    public ObservableList<TaskConcrete2> getTaskList() {
         return taskList;
     }
 
     @Override
     public void getAllTasks() throws ModelException {
         try {
-            List<TaskType2> allTasks = bllManager.getAllTasks();
-            for (TaskType2 task : allTasks) {
+            List<TaskConcrete2> allTasks = bllManager.getAllTasks();
+            for (TaskConcrete2 task : allTasks) {
                 task.setTotalCostString(formatCost(task.getTotalCost()));
                 task.setTotalDurationString(formatDuration(task.getTotalDurationSeconds()));
             }
@@ -151,7 +151,7 @@ public class MainModel implements IMainModel {
     @Override
     public void getAllTasksFiltered(Filter filter) throws ModelException {
         try {
-            List<TaskType2> temp = bllManager.getAllTasksFiltered(filter);
+            List<TaskConcrete2> temp = bllManager.getAllTasksFiltered(filter);
             taskList.clear();
             taskList.addAll(temp);
         } catch (BllException ex) {

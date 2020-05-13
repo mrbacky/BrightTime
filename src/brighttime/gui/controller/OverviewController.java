@@ -3,7 +3,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete2;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
@@ -26,13 +26,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class OverviewController implements Initializable {
     
     @FXML
-    private TableView<TaskType2> tblTasks;
+    private TableView<TaskConcrete2> tblTasks;
     @FXML
-    private TableColumn<TaskType2, String> colName;
+    private TableColumn<TaskConcrete2, String> colName;
     @FXML
-    private TableColumn<TaskType2, String> colHours;
+    private TableColumn<TaskConcrete2, String> colHours;
     @FXML
-    private TableColumn<TaskType2, String> colCost;
+    private TableColumn<TaskConcrete2, String> colCost;
     @FXML
     private JFXComboBox<Client> cboClient;
     @FXML

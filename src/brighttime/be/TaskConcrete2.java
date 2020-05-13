@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author annem
  */
-public class TaskType2 extends Task {
+public class TaskConcrete2 extends TaskBase {
 
     private int rate;
     private final IntegerProperty totalDurationSeconds = new SimpleIntegerProperty();
@@ -19,7 +19,7 @@ public class TaskType2 extends Task {
     private final StringProperty totalDurationString = new SimpleStringProperty();
     private final StringProperty totalCostString = new SimpleStringProperty();
 
-    public TaskType2(int id, String description, Task.Billability billability, int totalDurationSeconds, int rate) {
+    public TaskConcrete2(int id, String description, TaskBase.Billability billability, int totalDurationSeconds, int rate) {
         super(id, description, billability);
         this.rate = rate;
         this.totalDurationSeconds.set(totalDurationSeconds);

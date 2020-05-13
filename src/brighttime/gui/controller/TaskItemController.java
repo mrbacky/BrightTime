@@ -1,7 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
+import brighttime.be.TaskConcrete1;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
@@ -122,7 +122,7 @@ public class TaskItemController implements Initializable {
         }
     }
 
-    public void setTaskDetails(TaskType1 task) {
+    public void setTaskDetails(TaskConcrete1 task) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 

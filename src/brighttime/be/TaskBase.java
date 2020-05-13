@@ -9,20 +9,19 @@ import javafx.beans.property.StringProperty;
  *
  * @author rado
  */
-public abstract class Task {
-//TODO: Make one abstract class and two contrete classes.
+public abstract class TaskBase {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
     private Billability billability;
 
-    public Task(int id, String description, Billability billability) {
+    TaskBase(int id, String description, Billability billability) {
         this.id.set(id);
         this.description.set(description);
         this.billability = billability;
     }
 
-    public Task(String description, Billability billability) {
+    TaskBase(String description, Billability billability) {
         this.description.set(description);
         this.billability = billability;
     }

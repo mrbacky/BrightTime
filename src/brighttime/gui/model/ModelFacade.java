@@ -2,7 +2,7 @@ package brighttime.gui.model;
 
 import brighttime.be.Client;
 import brighttime.be.Project;
-import brighttime.be.Task;
+import brighttime.be.TaskBase;
 import javafx.collections.ObservableList;
 
 /**
@@ -66,10 +66,10 @@ public interface ModelFacade {
      * @return The created task from the database.
      * @throws ModelException
      */
-    Task addTask(Task task) throws ModelException;
+    TaskBase addTask(TaskBase task) throws ModelException;
 
     void loadTasks();
 
-    ObservableList<Task> getTasks();
+    ObservableList<TaskBase> getTasks();
 
 }

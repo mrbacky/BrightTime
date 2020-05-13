@@ -1,7 +1,7 @@
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
+import brighttime.be.TaskConcrete1;
 import brighttime.gui.model.ModelException;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -16,9 +16,9 @@ import javafx.beans.property.StringProperty;
  */
 public interface ITaskModel {
 
-    void setTask(TaskType1 task);
+    void setTask(TaskConcrete1 task);
 
-    TaskType1 getTask();
+    TaskConcrete1 getTask();
 
     Duration calculateDuration(TaskEntry taskEntry);
 

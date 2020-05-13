@@ -4,8 +4,8 @@ import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import brighttime.dal.dao.concretes.ClientDAO;
 import brighttime.dal.dao.concretes.ProjectDAO;
 import brighttime.dal.dao.concretes.TaskDAO;
@@ -74,7 +74,7 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public TaskType1 createTask(TaskType1 task) throws DalException {
+    public TaskConcrete1 createTask(TaskConcrete1 task) throws DalException {
         try {
             return taskDAO.createTask(task);
         } catch (DalException ex) {
@@ -92,7 +92,7 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public Map<LocalDate, List<TaskType1>> Tasks() throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException {
         try {
             return taskDAO.Tasks();
         } catch (DalException ex) {
@@ -120,7 +120,7 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public List<TaskType2> getAllTasks() throws DalException {
+    public List<TaskConcrete2> getAllTasks() throws DalException {
         try {
             return taskDAO.getAllTasks();
         } catch (DalException ex) {
@@ -129,7 +129,7 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public List<TaskType2> getAllTasksFiltered(Filter filter) throws DalException {
+    public List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException {
         try {
             return taskDAO.getAllTasksFiltered(filter);
         } catch (DalException ex) {

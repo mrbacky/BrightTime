@@ -4,8 +4,8 @@ import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +58,7 @@ public interface DalFacade {
      * @return The created task.
      * @throws DalException
      */
-    TaskType1 createTask(TaskType1 task) throws DalException;
+    TaskConcrete1 createTask(TaskConcrete1 task) throws DalException;
 
     /**
      * Gets the tasks logged between today and 30 days ago.
@@ -66,7 +66,7 @@ public interface DalFacade {
      * @return A map with a list of tasks (containing entries) for each day.
      * @throws DalException
      */
-    Map<LocalDate, List<TaskType1>> Tasks() throws DalException;
+    Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException;
 
     /**
      * Creates a task entry in the database.
@@ -81,8 +81,8 @@ public interface DalFacade {
 
     TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
 
-    List<TaskType2> getAllTasks() throws DalException;
+    List<TaskConcrete2> getAllTasks() throws DalException;
 
-    List<TaskType2> getAllTasksFiltered(Filter filter) throws DalException;
+    List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
 }

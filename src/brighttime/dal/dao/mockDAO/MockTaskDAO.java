@@ -3,10 +3,10 @@ package brighttime.dal.dao.mockDAO;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.Task;
+import brighttime.be.TaskBase;
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import brighttime.dal.DalException;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import java.time.LocalDate;
@@ -25,9 +25,9 @@ public class MockTaskDAO implements ITaskDAO {
     private List<TaskEntry> taskEntries2 = new ArrayList<>();
     private List<TaskEntry> taskEntries3 = new ArrayList<>();
 
-    private List<Task> taskList = new ArrayList<>();
+    private List<TaskBase> taskList = new ArrayList<>();
 
-    private Map<LocalDate, List<Task>> taskMap = new HashMap<>();
+    private Map<LocalDate, List<TaskBase>> taskMap = new HashMap<>();
 
     private Project brightTime;
     private Client grumsen;
@@ -68,13 +68,13 @@ public class MockTaskDAO implements ITaskDAO {
 
     }
 
-    public List<Task> getTasksList() {
+    public List<TaskBase> getTasksList() {
 //        return taskList;
         return null;
     }
 
     @Override
-    public Task createTask(TaskType1 task) throws DalException {
+    public TaskConcrete1 createTask(TaskConcrete1 task) throws DalException {
         return task;
     }
 
@@ -88,17 +88,17 @@ public class MockTaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<TaskType1>> Tasks() throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<TaskType2> getAllTasks() throws DalException {
+    public List<TaskConcrete2> getAllTasks() throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<TaskType2> getAllTasksFiltered(Filter filter) throws DalException {
+    public List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

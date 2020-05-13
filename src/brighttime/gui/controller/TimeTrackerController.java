@@ -1,6 +1,6 @@
 package brighttime.gui.controller;
 
-import brighttime.be.TaskType1;
+import brighttime.be.TaskConcrete1;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
@@ -85,12 +85,12 @@ public class TimeTrackerController implements Initializable {
         try {
             mainModel.loadTasks();
             vBoxMain.getChildren().clear();
-            Map<LocalDate, List<TaskType1>> taskList = mainModel.getTasks();
-            Map<LocalDate, List<TaskType1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+            Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTasks();
+            Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
             orderedMap.putAll(taskList);
-            for (Map.Entry<LocalDate, List<TaskType1>> entry : orderedMap.entrySet()) {
+            for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
                 LocalDate dateKey = entry.getKey();
-                List<TaskType1> taskListValue = entry.getValue();
+                List<TaskConcrete1> taskListValue = entry.getValue();
                 if (!dateKey.equals(date)) {
                     String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
                     Label label = new Label(formatted);
@@ -99,7 +99,7 @@ public class TimeTrackerController implements Initializable {
                     label.translateXProperty().set(25);
                     date = dateKey;
                 }
-                for (TaskType1 task : taskListValue) {
+                for (TaskConcrete1 task : taskListValue) {
                     addTaskItem(task);
                 }
             }
@@ -109,7 +109,7 @@ public class TimeTrackerController implements Initializable {
 
     }
 
-    private void addTaskItem(TaskType1 task) {
+    private void addTaskItem(TaskConcrete1 task) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
             Parent root = fxmlLoader.load();

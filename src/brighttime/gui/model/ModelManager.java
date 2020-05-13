@@ -2,7 +2,7 @@ package brighttime.gui.model;
 
 import brighttime.be.Client;
 import brighttime.be.Project;
-import brighttime.be.Task;
+import brighttime.be.TaskBase;
 import brighttime.gui.model.concretes.ClientModel;
 import brighttime.gui.model.concretes.ProjectModel;
 import brighttime.gui.model.concretes.TaskModel;
@@ -94,7 +94,7 @@ public class ModelManager implements ModelFacade {
 //    }
 
     @Override
-    public Task addTask(Task task) throws ModelException {
+    public TaskBase addTask(TaskBase task) throws ModelException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -104,7 +104,7 @@ public class ModelManager implements ModelFacade {
     }
 
     @Override
-    public ObservableList<Task> getTasks() {
+    public ObservableList<TaskBase> getTasks() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -1,6 +1,6 @@
 package brighttime.bll.util;
 
-import brighttime.be.Task;
+import brighttime.be.TaskBase;
 import brighttime.be.TaskEntry;
 import java.time.LocalDateTime;
 import java.util.List;

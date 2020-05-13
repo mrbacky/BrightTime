@@ -3,10 +3,9 @@ package brighttime.dal;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.Task;
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.mockDAO.MockTaskDAO;
 import java.time.LocalDate;
@@ -37,12 +36,12 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public Task createTask(TaskType1 task) throws DalException {
+    public TaskConcrete1 createTask(TaskConcrete1 task) throws DalException {
         return mockTaskDAO.createTask(task);
     }
 
     @Override
-    public Map<LocalDate, List<TaskType1>> Tasks() throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -72,12 +71,12 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public List<TaskType2> getAllTasks() throws DalException {
+    public List<TaskConcrete2> getAllTasks() throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<TaskType2> getAllTasksFiltered(Filter filter) throws DalException {
+    public List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -3,10 +3,10 @@ package brighttime.bll;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.Task;
+import brighttime.be.TaskBase;
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
-import brighttime.be.TaskType2;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import brighttime.dal.DalException;
 import brighttime.dal.DalFacade;
 import java.io.IOException;
@@ -81,7 +81,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public TaskType1 createTask(TaskType1 task) throws BllException {
+    public TaskConcrete1 createTask(TaskConcrete1 task) throws BllException {
         try {
             return dalManager.createTask(task);
         } catch (DalException ex) {
@@ -129,7 +129,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Map<LocalDate, List<TaskType1>> Tasks() throws BllException {
+    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws BllException {
         try {
             return dalManager.Tasks();
         } catch (DalException ex) {
@@ -157,11 +157,11 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public List<TaskType2> getAllTasks() throws BllException {
+    public List<TaskConcrete2> getAllTasks() throws BllException {
         try {
-            List<TaskType2> allTasks = dalManager.getAllTasks();
-            for (TaskType2 task : allTasks) {
-                if (task.getBillability() == Task.Billability.BILLABLE) {
+            List<TaskConcrete2> allTasks = dalManager.getAllTasks();
+            for (TaskConcrete2 task : allTasks) {
+                if (task.getBillability() == TaskBase.Billability.BILLABLE) {
                     double totalCost = calculateTotalCost(task.getTotalDurationSeconds(), task.getRate());
                     task.setTotalCost(totalCost);
                 } else {
@@ -183,11 +183,11 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public List<TaskType2> getAllTasksFiltered(Filter filter) throws BllException {
+    public List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws BllException {
         try {
-            List<TaskType2> filtered = dalManager.getAllTasksFiltered(filter);
-            for (TaskType2 task : filtered) {
-                if (task.getBillability() == Task.Billability.BILLABLE) {
+            List<TaskConcrete2> filtered = dalManager.getAllTasksFiltered(filter);
+            for (TaskConcrete2 task : filtered) {
+                if (task.getBillability() == TaskBase.Billability.BILLABLE) {
                     double totalCost = calculateTotalCost(task.getTotalDurationSeconds(), task.getRate());
                     task.setTotalCost(totalCost);
                 } else {

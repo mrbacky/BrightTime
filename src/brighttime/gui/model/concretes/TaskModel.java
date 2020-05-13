@@ -1,7 +1,7 @@
 package brighttime.gui.model.concretes;
 
 import brighttime.be.TaskEntry;
-import brighttime.be.TaskType1;
+import brighttime.be.TaskConcrete1;
 import brighttime.bll.BllFacade;
 import brighttime.bll.BllException;
 import brighttime.gui.model.ModelException;
@@ -27,7 +27,7 @@ import javafx.beans.value.ObservableValue;
 public class TaskModel implements ITaskModel {
 
     private final BllFacade bllManager;
-    private TaskType1 task;
+    private TaskConcrete1 task;
     private LocalDate date;
 
     private ObjectProperty<List<TaskEntry>> dayEntryList = new SimpleObjectProperty<>();
@@ -113,13 +113,13 @@ public class TaskModel implements ITaskModel {
     }
 
     @Override
-    public void setTask(TaskType1 task) {
+    public void setTask(TaskConcrete1 task) {
         this.task = task;
 
     }
 
     @Override
-    public TaskType1 getTask() {
+    public TaskConcrete1 getTask() {
         return task;
     }
 
