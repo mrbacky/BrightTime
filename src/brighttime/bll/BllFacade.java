@@ -99,4 +99,8 @@ public interface BllFacade {
 
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws BllException;
 
+    String formatDuration(int durationSeconds);
+
+    String formatCost(double cost);
+
 }

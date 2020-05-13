@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
+ * A concrete type of Task used in the Overview view.
  *
  * @author annem
  */

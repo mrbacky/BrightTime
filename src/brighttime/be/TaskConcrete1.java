@@ -6,6 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
+ * A concrete type of Task used in the TimeTracker view.
  *
  * @author annem
  */

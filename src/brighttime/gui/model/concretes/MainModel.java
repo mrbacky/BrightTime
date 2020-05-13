@@ -9,7 +9,6 @@ import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -120,8 +119,8 @@ public class MainModel implements IMainModel {
         try {
             List<TaskConcrete2> allTasks = bllManager.getAllTasks();
             for (TaskConcrete2 task : allTasks) {
-                task.setTotalCostString(formatCost(task.getTotalCost()));
-                task.setTotalDurationString(formatDuration(task.getTotalDurationSeconds()));
+                task.setTotalCostString(bllManager.formatCost(task.getTotalCost()));
+                task.setTotalDurationString(bllManager.formatDuration(task.getTotalDurationSeconds()));
             }
             taskList.clear();
             taskList.addAll(allTasks);
@@ -130,28 +129,14 @@ public class MainModel implements IMainModel {
         }
     }
 
-    private String formatCost(double cost) {
-        DecimalFormat df = new DecimalFormat("#,###,###,###,###,##0.00");
-        String formattedDuration = df.format(cost);
-        return formattedDuration;
-    }
-
-    private String formatDuration(int seconds) {
-        int hours, mins, secs;
-        mins = (int) (seconds / 60);
-        while (mins > 60) {
-            mins = mins % 60;
-        }
-        hours = (int) ((seconds / 60) / 60);
-        secs = seconds % 60;
-        String formattedDuration = String.format("%02d:%02d:%02d", hours, mins, secs);
-        return formattedDuration;
-    }
-
     @Override
     public void getAllTasksFiltered(Filter filter) throws ModelException {
         try {
             List<TaskConcrete2> temp = bllManager.getAllTasksFiltered(filter);
+            for (TaskConcrete2 task : temp) {
+                task.setTotalCostString(bllManager.formatCost(task.getTotalCost()));
+                task.setTotalDurationString(bllManager.formatDuration(task.getTotalDurationSeconds()));
+            }
             taskList.clear();
             taskList.addAll(temp);
         } catch (BllException ex) {
