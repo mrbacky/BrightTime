@@ -1,7 +1,9 @@
 package brighttime.dal.dao.interfaces;
 
 import brighttime.be.Filter;
-import brighttime.be.Task;
+import brighttime.be.TaskBase;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskConcrete2;
 import brighttime.dal.DalException;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +22,7 @@ public interface ITaskDAO {
      * @return The created task.
      * @throws DalException
      */
-    Task createTask(Task task) throws DalException;
+    TaskConcrete1 createTask(TaskConcrete1 task) throws DalException;
 
     /**
      * Gets the tasks logged between today and 30 days ago.
@@ -28,12 +30,10 @@ public interface ITaskDAO {
      * @return A map with a list of tasks (containing entries) for each day.
      * @throws DalException
      */
-    Map<LocalDate, List<Task>> Tasks() throws DalException;
+    Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException;
 
-    List<Task> getAllTasks() throws DalException;
+    List<TaskConcrete2> getAllTasks() throws DalException;
 
-    Map<Integer, Integer> getRate() throws DalException;
-
-    List<Task> getAllTasksFiltered(Filter filter) throws DalException;
+    List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
 }

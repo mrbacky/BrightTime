@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
    <children>
       <ScrollPane layoutX="199.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
@@ -16,7 +16,7 @@
                <children>
                   <TableView fx:id="tbvTasks" layoutX="219.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0">
                     <columns>
-                      <TableColumn fx:id="colTaskDesc" prefWidth="452.0" text="Task description" />
+                      <TableColumn fx:id="colTaskDescription" prefWidth="452.0" text="Task description" />
                       <TableColumn fx:id="colHours" prefWidth="101.0" text="Hours" />
                         <TableColumn fx:id="colCost" maxWidth="186.0" minWidth="50.0" prefWidth="89.0" text="Cost" />
                     </columns>

@@ -3,7 +3,7 @@ package brighttime.gui.controller;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
-import brighttime.be.Task;
+import brighttime.be.TaskConcrete2;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
@@ -14,11 +14,8 @@ import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,14 +32,14 @@ import javafx.scene.layout.AnchorPane;
 public class OverviewController implements Initializable {
 
     @FXML
-    private TableView<Task> tbvTasks;
+    private TableView<TaskConcrete2> tbvTasks;
 
     @FXML
-    private TableColumn<Task, String> colTaskDesc;
+    private TableColumn<TaskConcrete2, String> colTaskDescription;
     @FXML
-    private TableColumn<Task, Integer> colHours;
+    private TableColumn<TaskConcrete2, String> colHours;
     @FXML
-    private TableColumn<Task, Integer> colCost;
+    private TableColumn<TaskConcrete2, String> colCost;
 
     private IMainModel mainModel;
     private final AlertManager alertManager;
@@ -139,9 +136,9 @@ public class OverviewController implements Initializable {
     }
 
     private void setTable() {
-        colTaskDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
-        colHours.setCellValueFactory(new PropertyValueFactory<>("totalDuration"));
-        colCost.setCellValueFactory(new PropertyValueFactory<>("totalCost"));
+        colTaskDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colHours.setCellValueFactory(new PropertyValueFactory<>("totalDurationString"));
+        colCost.setCellValueFactory(new PropertyValueFactory<>("totalCostString"));
         tbvTasks.setItems(mainModel.getTaskList());
         try {
             mainModel.getAllTasks();

@@ -1,9 +1,8 @@
 package brighttime.gui.model.concretes;
 
-import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.be.TaskConcrete1;
 import brighttime.bll.BllFacade;
-import brighttime.bll.BllManager;
 import brighttime.bll.BllException;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskModel;
@@ -11,22 +10,14 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  *
@@ -36,7 +27,7 @@ import javafx.collections.ObservableList;
 public class TaskModel implements ITaskModel {
 
     private final BllFacade bllManager;
-    private Task task;
+    private TaskConcrete1 task;
     private LocalDate date;
 
     private ObjectProperty<List<TaskEntry>> dayEntryList = new SimpleObjectProperty<>();
@@ -122,13 +113,13 @@ public class TaskModel implements ITaskModel {
     }
 
     @Override
-    public void setTask(Task task) {
+    public void setTask(TaskConcrete1 task) {
         this.task = task;
 
     }
 
     @Override
-    public Task getTask() {
+    public TaskConcrete1 getTask() {
         return task;
     }
 

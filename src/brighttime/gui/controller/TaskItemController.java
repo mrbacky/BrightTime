@@ -1,7 +1,7 @@
 package brighttime.gui.controller;
 
-import brighttime.be.Task;
 import brighttime.be.TaskEntry;
+import brighttime.be.TaskConcrete1;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
@@ -9,7 +9,6 @@ import brighttime.gui.model.interfaces.ITaskModel;
 import brighttime.gui.util.AlertManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -26,9 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -125,7 +122,7 @@ public class TaskItemController implements Initializable {
         }
     }
 
-    public void setTaskDetails(Task task) {
+    public void setTaskDetails(TaskConcrete1 task) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
@@ -138,8 +135,6 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
-        
-        
         lblStartTime.textProperty().bind(Bindings.createStringBinding(()
                 -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 

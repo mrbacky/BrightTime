@@ -1,6 +1,5 @@
 package brighttime.bll.util;
 
-import brighttime.be.Task;
 import brighttime.be.TaskEntry;
 import java.time.Duration;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public class TaskDurationCalculator {
 
-    private EntryDurationCalculator entryDurationCalculator;
+    private final EntryDurationCalculator entryDurationCalculator;
 
     public TaskDurationCalculator() {
         entryDurationCalculator = new EntryDurationCalculator();
