@@ -1,6 +1,7 @@
 package brighttime.dal;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
@@ -16,8 +17,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -114,6 +113,33 @@ public class DalManager implements DalFacade {
     public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
         try {
             return taskEntryDAO.updateTaskEntryEndTime(taskEntry);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<Task> getAllTasks() throws DalException {
+        try {
+            return taskDAO.getAllTasks();
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Map<Integer, Integer> getRate() throws DalException {
+        try {
+            return taskDAO.getRate();
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<Task> getAllTasksFiltered(Filter filter) throws DalException {
+        try {
+            return taskDAO.getAllTasksFiltered(filter);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }

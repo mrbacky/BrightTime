@@ -14,6 +14,7 @@ import java.util.List;
  * @author rado
  */
 public class Task {
+//TODO: Make one abstract class and two contrete classes.
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
@@ -21,6 +22,66 @@ public class Task {
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
     private Billability billability;
+    private final IntegerProperty totalDuration = new SimpleIntegerProperty();
+    private final IntegerProperty totalCost = new SimpleIntegerProperty();
+    private int projectId;
+    private int rate;
+
+    public int getTotalDuration() {
+        return totalDuration.get();
+    }
+
+    public void setTotalDuration(int value) {
+        totalDuration.set(value);
+    }
+
+    public IntegerProperty totalDurationProperty() {
+        return totalDuration;
+    }
+
+    public int getTotalCost() {
+        return totalCost.get();
+    }
+
+    public void setTotalCost(int value) {
+        totalCost.set(value);
+    }
+
+    public IntegerProperty totalCostProperty() {
+        return totalCost;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
+    public Task(int id, String description, int totalHours, Billability billability, int projectId) {
+        this.id.set(id);
+        this.description.set(description);
+        this.billability = billability;
+        this.totalDuration.set(totalHours);
+        this.projectId = projectId;
+    }
+
+    public Task(int id, String description, int totalHours, int rate, Billability billability) {
+        this.id.set(id);
+        this.description.set(description);
+        this.billability = billability;
+        this.rate = rate;
+        this.totalDuration.set(totalHours);
+    }
 
     public Task(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
         this.id.set(id);

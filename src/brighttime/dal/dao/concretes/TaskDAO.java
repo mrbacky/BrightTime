@@ -1,6 +1,7 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
@@ -10,6 +11,7 @@ import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -266,6 +268,163 @@ public class TaskDAO implements ITaskDAO {
             throw new DalException(ex.getMessage());
         }
         return tasks;
+    }
+
+    @Override
+    public List<Task> getAllTasks() throws DalException {
+        List<Task> allTasks = new ArrayList<>();
+        //TODO: Make one method like getAllTasksFiltered(), so there is only one database call. 
+        String sql = "SELECT T.id, T.description, "
+                + "	SUM(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
+                + "	T.billability, T.projectId "
+                + "FROM Task T "
+                + "JOIN TaskEntry TE "
+                + "	ON T.id = TE.taskId "
+                + "GROUP BY T.id, T.description, T.billability, T.projectId";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                //TODO: Is it necessary to get unused info?
+
+                String billability = rs.getString("billability");
+
+                if (billability.equals("B")) {
+                    allTasks.add(new Task(rs.getInt("id"),
+                            rs.getString("description"),
+                            rs.getInt("totalDuration"),
+                            Task.Billability.BILLABLE,
+                            rs.getInt("projectId")));
+                } else if (billability.equals("N")) {
+                    allTasks.add(new Task(rs.getInt("id"),
+                            rs.getString("description"),
+                            rs.getInt("totalDuration"),
+                            Task.Billability.NON_BILLABLE,
+                            rs.getInt("projectId")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+        return allTasks;
+    }
+
+    @Override
+    public Map<Integer, Integer> getRate() throws DalException {
+        Map<Integer, Integer> map = new HashMap<>();
+        String sql = "SELECT P.id AS projectId, P.hourlyRate AS rate "
+                + "	FROM Project P "
+                + "	WHERE P.hourlyRate > 0 "
+                + "UNION "
+                + "SELECT P2.id AS projectId, C.hourlyRate AS rate "
+                + "FROM "
+                + "	Project P2 "
+                + "	JOIN Client C "
+                + "		ON P2.clientId = C.id "
+                + "	WHERE P2.hourlyRate = 0";
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                map.put(rs.getInt("projectId"), rs.getInt("rate"));
+            }
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+        return map;
+    }
+
+    @Override
+    public List<Task> getAllTasksFiltered(Filter filter) throws DalException {
+        List<Task> filtered = new ArrayList<>();
+
+        String sql = "SELECT A2.id, A2.description, "
+                + "	SUM(A2.totalDuration) AS totalDuration, "
+                + "	A2.billability, A1.clientRate, A1.projectRate "
+                + "FROM "
+                + "	( "
+                + "	SELECT C.hourlyRate AS clientRate, P.hourlyRate AS projectRate, P.id AS projectId "
+                + "	FROM Client C "
+                + "	JOIN Project P "
+                + "	ON C.id = P.clientId "
+                + "	) "
+                + "	AS A1 "
+                + "JOIN "
+                + "	( "
+                + "	SELECT T.id, T.description, "
+                + "	(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
+                + "	T.billability, T.projectId "
+                + "	FROM Task T "
+                + "	JOIN TaskEntry TE "
+                + "	ON T.id = TE.taskId "
+                + "	WHERE ";
+
+        String sqlFinal = buildSql(sql, filter);
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sqlFinal);
+
+            int i = 0;
+
+            if (filter.getProject() != null) {
+                pstmt.setInt(++i, filter.getProject().getId());
+            }
+
+            if (filter.getStartDate() != null && filter.getEndDate() != null) {
+                pstmt.setDate(++i, Date.valueOf(filter.getStartDate()));
+                pstmt.setDate(++i, Date.valueOf(filter.getEndDate().plusDays(1)));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                //TODO: Is it necessary to get unused info?
+
+                String rsBillability = rs.getString("billability");
+
+                int rate;
+                Task.Billability billability;
+
+                if (rsBillability.equals("B")) {
+                    billability = Task.Billability.BILLABLE;
+                    rate = rs.getInt("projectRate");
+                    if (rate == 0) {
+                        rate = rs.getInt("clientRate");
+                    };
+                } else {
+                    billability = Task.Billability.NON_BILLABLE;
+                    rate = 0;
+                }
+
+                filtered.add(new Task(rs.getInt("id"),
+                        rs.getString("description"),
+                        rs.getInt("totalDuration"),
+                        rate,
+                        billability));
+            }
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+        return filtered;
+    }
+
+    private String buildSql(String sql, Filter filter) {
+        if (filter.getProject() != null) {
+            sql += "T.projectId = ? ";
+        }
+
+        if (filter.getStartDate() != null && filter.getEndDate() != null) {
+            if (filter.getProject() != null) {
+                sql += "AND ";
+            }
+            sql += "TE.startTime BETWEEN ? AND ? ";
+        }
+        sql += "	) AS A2 "
+                + "ON A1.projectId = A2.projectId "
+                + "GROUP BY A2.id, A2.description, A2.billability, "
+                + "	A1.clientRate, A1.projectRate ";
+        return sql;
     }
 
 }

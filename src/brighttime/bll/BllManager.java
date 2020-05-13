@@ -1,6 +1,7 @@
 package brighttime.bll;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
@@ -17,8 +18,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -153,6 +152,52 @@ public class BllManager implements BllFacade {
             throw new BllException(ex.getMessage());
         }
 
+    }
+
+    @Override
+    public List<Task> getAllTasks() throws BllException {
+        try {
+            List<Task> allTasks = dalManager.getAllTasks();
+            Map<Integer, Integer> rateMap = dalManager.getRate();
+            for (Task allTask : allTasks) {
+                if (allTask.getBillability() == Task.Billability.BILLABLE) {
+                    int totalCost = calculateTotalCost(allTask.getTotalDuration(), rateMap.get(allTask.getProjectId()));
+                    allTask.setTotalCost(totalCost);
+                } else {
+                    allTask.setTotalCost(0);
+                }
+            }
+            return allTasks;
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    //TODO: Make a utility class with this method.
+    //It's here now, because it is more convenient to code in one class.
+    //TODO: Change the calculation method and data type, so the rounding is correct.
+    private int calculateTotalCost(int durationSeconds, int rate) {
+        int d = (durationSeconds * rate) / (60 * 60);
+        //double durationHours = durationSeconds / (60 * 60);
+        return d;
+    }
+
+    @Override
+    public List<Task> getAllTasksFiltered(Filter filter) throws BllException {
+        try {
+            List<Task> filtered = dalManager.getAllTasksFiltered(filter);
+            for (Task task : filtered) {
+                if (task.getBillability() == Task.Billability.BILLABLE) {
+                    int totalCost = calculateTotalCost(task.getTotalDuration(), task.getRate());
+                    task.setTotalCost(totalCost);
+                } else {
+                    task.setTotalCost(0);
+                }
+            }
+            return filtered;
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
 }

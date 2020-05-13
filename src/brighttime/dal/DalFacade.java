@@ -1,6 +1,7 @@
 package brighttime.dal;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.be.TaskEntry;
@@ -78,5 +79,11 @@ public interface DalFacade {
     TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
 
     TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
+
+    List<Task> getAllTasks() throws DalException;
+
+    Map<Integer, Integer> getRate() throws DalException;
+
+    List<Task> getAllTasksFiltered(Filter filter) throws DalException;
 
 }

@@ -1,6 +1,7 @@
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.Client;
+import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.Task;
 import brighttime.gui.model.ModelException;
@@ -68,5 +69,11 @@ public interface IMainModel {
     ObservableMap<LocalDate, List<Task>> getTasks();
 
     void loadTasks() throws ModelException;
+
+    ObservableList<Task> getTaskList();
+
+    void getAllTasks() throws ModelException;
+
+    void getAllTasksFiltered(Filter filter) throws ModelException;
 
 }

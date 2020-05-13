@@ -1,7 +1,7 @@
 package brighttime.dal.dao.interfaces;
 
+import brighttime.be.Filter;
 import brighttime.be.Task;
-import brighttime.be.TaskEntry;
 import brighttime.dal.DalException;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,5 +29,11 @@ public interface ITaskDAO {
      * @throws DalException
      */
     Map<LocalDate, List<Task>> Tasks() throws DalException;
+
+    List<Task> getAllTasks() throws DalException;
+
+    Map<Integer, Integer> getRate() throws DalException;
+
+    List<Task> getAllTasksFiltered(Filter filter) throws DalException;
 
 }

@@ -53,7 +53,8 @@ public class ProjectDAO implements IProjectDAO {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT id, name "
                 + "  FROM Project "
-                + "  WHERE clientId = ?";
+                + "  WHERE clientId = ?"
+                + "  ORDER BY name";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
