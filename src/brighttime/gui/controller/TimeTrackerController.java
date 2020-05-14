@@ -76,7 +76,6 @@ public class TimeTrackerController implements Initializable {
 
     public void initializeView() {
         try {
-//            vBoxMain.getChildren().clear();
 
             setUpTaskCreator();
             mainModel.loadTasks();

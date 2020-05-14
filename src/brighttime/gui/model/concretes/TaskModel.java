@@ -175,18 +175,12 @@ public class TaskModel implements ITaskModel {
 //    }
     @Override
     public void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException {
+
         try {
             TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
-            if (task.getTaskEntryList().isEmpty()) {
-                List<TaskEntry> taskEntryList = new ArrayList<>();
-                task.getTaskEntryList().add(newTaskEntry);
-//                taskEntryList.add(newTaskEntry);
-//                task.setTaskEntryList(taskEntryList);
-            } else {
-                task.getTaskEntryList().add(newTaskEntry);
-                bllManager.createTaskEntry(newTaskEntry);
+            TaskEntry fromDBEntry = bllManager.createTaskEntry(newTaskEntry);
 
-            }
+            task.getTaskEntryList().add(fromDBEntry);
 
 //  call createTaskEntry from DB here
 //  TODO: create entryList in task OBJ if the list does not exist
@@ -198,7 +192,7 @@ public class TaskModel implements ITaskModel {
 //            task.getTaskEntryList().add(newTaskEntry);
 //        }
         } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
+            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -103,17 +103,18 @@ public class MainModel implements IMainModel {
     public void addTask(Task task) throws ModelException {
 //        taskList.add(task);
         try {
-            List<Task> taskList = taskMap.get(task.getCreationTime().toLocalDate());
+            Task newTask = bllManager.createTask(task);
+            List<Task> taskList = taskMap.get(newTask.getCreationTime().toLocalDate());
             if (taskList == null) {
                 taskList = new ArrayList<>();
-                taskList.add(task);
-                taskMap.put(task.getCreationTime().toLocalDate(), taskList);
+                taskList.add(newTask);
+                taskMap.put(newTask.getCreationTime().toLocalDate(), taskList);
             } else {
 //                i // O(n*m) = O(n*n)
-                taskList.add(task);
+                taskList.add(newTask);
 
             }
-            bllManager.createTask(task);
+
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
