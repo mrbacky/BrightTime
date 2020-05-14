@@ -211,15 +211,17 @@ public class TaskItemController implements Initializable {
                 imgPlayPause.setImage(PLAY_ICON_IMAGE);
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
+                
+                
                 //  refresh
-                Platform.runLater(() -> {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    timeTrackerController.initializeView();
-                });
+//                Platform.runLater(() -> {
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+////                    timeTrackerController.initializeView();
+//                });
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
             }

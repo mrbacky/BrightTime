@@ -9,12 +9,15 @@ import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.Node;
 
 /**
  *
@@ -25,10 +28,25 @@ public class MainModel implements IMainModel {
     private final BllFacade bllManager;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
-    private final ObservableMap<LocalDate, List<Task>> taskMap = FXCollections.observableHashMap();
+    public final ObservableMap<LocalDate, List<Task>> taskMap = FXCollections.observableHashMap();
+
+    private final ObservableMap<LocalDate, List<Node>> taskItems = FXCollections.observableHashMap();
+
+    private final ObservableList<Node> nodeList = FXCollections.observableArrayList();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
+//        setupTaskMapListener();
+    }
+
+    @Override
+    public ObservableList<Node> getNodeList() {
+        return nodeList;
+    }
+
+    @Override
+    public ObservableMap<LocalDate, List<Node>> getTaskItemMap() {
+        return taskItems;
     }
 
     @Override
@@ -90,14 +108,10 @@ public class MainModel implements IMainModel {
                 taskList = new ArrayList<>();
                 taskList.add(task);
                 taskMap.put(task.getCreationTime().toLocalDate(), taskList);
-                System.out.println("task List in this key: " + taskList);
             } else {
-                if (!taskList.contains(task)) {
-                    taskList.add(task);
-                    for (Task task1 : taskList) {
-                        System.out.println("task from list: " + task1);
-                    }
-                }
+//                i // O(n*m) = O(n*n)
+                taskList.add(task);
+
             }
             bllManager.createTask(task);
         } catch (BllException ex) {
@@ -122,4 +136,10 @@ public class MainModel implements IMainModel {
         }
     }
 
+//    private void setupTaskMapListener() {
+//        taskMap.addListener((MapChangeListener.Change<? extends LocalDate, ? extends List<Task>> change) -> {
+//            
+//        });
+//        
+//    }
 }
