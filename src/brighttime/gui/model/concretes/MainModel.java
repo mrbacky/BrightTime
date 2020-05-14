@@ -5,6 +5,7 @@ import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
@@ -27,6 +28,7 @@ public class MainModel implements IMainModel {
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
     private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
     private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
+    private final ObservableList<User> userList = FXCollections.observableArrayList();
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -142,6 +144,22 @@ public class MainModel implements IMainModel {
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
+    }
+
+    @Override
+    public void loadUsers() throws ModelException {
+        try {
+            List<User> allUsers = bllManager.getUsers();
+            userList.clear();
+            userList.addAll(allUsers);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public ObservableList<User> getUserList() {
+        return userList;
     }
 
 }

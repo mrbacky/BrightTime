@@ -6,6 +6,7 @@ import brighttime.be.Project;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -85,4 +86,6 @@ public interface DalFacade {
 
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
+    List<User> getUsers() throws DalException;
+    
 }

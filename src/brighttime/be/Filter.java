@@ -10,6 +10,7 @@ import java.time.LocalDate;
  */
 public class Filter {
 
+    private User user;
     private Project project;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -17,14 +18,24 @@ public class Filter {
     /**
      * The constructor.
      *
+     * @param user
      * @param project
      * @param startDate
      * @param endDate
      */
-    public Filter(Project project, LocalDate startDate, LocalDate endDate) {
+    public Filter(User user, Project project, LocalDate startDate, LocalDate endDate) {
+        this.user = user;
         this.project = project;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Project getProject() {

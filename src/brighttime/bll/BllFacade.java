@@ -6,6 +6,8 @@ import brighttime.be.Project;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
+import brighttime.dal.DalException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -102,5 +104,7 @@ public interface BllFacade {
     String formatDuration(int durationSeconds);
 
     String formatCost(double cost);
+    
+    List<User> getUsers() throws BllException;
 
 }

@@ -4,6 +4,7 @@ import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
@@ -30,26 +31,26 @@ import javafx.scene.layout.AnchorPane;
  * @author rados
  */
 public class OverviewController implements Initializable {
-
+    
     @FXML
     private TableView<TaskConcrete2> tbvTasks;
-
+    
     @FXML
     private TableColumn<TaskConcrete2, String> colTaskDescription;
     @FXML
     private TableColumn<TaskConcrete2, String> colHours;
     @FXML
     private TableColumn<TaskConcrete2, String> colCost;
-
+    
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
-
+    
     @FXML
     private AnchorPane apOverview;
-
+    
     @FXML
-    private JFXComboBox<?> cboUsers;
+    private JFXComboBox<User> cboUsers;
     @FXML
     private JFXComboBox<Client> cboClients;
     @FXML
@@ -66,6 +67,8 @@ public class OverviewController implements Initializable {
     private JFXButton btnLastWeek;
     @FXML
     private JFXButton btnLastMonth;
+    @FXML
+    private JFXButton btnClearFilters;
 
     //TODO: Very basic and lacking implementation made to check the connection between the view and database.
     public OverviewController() {
@@ -80,20 +83,38 @@ public class OverviewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-
+    
     void initializeView() {
         System.out.println("in Overview page");
+        setUsersIntoComboBox();
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
         setValidators();
         setTable();
+        selectUser();
         selectProject();
         listenDatePickerStart();
         listenDatePickerEnd();
+        clearFilters();
     }
-
+    
     void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
+    }
+
+    /**
+     * Sets the users into the ComboBox.
+     */
+    private void setUsersIntoComboBox() {
+        if (mainModel.getUserList() != null) {
+            try {
+                mainModel.loadUsers();
+                cboUsers.getItems().clear();
+                cboUsers.getItems().addAll(mainModel.getUserList());
+            } catch (ModelException ex) {
+                alertManager.showAlert("Could not get the users.", "An error occured: " + ex.getMessage());
+            }
+        }
     }
 
     /**
@@ -129,12 +150,12 @@ public class OverviewController implements Initializable {
             }
         });
     }
-
+    
     private void setValidators() {
         validationManager.selectionValidation(cboClients, "No client selected.");
         validationManager.selectionValidation(cboProjects, "No project selected.");
     }
-
+    
     private void setTable() {
         colTaskDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colHours.setCellValueFactory(new PropertyValueFactory<>("totalDurationString"));
@@ -146,87 +167,99 @@ public class OverviewController implements Initializable {
             alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
         }
     }
-
+    
+    private void selectUser() {
+        cboUsers.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
+            if (newVal != null) {
+                try {
+                    mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+                } catch (ModelException ex) {
+                    alertManager.showAlert("Could not filter by user.", "An error occured: " + ex.getMessage());
+                }
+            }
+        });
+    }
+    
     private void selectProject() {
         cboProjects.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(newVal, dpStartDate.getValue(), dpEndDate.getValue()));
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, dpStartDate.getValue(), dpEndDate.getValue()));
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by project.", "An error occured: " + ex.getMessage());
                 }
             }
         });
     }
-
+    
     private void listenDatePickerStart() {
         dpStartDate.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && dpEndDate.getValue() != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(cboProjects.getValue(), newValue, dpEndDate.getValue()));
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
                 }
             }
         });
     }
-
+    
     private void listenDatePickerEnd() {
         dpEndDate.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && dpStartDate.getValue() != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(cboProjects.getValue(), dpStartDate.getValue(), newValue));
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
                 }
             }
         });
     }
-
+    
     @FXML
     private void handleThisWeek(ActionEvent event) {
         try {
             LocalDate firstDayOfThisWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
             LocalDate lastDayOfThisWeek = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
+            
             dpStartDate.setValue(firstDayOfThisWeek);
             dpEndDate.setValue(lastDayOfThisWeek);
-            mainModel.getAllTasksFiltered(new Filter(cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
         } catch (ModelException ex) {
             alertManager.showAlert("Could not filter in this week", "An error occured: " + ex.getMessage());
         }
     }
-
+    
     @FXML
     private void handleThisMonth(ActionEvent event) {
         try {
             LocalDate today = LocalDate.now();
             LocalDate firstDayInThisMonth = today.withDayOfMonth(1);
             LocalDate endDayInThisMonth = today.withDayOfMonth(today.lengthOfMonth());
-
+            
             dpStartDate.setValue(firstDayInThisMonth);
             dpEndDate.setValue(endDayInThisMonth);
-            mainModel.getAllTasksFiltered(new Filter(cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
         } catch (ModelException ex) {
             alertManager.showAlert("Could not filter in this month", "An error occured: " + ex.getMessage());
         }
     }
-
+    
     @FXML
     private void handleLastWeek(ActionEvent event) {
         try {
             LocalDate firstDayOfLastWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.MONDAY);
             LocalDate lastDayOfLastWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.SUNDAY);
-
+            
             dpStartDate.setValue(firstDayOfLastWeek);
             dpEndDate.setValue(lastDayOfLastWeek);
-
-            mainModel.getAllTasksFiltered(new Filter(cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+            
+            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
         } catch (ModelException ex) {
             alertManager.showAlert("Could not filter in this week", "An error occured: " + ex.getMessage());
         }
     }
-
+    
     @FXML
     private void handleLastMonth(ActionEvent event) {
         try {
@@ -234,14 +267,30 @@ public class OverviewController implements Initializable {
             LocalDate lastMonth = today.minusMonths(1);
             LocalDate firstDayOfLastMonth = lastMonth.withDayOfMonth(1);
             LocalDate lastDayOfLastMonth = lastMonth.withDayOfMonth(lastMonth.lengthOfMonth());
-
+            
             dpStartDate.setValue(firstDayOfLastMonth);
             dpEndDate.setValue(lastDayOfLastMonth);
-
-            mainModel.getAllTasksFiltered(new Filter(cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+            
+            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
         } catch (ModelException ex) {
             alertManager.showAlert("Could not filter in this month", "An error occured: " + ex.getMessage());
         }
+        
     }
-
+    
+    private void clearFilters() {
+        btnClearFilters.setOnAction((event) -> {
+            try {
+                cboUsers.getSelectionModel().clearSelection();
+                cboClients.getSelectionModel().clearSelection();
+                cboProjects.getSelectionModel().clearSelection();
+                dpStartDate.setValue(null);
+                dpEndDate.setValue(null);
+                mainModel.getAllTasks();                
+            } catch (ModelException ex) {
+                alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
+            }
+        });
+    }
+    
 }

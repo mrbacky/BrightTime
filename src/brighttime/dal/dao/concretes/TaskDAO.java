@@ -299,7 +299,8 @@ public class TaskDAO implements ITaskDAO {
                 + "	AS A2 "
                 + "ON A1.projectId = A2.projectId "
                 + "GROUP BY A2.id, A2.description, A2.billability, "
-                + "	A1.clientRate, A1.projectRate";
+                + "	A1.clientRate, A1.projectRate "
+                + "ORDER BY A2.description";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -368,6 +369,10 @@ public class TaskDAO implements ITaskDAO {
 
             int i = 0;
 
+            if (filter.getUser() != null) {
+                pstmt.setInt(++i, filter.getUser().getId());
+            }
+
             if (filter.getProject() != null) {
                 pstmt.setInt(++i, filter.getProject().getId());
             }
@@ -411,12 +416,18 @@ public class TaskDAO implements ITaskDAO {
     }
 
     private String buildSql(String sql, Filter filter) {
+        if (filter.getUser() != null) {
+            sql += "T.userId = ? ";
+        }
         if (filter.getProject() != null) {
+            if (filter.getUser() != null) {
+                sql += "AND ";
+            }
             sql += "T.projectId = ? ";
         }
 
         if (filter.getStartDate() != null && filter.getEndDate() != null) {
-            if (filter.getProject() != null) {
+            if (filter.getUser() != null || filter.getProject() != null) {
                 sql += "AND ";
             }
             sql += "TE.startTime BETWEEN ? AND ? ";
@@ -424,7 +435,8 @@ public class TaskDAO implements ITaskDAO {
         sql += "	) AS A2 "
                 + "ON A1.projectId = A2.projectId "
                 + "GROUP BY A2.id, A2.description, A2.billability, "
-                + "	A1.clientRate, A1.projectRate ";
+                + "	A1.clientRate, A1.projectRate "
+                + "ORDER BY A2.description";
         return sql;
     }
 

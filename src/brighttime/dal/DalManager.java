@@ -6,14 +6,17 @@ import brighttime.be.Project;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import brighttime.dal.dao.concretes.ClientDAO;
 import brighttime.dal.dao.concretes.ProjectDAO;
 import brighttime.dal.dao.concretes.TaskDAO;
 import brighttime.dal.dao.concretes.TaskEntryDAO;
+import brighttime.dal.dao.concretes.UserDAO;
 import brighttime.dal.dao.interfaces.IClientDAO;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
+import brighttime.dal.dao.interfaces.IUserDAO;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,12 +32,14 @@ public class DalManager implements DalFacade {
     private final IProjectDAO projectDAO;
     private final ITaskDAO taskDAO;
     private final ITaskEntryDAO taskEntryDAO;
+    private IUserDAO userDAO;
 
     public DalManager() throws IOException {
         clientDAO = new ClientDAO();
         projectDAO = new ProjectDAO();
         taskDAO = new TaskDAO();
         taskEntryDAO = new TaskEntryDAO();
+        userDAO = new UserDAO();
     }
 
     @Override
@@ -132,6 +137,15 @@ public class DalManager implements DalFacade {
     public List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException {
         try {
             return taskDAO.getAllTasksFiltered(filter);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<User> getUsers() throws DalException {
+        try {
+            return userDAO.getUsers();
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }

@@ -5,6 +5,7 @@ import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import brighttime.gui.model.ModelException;
 import java.time.LocalDate;
 import java.util.List;
@@ -76,5 +77,9 @@ public interface IMainModel {
     void getAllTasks() throws ModelException;
 
     void getAllTasksFiltered(Filter filter) throws ModelException;
+
+    void loadUsers() throws ModelException;
+
+    ObservableList<User> getUserList();
 
 }

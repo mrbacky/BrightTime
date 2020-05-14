@@ -7,6 +7,7 @@ import brighttime.be.TaskBase;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import brighttime.bll.util.CostCalculator;
 import brighttime.bll.util.CostFormatter;
 import brighttime.dal.DalException;
@@ -209,6 +210,15 @@ public class BllManager implements BllFacade {
     @Override
     public String formatCost(double cost) {
         return costFormatter.formatCost(cost);
+    }
+
+    @Override
+    public List<User> getUsers() throws BllException {
+        try {
+            return dalManager.getUsers();
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
     }
 
 }
