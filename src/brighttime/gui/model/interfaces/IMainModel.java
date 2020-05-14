@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.Node;
 
 /**
  *
@@ -69,4 +70,7 @@ public interface IMainModel {
 
     void loadTasks() throws ModelException;
 
+    ObservableMap<LocalDate, List<Node>> getTaskItemMap();
+
+    ObservableList<Node> getNodeList();
 }

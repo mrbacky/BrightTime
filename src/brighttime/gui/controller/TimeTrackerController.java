@@ -11,6 +11,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,13 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,8 +56,8 @@ public class TimeTrackerController implements Initializable {
     private final AlertManager alertManager;
     private LocalDate date = LocalDate.MIN;
 
-    private Map<LocalDate, Node> taskItems = new HashMap<>();
-
+//    private ObservableList<Node> taskItems = FXCollections.observableArrayList();
+//    private ObservableMap<LocalDate, List<Node>> nodeMap = FXCollections.observableHashMap();
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
     }
@@ -59,6 +67,7 @@ public class TimeTrackerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
     }
 
     public void injectMainModel(IMainModel mainModel) {
@@ -66,8 +75,59 @@ public class TimeTrackerController implements Initializable {
     }
 
     public void initializeView() {
-        setUpTaskCreator();
-        initTasks();
+        try {
+//            vBoxMain.getChildren().clear();
+
+            setUpTaskCreator();
+            mainModel.loadTasks();
+            initTasks();
+            ObservableList<Node> vBoxNodeList = mainModel.getNodeList();
+
+            vBoxMain.getChildren().clear();
+            vBoxMain.getChildren().addAll(vBoxNodeList);
+
+            vBoxNodeList.addListener((ListChangeListener.Change<? extends Node> c) -> {
+                vBoxMain.getChildren().clear();
+                vBoxMain.getChildren().addAll(vBoxNodeList);
+            });
+
+//            for (Map.Entry<LocalDate, List<Node>> entry : nodeMap.entrySet()) {
+//                LocalDate key = entry.getKey();
+//                List<Node> value = entry.getValue();
+//                vBoxMain.getChildren().addAll(value);
+//                System.out.println("im in for loop in initialize");
+//
+//            }
+//
+//            nodeMap.addListener((MapChangeListener.Change<? extends LocalDate, ? extends List<Node>> change) -> {
+//                mainModel.getTasks();
+//                vBoxMain.getChildren().clear();
+//                for (Map.Entry<LocalDate, List<Node>> entry : nodeMap.entrySet()) {
+//                    LocalDate key = entry.getKey();
+//                    List<Node> value = entry.getValue();
+//                    vBoxMain.getChildren().addAll(value);
+//                    System.out.println("im in listener");
+//
+//                }
+//
+//            });
+//            taskMap.addListener((MapChangeListener.Change<? extends LocalDate, ? extends List<Task>> change) -> {
+//                vBoxMain.getChildren().clear();
+//                for (Map.Entry<LocalDate, List<Task>> entry : taskMap.entrySet()) {
+//                    LocalDate key = entry.getKey();
+//                    List<Task> value = entry.getValue();
+//                    vBoxMain.getChildren().addAll(value);
+//                }
+//            });
+        } catch (ModelException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+//        ObservableMap<LocalDate, List<Task>> obsMap = mainModel.getTasks();
+//        obsMap.addListener((MapChangeListener.Change<? extends LocalDate, ? extends List<Task>> change) -> {
+//            initTasks();
+//
+//        });
     }
 
     private void setUpTaskCreator() {
@@ -86,58 +146,70 @@ public class TimeTrackerController implements Initializable {
         }
     }
 
-    private void initTasks() {
-        try {
-            long start = System.currentTimeMillis();
+    public void initTasks() {
+        long start = System.currentTimeMillis();
+        //            mainModel.loadTasks();
+        Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
+        Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+        orderedMap.putAll(taskList);
 
-            mainModel.loadTasks();
-            vBoxMain.getChildren().clear();
-            Map<LocalDate, List<Task>> taskList = mainModel.getTasks();
-            Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
-            orderedMap.putAll(taskList);
-
-            for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
-                LocalDate dateKey = entry.getKey();
-                List<Task> taskListValue = entry.getValue();
-                if (!dateKey.equals(date)) {
-                    String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
-                    Label label = new Label(formatted);
-                    label.getStyleClass().add("labelMenuItem");
-                    vBoxMain.getChildren().add(label);
-                    label.translateXProperty().set(25);
-                    date = dateKey;
-                }
-                for (Task task : taskListValue) {
-                    addTaskItem(task);
-
-                }
+        for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
+            LocalDate dateKey = entry.getKey();
+            List<Task> taskListValue = entry.getValue();
+            if (!dateKey.equals(date)) {
+                String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+                Label label = new Label(formatted);
+                label.getStyleClass().add("labelMenuItem");
+                label.translateXProperty().set(25);
+                date = dateKey;
+                mainModel.getNodeList().add(label);
             }
+            VBox taskVBox = new VBox();
+            for (Task task : taskListValue) {
+                taskVBox.getChildren().add(addTaskItem(task));
+            }
+            mainModel.getNodeList().add(taskVBox);
 
-            System.out.println("time passed: " + (System.currentTimeMillis() - start));
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
         }
+
+        //  add node list to vbox
+        System.out.println("time passed: " + (System.currentTimeMillis() - start));
 
     }
 
-    public void addTaskItem(Task task) {
+    public Node addTaskItem(Task task) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
-            Parent root = fxmlLoader.load();
+            Parent taskFXML = fxmlLoader.load();
             ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
             taskModel.setTask(task);
+
             taskModel.setDate(date);
 
             taskModel.setTaskEntryListIfNewTask();
             TaskItemController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
             controller.injectModel(taskModel);
-            vBoxMain.getChildren().add(root);
+            return taskFXML;
+//            vBoxMain.getChildren().add(root);
+//            List<Node> nodeList = nodeMap.get(taskModel.getDate());
+//            nodeList.add(taskFXML);
+//            System.out.println("im in ass Task item under add FXML to list in map");
 
-            taskItems.put(LocalDate.parse("2020-05-05"), root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
+    //                List<Node> nodeList = nodeMap.get(dateKey);
+//                if (nodeList == null) {
+//                    nodeList = new ArrayList<Node>();
+//                    nodeList.add(label);
+//                    nodeMap.put(dateKey, nodeList);
+//                } else {
+//                    nodeMap.put(dateKey, nodeList);
+//                }
+    //                vBoxMain.getChildren().add(label);
+    //  add to node list/map
 }

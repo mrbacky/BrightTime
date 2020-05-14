@@ -22,6 +22,9 @@ public class Task {
     private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
     private Billability billability;
 
+    public Task() {
+    }
+
     public Task(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
         this.id.set(id);
         this.description.set(description);

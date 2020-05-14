@@ -177,8 +177,17 @@ public class TaskModel implements ITaskModel {
     public void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException {
         try {
             TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
-            task.getTaskEntryList().add(newTaskEntry);
-            bllManager.createTaskEntry(newTaskEntry);
+            if (task.getTaskEntryList().isEmpty()) {
+                List<TaskEntry> taskEntryList = new ArrayList<>();
+                task.getTaskEntryList().add(newTaskEntry);
+//                taskEntryList.add(newTaskEntry);
+//                task.setTaskEntryList(taskEntryList);
+            } else {
+                task.getTaskEntryList().add(newTaskEntry);
+                bllManager.createTaskEntry(newTaskEntry);
+
+            }
+
 //  call createTaskEntry from DB here
 //  TODO: create entryList in task OBJ if the list does not exist
 //        if (task.getTaskEntryList().isEmpty()) {
