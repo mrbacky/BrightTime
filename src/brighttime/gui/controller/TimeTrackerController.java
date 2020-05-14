@@ -54,7 +54,11 @@ public class TimeTrackerController implements Initializable {
 
     private IMainModel mainModel;
     private final AlertManager alertManager;
-    private LocalDate date = LocalDate.MIN;
+    private LocalDate date = LocalDate.now();
+
+    private Label noTasksToday = new Label("No Tasks Today.");
+
+    private VBox someVBOX = new VBox();
 
 //    private ObservableList<Node> taskItems = FXCollections.observableArrayList();
 //    private ObservableMap<LocalDate, List<Node>> nodeMap = FXCollections.observableHashMap();
@@ -76,7 +80,7 @@ public class TimeTrackerController implements Initializable {
 
     public void initializeView() {
         try {
-
+            mainModel.getNodeList().clear();
             setUpTaskCreator();
             mainModel.loadTasks();
             initTasks();
@@ -152,9 +156,19 @@ public class TimeTrackerController implements Initializable {
         Map<LocalDate, List<Task>> orderedMap = new TreeMap<>(Collections.reverseOrder());
         orderedMap.putAll(taskList);
 
+        Label labelBasic = new Label(date.toString());
+
+        someVBOX.getChildren().add(noTasksToday);
+        mainModel.getNodeList().add(labelBasic);
+        mainModel.getNodeList().add(someVBOX);
+
         for (Map.Entry<LocalDate, List<Task>> entry : orderedMap.entrySet()) {
             LocalDate dateKey = entry.getKey();
             List<Task> taskListValue = entry.getValue();
+            if (dateKey.equals(date)) {
+                mainModel.getNodeList().remove(noTasksToday);
+                mainModel.getNodeList().remove(someVBOX);
+            }
             if (!dateKey.equals(date)) {
                 String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
                 Label label = new Label(formatted);
@@ -164,6 +178,7 @@ public class TimeTrackerController implements Initializable {
                 mainModel.getNodeList().add(label);
             }
             VBox taskVBox = new VBox();
+
             for (Task task : taskListValue) {
                 taskVBox.getChildren().add(addTaskItem(task));
             }
@@ -174,6 +189,15 @@ public class TimeTrackerController implements Initializable {
         //  add node list to vbox
         System.out.println("time passed: " + (System.currentTimeMillis() - start));
 
+    }
+
+    //  TODO: This is terible solution. We don't have time right now to fix it.
+    public void deleteLabel() {
+        if (mainModel.getNodeList().contains(someVBOX)) {
+            int vBoxIndex = mainModel.getNodeList().indexOf(someVBOX);
+            VBox someVbox = (VBox) mainModel.getNodeList().get(vBoxIndex);
+            someVbox.getChildren().remove(noTasksToday);
+        }
     }
 
     public Node addTaskItem(Task task) {

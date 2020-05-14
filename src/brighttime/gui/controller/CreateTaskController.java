@@ -21,6 +21,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
@@ -134,7 +135,11 @@ public class CreateTaskController implements Initializable {
                     task.setCreationTime(LocalDateTime.now());
                     mainModel.addTask(task);
                     VBox subVBox = (VBox) mainModel.getNodeList().get(1);
-                    subVBox.getChildren().add(timeTrackerContr.addTaskItem(task));
+//                  
+                    timeTrackerContr.deleteLabel();
+                    Node nodeToAdd = timeTrackerContr.addTaskItem(task);
+                    subVBox.getChildren().add(nodeToAdd);
+                    nodeToAdd.toFront();
 
 //                    timeTrackerContr.initTasks();
 //                    Platform.runLater(() -> {

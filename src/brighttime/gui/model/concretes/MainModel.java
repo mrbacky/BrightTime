@@ -103,6 +103,7 @@ public class MainModel implements IMainModel {
     public void addTask(Task task) throws ModelException {
 //        taskList.add(task);
         try {
+            
             Task newTask = bllManager.createTask(task);
             List<Task> taskList = taskMap.get(newTask.getCreationTime().toLocalDate());
             if (taskList == null) {
@@ -129,6 +130,7 @@ public class MainModel implements IMainModel {
     @Override
     public void loadTasks() throws ModelException {
         try {
+            
             Map<LocalDate, List<Task>> allTasks = bllManager.Tasks();
             taskMap.clear();
             taskMap.putAll(allTasks);

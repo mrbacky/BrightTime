@@ -199,6 +199,8 @@ public class TaskItemController implements Initializable {
     @FXML
     private void handlePlayPauseTask(ActionEvent event) {
         if (btnPlayPause.isSelected()) {
+            btnExpandTask.setDisable(false);
+
             imgPlayPause.setImage(PAUSE_ICON_IMAGE);
             LocalDate date = LocalDate.now();
             LocalTime startTime = LocalTime.now();
@@ -211,8 +213,8 @@ public class TaskItemController implements Initializable {
                 imgPlayPause.setImage(PLAY_ICON_IMAGE);
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
-                
-                
+                expandTaskItem(event);
+
                 //  refresh
 //                Platform.runLater(() -> {
 //                    try {
