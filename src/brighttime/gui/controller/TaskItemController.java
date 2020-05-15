@@ -69,8 +69,9 @@ public class TaskItemController implements Initializable {
     private TimeTrackerController timeTrackerController;
     private ITaskModel taskModel;
     private final AlertManager alertManager;
-    private LocalDateTime tempStartTime;
-    private LocalDateTime tempEndTime;
+
+    private LocalDateTime tempStartTime = LocalDateTime.MIN;
+
     @FXML
     private Label lblEndTime;
     @FXML
@@ -116,7 +117,7 @@ public class TaskItemController implements Initializable {
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
         setTaskDetails(taskModel.getTask());
-        if (taskModel.getDayEntryList().isEmpty()) {
+        if (taskModel.getDayEntryList().isEmpty() || taskModel.getDayEntryList() == null) {
             btnExpandTask.setDisable(true);
             imgExpandCollapse.setImage(null);
         }
@@ -196,19 +197,15 @@ public class TaskItemController implements Initializable {
     private void handlePlayPauseTask(ActionEvent event) {
         if (btnPlayPause.isSelected()) {
             imgPlayPause.setImage(PAUSE_ICON_IMAGE);
-            LocalDate date = LocalDate.now();
-            LocalTime startTime = LocalTime.now();
-
-            LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
-
             tempStartTime = LocalDateTime.now().withNano(0);
         } else {
             try {
+                LocalDateTime tempEndTime = LocalDateTime.now();
                 imgPlayPause.setImage(PLAY_ICON_IMAGE);
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
                 //  refresh
-                timeTrackerController.initializeView();
+                timeTrackerController.initTasks();
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
             }

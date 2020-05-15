@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,8 +63,7 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public LocalDateTime getStartTime() {
-        if (!getDayEntryList().isEmpty()) {
-
+        if (getDayEntryList() != null) {
             return bllManager.getStartTime(getDayEntryList());
         }
         return task.getCreationTime();
@@ -96,10 +96,12 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public List getDayEntryList() {
+
         List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
                 -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
         dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
         return dayEntries;
+
     }
 
     @Override

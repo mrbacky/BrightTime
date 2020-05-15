@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -61,8 +62,27 @@ public class TimeTrackerController implements Initializable {
     }
 
     public void initializeView() {
-        setUpTaskCreator();
-        initTasks();
+        try {
+            mainModel.loadTasks();
+
+            setUpTaskCreator();
+            initTasks();
+//            setUpTaskMapListener();
+//  when using listener on the map, looks like more changes are noticed and its loading too much stuff.
+//  Its easier to call initTasks() from this controller.
+//  setUpTaskMapListener();
+
+        } catch (ModelException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setUpTaskMapListener() {
+        mainModel.getTasks().addListener((MapChangeListener.Change<? extends LocalDate, ? extends List<TaskConcrete1>> change) -> {
+            System.out.println("change...");
+            initTasks();
+        });
+
     }
 
     private void setUpTaskCreator() {
@@ -81,30 +101,25 @@ public class TimeTrackerController implements Initializable {
         }
     }
 
-    private void initTasks() {
-        try {
-            mainModel.loadTasks();
-            vBoxMain.getChildren().clear();
-            Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTasks();
-            Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
-            orderedMap.putAll(taskList);
-            for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
-                LocalDate dateKey = entry.getKey();
-                List<TaskConcrete1> taskListValue = entry.getValue();
-                if (!dateKey.equals(date)) {
-                    String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
-                    Label label = new Label(formatted);
-                    label.getStyleClass().add("labelMenuItem");
-                    vBoxMain.getChildren().add(label);
-                    label.translateXProperty().set(25);
-                    date = dateKey;
-                }
-                for (TaskConcrete1 task : taskListValue) {
-                    addTaskItem(task);
-                }
+    public void initTasks() {
+        vBoxMain.getChildren().clear();
+        Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTasks();
+        Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+        orderedMap.putAll(taskList);
+        for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
+            LocalDate dateKey = entry.getKey();
+            List<TaskConcrete1> taskListValue = entry.getValue();
+            if (!dateKey.equals(date)) {
+                String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+                Label label = new Label(formatted);
+                label.getStyleClass().add("labelMenuItem");
+                vBoxMain.getChildren().add(label);
+                label.translateXProperty().set(25);
+                date = dateKey;
             }
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
+            for (TaskConcrete1 task : taskListValue) {
+                addTaskItem(task);
+            }
         }
 
     }

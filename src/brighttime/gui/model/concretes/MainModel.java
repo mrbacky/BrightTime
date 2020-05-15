@@ -5,14 +5,19 @@ import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.TaskEntry;
 import brighttime.be.User;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -86,17 +91,27 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
-//        taskList.add(task);
         try {
-            bllManager.createTask(task);
+            TaskConcrete1 freshTask = bllManager.createTask(task);
+            List<TaskEntry> entryList = new ArrayList();
+            freshTask.setTaskEntryList(entryList);
+            List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
+            if (taskList == null) {
+                taskList = new ArrayList<>();
+                taskList.add(freshTask);
+                taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+            } else {
+                taskList.add(0, freshTask);
+            }
         } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
+            Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     @Override
     public ObservableMap<LocalDate, List<TaskConcrete1>> getTasks() {
+        System.out.println("getting taskMap");
         return taskMap;
     }
 
@@ -116,6 +131,11 @@ public class MainModel implements IMainModel {
         return taskList;
     }
 
+    /**
+     * Gets Task list for overview
+     *
+     * @throws ModelException
+     */
     @Override
     public void getAllTasks() throws ModelException {
         try {

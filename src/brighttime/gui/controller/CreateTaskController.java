@@ -14,7 +14,10 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleNode;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -123,14 +126,29 @@ public class CreateTaskController implements Initializable {
             if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
                     if (tglBillability.isSelected()) {
-                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.BILLABLE, cboProject.getSelectionModel().getSelectedItem());
+//                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.BILLABLE,
+//                                cboProject.getSelectionModel().getSelectedItem());
+
+                        /*
+                        Creating task with creation Time instead of setting it here.
+                        This task is created locally so we need to set creation time here. 
+                        We need creation time for setting it as "startTime" and "endTime" if Task has no entries 
+                        even though the task is created locally.
+                        
+       --------------   Should we keep creation date in SQL stmt in DAO ? 
+                         */
+                        task = new TaskConcrete1(txtDescription.getText(), TaskBase.Billability.BILLABLE,
+                                cboProject.getSelectionModel().getSelectedItem(), LocalDateTime.now().withNano(0));
                     } else {
-                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.NON_BILLABLE, cboProject.getSelectionModel().getSelectedItem());
+//                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.NON_BILLABLE,
+//                                cboProject.getSelectionModel().getSelectedItem());
+                        task = new TaskConcrete1(txtDescription.getText(), TaskBase.Billability.NON_BILLABLE,
+                                cboProject.getSelectionModel().getSelectedItem(), LocalDateTime.now().withNano(0));
+
                     }
                     mainModel.addTask(task);
-                    Platform.runLater(() -> {
-                        timeTrackerContr.initializeView();
-                    });
+                    resetCreatorValues();
+                    timeTrackerContr.initTasks();
 
                     System.out.println("action event is working!");
                 } catch (ModelException ex) {
@@ -144,6 +162,12 @@ public class CreateTaskController implements Initializable {
                 alertManager.showAlert("No project is selected.", "Please select a project.");
             }
         });
+    }
+
+    private void resetCreatorValues() {
+        txtDescription.setText("");
+        cboClient.setValue(null);
+        cboProject.setValue(null);
     }
 
 }

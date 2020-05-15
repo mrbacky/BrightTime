@@ -61,6 +61,7 @@ public class TaskDAO implements ITaskDAO {
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 task.setId(rs.getInt(1));
+
             }
             return task;
         } catch (SQLException ex) {
@@ -200,6 +201,7 @@ public class TaskDAO implements ITaskDAO {
                 int taskId = rs.getInt("taskId");
                 String description = rs.getString("description");
                 List<TaskEntry> entries = new ArrayList<>();
+
                 LocalDateTime creationTime = rs.getTimestamp("modifiedDate").toLocalDateTime();
 
                 String billability = rs.getString("billability");
