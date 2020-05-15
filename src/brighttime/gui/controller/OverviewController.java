@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -69,6 +70,8 @@ public class OverviewController implements Initializable {
     private JFXButton btnLastMonth;
     @FXML
     private JFXButton btnClearFilters;
+    @FXML
+    private BarChart<?, ?> barChartTasks;
 
     //TODO: Very basic and lacking implementation made to check the connection between the view and database.
     public OverviewController() {
