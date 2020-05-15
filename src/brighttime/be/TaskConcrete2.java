@@ -82,4 +82,9 @@ public class TaskConcrete2 extends TaskBase {
         return totalCostString;
     }
 
+    @Override
+    public String toString() {
+        return "TaskConcrete2{" + " " + totalDurationSeconds + ", " + totalDurationString + '}';
+    }
+
 }
