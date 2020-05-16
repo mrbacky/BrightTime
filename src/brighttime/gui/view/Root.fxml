@@ -8,23 +8,23 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" minWidth="-Infinity" prefHeight="500.0" prefWidth="830.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
+<AnchorPane id="AnchorPane" minWidth="-Infinity" prefHeight="500.0" prefWidth="830.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.RootController">
     <children>
         <BorderPane fx:id="rootBorderPane" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <left>
                 <AnchorPane fx:id="anchorPaneRoot" prefHeight="200.0" prefWidth="50.0" styleClass="anchorPaneRoot" BorderPane.alignment="CENTER">
                     <children>
-                        <JFXButton fx:id="btnTimeTracker" contentDisplay="GRAPHIC_ONLY" layoutY="7.0" mnemonicParsing="false" onAction="#loadTimeTrackerModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
-                            <graphic>
-                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@assets/timer_48px.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </JFXButton>
-                        <VBox AnchorPane.topAnchor="60.0">
+                        <VBox fx:id="vBoxRootButtons" AnchorPane.topAnchor="10.0">
                             <children>
+                              <JFXButton fx:id="btnTimeTracker" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#loadTimeTrackerModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
+                                  <graphic>
+                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@assets/timer_48px.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </JFXButton>
                                 <JFXButton fx:id="btnOverview" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#loadOverviewModule" prefHeight="50.0" prefWidth="50.0" styleClass="rootButtons">
                                     <graphic>
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -76,6 +76,15 @@
                                 </JFXNodesList>
                             </children>
                         </VBox>
+                  <JFXButton fx:id="btnLogout" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleLogout" prefHeight="50.0" prefWidth="50.0" AnchorPane.bottomAnchor="5.0">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/exit_96px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
                     </children>
                 </AnchorPane>
             </left>

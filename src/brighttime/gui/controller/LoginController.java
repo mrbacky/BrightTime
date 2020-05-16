@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,8 +53,14 @@ public class LoginController implements Initializable {
     private IAuthenticationModel authenticationModel;
     private User user;
 
-    public LoginController() {
+    public LoginController() throws ModelException {
         alertManager = new AlertManager();
+        try {
+            authenticationModel = ModelCreator.getInstance().createAuthenticationModel();
+        } catch (IOException ex) {
+            alertManager.showAlert("Could not get authentication model", "An error occured: " + ex.getMessage());
+        }
+
     }
 
     /**
@@ -63,30 +70,16 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-    public void initializeView() {
-        fieldValidator();
-
-    }
-
     @FXML
     private void EnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            try {
-                authenticateUser();
-            } catch (Exception ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            authenticateUser();
         }
     }
 
     @FXML
     private void loginBtnPressed(ActionEvent event) {
-        try {
-            authenticateUser();
-        } catch (Exception ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        authenticateUser();
     }
 
     private void fieldValidator() {
@@ -123,7 +116,7 @@ public class LoginController implements Initializable {
             Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
             stage.getIcons().add(icon);
             stage.setTitle("BrightTime");
-            stage.setMinWidth(600);
+            stage.setMinWidth(850);
             stage.setMinHeight(400);
             stage.setScene(scene);
             stage.setResizable(true);
@@ -138,17 +131,15 @@ public class LoginController implements Initializable {
         try {
             user = authenticationModel.authenticateUser(txtUsername.getText(), txtPassword.getText());
             if (user != null) {
-                initializeRoot(user);
-                closeLogin();
+                Platform.runLater(() -> {
+                    initializeRoot(user);
+                    closeLogin();
+                });
+
             }
         } catch (ModelException ex) {
             alertManager.showAlert("Could not authenticate user.", "An error occured: " + ex.getMessage());
         }
-
-    }
-
-    public void injectAuthenticationModel(IAuthenticationModel authenticationModel) {
-        this.authenticationModel = authenticationModel;
 
     }
 

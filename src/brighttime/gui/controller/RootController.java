@@ -18,10 +18,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  *
@@ -34,6 +39,8 @@ public class RootController implements Initializable {
     private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/ManageClients.fxml";
     private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/ManageProjects.fxml";
     private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview_1.fxml";
+    private final String LOGIN_VIEW = "/brighttime/gui/view/Login.fxml";
+    private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
 
     @FXML
     private AnchorPane anchorPaneRoot;
@@ -56,6 +63,10 @@ public class RootController implements Initializable {
     private IMainModel mainModel;
     private User user;
     private final AlertManager alertManager;
+    @FXML
+    private JFXButton btnLogout;
+    @FXML
+    private VBox vBoxRootButtons;
 
     public RootController() {
         alertManager = new AlertManager();
@@ -63,13 +74,6 @@ public class RootController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //        loadModule(TIME_TRACKER_MODULE);
-        //        setToolTipsForButtons();
-        //        displayAdminMenuItems();
-        //        //showAdminMenu();
-        //        //hideAdminMenu();
-        //        showAdminClientModule();
-        //        showAdminProjectModule();
     }
 
     void injectMainModel(IMainModel mainModel) {
@@ -78,11 +82,23 @@ public class RootController implements Initializable {
 
     private void setUser() {
         user = mainModel.getUser();
+        if (user.getType().equals(User.UserType.USER)) {
+            Node nodeList = vBoxRootButtons.getChildren().get(2);
+            vBoxRootButtons.getChildren().remove(nodeList);
+        }
     }
 
     public void initializeView() {
+
         setUser();
+
         loadModule(TIME_TRACKER_MODULE);
+        setToolTipsForButtons();
+        displayAdminMenuItems();
+//        showAdminMenu();
+//        hideAdminMenu();
+        showAdminClientModule();
+        showAdminProjectModule();
 
     }
 
@@ -116,7 +132,7 @@ public class RootController implements Initializable {
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
-            alertManager.showAlert("Could not load module.", "An error occured." + ex.getMessage());
+            alertManager.showAlert("Could not load module.", "An error occured:" + ex.getMessage());
         }
     }
 
@@ -127,9 +143,7 @@ public class RootController implements Initializable {
 
     @FXML
     private void loadCreatorModule(ActionEvent event) {
-
         loadModule(ADMIN_MENU_MODULE);
-
     }
 
     void loadAdminClientModule() {
@@ -189,6 +203,28 @@ public class RootController implements Initializable {
 
     private void setToolTipForOneButton(JFXButton button, String tip) {
         button.setTooltip(new Tooltip(tip));
+    }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+
+        try {
+            Stage logOutStage;
+            logOutStage = (Stage) btnLogout.getScene().getWindow();
+            logOutStage.close();
+            Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(LOGIN_VIEW));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.getIcons().add(icon);
+            stage.setTitle("BrightTime");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
