@@ -29,9 +29,20 @@ public class MainModel implements IMainModel {
     private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
     private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
     private final ObservableList<User> userList = FXCollections.observableArrayList();
+    private User user;
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public User getUser() {
+        return user;
     }
 
     @Override

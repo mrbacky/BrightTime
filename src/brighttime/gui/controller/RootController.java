@@ -1,6 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.BrightTime;
+import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.interfaces.IMainModel;
 import com.jfoenix.controls.JFXButton;
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,20 +53,34 @@ public class RootController implements Initializable {
     @FXML
     private JFXButton btnUsers;
     private IMainModel mainModel;
+    private User user;
 
     public RootController() throws IOException {
-        mainModel = ModelCreator.getInstance().createMainModel();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //        loadModule(TIME_TRACKER_MODULE);
+        //        setToolTipsForButtons();
+        //        displayAdminMenuItems();
+        //        //showAdminMenu();
+        //        //hideAdminMenu();
+        //        showAdminClientModule();
+        //        showAdminProjectModule();
+    }
+
+    void injectMainModel(IMainModel mainModel) {
+        this.mainModel = mainModel;
+    }
+
+    private void setUser() {
+        user = mainModel.getUser();
+    }
+
+    public void initializeView() {
+        setUser();
         loadModule(TIME_TRACKER_MODULE);
-        setToolTipsForButtons();
-        displayAdminMenuItems();
-        //showAdminMenu();
-        //hideAdminMenu();
-        showAdminClientModule();
-        showAdminProjectModule();
+
     }
 
     public void loadModule(String module) {
@@ -142,7 +158,6 @@ public class RootController implements Initializable {
             nodesList.animateList(false);
         });
     }
-
 
     private void showAdminClientModule() {
         btnClients.setOnAction((event) -> {

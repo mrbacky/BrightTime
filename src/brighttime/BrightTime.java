@@ -1,5 +1,8 @@
 package brighttime;
 
+import brighttime.gui.controller.LoginController;
+import brighttime.gui.model.ModelCreator;
+import brighttime.gui.model.interfaces.IAuthenticationModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,19 +17,29 @@ import javafx.stage.StageStyle;
  */
 public class BrightTime extends Application {
 
+    private final String LOGIN_VIEW = "/brighttime/gui/view/Login.fxml";
+    private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
+    
+
     @Override
     public void start(Stage stage) throws Exception {
 
-        Image icon = new Image(getClass().getResourceAsStream("/brighttime/gui/view/assets/sun_48px.png"));
+        Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
         stage.getIcons().add(icon);
         stage.setTitle("BrightTime");
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(BrightTime.class.getResource("/brighttime/gui/view/Root.fxml"));
-        Parent root = loader.load();
-        stage.setMinWidth(850);
-        stage.setMinHeight(400);
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(BrightTime.class.getResource(LOGIN_VIEW));
+        Parent root = fxmlLoader.load();
+
+        IAuthenticationModel authenticationModel = ModelCreator.getInstance().createAuthenticationModel();
+
+        LoginController controller = fxmlLoader.getController();
+        controller.injectAuthenticationModel(authenticationModel);
+
+        
         Scene scene = new Scene(root);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

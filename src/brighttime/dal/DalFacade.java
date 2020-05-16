@@ -87,5 +87,7 @@ public interface DalFacade {
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
     List<User> getUsers() throws DalException;
-    
+
+    public User authenticateUser(String username, String password) throws DalException;
+
 }

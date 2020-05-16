@@ -1,6 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.be.TaskConcrete1;
+import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
@@ -44,6 +45,7 @@ public class TimeTrackerController implements Initializable {
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private LocalDate date = LocalDate.MIN;
+    private User user;
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -60,7 +62,12 @@ public class TimeTrackerController implements Initializable {
         this.mainModel = mainModel;
     }
 
+    private void setUser() {
+        user = mainModel.getUser();
+    }
+
     public void initializeView() {
+        setUser();
         setUpTaskCreator();
         initTasks();
     }

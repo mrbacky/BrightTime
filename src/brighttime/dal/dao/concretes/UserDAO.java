@@ -57,4 +57,31 @@ public class UserDAO implements IUserDAO {
         return users;
     }
 
+    @Override
+    public User authenticateUser(String username, String password) throws DalException {
+        String sql = "SELECT * FROM [User] WHERE username = ? AND password = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+            String firstName = rs.getString("firstName");
+            String lastName = rs.getString("lastName");
+            int type = rs.getInt("userTypeId");
+
+            if (type == 1) {
+                return new User(id, firstName, lastName, User.UserType.ADMIN);
+            } else {
+                return new User(id, firstName, lastName, User.UserType.USER);
+            }
+
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
 }

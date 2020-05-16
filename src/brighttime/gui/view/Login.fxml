@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="anchorPaneRoot" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.LoginController">
+   <children>
+      <JFXTextField fx:id="txtUsername" focusColor="#f0c326" layoutX="225.0" layoutY="154.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#EnterPressed" prefHeight="30.0" prefWidth="150.0" promptText="Username" styleClass="cboLogin" />
+      <JFXPasswordField fx:id="txtPassword" focusColor="#f0c326" layoutX="225.0" layoutY="206.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#EnterPressed" prefHeight="30.0" prefWidth="150.0" promptText="Password" styleClass="cboLogin" />
+      <JFXButton id="loginBtn" fx:id="btnLogIn" buttonType="RAISED" layoutX="225.0" layoutY="303.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#loginBtnPressed" prefHeight="30.0" prefWidth="150.0" ripplerFill="BLACK" styleClass="btnLogin" text="Log in" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/grumsen-logo-non-retina.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

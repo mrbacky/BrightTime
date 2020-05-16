@@ -82,4 +82,8 @@ public interface IMainModel {
 
     ObservableList<User> getUserList();
 
+    void setUser(User user);
+    
+    User getUser();
+
 }

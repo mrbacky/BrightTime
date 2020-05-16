@@ -42,8 +42,8 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public TaskConcrete1 createTask(TaskConcrete1 task) throws DalException {
-        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId, billability) "
-                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?, ?)";
+        String sql = "INSERT INTO Task (description, createdDate, modifiedDate, projectId, billability, userId) "
+                + "VALUES (?, SYSDATETIME(), SYSDATETIME(), ?, ?, ?)";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -55,7 +55,7 @@ public class TaskDAO implements ITaskDAO {
             } else if (task.getBillability() == TaskBase.Billability.NON_BILLABLE) {
                 pstmt.setString(3, String.valueOf('N'));
             }
-
+            pstmt.setInt(4, task.getUser().getId());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();

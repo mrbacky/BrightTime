@@ -4,6 +4,7 @@ import brighttime.be.Client;
 import brighttime.be.Project;
 import brighttime.be.TaskBase;
 import brighttime.be.TaskConcrete1;
+import brighttime.be.User;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
@@ -14,6 +15,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleNode;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -42,6 +44,7 @@ public class CreateTaskController implements Initializable {
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
     private TaskConcrete1 task;
+    private User user;
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -61,6 +64,7 @@ public class CreateTaskController implements Initializable {
     }
 
     void initializeView() throws IOException {
+        setUser();
         System.out.println("in Creator page");
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
@@ -70,6 +74,10 @@ public class CreateTaskController implements Initializable {
 
     public void injectTimeTrackerController(TimeTrackerController timeTrackerContr) {
         this.timeTrackerContr = timeTrackerContr;
+    }
+
+    private void setUser() {
+        user = mainModel.getUser();
     }
 
     /**
@@ -123,10 +131,12 @@ public class CreateTaskController implements Initializable {
             if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
                 try {
                     if (tglBillability.isSelected()) {
-                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.BILLABLE, cboProject.getSelectionModel().getSelectedItem());
+
+                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.BILLABLE, cboProject.getSelectionModel().getSelectedItem(), user);
                     } else {
-                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.NON_BILLABLE, cboProject.getSelectionModel().getSelectedItem());
+                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.NON_BILLABLE, cboProject.getSelectionModel().getSelectedItem(), user);
                     }
+//                    task.setCreationTime(LocalDateTime.now());
                     mainModel.addTask(task);
                     Platform.runLater(() -> {
                         timeTrackerContr.initializeView();

@@ -36,7 +36,7 @@
 }
 
 .viewSubItem{
-    -fx-background-color: #F0C326;
+    -fx-background-color: #F0C326;/*yellow*/
     -fx-background-radius :  10 10 10 10;
 }
 
@@ -160,7 +160,19 @@
     -jfx-label-float: false; 
 }
 
+.cboLogin{
+    -fx-background-color: white;
+    -fx-background-radius: 10 10 10 10;
+    -fx-padding: 0 10 0 10;
 
+}
+
+.btnLogin{
+
+    -fx-background-color: white;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color:#F0C326
+}
 
 
 

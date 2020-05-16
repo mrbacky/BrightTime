@@ -15,9 +15,12 @@ public class TaskConcrete1 extends TaskBase {
     private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
+    private final ObjectProperty<User> user = new SimpleObjectProperty<>();
 
-    public TaskConcrete1(String description, Billability billability, Project project) {
+    public TaskConcrete1(String description, Billability billability, Project project, User user) {
+
         super(description, billability);
+        this.user.set(user);
         this.project.set(project);
     }
 
@@ -62,6 +65,18 @@ public class TaskConcrete1 extends TaskBase {
 
     public ObjectProperty creationTimeProperty() {
         return creationTime;
+    }
+
+    public User getUser() {
+        return user.get();
+    }
+
+    public void setUser(User value) {
+        user.set(value);
+    }
+
+    public ObjectProperty userProperty() {
+        return user;
     }
 
 }

@@ -104,7 +104,9 @@ public interface BllFacade {
     String formatDuration(int durationSeconds);
 
     String formatCost(double cost);
-    
+
     List<User> getUsers() throws BllException;
+
+    public User authenticateUser(String username, String password) throws BllException;
 
 }

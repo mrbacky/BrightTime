@@ -12,4 +12,6 @@ public interface IUserDAO {
 
     List<User> getUsers() throws DalException;
 
+    public User authenticateUser(String username, String password) throws DalException;
+
 }

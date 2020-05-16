@@ -7,9 +7,11 @@ import brighttime.bll.BllManager;
 import brighttime.dal.DalFacade;
 import brighttime.dal.DalManager;
 import brighttime.dal.dao.interfaces.IProjectDAO;
+import brighttime.gui.model.concretes.AuthenticationModel;
 import brighttime.gui.model.concretes.MainModel;
 import brighttime.gui.model.concretes.TaskEntryModel;
 import brighttime.gui.model.concretes.TaskModel;
+import brighttime.gui.model.interfaces.IAuthenticationModel;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.IProjectModel;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
@@ -47,6 +49,10 @@ public class ModelCreator {
     
     public ITaskEntryModel createTaskEntryModel(){
         return new TaskEntryModel(bllManager);
+    }
+    
+    public IAuthenticationModel createAuthenticationModel(){
+        return new AuthenticationModel(bllManager);
     }
     
 }
