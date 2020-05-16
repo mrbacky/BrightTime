@@ -10,6 +10,7 @@ import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IAuthenticationModel;
 import brighttime.gui.model.interfaces.IMainModel;
+import brighttime.gui.util.AlertManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -41,7 +42,7 @@ public class LoginController implements Initializable {
 
     private final String ROOT_PATH = "/brighttime/gui/view/Root.fxml";
     private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
-
+    private final AlertManager alertManager;
     @FXML
     private JFXTextField txtUsername;
     @FXML
@@ -50,6 +51,10 @@ public class LoginController implements Initializable {
     private JFXButton btnLogIn;
     private IAuthenticationModel authenticationModel;
     private User user;
+
+    public LoginController() {
+        alertManager = new AlertManager();
+    }
 
     /**
      * Initializes the controller class.
@@ -129,12 +134,15 @@ public class LoginController implements Initializable {
         }
     }
 
-    private void authenticateUser() throws Exception {
-        user = authenticationModel.authenticateUser(txtUsername.getText(), txtPassword.getText());
-        if (user != null) {
-            initializeRoot(user);
-            closeLogin();
-
+    private void authenticateUser() {
+        try {
+            user = authenticationModel.authenticateUser(txtUsername.getText(), txtPassword.getText());
+            if (user != null) {
+                initializeRoot(user);
+                closeLogin();
+            }
+        } catch (ModelException ex) {
+            alertManager.showAlert("Could not authenticate user.", "An error occured: " + ex.getMessage());
         }
 
     }

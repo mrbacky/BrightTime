@@ -6,12 +6,13 @@
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.User;
+import brighttime.gui.model.ModelException;
 
 /**
  *
  * @author rados
  */
 public interface IAuthenticationModel {
- 
-    User authenticateUser(String username, String password);
+
+    User authenticateUser(String username, String password) throws ModelException;
 }

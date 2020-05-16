@@ -4,6 +4,7 @@ import brighttime.BrightTime;
 import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.interfaces.IMainModel;
+import brighttime.gui.util.AlertManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import java.io.IOException;
@@ -54,8 +55,10 @@ public class RootController implements Initializable {
     private JFXButton btnUsers;
     private IMainModel mainModel;
     private User user;
+    private final AlertManager alertManager;
 
-    public RootController() throws IOException {
+    public RootController() {
+        alertManager = new AlertManager();
     }
 
     @Override
@@ -113,7 +116,7 @@ public class RootController implements Initializable {
             }
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
-            Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not load module.", "An error occured." + ex.getMessage());
         }
     }
 

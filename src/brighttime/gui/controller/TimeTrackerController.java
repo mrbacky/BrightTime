@@ -99,6 +99,7 @@ public class TimeTrackerController implements Initializable {
                 LocalDate dateKey = entry.getKey();
                 List<TaskConcrete1> taskListValue = entry.getValue();
                 if (!dateKey.equals(date)) {
+                    
                     String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
                     Label label = new Label(formatted);
                     label.getStyleClass().add("labelMenuItem");
