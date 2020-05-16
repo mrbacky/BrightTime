@@ -160,9 +160,39 @@
     -jfx-label-float: false; 
 }
 
+.gridFilterMenu{
+    -fx-background-color: orange;
+}
 
+.scroll-pane{
+    /*-fx-background-color: blue;*/
+}
 
+.labelFilter{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: white;
+    -fx-label-padding: 4 0 4 8;
+    -fx-text-fill: #435A9A;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
 
+.buttonFilter{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: white;
+}
 
+.jfx-date-picker .jfx-text-field{
+    -jfx-unfocus-color: white;
+    -jfx-default-color: white;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+}
 
-
+.buttonFilteredItem{
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
+    -fx-padding: 0 0 20 0;
+}
