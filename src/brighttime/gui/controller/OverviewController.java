@@ -20,12 +20,12 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -89,7 +89,14 @@ public class OverviewController implements Initializable {
     private JFXNodesList nodesListTimeFrame;
     @FXML
     private HBox hBoxFilter;
-    private JFXButton user = new JFXButton();
+    @FXML
+    private Label lblProject;
+    @FXML
+    private Label lblTimeFrame;
+
+    private final JFXButton user = new JFXButton();
+    private final JFXButton project = new JFXButton();
+    private final JFXButton timeFrame = new JFXButton();
 
     //TODO: Very basic and lacking implementation made to check the connection between the view and database.
     public OverviewController() {
@@ -107,9 +114,11 @@ public class OverviewController implements Initializable {
         colCost.setPrefWidth(134);
         // TODO
         displayUserFilter();
-        //displayProjectFilter();
-        //displayTimeFrameFilter();
+        displayProjectFilter();
+        displayTimeFrameFilter();
         removeUserFilter();
+        removeProjectFilter();
+        removeTimeFrameFilter();
     }
 
     void initializeView() {
@@ -124,7 +133,7 @@ public class OverviewController implements Initializable {
         selectProject();
         listenDatePickerStart();
         listenDatePickerEnd();
-        clearFilters();
+        clearAllFilters();
         //vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
 
         scrollPane.widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -231,7 +240,9 @@ public class OverviewController implements Initializable {
     private void selectClient() {
         cboClients.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
-                nodesListProject.animateList();
+                lblProject.setText("Please select a project.");
+                //TODO: Change color!
+                lblProject.setStyle("-fx-text-fill: red");
             }
         });
     }
@@ -241,6 +252,11 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, dpStartDate.getValue(), dpEndDate.getValue()));
+                    project.setText(newVal.toString() + " (" + cboClients.getValue().toString() + ")");
+                    project.getStyleClass().add("buttonFilteredItem");
+                    hBoxFilter.getChildren().add(project);
+                    lblProject.setText("Project");
+                    lblProject.setStyle("-fx-text-fill: #435A9A");
                     nodesListProject.animateList(false);
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by project.", "An error occured: " + ex.getMessage());
@@ -251,11 +267,24 @@ public class OverviewController implements Initializable {
 
     private void listenDatePickerStart() {
         dpStartDate.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && dpEndDate.getValue() != null) {
-                try {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
-                } catch (ModelException ex) {
-                    alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+            if (newValue != null) {
+                if (dpEndDate.getValue() != null) {
+                    try {
+                        mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
+                        //TODO: Change date format.
+                        timeFrame.setText(newValue.toString() + " - " + dpEndDate.getValue().toString());
+                        timeFrame.getStyleClass().add("buttonFilteredItem");
+                        hBoxFilter.getChildren().add(timeFrame);
+                        lblTimeFrame.setText("Time frame");
+                        lblTimeFrame.setStyle("-fx-text-fill: #435A9A");
+                        nodesListTimeFrame.animateList(false);
+                    } catch (ModelException ex) {
+                        alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+                    }
+                } else {
+                    //TODO: Change color!
+                    lblTimeFrame.setText("Please select an end date.");
+                    lblTimeFrame.setStyle("-fx-text-fill: red");
                 }
             }
         });
@@ -263,11 +292,25 @@ public class OverviewController implements Initializable {
 
     private void listenDatePickerEnd() {
         dpEndDate.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && dpStartDate.getValue() != null) {
-                try {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
-                } catch (ModelException ex) {
-                    alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+            if (newValue != null) {
+                if (dpStartDate.getValue() != null) {
+
+                    try {
+                        mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
+                        //TODO: Change date format.
+                        timeFrame.setText(dpStartDate.getValue().toString() + " - " + newValue.toString());
+                        timeFrame.getStyleClass().add("buttonFilteredItem");
+                        hBoxFilter.getChildren().add(timeFrame);
+                        lblTimeFrame.setText("Time frame");
+                        lblTimeFrame.setStyle("-fx-text-fill: #435A9A");
+                        nodesListTimeFrame.animateList(false);
+                    } catch (ModelException ex) {
+                        alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+                    }
+                } else {
+                    //TODO: Change color!
+                    lblTimeFrame.setText("Please select a start date.");
+                    lblTimeFrame.setStyle("-fx-text-fill: red");
                 }
             }
         });
@@ -335,13 +378,18 @@ public class OverviewController implements Initializable {
 
     }
 
-    private void clearFilters() {
+    private void clearAllFilters() {
         btnClearFilters.setOnAction((event) -> {
             try {
+                lblProject.setText("Project");
+                lblTimeFrame.setText("Time frame");
                 hBoxFilter.getChildren().remove(user);
+                hBoxFilter.getChildren().remove(project);
+                hBoxFilter.getChildren().remove(timeFrame);
                 cboUsers.getSelectionModel().clearSelection();
                 cboClients.getSelectionModel().clearSelection();
                 cboProjects.getSelectionModel().clearSelection();
+                cboProjects.getItems().clear();
                 dpStartDate.setValue(null);
                 dpEndDate.setValue(null);
                 mainModel.getAllTasks();
@@ -367,22 +415,20 @@ public class OverviewController implements Initializable {
         nodesListProject.setOnMouseEntered((event) -> {
             nodesListProject.animateList();
         });
+
         nodesListProject.setOnMouseExited((event) -> {
-            if (!cboClients.getSelectionModel().isEmpty()) {
-                nodesListProject.animateList();
-            } else {
-                if (!cboClients.isShowing() && !cboProjects.isShowing()) {
-                    nodesListProject.animateList(false);
-                }
+            if (!cboClients.isShowing() && !cboProjects.isShowing()) {
+                nodesListProject.animateList(false);
             }
         });
     }
 
     private void displayTimeFrameFilter() {
-        nodesListTimeFrame.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            if (newValue) {
-                nodesListTimeFrame.animateList();
-            } else {
+        nodesListTimeFrame.setOnMouseEntered((event) -> {
+            nodesListTimeFrame.animateList();
+        });
+        nodesListTimeFrame.setOnMouseExited((event) -> {
+            if (!dpStartDate.isShowing() && !dpEndDate.isShowing()) {
                 nodesListTimeFrame.animateList(false);
             }
         });
@@ -392,13 +438,57 @@ public class OverviewController implements Initializable {
         user.setOnAction((event) -> {
             cboUsers.getSelectionModel().clearSelection();
             hBoxFilter.getChildren().remove(user);
-            
+
             try {
-                mainModel.getAllTasks();
+                if (checkAllFilterEmpty()) {
+                    mainModel.getAllTasks();
+                } else {
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+                }
             } catch (ModelException ex) {
                 Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
-            }                    
+            }
         });
     }
 
+    private void removeProjectFilter() {
+        project.setOnAction((event) -> {
+            cboProjects.getSelectionModel().clearSelection();
+            cboProjects.getItems().clear();
+            cboClients.getSelectionModel().clearSelection();
+            hBoxFilter.getChildren().remove(project);
+
+            try {
+                if (checkAllFilterEmpty()) {
+                    mainModel.getAllTasks();
+                } else {
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+                }
+            } catch (ModelException ex) {
+                Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
+    private void removeTimeFrameFilter() {
+        timeFrame.setOnAction((event) -> {
+            hBoxFilter.getChildren().remove(timeFrame);
+            dpStartDate.setValue(null);
+            dpEndDate.setValue(null);
+            try {
+                if (checkAllFilterEmpty()) {
+                    mainModel.getAllTasks();
+                } else {
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+                }
+            } catch (ModelException ex) {
+                Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
+    private Boolean checkAllFilterEmpty() {
+        return cboUsers.getValue() == null && cboProjects.getValue() == null
+                && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+    }
 }

@@ -77,7 +77,7 @@
                <children>
                   <JFXNodesList fx:id="nodesListProject" alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <children>
-                        <Label minHeight="20.0" prefWidth="210.0" styleClass="labelFilter" text="Project" />
+                        <Label fx:id="lblProject" minHeight="20.0" prefWidth="210.0" styleClass="labelFilter" text="Project" />
                         <GridPane styleClass="createItem">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -105,7 +105,7 @@
                   </JFXNodesList>
                   <JFXNodesList fx:id="nodesListTimeFrame" alignment="TOP_RIGHT" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                      <children>
-                        <Label minHeight="20.0" prefWidth="210.0" styleClass="labelFilter" text="Time frame" />
+                        <Label fx:id="lblTimeFrame" minHeight="20.0" prefWidth="210.0" styleClass="labelFilter" text="Time frame" />
                         <GridPane prefWidth="210.0" styleClass="createItem">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
