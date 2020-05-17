@@ -102,4 +102,9 @@ public class MockTaskDAO implements ITaskDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries() throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

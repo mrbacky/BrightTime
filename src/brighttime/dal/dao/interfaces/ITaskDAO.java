@@ -36,4 +36,6 @@ public interface ITaskDAO {
 
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries() throws DalException;
+    
 }

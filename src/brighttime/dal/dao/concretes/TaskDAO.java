@@ -69,6 +69,116 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries() throws DalException {
+        Map<Integer, TaskConcrete1> mapTaskMap = new HashMap<>();
+        Map<LocalDate, List<TaskConcrete1>> mapDateMap = new HashMap<>();
+        String sql = "SELECT A1.id AS taskId, A1.description, A1.modifiedDate, A1.billability,\n"
+                + "	A1.projectId, A1.projectName,\n"
+                + "	A1.clientId, A1.clientName,\n"
+                + "	A2.taskEntryId, A2.startTime, A2.endTime\n"
+                + "FROM\n"
+                + "	(\n"
+                + "	SELECT T.id, T.description, T.modifiedDate, T.billability,\n"
+                + "		P.id AS projectId, P.name AS projectName,\n"
+                + "		C.id AS clientId, C.name AS clientName\n"
+                + "	FROM Task T\n"
+                + "	JOIN Project P\n"
+                + "	ON T.projectId = P.id\n"
+                + "	JOIN Client C\n"
+                + "	ON P.clientId = C.id\n"
+                + "	WHERE T.modifiedDate BETWEEN DATEADD(DD, -5, CONVERT(DATE,GETDATE())) AND GETDATE() AND T.userId = 1\n"
+                + "	)\n"
+                + "	AS A1\n"
+                + "LEFT JOIN\n"
+                + "	(\n"
+                + "	SELECT TE.id AS taskEntryId, TE.startTime, TE.endTime, TE.taskId\n"
+                + "	FROM TaskEntry TE\n"
+                + "	WHERE TE.startTime BETWEEN DATEADD(DD, -5, CONVERT(DATE,GETDATE())) AND GETDATE()\n"
+                + "	)\n"
+                + "	AS A2\n"
+                + "ON A1.id = A2.taskId\n"
+                + "ORDER BY A1.modifiedDate DESC, A2.startTime DESC";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int taskId = rs.getInt("taskId");
+                LocalDateTime modifiedDate = rs.getTimestamp("modifiedDate").toLocalDateTime();
+                LocalDateTime startTime = null;
+                if (rs.getTimestamp("startTime") != null) {
+                    startTime = rs.getTimestamp("startTime").toLocalDateTime();
+                }
+
+                TaskConcrete1 newTask;
+                if (!mapTaskMap.containsKey(taskId)) {
+
+                    int projectId = rs.getInt("projectId");
+                    String projectName = rs.getString("projectName");
+                    int clientId = rs.getInt("clientId");
+                    String clientName = rs.getString("clientName");
+
+                    Client client = new Client(clientId, clientName);
+                    Project project = new Project(projectId, projectName, client);
+
+                    TaskBase.Billability billability;
+                    String rsBillability = rs.getString("billability");
+
+                    if (rsBillability.equals("B")) {
+                        billability = TaskBase.Billability.BILLABLE;
+                    } else {
+                        billability = TaskBase.Billability.NON_BILLABLE;
+                    }
+
+                    String description = rs.getString("description");
+                    
+                    List<TaskEntry> entryList = new ArrayList();
+
+                    newTask = new TaskConcrete1(taskId, description, billability, project, entryList, modifiedDate);
+
+                    mapTaskMap.put(taskId, newTask);
+
+                } else {
+                    newTask = mapTaskMap.get(taskId);
+                }
+
+                int taskEntryId = rs.getInt("taskEntryId");
+                if (taskEntryId > 0) {
+
+                    if (rs.getTimestamp("endTime") != null) {
+                        LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
+                        TaskEntry newEntry = new TaskEntry(taskEntryId, newTask, startTime, endTime);
+                        newTask.getTaskEntryList().add(newEntry);
+                    }
+
+                }
+
+                LocalDate date;
+                if (startTime != null) {
+                    date = startTime.toLocalDate();
+                } else {
+                    date = modifiedDate.toLocalDate();
+                }
+
+                if (!mapDateMap.containsKey(date)) {
+                    List<TaskConcrete1> taskList = new ArrayList<>();
+                    taskList.add(newTask);
+                    mapDateMap.put(date, taskList);
+                } else {
+                    List<TaskConcrete1> list = mapDateMap.get(date);
+                    if (!list.contains(newTask)) {
+                        list.add(newTask);
+                    }
+                }
+            }
+            return mapDateMap;
+        } catch (SQLException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
     public Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException {
         try {
             dateMap = new HashMap<>();
