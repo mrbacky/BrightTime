@@ -38,8 +38,8 @@
                         <TableView fx:id="tbvTasks" prefHeight="260.0">
                           <columns>
                             <TableColumn fx:id="colTaskDescription" maxWidth="1.7976931348623157E308" prefWidth="260.0" text="Task description" />
-                            <TableColumn fx:id="colHours" maxWidth="1.7976931348623157E308" minWidth="50.0" text="Hours" />
-                              <TableColumn fx:id="colCost" maxWidth="1.7976931348623157E308" minWidth="50.0" text="Cost" />
+                            <TableColumn id="tableCol" fx:id="colHours" maxWidth="1.7976931348623157E308" minWidth="50.0" text="Hours" />
+                              <TableColumn id="tableCol" fx:id="colCost" maxWidth="1.7976931348623157E308" minWidth="50.0" text="Cost" />
                           </columns>
                         </TableView>
                         <BarChart fx:id="barChartTasks" prefHeight="260.0" GridPane.rowIndex="1">

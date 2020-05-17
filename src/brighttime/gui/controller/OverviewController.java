@@ -98,7 +98,10 @@ public class OverviewController implements Initializable {
     private final JFXButton project = new JFXButton();
     private final JFXButton timeFrame = new JFXButton();
 
-    //TODO: Very basic and lacking implementation made to check the connection between the view and database.
+    //TODO: Maybe move to CSS
+    String defaultColor = "-fx-text-fill: #435A9A";
+    String highlightColor = "-fx-text-fill: red";
+
     public OverviewController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
@@ -109,9 +112,6 @@ public class OverviewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        colTaskDescription.setPrefWidth(335);
-        colHours.setPrefWidth(134);
-        colCost.setPrefWidth(134);
         // TODO
         displayUserFilter();
         displayProjectFilter();
@@ -140,9 +140,10 @@ public class OverviewController implements Initializable {
             if (newValue != null) {
                 grid.setPrefWidth(newValue.doubleValue() - (oldValue.doubleValue() - scrollPane.getViewportBounds().getWidth()));
             }
-
         });
-        ObservableValue<Number> w1 = tbvTasks.widthProperty().multiply(0.5);
+        
+        //TODO: Fix table column widths.
+        ObservableValue<Number> w1 = tbvTasks.widthProperty().multiply(0.465);
         ObservableValue<Number> w2 = tbvTasks.widthProperty().multiply(0.25);
         colTaskDescription.prefWidthProperty().bind(w1);
         colHours.prefWidthProperty().bind(w2);
@@ -225,14 +226,11 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-                    user.setText(newVal.toString());
-                    user.getStyleClass().add("buttonFilteredItem");
-                    hBoxFilter.getChildren().add(user);
+                    makeActiveFilterButton(user, newVal.toString());
                     nodesListUser.animateList(false);
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by user.", "An error occured: " + ex.getMessage());
                 }
-                System.out.println(scrollPane.getWidth());
             }
         });
     }
@@ -240,9 +238,7 @@ public class OverviewController implements Initializable {
     private void selectClient() {
         cboClients.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
-                lblProject.setText("Please select a project.");
-                //TODO: Change color!
-                lblProject.setStyle("-fx-text-fill: red");
+                changeLabel(lblProject, "Please select a project.", highlightColor);
             }
         });
     }
@@ -252,11 +248,8 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, dpStartDate.getValue(), dpEndDate.getValue()));
-                    project.setText(newVal.toString() + " (" + cboClients.getValue().toString() + ")");
-                    project.getStyleClass().add("buttonFilteredItem");
-                    hBoxFilter.getChildren().add(project);
-                    lblProject.setText("Project");
-                    lblProject.setStyle("-fx-text-fill: #435A9A");
+                    makeActiveFilterButton(project, newVal.toString() + " (" + cboClients.getValue().toString() + ")");
+                    changeLabel(lblProject, "Project", defaultColor);
                     nodesListProject.animateList(false);
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by project.", "An error occured: " + ex.getMessage());
@@ -272,19 +265,14 @@ public class OverviewController implements Initializable {
                     try {
                         mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
                         //TODO: Change date format.
-                        timeFrame.setText(newValue.toString() + " - " + dpEndDate.getValue().toString());
-                        timeFrame.getStyleClass().add("buttonFilteredItem");
-                        hBoxFilter.getChildren().add(timeFrame);
-                        lblTimeFrame.setText("Time frame");
-                        lblTimeFrame.setStyle("-fx-text-fill: #435A9A");
+                        makeActiveFilterButton(timeFrame, newValue.toString() + " - " + dpEndDate.getValue().toString());
+                        changeLabel(lblTimeFrame, "Time frame", defaultColor);
                         nodesListTimeFrame.animateList(false);
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
                     }
                 } else {
-                    //TODO: Change color!
-                    lblTimeFrame.setText("Please select an end date.");
-                    lblTimeFrame.setStyle("-fx-text-fill: red");
+                    changeLabel(lblTimeFrame, "Please select an end date.", highlightColor);
                 }
             }
         });
@@ -298,19 +286,14 @@ public class OverviewController implements Initializable {
                     try {
                         mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
                         //TODO: Change date format.
-                        timeFrame.setText(dpStartDate.getValue().toString() + " - " + newValue.toString());
-                        timeFrame.getStyleClass().add("buttonFilteredItem");
-                        hBoxFilter.getChildren().add(timeFrame);
-                        lblTimeFrame.setText("Time frame");
-                        lblTimeFrame.setStyle("-fx-text-fill: #435A9A");
+                        makeActiveFilterButton(timeFrame, dpStartDate.getValue().toString() + " - " + newValue.toString());
+                        changeLabel(lblTimeFrame, "Time frame", defaultColor);
                         nodesListTimeFrame.animateList(false);
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
                     }
                 } else {
-                    //TODO: Change color!
-                    lblTimeFrame.setText("Please select a start date.");
-                    lblTimeFrame.setStyle("-fx-text-fill: red");
+                    changeLabel(lblTimeFrame, "Please select a start date.", highlightColor);
                 }
             }
         });
@@ -378,27 +361,6 @@ public class OverviewController implements Initializable {
 
     }
 
-    private void clearAllFilters() {
-        btnClearFilters.setOnAction((event) -> {
-            try {
-                lblProject.setText("Project");
-                lblTimeFrame.setText("Time frame");
-                hBoxFilter.getChildren().remove(user);
-                hBoxFilter.getChildren().remove(project);
-                hBoxFilter.getChildren().remove(timeFrame);
-                cboUsers.getSelectionModel().clearSelection();
-                cboClients.getSelectionModel().clearSelection();
-                cboProjects.getSelectionModel().clearSelection();
-                cboProjects.getItems().clear();
-                dpStartDate.setValue(null);
-                dpEndDate.setValue(null);
-                mainModel.getAllTasks();
-            } catch (ModelException ex) {
-                alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
-            }
-        });
-    }
-
     private void displayUserFilter() {
         nodesListUser.setOnMouseEntered((event) -> {
             nodesListUser.animateList();
@@ -408,14 +370,12 @@ public class OverviewController implements Initializable {
                 nodesListUser.animateList(false);
             }
         });
-
     }
 
     private void displayProjectFilter() {
         nodesListProject.setOnMouseEntered((event) -> {
             nodesListProject.animateList();
         });
-
         nodesListProject.setOnMouseExited((event) -> {
             if (!cboClients.isShowing() && !cboProjects.isShowing()) {
                 nodesListProject.animateList(false);
@@ -438,16 +398,7 @@ public class OverviewController implements Initializable {
         user.setOnAction((event) -> {
             cboUsers.getSelectionModel().clearSelection();
             hBoxFilter.getChildren().remove(user);
-
-            try {
-                if (checkAllFilterEmpty()) {
-                    mainModel.getAllTasks();
-                } else {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-                }
-            } catch (ModelException ex) {
-                Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            refreshAfterRemovingOneFilter();
         });
     }
 
@@ -457,16 +408,7 @@ public class OverviewController implements Initializable {
             cboProjects.getItems().clear();
             cboClients.getSelectionModel().clearSelection();
             hBoxFilter.getChildren().remove(project);
-
-            try {
-                if (checkAllFilterEmpty()) {
-                    mainModel.getAllTasks();
-                } else {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-                }
-            } catch (ModelException ex) {
-                Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            refreshAfterRemovingOneFilter();
         });
     }
 
@@ -475,14 +417,40 @@ public class OverviewController implements Initializable {
             hBoxFilter.getChildren().remove(timeFrame);
             dpStartDate.setValue(null);
             dpEndDate.setValue(null);
+            refreshAfterRemovingOneFilter();
+        });
+    }
+
+    private void refreshAfterRemovingOneFilter() {
+        //TODO: Exceptions.
+        try {
+            if (checkAllFilterEmpty()) {
+                mainModel.getAllTasks();
+            } else {
+                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+            }
+        } catch (ModelException ex) {
+            Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearAllFilters() {
+        btnClearFilters.setOnAction((event) -> {
             try {
-                if (checkAllFilterEmpty()) {
-                    mainModel.getAllTasks();
-                } else {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-                }
+                changeLabel(lblProject, "Project", defaultColor);
+                changeLabel(lblTimeFrame, "Time frame", defaultColor);
+                hBoxFilter.getChildren().remove(user);
+                hBoxFilter.getChildren().remove(project);
+                hBoxFilter.getChildren().remove(timeFrame);
+                cboUsers.getSelectionModel().clearSelection();
+                cboClients.getSelectionModel().clearSelection();
+                cboProjects.getSelectionModel().clearSelection();
+                cboProjects.getItems().clear();
+                dpStartDate.setValue(null);
+                dpEndDate.setValue(null);
+                mainModel.getAllTasks();
             } catch (ModelException ex) {
-                Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
+                alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
             }
         });
     }
@@ -491,4 +459,16 @@ public class OverviewController implements Initializable {
         return cboUsers.getValue() == null && cboProjects.getValue() == null
                 && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
     }
+
+    private void changeLabel(Label label, String text, String style) {
+        label.setText(text);
+        label.setStyle(style);
+    }
+
+    private void makeActiveFilterButton(JFXButton button, String text) {
+        button.setText(text);
+        button.getStyleClass().add("buttonFilteredItem");
+        hBoxFilter.getChildren().add(button);
+    }
+
 }

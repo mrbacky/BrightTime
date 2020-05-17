@@ -197,3 +197,35 @@
     -fx-text-fill: #435A9A;
     -fx-padding: 0 20 20 0;
 }
+
+.table-view{
+    -fx-border-style: solid;
+    -fx-border-width: 0.1;
+    -fx-background-color: whitesmoke;
+    -fx-border-color: #435A9A;
+    /*backgroung of selected row*/
+    -fx-selection-bar: #F0C326;
+}
+
+.table-row-cell:selected .text {
+    /*text of selected row*/
+    -fx-fill: black;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: #435A9A;
+}
+
+.table-view .column-header-background .label{
+    -fx-font-weight:bold;
+    -fx-text-fill: white;
+    -fx-font-size: 12;
+    -fx-alignment: CENTER;
+}
+
+#tableCol{
+    -fx-alignment: CENTER_RIGHT;  
+}
+
