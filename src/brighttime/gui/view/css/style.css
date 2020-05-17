@@ -155,11 +155,14 @@
 }
 
 .dateTimePicker .jfx-text-field{
+    -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;
     -fx-prompt-text-fill: #435A9A;
+    -fx-text-fill: black;
     /*-jfx-label-float: true;*/
     -jfx-focus-color: #D11149;
     -jfx-unfocus-color: transparent;
+    -fx-alignment: CENTER;
 }
 
 #btnPlayPause{
@@ -204,10 +207,10 @@
 }
 
 .jfx-date-picker .jfx-text-field{
-    -jfx-unfocus-color: white;
-    -jfx-default-color: white;
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: white;
+    /*-jfx-unfocus-color: white;*/
+    /*-jfx-default-color: white;*/
+    /*-fx-text-fill: white;*/
+    /*-fx-prompt-text-fill: white;*/
 }
 
 .buttonFilteredItem{

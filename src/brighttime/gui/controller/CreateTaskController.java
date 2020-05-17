@@ -21,6 +21,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.chrono.Chronology;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DateCell;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
@@ -42,9 +44,9 @@ import javafx.util.converter.LocalTimeStringConverter;
 public class CreateTaskController implements Initializable {
 
     @FXML
-    private JFXTextField txtDescription;
+    private GridPane grid;
     @FXML
-    private JFXButton btnAdd;
+    private JFXTextField txtDescription;
     @FXML
     private JFXComboBox<Client> cboClient;
     @FXML
@@ -52,10 +54,20 @@ public class CreateTaskController implements Initializable {
     @FXML
     private JFXToggleNode tglBillability;
     @FXML
-    private HBox hBoxDateTime;
+    private JFXButton btnAdd;
 
+    @FXML
+    private StackPane stack1;
+    @FXML
+    private StackPane stack2;
+    @FXML
+    private StackPane stack3;
+
+    @FXML
     private JFXDatePicker datePicker;
+    @FXML
     private JFXTimePicker timePickerStart;
+    @FXML
     private JFXTimePicker timePickerEnd;
 
     private IMainModel mainModel;
@@ -63,7 +75,6 @@ public class CreateTaskController implements Initializable {
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
     private User user;
-    private TaskConcrete1 task;
 
     private Boolean manualMode;
     private Boolean date = false;
@@ -71,9 +82,9 @@ public class CreateTaskController implements Initializable {
     private Boolean end = false;
     private Boolean timeInterval = false;
 
-// TODO: Decide if 12HourView or 24HourView. Or the user's system.
-    //StringConverter<LocalTime> converter =new LocalTimeStringConverter(FormatStyle.SHORT, Locale.getDefault());
-    StringConverter<LocalTime> converter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
+    //TODO: Decide if 12HourView or 24HourView. Or the user's system.
+    StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
+    StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -86,11 +97,11 @@ public class CreateTaskController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        createDateTimepickers();
         normalMode();
         setDateRestriction();
         setTimeRestriction();
         display24HourView();
+        displayFormattedDate();
         listenDatePicker();
         listenTimePickerStart();
         listenTimePickerEnd();
@@ -114,24 +125,18 @@ public class CreateTaskController implements Initializable {
         this.timeTrackerContr = timeTrackerContr;
     }
 
-    private void createDateTimepickers() {
-        datePicker = new JFXDatePicker();
-        timePickerStart = new JFXTimePicker();
-        timePickerEnd = new JFXTimePicker();
-    }
-
     void manualMode() {
         manualMode = true;
-        hBoxDateTime.getChildren().add(datePicker);
-        hBoxDateTime.getChildren().add(timePickerStart);
-        hBoxDateTime.getChildren().add(timePickerEnd);
+        grid.add(stack1, 0, 1, 1, 1);
+        grid.add(stack2, 1, 1, 1, 1);
+        grid.add(stack3, 2, 1, 1, 1);
     }
 
     void normalMode() {
         manualMode = false;
-        hBoxDateTime.getChildren().remove(datePicker);
-        hBoxDateTime.getChildren().remove(timePickerStart);
-        hBoxDateTime.getChildren().remove(timePickerEnd);
+        grid.getChildren().remove(stack1);
+        grid.getChildren().remove(stack2);
+        grid.getChildren().remove(stack3);
     }
 
     private void setUser() {
@@ -318,7 +323,11 @@ public class CreateTaskController implements Initializable {
 
     private void display24HourView() {
         timePickerStart.set24HourView(true);
-        timePickerStart.converterProperty().setValue(converter);
+        timePickerStart.converterProperty().setValue(timeConverter);
+    }
+
+    private void displayFormattedDate() {
+        datePicker.converterProperty().setValue(dateConverter);
     }
 
     private void listenDatePicker() {
