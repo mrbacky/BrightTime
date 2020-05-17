@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
@@ -11,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane minWidth="-Infinity" prefWidth="750.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
     <children>
@@ -24,8 +22,8 @@
                                 <Insets />
                             </StackPane.margin>
                         </Label>
-                  <Label fx:id="lblEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" text="99:88" StackPane.alignment="CENTER_RIGHT" />
-                  <Label fx:id="lblStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" text="88:99" StackPane.alignment="CENTER_LEFT" />
+                  <Label fx:id="lblEndTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" StackPane.alignment="CENTER_RIGHT" />
+                  <Label fx:id="lblStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" StackPane.alignment="CENTER_LEFT" />
                     </children>
                 </StackPane>
                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
@@ -70,26 +68,11 @@
                 </StackPane>
                 <StackPane prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="lblDuration" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="55.0" styleClass="txtCommon" text="59:03:77" />
+                  <Label fx:id="lblDuration" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="55.0" styleClass="txtCommon" text=" " />
                </children>
                 </StackPane>
                 <StackPane prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <JFXButton fx:id="btnDeleteTask" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="." maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" ripplerFill="BLACK">
-                            <graphic>
-                                <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@assets/delete_48px.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                            <StackPane.margin>
-                                <Insets left="40.0" />
-                            </StackPane.margin>
-                            <font>
-                                <Font size="1.0" />
-                            </font>
-                        </JFXButton>
                         <ToggleButton fx:id="btnPlayPause" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handlePlayPauseTask" prefHeight="30.0" prefWidth="30.0" styleClass="rootButtons">
                             <graphic>
                                 <ImageView fx:id="imgPlayPause" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -99,9 +82,14 @@
                                 </ImageView>
                             </graphic>
                             <StackPane.margin>
-                                <Insets right="30.0" />
+                                <Insets right="35.0" />
                             </StackPane.margin>
                         </ToggleButton>
+                  <ImageView fx:id="imgMoneyBag" fitHeight="30.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
+                     <image>
+                        <Image url="@assets/icons8_money_bag_krona_96px.png" />
+                     </image>
+                  </ImageView>
                     </children>
                 </StackPane>
             </children>

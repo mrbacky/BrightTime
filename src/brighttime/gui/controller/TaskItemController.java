@@ -58,8 +58,6 @@ public class TaskItemController implements Initializable {
     @FXML
     private JFXTextField textFieldTaskDesc;
     @FXML
-    private JFXButton btnDeleteTask;
-    @FXML
     private ToggleButton btnPlayPause;
     @FXML
     private ImageView imgPlayPause;
@@ -77,6 +75,8 @@ public class TaskItemController implements Initializable {
     private Label lblStartTime;
     @FXML
     private Label lblDuration;
+    @FXML
+    private ImageView imgMoneyBag;
 
     public TaskItemController() {
         this.alertManager = new AlertManager();
@@ -119,6 +119,10 @@ public class TaskItemController implements Initializable {
         if (taskModel.getDayEntryList().isEmpty()) {
             btnExpandTask.setDisable(true);
             imgExpandCollapse.setImage(null);
+        }
+
+        if (taskModel.getTask().getBillability() == TaskConcrete1.Billability.NON_BILLABLE) {
+            imgMoneyBag.setVisible(false);
         }
     }
 
