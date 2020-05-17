@@ -165,6 +165,12 @@ public class TaskDAO implements ITaskDAO {
         }
     }
 
+    /**
+     * Builds the data structure (map) which is needed to display the tasks in
+     * the TimeTracker View. *
+     *
+     * @return A map with a list of tasks (containing entries) for each day.
+     */
     private Map<LocalDate, List<TaskConcrete1>> buildDateMap(Map<LocalDate, List<TaskConcrete1>> map,
             TaskConcrete1 newTask, LocalDate date) {
         if (!map.containsKey(date)) {
