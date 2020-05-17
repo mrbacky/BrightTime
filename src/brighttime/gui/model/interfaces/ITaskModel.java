@@ -7,8 +7,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -58,8 +60,24 @@ public interface ITaskModel {
 
     StringProperty stringDurationProperty();
 
-    void setupStartTimeListener();
+    void setupDayEntryListListener();
 
     void setupEndTimeListener();
+
+    LocalDateTime updatedStartTime();
+
+    LocalDateTime updatedEndTime();
+
+    List<TaskEntry> setUpDayEntryList();
+
+    public void initializeModel();
+
+    ObservableList getObsEntries();
+
+    ObservableList getDayEntryListProp();
+
+    void setDayEntryListProp(ObservableList value);
+
+    ListProperty dayEntryListPropProperty();
 
 }

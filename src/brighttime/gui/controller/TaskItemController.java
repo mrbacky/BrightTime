@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -116,7 +117,7 @@ public class TaskItemController implements Initializable {
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
         setTaskDetails(taskModel.getTask());
-        if (taskModel.getDayEntryList().isEmpty()) {
+        if (taskModel.getObsEntries().isEmpty()) {
             btnExpandTask.setDisable(true);
             imgExpandCollapse.setImage(null);
         }
@@ -143,12 +144,11 @@ public class TaskItemController implements Initializable {
                 -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 
         lblEndTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
+                -> dtf.format(taskModel.getEndTime()), taskModel.endTimeProperty()));
 
         lblDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
+                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getObsEntries()).toSeconds()), taskModel.stringDurationProperty()));
 
-//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(task).toSeconds()));
     }
 
     @FXML
@@ -156,7 +156,7 @@ public class TaskItemController implements Initializable {
 
         if (btnExpandTask.isSelected()) {
             imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
-            if (!taskModel.getDayEntryList().isEmpty()) {
+            if (!taskModel.getObsEntries().isEmpty()) {
                 initTaskEntries();
             }
         } else {
@@ -171,7 +171,7 @@ public class TaskItemController implements Initializable {
 
     public void initTaskEntries() {
         vBoxTaskEntries.getChildren().clear();
-        List<TaskEntry> dayEntries = taskModel.getDayEntryList();
+        List<TaskEntry> dayEntries = taskModel.getObsEntries();
         for (TaskEntry entry : dayEntries) {
             addEntryItem(entry);
         }
@@ -207,24 +207,19 @@ public class TaskItemController implements Initializable {
 
             tempStartTime = LocalDateTime.now().withNano(0);
         } else {
-            try {
-                imgPlayPause.setImage(PLAY_ICON_IMAGE);
-                tempEndTime = LocalDateTime.now().withNano(0);
-                taskModel.addTaskEntry(tempStartTime, tempEndTime);
-                //  refresh
-                timeTrackerController.initializeView();
-
-//                Platform.runLater(() -> {
-//                try {
-//                    taskModel.addTaskEntry(tempStartTime, tempEndTime);
-//                    timeTrackerController.initializeView();
-//                } catch (ModelException ex) {
-//                    Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            });
-            } catch (ModelException ex) {
-                alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
-            }
+            imgPlayPause.setImage(PLAY_ICON_IMAGE);
+            tempEndTime = LocalDateTime.now().withNano(0);
+            //                taskModel.addTaskEntry(tempStartTime, tempEndTime);
+//                //  refresh
+//                timeTrackerController.initializeView();
+            Platform.runLater(() -> {
+                try {
+                    taskModel.addTaskEntry(tempStartTime, tempEndTime);
+                    timeTrackerController.initializeView();
+                } catch (ModelException ex) {
+                    Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
 
         }
     }

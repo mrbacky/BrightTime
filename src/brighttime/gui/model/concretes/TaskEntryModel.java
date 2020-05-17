@@ -154,6 +154,7 @@ public class TaskEntryModel implements ITaskEntryModel {
                 LocalDateTime endTimeLDT = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setEndTime(endTimeLDT);
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
+                
             }
         });
     }

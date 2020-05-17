@@ -10,14 +10,21 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -34,20 +41,53 @@ public class TaskModel implements ITaskModel {
     private final StringProperty stringDuration = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
+    private final ListProperty<TaskEntry> dayEntryListProp = new SimpleListProperty<>();
+    private ObservableList<TaskEntry> obsEntries = FXCollections.observableArrayList();
+
+    @Override
+    public ObservableList getObsEntries() {
+        return obsEntries;
+    }
+
+    @Override
+    public ObservableList getDayEntryListProp() {
+        return dayEntryListProp.get();
+    }
+
+    @Override
+    public void setDayEntryListProp(ObservableList value) {
+        dayEntryListProp.set(value);
+    }
+
+    @Override
+    public ListProperty dayEntryListPropProperty() {
+        return dayEntryListProp;
+    }
 
     public TaskModel(BllFacade bllManager) throws IOException {
         this.bllManager = bllManager;
-        setupStartTimeListener();
-        setupEndTimeListener();
+
+    }
+
+    @Override
+    public void initializeModel() {
+        obsEntries.addAll(setUpDayEntryList());
+        dayEntryListProp.set(obsEntries);
+        startTime.set(updatedStartTime());
+        endTime.set(updatedEndTime());
+//
+        setupDayEntryListListener();
+//        setupEndTimeListener();
 
     }
 
     @Override
     public LocalDateTime getEndTime() {
-        if (!getDayEntryList().isEmpty()) {
-            return bllManager.getEndTime(getDayEntryList());
-        }
-        return task.getCreationTime();
+//        if (!getDayEntryList().isEmpty()) {
+//            return bllManager.getEndTime(getDayEntryList());
+//        }
+//        return task.getCreationTime();
+        return endTime.get();
     }
 
     @Override
@@ -62,11 +102,8 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public LocalDateTime getStartTime() {
-        if (!getDayEntryList().isEmpty()) {
 
-            return bllManager.getStartTime(getDayEntryList());
-        }
-        return task.getCreationTime();
+        return startTime.get();
     }
 
     @Override
@@ -96,10 +133,12 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public List getDayEntryList() {
-        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
-                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
-        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
-        return dayEntries;
+
+        return dayEntryList.get();
+//        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
+//                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+//        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+//        return dayEntries;
     }
 
     @Override
@@ -165,8 +204,8 @@ public class TaskModel implements ITaskModel {
     public void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException {
         try {
             TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
-            task.getTaskEntryList().add(newTaskEntry);
-            bllManager.createTaskEntry(newTaskEntry);
+            TaskEntry taskEntry = bllManager.createTaskEntry(newTaskEntry);
+            task.getTaskEntryList().add(taskEntry);
 //  call createTaskEntry from DB here
 //  TODO: create entryList in task OBJ if the list does not exist
 //        if (task.getTaskEntryList().isEmpty()) {
@@ -191,19 +230,66 @@ public class TaskModel implements ITaskModel {
         this.date = date;
     }
 
+    public void taskEntryListListener() {
+        task.getTaskEntryList();
+    }
+
     @Override
-    public void setupStartTimeListener() {
-        startTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
+    public void setupDayEntryListListener() {
+
+        obsEntries.addListener((ListChangeListener.Change<? extends TaskEntry> c) -> {
+            System.out.println("change in setupDayEntryListListener");
+            startTime.set(updatedStartTime());
+            endTime.set(updatedEndTime());
+            
+            
 
         });
+
+//        dayEntryList.addListener((ObservableValue<? extends List<TaskEntry>> observable, List<TaskEntry> oldValue, List<TaskEntry> newValue) -> {
+//            System.out.println("change in setupDayEntryListListener");
+//            
+//            dayEntryList.setValue(newValue);
+//            startTime.set(updatedStartTime());
+//            endTime.set(updatedEndTime());
+//
+//        });
+//        startTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
+//            
+//        });
     }
 
     @Override
     public void setupEndTimeListener() {
-        endTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
-            System.out.println("in start time listener");
-            endTime.set(newValue);
-        });
+//        endTime.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue, LocalDateTime newValue) -> {
+//            newValue = getEndTime();
+//        });
+    }
+
+    @Override
+    public LocalDateTime updatedStartTime() {
+        // || getDayEntryList()!=null
+        if (!obsEntries.isEmpty()) {
+            return bllManager.getStartTime(obsEntries);
+        }
+        return task.getCreationTime();
+    }
+
+    @Override
+    public LocalDateTime updatedEndTime() {
+        if (!obsEntries.isEmpty()) {
+            return bllManager.getEndTime(obsEntries);
+        }
+        return task.getCreationTime();
+    }
+
+    @Override
+    public List<TaskEntry> setUpDayEntryList() {
+
+        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
+                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+        return dayEntries;
     }
 
 }
