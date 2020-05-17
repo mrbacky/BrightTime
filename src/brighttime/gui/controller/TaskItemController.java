@@ -209,6 +209,15 @@ public class TaskItemController implements Initializable {
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
                 //  refresh
                 timeTrackerController.initializeView();
+
+//                Platform.runLater(() -> {
+//                try {
+//                    taskModel.addTaskEntry(tempStartTime, tempEndTime);
+//                    timeTrackerController.initializeView();
+//                } catch (ModelException ex) {
+//                    Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            });
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
             }

@@ -142,6 +142,14 @@ public class CreateTaskController implements Initializable {
                         timeTrackerContr.initializeView();
                     });
 
+//                    Platform.runLater(() -> {
+//                    try {
+//                        mainModel.addTask(task);
+//                        timeTrackerContr.initializeView();
+//                    } catch (ModelException ex) {
+//                        Logger.getLogger(CreateTaskController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                });
                     System.out.println("action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
