@@ -29,6 +29,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
@@ -497,13 +498,15 @@ public class OverviewController implements Initializable {
             double taskHoursTotal = ((double) task.getTotalDurationSeconds() / 60) / 60;
             String taskDescription = task.getDescription();
             XYChart.Series<String, Double> oneTaskBar = new XYChart.Series<>();
-            XYChart.Data<String, Double> data = new XYChart.Data<>("Tasks", taskHoursTotal);
+            XYChart.Data<String, Double> data = new XYChart.Data<>("", taskHoursTotal);
             oneTaskBar.setName(taskDescription);
             oneTaskBar.getData().add(data);
             taskBars.add(oneTaskBar);
         }
         barChartTasks.getData().clear();
         barChartTasks.getData().addAll(taskBars);
+        barChartTasks.getYAxis().setLabel("hours");
+        barChartTasks.setLegendSide(Side.RIGHT);
 
     }
 
