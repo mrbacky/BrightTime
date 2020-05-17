@@ -160,21 +160,84 @@
     -jfx-label-float: false; 
 }
 
+.gridFilterMenu{
+    -fx-background-color: orange;
+}
+
+.scroll-pane{
+    /*-fx-background-color: blue;*/
+}
+
+.labelFilter{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: white;
+    -fx-label-padding: 4 0 4 8;
+    -fx-text-fill: #435A9A;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+
+.buttonFilter{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: white;
+}
+
+.jfx-date-picker .jfx-text-field{
+    -jfx-unfocus-color: white;
+    -jfx-default-color: white;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+}
+
+.buttonFilteredItem{
+    /*TODO: fix the look of the buttons!*/
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
+    -fx-padding: 0 20 20 0;
+}
+
+.table-view{
+    -fx-border-style: solid;
+    -fx-border-width: 0.1;
+    -fx-background-color: whitesmoke;
+    -fx-border-color: #435A9A;
+    /*backgroung of selected row*/
+    -fx-selection-bar: #F0C326;
+}
+
+.table-row-cell:selected .text {
+    /*text of selected row*/
+    -fx-fill: black;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: #435A9A;
+}
+
+.table-view .column-header-background .label{
+    -fx-font-weight:bold;
+    -fx-text-fill: white;
+    -fx-font-size: 12;
+    -fx-alignment: CENTER;
+}
+
+#tableCol{
+    -fx-alignment: CENTER_RIGHT;  
+}
+
 .cboLogin{
     -fx-background-color: white;
     -fx-background-radius: 10 10 10 10;
     -fx-padding: 0 10 0 10;
-
 }
 
 .btnLogin{
-
     -fx-background-color: white;
     -fx-background-radius: 10 10 10 10;
     -fx-background-color:#F0C326
 }
-
-
-
-
-

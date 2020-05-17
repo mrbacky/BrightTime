@@ -12,34 +12,32 @@ import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXNodesList;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 /**
  * FXML Controller class
@@ -61,9 +59,6 @@ public class OverviewController implements Initializable {
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
-
-    @FXML
-    private AnchorPane apOverview;
 
     @FXML
     private JFXComboBox<User> cboUsers;
@@ -88,7 +83,31 @@ public class OverviewController implements Initializable {
     @FXML
     private BarChart<String, Double> barChartTasks;
 
-    //TODO: Very basic and lacking implementation made to check the connection between the view and database.
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private GridPane grid;
+    @FXML
+    private JFXNodesList nodesListUser;
+    @FXML
+    private JFXNodesList nodesListProject;
+    @FXML
+    private JFXNodesList nodesListTimeFrame;
+    @FXML
+    private HBox hBoxFilter;
+    @FXML
+    private Label lblProject;
+    @FXML
+    private Label lblTimeFrame;
+
+    private final JFXButton user = new JFXButton();
+    private final JFXButton project = new JFXButton();
+    private final JFXButton timeFrame = new JFXButton();
+
+    //TODO: Maybe move to CSS
+    String defaultColor = "-fx-text-fill: #435A9A";
+    String highlightColor = "-fx-text-fill: red";
+
     public OverviewController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
@@ -100,6 +119,12 @@ public class OverviewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        displayUserFilter();
+        displayProjectFilter();
+        displayTimeFrameFilter();
+        removeUserFilter();
+        removeProjectFilter();
+        removeTimeFrameFilter();
     }
 
     void initializeView() {
@@ -110,10 +135,25 @@ public class OverviewController implements Initializable {
         setValidators();
         setTable();
         selectUser();
+        selectClient();
         selectProject();
         listenDatePickerStart();
         listenDatePickerEnd();
-        clearFilters();
+        clearAllFilters();
+        //vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
+
+        scrollPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                grid.setPrefWidth(newValue.doubleValue() - (oldValue.doubleValue() - scrollPane.getViewportBounds().getWidth()));
+            }
+        });
+
+        //TODO: Fix table column widths.
+        ObservableValue<Number> w1 = tbvTasks.widthProperty().multiply(0.465);
+        ObservableValue<Number> w2 = tbvTasks.widthProperty().multiply(0.25);
+        colTaskDescription.prefWidthProperty().bind(w1);
+        colHours.prefWidthProperty().bind(w2);
+        colCost.prefWidthProperty().bind(w2);
 
         barChartTasks.setTitle("Amount of hours for each task");
 
@@ -197,10 +237,19 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-
+                    makeActiveFilterButton(user, newVal.toString());
+                    nodesListUser.animateList(false);
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by user.", "An error occured: " + ex.getMessage());
                 }
+            }
+        });
+    }
+
+    private void selectClient() {
+        cboClients.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
+            if (newVal != null) {
+                changeLabel(lblProject, "Please select a project.", highlightColor);
             }
         });
     }
@@ -210,7 +259,9 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, dpStartDate.getValue(), dpEndDate.getValue()));
-
+                    makeActiveFilterButton(project, newVal.toString() + " (" + cboClients.getValue().toString() + ")");
+                    changeLabel(lblProject, "Project", defaultColor);
+                    nodesListProject.animateList(false);
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by project.", "An error occured: " + ex.getMessage());
                 }
@@ -220,11 +271,19 @@ public class OverviewController implements Initializable {
 
     private void listenDatePickerStart() {
         dpStartDate.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && dpEndDate.getValue() != null) {
-                try {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
-                } catch (ModelException ex) {
-                    alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+            if (newValue != null) {
+                if (dpEndDate.getValue() != null) {
+                    try {
+                        mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
+                        //TODO: Change date format.
+                        makeActiveFilterButton(timeFrame, newValue.toString() + " - " + dpEndDate.getValue().toString());
+                        changeLabel(lblTimeFrame, "Time frame", defaultColor);
+                        nodesListTimeFrame.animateList(false);
+                    } catch (ModelException ex) {
+                        alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+                    }
+                } else {
+                    changeLabel(lblTimeFrame, "Please select an end date.", highlightColor);
                 }
             }
         });
@@ -232,12 +291,20 @@ public class OverviewController implements Initializable {
 
     private void listenDatePickerEnd() {
         dpEndDate.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && dpStartDate.getValue() != null) {
-                try {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
+            if (newValue != null) {
+                if (dpStartDate.getValue() != null) {
 
-                } catch (ModelException ex) {
-                    alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+                    try {
+                        mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
+                        //TODO: Change date format.
+                        makeActiveFilterButton(timeFrame, dpStartDate.getValue().toString() + " - " + newValue.toString());
+                        changeLabel(lblTimeFrame, "Time frame", defaultColor);
+                        nodesListTimeFrame.animateList(false);
+                    } catch (ModelException ex) {
+                        alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+                    }
+                } else {
+                    changeLabel(lblTimeFrame, "Please select a start date.", highlightColor);
                 }
             }
         });
@@ -308,20 +375,114 @@ public class OverviewController implements Initializable {
 
     }
 
-    private void clearFilters() {
+    private void displayUserFilter() {
+        nodesListUser.setOnMouseEntered((event) -> {
+            nodesListUser.animateList();
+        });
+        nodesListUser.setOnMouseExited((event) -> {
+            if (!cboUsers.isShowing()) {
+                nodesListUser.animateList(false);
+            }
+        });
+    }
+
+    private void displayProjectFilter() {
+        nodesListProject.setOnMouseEntered((event) -> {
+            nodesListProject.animateList();
+        });
+        nodesListProject.setOnMouseExited((event) -> {
+            if (!cboClients.isShowing() && !cboProjects.isShowing()) {
+                nodesListProject.animateList(false);
+            }
+        });
+    }
+
+    private void displayTimeFrameFilter() {
+        nodesListTimeFrame.setOnMouseEntered((event) -> {
+            nodesListTimeFrame.animateList();
+        });
+        nodesListTimeFrame.setOnMouseExited((event) -> {
+            if (!dpStartDate.isShowing() && !dpEndDate.isShowing()) {
+                nodesListTimeFrame.animateList(false);
+            }
+        });
+    }
+
+    private void removeUserFilter() {
+        user.setOnAction((event) -> {
+            cboUsers.getSelectionModel().clearSelection();
+            hBoxFilter.getChildren().remove(user);
+            refreshAfterRemovingOneFilter();
+        });
+    }
+
+    private void removeProjectFilter() {
+        project.setOnAction((event) -> {
+            cboProjects.getSelectionModel().clearSelection();
+            cboProjects.getItems().clear();
+            cboClients.getSelectionModel().clearSelection();
+            hBoxFilter.getChildren().remove(project);
+            refreshAfterRemovingOneFilter();
+        });
+    }
+
+    private void removeTimeFrameFilter() {
+        timeFrame.setOnAction((event) -> {
+            hBoxFilter.getChildren().remove(timeFrame);
+            dpStartDate.setValue(null);
+            dpEndDate.setValue(null);
+            refreshAfterRemovingOneFilter();
+        });
+    }
+
+    private void refreshAfterRemovingOneFilter() {
+        //TODO: Exceptions.
+        try {
+            if (checkAllFilterEmpty()) {
+                mainModel.getAllTasks();
+            } else {
+                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+            }
+        } catch (ModelException ex) {
+            Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearAllFilters() {
         btnClearFilters.setOnAction((event) -> {
             try {
+                changeLabel(lblProject, "Project", defaultColor);
+                changeLabel(lblTimeFrame, "Time frame", defaultColor);
+                hBoxFilter.getChildren().remove(user);
+                hBoxFilter.getChildren().remove(project);
+                hBoxFilter.getChildren().remove(timeFrame);
                 cboUsers.getSelectionModel().clearSelection();
                 cboClients.getSelectionModel().clearSelection();
                 cboProjects.getSelectionModel().clearSelection();
+                cboProjects.getItems().clear();
                 dpStartDate.setValue(null);
                 dpEndDate.setValue(null);
                 mainModel.getAllTasks();
-
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
             }
         });
+    }
+
+    private Boolean checkAllFilterEmpty() {
+        return cboUsers.getValue() == null && cboProjects.getValue() == null
+                && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+    }
+
+    private void changeLabel(Label label, String text, String style) {
+        label.setText(text);
+        label.setStyle(style);
+    }
+
+    private void makeActiveFilterButton(JFXButton button, String text) {
+        button.setText(text);
+        button.getStyleClass().add("buttonFilteredItem");
+        hBoxFilter.getChildren().add(button);
     }
 
     private void setUpBarChart() {
