@@ -1,6 +1,7 @@
 package brighttime.gui.util;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.beans.value.ObservableValue;
@@ -34,13 +35,24 @@ public class ValidationManager {
      * @param comboBox
      * @param message
      */
-    public void selectionValidation(JFXComboBox comboBox, String message) {
+    public void comboBoxValidation(JFXComboBox comboBox, String message) {
         RequiredFieldValidator validator = new RequiredFieldValidator();
         comboBox.getValidators().add(validator);
         validator.setMessage(message);
         comboBox.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (!newValue) {
                 comboBox.validate();
+            }
+        });
+    }
+
+    public void dateValidation(JFXDatePicker datePicker, String message) {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        datePicker.getValidators().add(validator);
+        validator.setMessage(message);
+        datePicker.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (!newValue) {
+                datePicker.validate();
             }
         });
     }

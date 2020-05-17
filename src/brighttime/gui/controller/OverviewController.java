@@ -218,8 +218,8 @@ public class OverviewController implements Initializable {
     }
 
     private void setValidators() {
-        validationManager.selectionValidation(cboClients, "No client selected.");
-        validationManager.selectionValidation(cboProjects, "No project selected.");
+        validationManager.comboBoxValidation(cboClients, "No client selected.");
+        validationManager.comboBoxValidation(cboProjects, "No project selected.");
     }
 
     private void setTable() {

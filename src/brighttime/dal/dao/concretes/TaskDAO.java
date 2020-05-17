@@ -12,6 +12,7 @@ import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.ITaskDAO;
+import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -32,9 +33,11 @@ import java.util.Map;
 public class TaskDAO implements ITaskDAO {
 
     private final IConnectionManager connection;
+    private final ITaskEntryDAO taskEntryDAO;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
+        this.taskEntryDAO = new TaskEntryDAO();
     }
 
     @Override
@@ -57,8 +60,13 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
-                task.setId(rs.getInt(1));
+                int taskId = rs.getInt(1);
+                task.setId(taskId);
+                if (task.getTaskEntryList() != null) {
+                    taskEntryDAO.createTaskEntry(task.getTaskEntryList().get(0));
+                }
             }
+
             return task;
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());

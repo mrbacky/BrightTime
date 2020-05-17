@@ -5,21 +5,34 @@ import brighttime.be.Project;
 import brighttime.be.TaskBase;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.User;
+import brighttime.be.TaskEntry;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import com.jfoenix.controls.JFXToggleNode;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.DateCell;
+import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 
 /**
  * FXML Controller class
@@ -38,13 +51,29 @@ public class CreateTaskController implements Initializable {
     private JFXComboBox<Project> cboProject;
     @FXML
     private JFXToggleNode tglBillability;
+    @FXML
+    private HBox hBoxDateTime;
+
+    private JFXDatePicker datePicker;
+    private JFXTimePicker timePickerStart;
+    private JFXTimePicker timePickerEnd;
 
     private IMainModel mainModel;
     private TimeTrackerController timeTrackerContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
-    private TaskConcrete1 task;
     private User user;
+    private TaskConcrete1 task;
+
+    private Boolean manualMode;
+    private Boolean date = false;
+    private Boolean start = false;
+    private Boolean end = false;
+    private Boolean timeInterval = false;
+
+// TODO: Decide if 12HourView or 24HourView. Or the user's system.
+    //StringConverter<LocalTime> converter =new LocalTimeStringConverter(FormatStyle.SHORT, Locale.getDefault());
+    StringConverter<LocalTime> converter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -57,6 +86,14 @@ public class CreateTaskController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        createDateTimepickers();
+        normalMode();
+        setDateRestriction();
+        setTimeRestriction();
+        display24HourView();
+        listenDatePicker();
+        listenTimePickerStart();
+        listenTimePickerEnd();
     }
 
     void injectMainModel(IMainModel mainModel) {
@@ -70,10 +107,31 @@ public class CreateTaskController implements Initializable {
         setProjectsIntoComboBox();
         setValidators();
         addTask();
+        timeTrackerContr.injectCreateTaskController(this);
     }
 
     public void injectTimeTrackerController(TimeTrackerController timeTrackerContr) {
         this.timeTrackerContr = timeTrackerContr;
+    }
+
+    private void createDateTimepickers() {
+        datePicker = new JFXDatePicker();
+        timePickerStart = new JFXTimePicker();
+        timePickerEnd = new JFXTimePicker();
+    }
+
+    void manualMode() {
+        manualMode = true;
+        hBoxDateTime.getChildren().add(datePicker);
+        hBoxDateTime.getChildren().add(timePickerStart);
+        hBoxDateTime.getChildren().add(timePickerEnd);
+    }
+
+    void normalMode() {
+        manualMode = false;
+        hBoxDateTime.getChildren().remove(datePicker);
+        hBoxDateTime.getChildren().remove(timePickerStart);
+        hBoxDateTime.getChildren().remove(timePickerEnd);
     }
 
     private void setUser() {
@@ -119,47 +177,184 @@ public class CreateTaskController implements Initializable {
      */
     private void setValidators() {
         validationManager.inputValidation(txtDescription, "No description added.");
-        validationManager.selectionValidation(cboClient, "No client selected.");
-        validationManager.selectionValidation(cboProject, "No project selected.");
+        validationManager.comboBoxValidation(cboClient, "No client selected.");
+        validationManager.comboBoxValidation(cboProject, "No project selected.");
     }
 
     /**
      * Adds a new task.
      */
     private void addTask() {
+        //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
         btnAdd.setOnAction((event) -> {
-            if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
-                try {
-                    if (tglBillability.isSelected()) {
-
-                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.BILLABLE, cboProject.getSelectionModel().getSelectedItem(), user);
-                    } else {
-                        task = new TaskConcrete1(txtDescription.getText().trim(), TaskBase.Billability.NON_BILLABLE, cboProject.getSelectionModel().getSelectedItem(), user);
-                    }
-//                    task.setCreationTime(LocalDateTime.now());
-                    mainModel.addTask(task);
-                    Platform.runLater(() -> {
+            if (validateInput()) {
+                if (!manualMode) {
+                    try {
+                        TaskConcrete1 newTask = makeTask();
+                        mainModel.addTask(newTask);
                         timeTrackerContr.initializeView();
-                    });
-
-//                    Platform.runLater(() -> {
-//                    try {
-//                        mainModel.addTask(task);
-//                        timeTrackerContr.initializeView();
-//                    } catch (ModelException ex) {
-//                        Logger.getLogger(CreateTaskController.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                });
-                    System.out.println("action event is working!");
-                } catch (ModelException ex) {
-                    alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
+                    } catch (ModelException ex) {
+                        alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
+                    }
+                } else {
+                    try {
+                        TaskConcrete1 newTask = makeTask();
+                        TaskConcrete1 newTaskWithEntry = makeTaskEntry(newTask);
+                        mainModel.addTask(newTaskWithEntry);
+                        timeTrackerContr.initializeView();
+                    } catch (ModelException ex) {
+                        alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
+                    }
                 }
-            } else if (txtDescription.getText().trim().isEmpty()) {
-                alertManager.showAlert("No task description was entered.", "Please enter a description of the new task.");
-            } else if (cboClient.getSelectionModel().isEmpty()) {
-                alertManager.showAlert("No client is selected.", "Please select a client.");
+            }
+        });
+    }
+
+    private boolean validateInput() {
+        if (txtDescription.getText().trim().isEmpty()) {
+            alertManager.showAlert("No task description was entered.", "Please enter a description of the new task.");
+            return false;
+        }
+        if (cboClient.getSelectionModel().isEmpty()) {
+            alertManager.showAlert("No client is selected.", "Please select a client.");
+            return false;
+        }
+        if (cboProject.getSelectionModel().isEmpty()) {
+            alertManager.showAlert("No project is selected.", "Please select a project.");
+            return false;
+        }
+        if (manualMode) {
+            if (!date) {
+                alertManager.showAlert("No date was selected.", "Please select a date.");
+                return false;
+            }
+            if (!start) {
+                alertManager.showAlert("No start time was selected.", "Please select a time.");
+                return false;
+            }
+            if (!end) {
+                alertManager.showAlert("No end time was selected.", "Please select a time.");
+                return false;
+            }
+            if (!timeInterval) {
+                alertManager.showAlert("The time interval is invalid.", "The end time is before the start time. Please check the selection.");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private TaskConcrete1 makeTask() {
+        TaskBase.Billability billability;
+        if (tglBillability.isSelected()) {
+            billability = TaskBase.Billability.BILLABLE;
+        } else {
+            billability = TaskBase.Billability.NON_BILLABLE;
+        }
+        TaskConcrete1 newTask = new TaskConcrete1(txtDescription.getText().trim(), billability, cboProject.getSelectionModel().getSelectedItem(), user);
+//      task.setCreationTime(LocalDateTime.now());
+        return newTask;
+    }
+
+    private TaskConcrete1 makeTaskEntry(TaskConcrete1 newTask) {
+        LocalDateTime startDateTime = LocalDateTime.of(datePicker.getValue(), timePickerStart.getValue());
+        LocalDateTime endDateTime = LocalDateTime.of(datePicker.getValue(), timePickerEnd.getValue());
+        TaskEntry entry = new TaskEntry(newTask, newTask.getDescription(), startDateTime, endDateTime);
+        List<TaskEntry> list = new ArrayList();
+        list.add(entry);
+        newTask.setTaskEntryList(list);
+        return newTask;
+    }
+
+    private void setDateRestriction() {
+        //TODO: Disables future dates.
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(LocalDate.now()));
+            }
+        });
+
+        //If a futute date is written, show alert and change to current date.
+        StringConverter<LocalDate> dateConverter = new LocalDateStringConverter() {
+            @Override
+            public LocalDate fromString(String string) {
+                LocalDate date = super.fromString(string);
+                if (date.isAfter(LocalDate.now())) {
+                    //TODO: Why does the alert crash the program?
+                    //alertManager.showAlert("The date is in the future.", "Please write or select a valid date.");
+                    return LocalDate.now();
+                    //return lastVal;
+                } else {
+                    return date;
+                }
+            }
+        };
+        datePicker.setConverter(dateConverter);
+    }
+
+    private void setTimeRestriction() {
+        //TODO: If a future time is written or chosen, show alert and write the current time.
+        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEqual(LocalDate.now())) {
+                StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter() {
+                    @Override
+                    public LocalTime fromString(String string) {
+                        LocalTime time = super.fromString(string);
+                        if (time.isAfter(LocalTime.now())) {
+                            alertManager.showAlert("The time is in the future.", "Please write or select a valid time.");
+                            return LocalTime.now();
+                        } else {
+                            return time;
+                        }
+                    }
+                };
+                timePickerStart.setConverter(timeConverter);
+                timePickerEnd.setConverter(timeConverter);
+            }
+        });
+    }
+
+    private void display24HourView() {
+        timePickerStart.set24HourView(true);
+        timePickerStart.converterProperty().setValue(converter);
+    }
+
+    private void listenDatePicker() {
+        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                date = true;
             } else {
-                alertManager.showAlert("No project is selected.", "Please select a project.");
+                date = false;
+            }
+        });
+    }
+
+    private void listenTimePickerStart() {
+        timePickerStart.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                start = true;
+                if (timePickerEnd.getValue() != null && newValue.isBefore(timePickerEnd.getValue())) {
+                    timeInterval = true;
+                }
+                if (timePickerEnd.getValue() != null && newValue.isAfter(timePickerEnd.getValue())) {
+                    timeInterval = false;
+                }
+            }
+        });
+    }
+
+    private void listenTimePickerEnd() {
+        timePickerEnd.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                end = true;
+                if (timePickerStart.getValue() != null && newValue.isAfter(timePickerStart.getValue())) {
+                    timeInterval = true;
+                }
+                if (timePickerStart.getValue() != null && newValue.isBefore(timePickerStart.getValue())) {
+                    timeInterval = false;
+                }
             }
         });
     }

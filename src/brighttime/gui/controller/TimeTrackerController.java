@@ -7,6 +7,7 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import brighttime.gui.util.AlertManager;
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -37,15 +38,19 @@ public class TimeTrackerController implements Initializable {
     @FXML
     private VBox vBoxMain;
     @FXML
-    private StackPane spTaskCreator;
+    private VBox vBoxCreator;
+    @FXML
+    private JFXButton btnSwitchMode;
 
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
 
+    private CreateTaskController createTaskContr;
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private LocalDate date = LocalDate.MIN;
     private User user;
+    int i = 0;
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -70,6 +75,7 @@ public class TimeTrackerController implements Initializable {
         setUser();
         setUpTaskCreator();
         initTasks();
+        switchLoggingMode();
     }
 
     private void setUpTaskCreator() {
@@ -81,7 +87,8 @@ public class TimeTrackerController implements Initializable {
             controller.injectTimeTrackerController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();
-            spTaskCreator.getChildren().add(root);
+            vBoxCreator.getChildren().clear();
+            vBoxCreator.getChildren().add(root);
 
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,6 +138,26 @@ public class TimeTrackerController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    void injectCreateTaskController(CreateTaskController contr) {
+        this.createTaskContr = contr;
+    }
+
+    private void switchLoggingMode() {
+        btnSwitchMode.setText("Manual logging");
+        btnSwitchMode.getStyleClass().add("buttonSwitchMode");
+        btnSwitchMode.setOnAction((event) -> {
+            if (i % 2 == 0) {
+                createTaskContr.manualMode();
+                btnSwitchMode.setText("Timer logging");
+            } else if (i % 2 == 1) {
+                createTaskContr.normalMode();
+                btnSwitchMode.setText("Manual logging");
+            }
+            i++;
+        });
+
     }
 
 }

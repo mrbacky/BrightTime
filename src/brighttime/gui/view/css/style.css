@@ -144,6 +144,24 @@
     -fx-text-fill: #435A9A;
 }
 
+.buttonSwitchMode{
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #435A9A;
+}
+
+.dateTimePicker{    
+    -jfx-default-color: #D11149;
+}
+
+.dateTimePicker .jfx-text-field{
+    -fx-background-color: white;
+    -fx-prompt-text-fill: #435A9A;
+    /*-jfx-label-float: true;*/
+    -jfx-focus-color: #D11149;
+    -jfx-unfocus-color: transparent;
+}
+
 #btnPlayPause{
     -fx-background-color: transparent;
 }

@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
@@ -23,6 +24,7 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
           <StackPane prefHeight="35.0" prefWidth="270.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -86,5 +88,6 @@
                     </ImageView>
                 </graphic>
             </JFXButton>
+      <HBox fx:id="hBoxDateTime" alignment="CENTER" GridPane.columnSpan="3" GridPane.rowIndex="1" />
    </children>
 </GridPane>

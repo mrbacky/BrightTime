@@ -84,7 +84,7 @@ public class CreateProjectController implements Initializable {
      */
     private void setValidators() {
         validationManager.inputValidation(txtName, "No name written.");
-        validationManager.selectionValidation(cboClient, "No client selected.");
+        validationManager.comboBoxValidation(cboClient, "No client selected.");
         validationManager.inputValidation(txtHourlyRate, "Optional.");
     }
 
