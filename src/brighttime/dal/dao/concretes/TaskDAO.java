@@ -53,7 +53,7 @@ public class TaskDAO implements ITaskDAO {
             if (rs != null && rs.next()) {
                 int taskId = rs.getInt(1);
                 task.setId(taskId);
-                if (!task.getTaskEntryList().isEmpty()) {
+                if (task.getTaskEntryList() != null) {
                     taskEntryDAO.createTaskEntry(task.getTaskEntryList().get(0));
                 }
             }

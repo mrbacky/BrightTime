@@ -121,26 +121,35 @@ public class CreateTaskController implements Initializable {
      */
     private void setValidators() {
         validationManager.inputValidation(txtDescription, "No description added.");
-        validationManager.selectionValidation(cboClient, "No client selected.");
-        validationManager.selectionValidation(cboProject, "No project selected.");
+        validationManager.comboBoxValidation(cboClient, "No client selected.");
+        validationManager.comboBoxValidation(cboProject, "No project selected.");
     }
 
     /**
      * Adds a new task.
      */
     private void addTask() {
+        //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
         btnAdd.setOnAction((event) -> {
-            if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()) {
+            if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty() && !manualMode) {
                 try {
                     Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
-                    if (manualMode) {
-                        LocalDateTime startDateTime = createTaskManuallyContr.getStartTime();
-                        LocalDateTime endDateTime = createTaskManuallyContr.getEndTime();
-                        TaskEntry entry = new TaskEntry(task, task.getDescription(), startDateTime, endDateTime);
-                        List<TaskEntry> list = new ArrayList();
-                        list.add(entry);
-                        task.setTaskEntryList(list);
-                    }
+                    mainModel.addTask(task);
+                    timeTrackerContr.initializeView();
+                } catch (ModelException ex) {
+                    alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
+                }
+            }
+            if (!txtDescription.getText().trim().isEmpty() && !cboProject.getSelectionModel().isEmpty()
+                    && manualMode && createTaskManuallyContr.getDate() && createTaskManuallyContr.getTimeInterval()) {
+                try {
+                    Task task = new Task(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem());
+                    LocalDateTime startDateTime = createTaskManuallyContr.getStartTime();
+                    LocalDateTime endDateTime = createTaskManuallyContr.getEndTime();
+                    TaskEntry entry = new TaskEntry(task, task.getDescription(), startDateTime, endDateTime);
+                    List<TaskEntry> list = new ArrayList();
+                    list.add(entry);
+                    task.setTaskEntryList(list);
                     mainModel.addTask(task);
                     timeTrackerContr.initializeView();
                 } catch (ModelException ex) {
@@ -150,8 +159,16 @@ public class CreateTaskController implements Initializable {
                 alertManager.showAlert("No task description was entered.", "Please enter a description of the new task.");
             } else if (cboClient.getSelectionModel().isEmpty()) {
                 alertManager.showAlert("No client is selected.", "Please select a client.");
-            } else {
+            } else if (cboProject.getSelectionModel().isEmpty()) {
                 alertManager.showAlert("No project is selected.", "Please select a project.");
+            } else if (manualMode && !createTaskManuallyContr.getDate()) {
+                alertManager.showAlert("No date was selected.", "Please select a date.");
+            } else if (manualMode && !createTaskManuallyContr.getStart()) {
+                alertManager.showAlert("No start time was selected.", "Please select a time.");
+            } else if (manualMode && !createTaskManuallyContr.getEnd()) {
+                alertManager.showAlert("No end time was selected.", "Please select a time.");
+            } else if (manualMode && !createTaskManuallyContr.getTimeInterval()) {
+                alertManager.showAlert("The time interval is invalid.", "The end time is before the start time. Please check the selection.");
             }
         });
     }
