@@ -7,6 +7,7 @@ import brighttime.be.TaskBase;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.User;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
@@ -65,7 +66,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries() throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws DalException {
         Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
         Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
@@ -83,7 +84,7 @@ public class TaskDAO implements ITaskDAO {
                 + "	ON T.projectId = P.id "
                 + "	JOIN Client C "
                 + "	ON P.clientId = C.id "
-                + "	WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE() AND T.userId = 1\n"
+                + "	WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE() AND T.userId = ? "
                 + "	) "
                 + "	AS A1 "
                 + "LEFT JOIN "
@@ -98,6 +99,7 @@ public class TaskDAO implements ITaskDAO {
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, user.getId());
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {

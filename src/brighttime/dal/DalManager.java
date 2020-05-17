@@ -99,9 +99,9 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws DalException {
         try {
-            return taskDAO.getAllTasksWithEntries();
+            return taskDAO.getAllTasksWithEntries(user);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }

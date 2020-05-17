@@ -70,7 +70,7 @@ public interface IMainModel {
 
     ObservableMap<LocalDate, List<TaskConcrete1>> getTasks();
 
-    void loadTasks() throws ModelException;
+    void loadTasks(User user) throws ModelException;
 
     ObservableList<TaskConcrete2> getTaskList();
 
@@ -83,7 +83,7 @@ public interface IMainModel {
     ObservableList<User> getUserList();
 
     void setUser(User user);
-    
+
     User getUser();
 
 }

@@ -112,9 +112,9 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void loadTasks() throws ModelException {
+    public void loadTasks(User user) throws ModelException {
         try {
-            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.Tasks();
+            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user);
             taskMap.clear();
             taskMap.putAll(allTasks);
         } catch (BllException ex) {

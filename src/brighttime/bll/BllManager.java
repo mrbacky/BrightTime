@@ -141,9 +141,9 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws BllException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws BllException {
         try {
-            return dalManager.Tasks();
+            return dalManager.getAllTasksWithEntries(user);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
