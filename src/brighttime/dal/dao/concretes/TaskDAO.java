@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +31,6 @@ import java.util.Map;
 public class TaskDAO implements ITaskDAO {
 
     private final IConnectionManager connection;
-    private Map<LocalDate, List<TaskConcrete1>> dateMap;
-    private Map<Integer, TaskConcrete1> taskMap;
-    private TaskConcrete1 task;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
@@ -69,207 +65,125 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException {
-        try {
-            dateMap = new HashMap<>();
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries() throws DalException {
+        Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
+        Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
-            getEntries();
+        String sql = "SELECT A1.id AS taskId, A1.description, A1.modifiedDate, A1.billability, "
+                + "	A1.projectId, A1.projectName, "
+                + "	A1.clientId, A1.clientName, "
+                + "	A2.taskEntryId, A2.startTime, A2.endTime "
+                + "FROM "
+                + "	( "
+                + "	SELECT T.id, T.description, T.modifiedDate, T.billability, "
+                + "		P.id AS projectId, P.name AS projectName, "
+                + "		C.id AS clientId, C.name AS clientName "
+                + "	FROM Task T "
+                + "	JOIN Project P "
+                + "	ON T.projectId = P.id "
+                + "	JOIN Client C "
+                + "	ON P.clientId = C.id "
+                + "	WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE() AND T.userId = 1\n"
+                + "	) "
+                + "	AS A1 "
+                + "LEFT JOIN "
+                + "	( "
+                + "	SELECT TE.id AS taskEntryId, TE.startTime, TE.endTime, TE.taskId "
+                + "	FROM TaskEntry TE "
+                + "	WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE() "
+                + "	) "
+                + "	AS A2 "
+                + "ON A1.id = A2.taskId "
+                + "ORDER BY A1.modifiedDate DESC, A2.startTime DESC";
 
-            List<TaskConcrete1> emptyTasksList = getTasksWithoutEntries();
-            if (!emptyTasksList.isEmpty()) {
-                for (TaskConcrete1 emptyTask : emptyTasksList) {
-                    LocalDate date = emptyTask.getCreationTime().toLocalDate();
-                    if (!dateMap.containsKey(date)) {
-                        List<TaskConcrete1> list = new ArrayList<>();
-                        list.add(emptyTask);
-                        dateMap.put(date, list);
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                //Create task from ResultSet
+                int taskId = rs.getInt("taskId");
+
+                LocalDateTime modifiedDate = rs.getTimestamp("modifiedDate").toLocalDateTime();
+
+                TaskConcrete1 newTask;
+
+                if (!taskMap.containsKey(taskId)) {
+                    Client client = new Client(rs.getInt("clientId"), rs.getString("clientName"));
+                    Project project = new Project(rs.getInt("projectId"), rs.getString("projectName"), client);
+
+                    TaskBase.Billability billability;
+
+                    if (rs.getString("billability").equals("B")) {
+                        billability = TaskBase.Billability.BILLABLE;
+                    } else {
+                        billability = TaskBase.Billability.NON_BILLABLE;
                     }
-                    if (dateMap.containsKey(date)) {
-                        List<TaskConcrete1> tasks = dateMap.get(date);
-                        if (!tasks.contains(emptyTask)) {
-                            tasks.add(0, emptyTask);
-                        }
+
+                    List<TaskEntry> entryList = new ArrayList();
+
+                    newTask = new TaskConcrete1(
+                            taskId,
+                            rs.getString("description"),
+                            billability,
+                            project,
+                            entryList,
+                            modifiedDate);
+                    taskMap.put(taskId, newTask);
+
+                } else {
+                    newTask = taskMap.get(taskId);
+                }
+
+                //Create task entry from ResultSet
+                LocalDateTime startTime = null;
+                if (rs.getTimestamp("startTime") != null) {
+                    startTime = rs.getTimestamp("startTime").toLocalDateTime();
+                }
+
+                int taskEntryId = rs.getInt("taskEntryId");
+                if (taskEntryId > 0) {
+                    if (rs.getTimestamp("endTime") != null) {
+                        LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
+                        TaskEntry newEntry = new TaskEntry(taskEntryId, newTask, startTime, endTime);
+                        newTask.getTaskEntryList().add(newEntry);
                     }
                 }
-            }
 
+                LocalDate dateOfTask;
+                if (startTime != null) {
+                    dateOfTask = startTime.toLocalDate();
+                } else {
+                    dateOfTask = modifiedDate.toLocalDate();
+                }
+
+                dateMap = buildDateMap(dateMap, newTask, dateOfTask);
+            }
             return dateMap;
-        } catch (DalException ex) {
-            throw new DalException(ex.getMessage());
-        }
-    }
-
-    /**
-     * Gets the task entries logged between the current day and 30 days ago.
-     * Uses the getTasks() to set each TaskEntry's connection to its Task. Also,
-     * adds the Task to the dateMap (data structure) for the View, so the Task
-     * gets added to a date to show it has entries for the particular date.
-     *
-     * @return A list of all entries.
-     * @throws DalException
-     */
-    private List<TaskEntry> getEntries() throws DalException {
-        List<TaskEntry> entries = new ArrayList<>();
-
-        Map<Integer, TaskConcrete1> map = getTasks();
-
-        String sql = "SELECT CONVERT(DATE, TE.startTime) AS date, "
-                + "TE.id, TE.startTime, TE.endTime, TE.taskId "
-                + "FROM TaskEntry TE "
-                + "WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
-                + "AND ";
-        String sqlFinal = prepStatement(sql, map);
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sqlFinal);
-
-            Iterator iterator = map.entrySet().iterator();
-            int i = 0;
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                Integer key = (Integer) entry.getKey();
-                pstmt.setInt(i + 1, key);
-                i++;
-            }
-
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int taskId = rs.getInt("taskId");
-                TaskConcrete1 taskFromMap = map.get(taskId);
-                LocalDateTime startTime = rs.getTimestamp("startTime").toLocalDateTime();
-                LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
-
-                TaskEntry taskEntry = new TaskEntry(id, taskFromMap, startTime, endTime);
-
-                taskFromMap.getTaskEntryList().add(taskEntry);
-                entries.add(taskEntry);
-
-                LocalDate date = startTime.toLocalDate();
-                if (!dateMap.containsKey(date)) {
-                    List<TaskConcrete1> list = new ArrayList<>();
-                    list.add(taskEntry.getTask());
-                    dateMap.put(date, list);
-                }
-                if (dateMap.containsKey(date)) {
-                    List<TaskConcrete1> list = dateMap.get(date);
-                    if (!list.contains(taskEntry.getTask())) {
-                        list.add(taskEntry.getTask());
-                    }
-                }
-            }
         } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
         }
-        return entries;
     }
 
     /**
-     * Gets the tasks which have been modified between the current day and 30
-     * days ago and stores it in a HashMap.
+     * Builds the data structure (map) which is needed to display the tasks in
+     * the TimeTracker View. *
      *
-     * @return A map with a Task instance as a value and its taskId as the key.
-     * @throws DalException
+     * @return A map with a list of tasks (containing entries) for each day.
      */
-    private Map getTasks() throws DalException {
-        taskMap = new HashMap<>();
-
-        String sql = "SELECT T.id AS taskId, T.description, T.modifiedDate, T.billability, "
-                + "P.id AS projectId, P.name AS projectName, "
-                + "C.id AS clientId, C.name AS clientName "
-                + "FROM Task AS T "
-                + "JOIN Project AS P "
-                + "ON T.projectId = P.id "
-                + "JOIN Client AS C "
-                + "ON P.clientId = C.id "
-                + "WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()";
-
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sql);
-
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                //TODO: Should the clients and projects also be the same instance?
-                int clientId = rs.getInt("clientId");
-                String clientName = rs.getString("clientName");
-                Client client = new Client(clientId, clientName);
-
-                int projectId = rs.getInt("projectId");
-                String projectName = rs.getString("projectName");
-                Project project = new Project(projectId, projectName, client);
-
-                int taskId = rs.getInt("taskId");
-                String description = rs.getString("description");
-                List<TaskEntry> entries = new ArrayList<>();
-                LocalDateTime creationTime = rs.getTimestamp("modifiedDate").toLocalDateTime();
-
-                String billability = rs.getString("billability");
-
-                if (billability.equals("B")) {
-                    task = new TaskConcrete1(taskId, description, TaskBase.Billability.BILLABLE, project, entries, creationTime);
-                } else if (billability.equals("N")) {
-                    task = new TaskConcrete1(taskId, description, TaskBase.Billability.NON_BILLABLE, project, entries, creationTime);
-                }
-
-                if (!taskMap.containsKey(task.getId())) {
-                    taskMap.put(taskId, task);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DalException(ex.getMessage());
-        }
-        return taskMap;
-    }
-
-    /**
-     * Prepares the rest of the SQL statement, which will change depending on
-     * the number of tasks.
-     *
-     * @param sql The constant part of the SQL statement.
-     * @param tasks The map of tasks.
-     * @return The complete SQL query.
-     */
-    private String prepStatement(String sql, Map<Integer, TaskConcrete1> tasks) {
-        boolean firstItem = true;
-        for (Map.Entry<Integer, TaskConcrete1> entry : tasks.entrySet()) {
-            if (firstItem) {
-                sql += " (taskId = ?";
-                firstItem = false;
-            } else {
-                sql += " OR taskId = ? ";
+    private Map<LocalDate, List<TaskConcrete1>> buildDateMap(Map<LocalDate, List<TaskConcrete1>> map,
+            TaskConcrete1 newTask, LocalDate date) {
+        if (!map.containsKey(date)) {
+            List<TaskConcrete1> taskList = new ArrayList<>();
+            taskList.add(newTask);
+            map.put(date, taskList);
+        } else {
+            List<TaskConcrete1> list = map.get(date);
+            if (!list.contains(newTask)) {
+                list.add(newTask);
             }
         }
-        sql += ") ORDER BY TE.startTime DESC";
-        return sql;
-    }
-
-    /**
-     * Gets the tasks logged between the current day and 30 days ago, which do
-     * not have any entries.
-     *
-     * @return A list of tasks.
-     * @throws DalException
-     */
-    private List<TaskConcrete1> getTasksWithoutEntries() throws DalException {
-        List<TaskConcrete1> tasks = new ArrayList<>();
-        String sql = "SELECT id "
-                + "  FROM Task "
-                + "  WHERE createdDate = modifiedDate "
-                + "  AND createdDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE()"
-                + "  ORDER BY createdDate DESC";
-
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sql);
-
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                TaskConcrete1 taskWithoutEntry = taskMap.get(rs.getInt("id"));
-                tasks.add(taskWithoutEntry);
-            }
-
-        } catch (SQLException ex) {
-            throw new DalException(ex.getMessage());
-        }
-        return tasks;
+        return map;
     }
 
     @Override

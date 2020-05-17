@@ -30,7 +30,7 @@ public interface ITaskDAO {
      * @return A map with a list of tasks (containing entries) for each day.
      * @throws DalException
      */
-    Map<LocalDate, List<TaskConcrete1>> Tasks() throws DalException;
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries() throws DalException;
 
     List<TaskConcrete2> getAllTasks() throws DalException;
 
