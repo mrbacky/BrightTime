@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="830.0" prefWidth="785.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
+<AnchorPane id="AnchorPane" prefHeight="830.0" prefWidth="785.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
    <children>
       <StackPane layoutX="-0.3333333432674408" layoutY="119.66666412353516" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
          <children>
@@ -154,7 +154,7 @@
                   </JFXNodesList>
                   <JFXNodesList fx:id="nodesListUser" alignment="TOP_RIGHT" GridPane.halignment="CENTER">
                      <children>
-                        <Label minHeight="20.0" prefWidth="210.0" styleClass="labelFilter" text="User" />
+                        <Label fx:id="lblUser" minHeight="20.0" prefWidth="210.0" styleClass="labelFilter" text="User" />
                         <GridPane styleClass="createItem">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

@@ -108,6 +108,9 @@ public class OverviewController implements Initializable {
     //TODO: Maybe move to CSS
     String defaultColor = "-fx-text-fill: #435A9A";
     String highlightColor = "-fx-text-fill: red";
+    @FXML
+    private Label lblUser;
+    private User currentUser;
 
     public OverviewController() {
         this.alertManager = new AlertManager();
@@ -119,17 +122,16 @@ public class OverviewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        displayUserFilter();
+    }
+
+    void initializeView() {
+
+//        displayUserFilter();      this one is called in setUpUserRules();
         displayProjectFilter();
         displayTimeFrameFilter();
         removeUserFilter();
         removeProjectFilter();
         removeTimeFrameFilter();
-    }
-
-    void initializeView() {
-        System.out.println("in Overview page");
         setUsersIntoComboBox();
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
@@ -141,8 +143,11 @@ public class OverviewController implements Initializable {
         listenDatePickerStart();
         listenDatePickerEnd();
         clearAllFilters();
-        //vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
 
+        //  this is important for hiding user combo box and stuff
+        setUpUserRules();
+
+        //vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
         scrollPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 grid.setPrefWidth(newValue.doubleValue() - (oldValue.doubleValue() - scrollPane.getViewportBounds().getWidth()));
@@ -239,8 +244,12 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-                    makeActiveFilterButton(user, newVal.toString());
-                    nodesListUser.animateList(false);
+
+                    //  added rule ------------------------------------------------------------------------------------------------------------
+                    if (currentUser.getType() == User.UserType.ADMIN) {
+                        makeActiveFilterButton(user, newVal.toString());
+                        nodesListUser.animateList(false);
+                    }
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not filter by user.", "An error occured: " + ex.getMessage());
                 }
@@ -441,7 +450,10 @@ public class OverviewController implements Initializable {
         //TODO: Exceptions.
         try {
             if (checkAllFilterEmpty()) {
-                mainModel.getAllTasks();
+                if (currentUser.getType() == User.UserType.ADMIN) {
+                    mainModel.getAllTasks();
+                }
+                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), null, null, null));
             } else {
                 mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
             }
@@ -455,16 +467,24 @@ public class OverviewController implements Initializable {
             try {
                 changeLabel(lblProject, "Project", defaultColor);
                 changeLabel(lblTimeFrame, "Time frame", defaultColor);
-                hBoxFilter.getChildren().remove(user);
                 hBoxFilter.getChildren().remove(project);
                 hBoxFilter.getChildren().remove(timeFrame);
-                cboUsers.getSelectionModel().clearSelection();
+                //  added rules --------------------------------------------------------------------------------------------------------------------
+                if (currentUser.getType() == User.UserType.ADMIN) {
+                    hBoxFilter.getChildren().remove(user);
+                    cboUsers.getSelectionModel().clearSelection();
+                }
                 cboClients.getSelectionModel().clearSelection();
                 cboProjects.getSelectionModel().clearSelection();
                 cboProjects.getItems().clear();
                 dpStartDate.setValue(null);
                 dpEndDate.setValue(null);
-                mainModel.getAllTasks();
+                //  added rule --------------------------------------------------------------------------------------------------------------------
+                if (currentUser.getType() == User.UserType.ADMIN) {
+                    mainModel.getAllTasks();
+                } else if (currentUser.getType() == User.UserType.USER) {
+                    mainModel.getAllTasksFiltered(new Filter(currentUser, null, null, null));
+                }
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
             }
@@ -472,8 +492,16 @@ public class OverviewController implements Initializable {
     }
 
     private Boolean checkAllFilterEmpty() {
-        return cboUsers.getValue() == null && cboProjects.getValue() == null
-                && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+
+        if (currentUser.getType() == User.UserType.ADMIN) {
+            System.out.println("current user: " + currentUser.getFirstName());
+            return cboUsers.getValue() == null && cboProjects.getValue() == null && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+        } else {
+            //  added rule --------------------------------------------------------------------------------------------------------------------
+            System.out.println("current user: " + currentUser.getFirstName());
+            return cboUsers.getValue() == currentUser && cboProjects.getValue() == null && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+        }
+
     }
 
     private void changeLabel(Label label, String text, String style) {
@@ -482,9 +510,17 @@ public class OverviewController implements Initializable {
     }
 
     private void makeActiveFilterButton(JFXButton button, String text) {
+
         button.setText(text);
         button.getStyleClass().add("buttonFilteredItem");
+
+//        if (hBoxFilter.getChildren().contains(button)) {
+//            hBoxFilter.getChildren().remove(1);
+//        }
+//        hBoxFilter.getChildren().add(1, button);
+        //  Exception after selecting different project. Adding duplicate node. -----------------------------------------------------------------
         hBoxFilter.getChildren().add(button);
+
     }
 
     private void setUpBarChart() {
@@ -508,6 +544,19 @@ public class OverviewController implements Initializable {
         barChartTasks.getYAxis().setLabel("hours");
         barChartTasks.setLegendSide(Side.RIGHT);
 
+    }
+
+    private void setUpUserRules() {
+        currentUser = mainModel.getUser();
+        if (currentUser.getType() == User.UserType.ADMIN) {
+            displayUserFilter();
+
+        } else {
+            cboUsers.getSelectionModel().select(currentUser);
+            lblUser.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+            nodesListUser.setDisable(true);
+            lblUser.setStyle("-fx-opacity: 1");
+        }
     }
 
 }
