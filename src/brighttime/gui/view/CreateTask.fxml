@@ -2,7 +2,9 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
 <?import com.jfoenix.controls.JFXToggleNode?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
@@ -10,11 +12,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<GridPane styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
+<GridPane fx:id="grid" styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateTaskController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -24,7 +25,7 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="ALWAYS" />
    </rowConstraints>
    <children>
           <StackPane prefHeight="35.0" prefWidth="270.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -88,6 +89,35 @@
                     </ImageView>
                 </graphic>
             </JFXButton>
-      <HBox fx:id="hBoxDateTime" alignment="CENTER" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+      <StackPane fx:id="stack1" prefHeight="35.0" prefWidth="270.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         <children>
+            <JFXDatePicker fx:id="datePicker" prefHeight="27.0" prefWidth="200.0" styleClass="dateTimePicker">
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="35.0" />
+               </StackPane.margin>
+            </JFXDatePicker>
+         </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </StackPane>
+      <StackPane fx:id="stack2" prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         <children>
+            <JFXTimePicker fx:id="timePickerStart" prefHeight="27.0" prefWidth="150.0" styleClass="dateTimePicker">
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="35.0" />
+               </StackPane.margin>
+            </JFXTimePicker>
+         </children>
+      </StackPane>
+      <StackPane fx:id="stack3" prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         <children>
+            <JFXTimePicker fx:id="timePickerEnd" prefHeight="27.0" prefWidth="150.0" styleClass="dateTimePicker">
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="35.0" />
+               </StackPane.margin>
+            </JFXTimePicker>
+         </children>
+      </StackPane>
    </children>
 </GridPane>

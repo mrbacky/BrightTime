@@ -25,7 +25,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -145,15 +144,15 @@ public class TimeTrackerController implements Initializable {
     }
 
     private void switchLoggingMode() {
-        btnSwitchMode.setText("Manual logging");
+        btnSwitchMode.setText("Switch to manual logging");
         btnSwitchMode.getStyleClass().add("buttonSwitchMode");
         btnSwitchMode.setOnAction((event) -> {
             if (i % 2 == 0) {
                 createTaskContr.manualMode();
-                btnSwitchMode.setText("Timer logging");
+                btnSwitchMode.setText("Switch to timer logging");
             } else if (i % 2 == 1) {
                 createTaskContr.normalMode();
-                btnSwitchMode.setText("Manual logging");
+                btnSwitchMode.setText("Switch to manual logging");
             }
             i++;
         });
