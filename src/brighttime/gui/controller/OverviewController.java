@@ -156,10 +156,11 @@ public class OverviewController implements Initializable {
         colCost.prefWidthProperty().bind(w2);
 
         barChartTasks.setTitle("Amount of hours for each task");
-
+        setUpBarChart();
         tbvTasks.getItems().addListener((ListChangeListener.Change<? extends TaskConcrete2> c) -> {
             setUpBarChart();
         });
+
     }
 
     void injectMainModel(IMainModel mainModel) {
