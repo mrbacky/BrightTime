@@ -17,8 +17,11 @@ import com.jfoenix.controls.JFXNodesList;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ResourceBundle;
@@ -110,6 +113,9 @@ public class OverviewController implements Initializable {
     //TODO: Maybe move to CSS
     String defaultColor = "-fx-text-fill: #435A9A";
     String highlightColor = "-fx-text-fill: #F0C326";
+
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.US);
+
     @FXML
     private Label lblUser;
     private User currentUser;
@@ -291,7 +297,9 @@ public class OverviewController implements Initializable {
                     try {
                         mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
                         //TODO: Change date format.
-                        makeActiveFilterButton(btnFilterTimeFrame, newValue.toString() + " - " + dpEndDate.getValue().toString());
+                        String startDate = newValue.format(dateFormatter);
+                        String endDate = dpEndDate.getValue().format(dateFormatter);
+                        makeActiveFilterButton(btnFilterTimeFrame, startDate + " - " + endDate);
                         changeLabel(lblTimeFrame, "Time frame", defaultColor);
                         nodesListTimeFrame.animateList(false);
                     } catch (ModelException ex) {
@@ -312,7 +320,9 @@ public class OverviewController implements Initializable {
                     try {
                         mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
                         //TODO: Change date format.
-                        makeActiveFilterButton(btnFilterTimeFrame, dpStartDate.getValue().toString() + " - " + newValue.toString());
+                        String start = dpStartDate.getValue().format(dateFormatter);
+                        String end = newValue.format(dateFormatter);
+                        makeActiveFilterButton(btnFilterTimeFrame, start + " - " + end);
                         changeLabel(lblTimeFrame, "Time frame", defaultColor);
                         nodesListTimeFrame.animateList(false);
                     } catch (ModelException ex) {
