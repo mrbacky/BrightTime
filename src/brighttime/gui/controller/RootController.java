@@ -5,6 +5,7 @@ import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.ToolTipManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class RootController implements Initializable {
     private IMainModel mainModel;
     private User user;
     private final AlertManager alertManager;
+    private final ToolTipManager toolTipManager;
     @FXML
     private JFXButton btnLogout;
     @FXML
@@ -70,6 +72,7 @@ public class RootController implements Initializable {
 
     public RootController() {
         alertManager = new AlertManager();
+        toolTipManager = new ToolTipManager();
     }
 
     @Override
@@ -194,15 +197,12 @@ public class RootController implements Initializable {
     }
 
     private void setToolTipsForButtons() {
-        setToolTipForOneButton(btnTimeTracker, "Time Tracker");
-        setToolTipForOneButton(btnOverview, "Overview");
-        setToolTipForOneButton(btnCreator, "Administration");
-        setToolTipForOneButton(btnClients, "Manage Clients");
-        setToolTipForOneButton(btnProjects, "Manage Projects");
-    }
-
-    private void setToolTipForOneButton(JFXButton button, String tip) {
-        button.setTooltip(new Tooltip(tip));
+        toolTipManager.setToolTipForOneButton(btnTimeTracker, "Time Tracker");
+        toolTipManager.setToolTipForOneButton(btnOverview, "Overview");
+        toolTipManager.setToolTipForOneButton(btnCreator, "Administration");
+        toolTipManager.setToolTipForOneButton(btnClients, "Manage Clients");
+        toolTipManager.setToolTipForOneButton(btnProjects, "Manage Projects");
+        toolTipManager.setToolTipForOneButton(btnLogout, "Logout");
     }
 
     @FXML

@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="830.0" prefWidth="785.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
+<AnchorPane id="AnchorPane" prefHeight="830.0" prefWidth="785.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
    <children>
       <StackPane layoutX="-0.3333333432674408" layoutY="119.66666412353516" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
          <children>
@@ -35,11 +35,11 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <TableView fx:id="tbvTasks" prefHeight="260.0">
+                        <TableView fx:id="tbvTasks" prefHeight="260.0" GridPane.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="colTaskDescription" maxWidth="1.7976931348623157E308" prefWidth="260.0" text="Task description" />
-                            <TableColumn id="tableCol" fx:id="colHours" maxWidth="1.7976931348623157E308" minWidth="50.0" text="Hours" />
-                              <TableColumn id="tableCol" fx:id="colCost" maxWidth="1.7976931348623157E308" minWidth="50.0" text="Cost" />
+                            <TableColumn fx:id="colTaskDescription" maxWidth="1.7976931348623157E308" prefWidth="480.0" text="Task description" />
+                            <TableColumn id="tableCol" fx:id="colHours" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="115.0" text="Hours" />
+                              <TableColumn id="tableCol" fx:id="colCost" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="115.0" text="Cost" />
                           </columns>
                         </TableView>
                         <BarChart fx:id="barChartTasks" GridPane.rowIndex="1">

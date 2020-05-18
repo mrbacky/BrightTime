@@ -262,3 +262,10 @@
     -fx-background-radius: 10 10 10 10;
     -fx-background-color:#F0C326
 }
+
+.chart{
+    -fx-border-style: solid;
+    -fx-border-width: 0.1;
+    -fx-background-color: white;
+    -fx-border-color: #435A9A;
+}
