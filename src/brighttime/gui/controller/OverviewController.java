@@ -567,6 +567,10 @@ public class OverviewController implements Initializable {
             displayUserFilter();
 
         } else {
+            //  just removing the column -------------------------------------------------------------------------------------------
+            //  we have to set constrains for tableCollumns just like elements on anchor pane, want to figure out how 
+            tbvTasks.getColumns().remove(2);
+//            tbvTasks.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             cboUsers.getSelectionModel().select(currentUser);
             lblUser.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
             nodesListUser.setDisable(true);
