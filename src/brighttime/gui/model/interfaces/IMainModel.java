@@ -9,6 +9,7 @@ import brighttime.be.User;
 import brighttime.gui.model.ModelException;
 import java.time.LocalDate;
 import java.util.List;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
@@ -85,5 +86,7 @@ public interface IMainModel {
     void setUser(User user);
 
     User getUser();
+
+    public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
 
 }

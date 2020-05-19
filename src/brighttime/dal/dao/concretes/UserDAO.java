@@ -72,7 +72,9 @@ public class UserDAO implements IUserDAO {
             String firstName = rs.getString("firstName");
             String lastName = rs.getString("lastName");
             int type = rs.getInt("userTypeId");
-
+            
+            
+            
             if (type == 1) {
                 return new User(id, firstName, lastName, User.UserType.ADMIN);
             } else {

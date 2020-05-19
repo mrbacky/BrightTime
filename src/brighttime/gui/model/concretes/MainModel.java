@@ -5,15 +5,19 @@ import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
+import brighttime.be.TaskEntry;
 import brighttime.be.User;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
+import java.lang.System.Logger;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
@@ -30,6 +34,7 @@ public class MainModel implements IMainModel {
     private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
     private final ObservableList<User> userList = FXCollections.observableArrayList();
     private User user;
+    private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
@@ -97,9 +102,22 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
-//        taskList.add(task);
         try {
-            bllManager.createTask(task);
+            TaskConcrete1 freshTask = bllManager.createTask(task);
+            List<TaskEntry> entryList = new ArrayList();
+            freshTask.setTaskEntryList(entryList);
+            System.out.println("date " + freshTask.getCreationTime().toLocalDate());
+            List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
+            if (taskList == null) {
+                taskList = new ArrayList<>();
+                taskList.add(freshTask);
+                taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+            } else {
+                taskList.add(0, freshTask);
+                taskMap.remove(freshTask.getCreationTime().toLocalDate());
+                taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+
+            }
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
@@ -115,8 +133,13 @@ public class MainModel implements IMainModel {
     public void loadTasks(User user) throws ModelException {
         try {
             Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user);
+//            if(taskMapListener!=null)
+            //  temp removal
+            taskMap.removeListener(taskMapListener);
             taskMap.clear();
             taskMap.putAll(allTasks);
+//            if(taskMapListener!=null)
+            taskMap.addListener(taskMapListener);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
@@ -173,4 +196,13 @@ public class MainModel implements IMainModel {
         return userList;
     }
 
+    @Override
+    public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener) {
+        if (this.taskMapListener != null) {
+            taskMap.removeListener(this.taskMapListener);
+        }
+
+        this.taskMapListener = taskMapListener;
+        taskMap.addListener(taskMapListener);
+    }
 }

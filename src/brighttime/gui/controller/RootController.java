@@ -1,6 +1,8 @@
 package brighttime.gui.controller;
 
 import brighttime.BrightTime;
+import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskEntry;
 import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.interfaces.IMainModel;
@@ -10,11 +12,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -102,37 +107,65 @@ public class RootController implements Initializable {
 //        hideAdminMenu();
         showAdminClientModule();
         showAdminProjectModule();
+//        taskMapListener = (MapChangeListener.Change<? extends LocalDate, ? extends List<TaskConcrete1>> change) -> {
+//            System.out.println("adding");
+//            controller.initTasks();
+//        };
 
     }
+//    boolean isListening = false;
+//    private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
+
+//          Multithreading
+//          ON DESTRUCT, finialize ----------------------------------------------------------------------------------------------------------
+//    public void createTaskMapListener() {
+//
+//        if (isListening == true) {
+//            mainModel.getTasks().addListener(taskMapListener);
+//            System.out.println("adding");
+//        } else {
+//            mainModel.getTasks().removeListener(taskMapListener);
+//            System.out.println("removing");
+//        }
+//
+//    }
+    TimeTrackerController controller;
 
     public void loadModule(String module) {
         try {
+//            System.gc();
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(BrightTime.class.getResource(module));
             Parent root = fxmlLoader.load();
 
             if (module.equals(TIME_TRACKER_MODULE)) {
-                TimeTrackerController controller = fxmlLoader.getController();
+                controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
+//                isListening = true;
             } else if (module.equals(ADMIN_MENU_MODULE)) {
                 CreatorController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
                 controller.setContr(this);
+//                isListening = false;
             } else if (module.equals(ADMIN_CLIENTS_MODULE)) {
                 ManageClientsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
+//                isListening = false;
             } else if (module.equals(ADMIN_PROJECTS_MODULE)) {
                 ManageProjectsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
+//                isListening = false;
             } else if (module.equals(OVERVIEW_MODULE)) {
                 OverviewController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
+//                isListening = false;
             }
+//            createTaskMapListener();
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
             alertManager.showAlert("Could not load module.", "An error occured:" + ex.getMessage());

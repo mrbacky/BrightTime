@@ -212,7 +212,7 @@ public class TaskItemController implements Initializable {
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
                 //  refresh
-                timeTrackerController.initializeView();
+//                timeTrackerController.initializeView();
 
 //                Platform.runLater(() -> {
 //                try {

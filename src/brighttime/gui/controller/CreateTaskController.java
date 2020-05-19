@@ -191,13 +191,13 @@ public class CreateTaskController implements Initializable {
      */
     private void addTask() {
         //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
-        btnAdd.setOnAction((event) -> {
+        btnAdd.setOnAction((event) -> {//   change name method.
             if (validateInput()) {
                 if (!manualMode) {
                     try {
                         TaskConcrete1 newTask = makeTask();
                         mainModel.addTask(newTask);
-                        timeTrackerContr.initializeView();
+//                        timeTrackerContr.initTasks();
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                     }
@@ -206,7 +206,7 @@ public class CreateTaskController implements Initializable {
                         TaskConcrete1 newTask = makeTask();
                         TaskConcrete1 newTaskWithEntry = makeTaskEntry(newTask);
                         mainModel.addTask(newTaskWithEntry);
-                        timeTrackerContr.initializeView();
+//                        timeTrackerContr.initTasks();
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                     }
@@ -257,7 +257,7 @@ public class CreateTaskController implements Initializable {
             billability = TaskBase.Billability.NON_BILLABLE;
         }
         TaskConcrete1 newTask = new TaskConcrete1(txtDescription.getText().trim(), billability, cboProject.getSelectionModel().getSelectedItem(), user);
-//      task.setCreationTime(LocalDateTime.now());
+        newTask.setCreationTime(LocalDateTime.now());
         return newTask;
     }
 
