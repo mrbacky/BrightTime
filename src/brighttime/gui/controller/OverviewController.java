@@ -7,7 +7,9 @@ import brighttime.be.TaskConcrete2;
 import brighttime.be.User;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
+import brighttime.gui.util.ActiveFilterButton;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.HoverNode;
 import brighttime.gui.util.ToolTipManager;
 import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
@@ -26,6 +28,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -33,7 +38,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Side;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
@@ -106,9 +110,9 @@ public class OverviewController implements Initializable {
     @FXML
     private Label lblTimeFrame;
 
-    private final JFXButton btnFilterUser = new JFXButton();
-    private final JFXButton btnFilterProject = new JFXButton();
-    private final JFXButton btnFilterTimeFrame = new JFXButton();
+    private final ActiveFilterButton btnFilterUser = new ActiveFilterButton();
+    private final ActiveFilterButton btnFilterProject = new ActiveFilterButton();
+    private final ActiveFilterButton btnFilterTimeFrame = new ActiveFilterButton();
 
     //TODO: Maybe move to CSS
     String defaultColor = "-fx-text-fill: #435A9A";
@@ -165,12 +169,11 @@ public class OverviewController implements Initializable {
         });
 
         //TODO: Fix table column widths.
-        ObservableValue<Number> w1 = tbvTasks.widthProperty().multiply(0.465);
-        ObservableValue<Number> w2 = tbvTasks.widthProperty().multiply(0.25);
-        colTaskDescription.prefWidthProperty().bind(w1);
-        colHours.prefWidthProperty().bind(w2);
-        colCost.prefWidthProperty().bind(w2);
-
+//        ObservableValue<Number> w1 = tbvTasks.widthProperty().multiply(0.465);
+//        ObservableValue<Number> w2 = tbvTasks.widthProperty().multiply(0.25);
+//        colTaskDescription.prefWidthProperty().bind(w1);
+//        colHours.prefWidthProperty().bind(w2);
+//        colCost.prefWidthProperty().bind(w2);
         //barChartTasks.setTitle("Amount of hours for each task");
         setUpBarChart();
         tbvTasks.getItems().addListener((ListChangeListener.Change<? extends TaskConcrete2> c) -> {
@@ -257,7 +260,9 @@ public class OverviewController implements Initializable {
 
                     //  added rule ------------------------------------------------------------------------------------------------------------
                     if (currentUser.getType() == User.UserType.ADMIN) {
-                        makeActiveFilterButton(btnFilterUser, newVal.toString());
+                        StringProperty selectedFilter = new SimpleStringProperty();
+                        selectedFilter.bind(Bindings.concat(newVal.firstNameProperty(), " ", newVal.lastNameProperty()));
+                        makeCustomActiveFilterButton(btnFilterUser, selectedFilter);
                         nodesListUser.animateList(false);
                     }
                 } catch (ModelException ex) {
@@ -280,7 +285,9 @@ public class OverviewController implements Initializable {
             if (newVal != null) {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, dpStartDate.getValue(), dpEndDate.getValue()));
-                    makeActiveFilterButton(btnFilterProject, newVal.toString() + " (" + cboClients.getValue().toString() + ")");
+                    StringProperty selectedFilter = new SimpleStringProperty();
+                    selectedFilter.bind(Bindings.concat(newVal.nameProperty(), " (", newVal.clientProperty(), ")"));
+                    makeCustomActiveFilterButton(btnFilterProject, selectedFilter);
                     changeLabel(lblProject, "Project", defaultColor);
                     nodesListProject.animateList(false);
                 } catch (ModelException ex) {
@@ -299,7 +306,9 @@ public class OverviewController implements Initializable {
                         //TODO: Change date format.
                         String startDate = newValue.format(dateFormatter);
                         String endDate = dpEndDate.getValue().format(dateFormatter);
-                        makeActiveFilterButton(btnFilterTimeFrame, startDate + " - " + endDate);
+                        StringProperty selectedFilter = new SimpleStringProperty();
+                        selectedFilter.bind(Bindings.concat(startDate, " - ", endDate));
+                        makeCustomActiveFilterButton(btnFilterTimeFrame, selectedFilter);
                         changeLabel(lblTimeFrame, "Time frame", defaultColor);
                         nodesListTimeFrame.animateList(false);
                     } catch (ModelException ex) {
@@ -322,7 +331,9 @@ public class OverviewController implements Initializable {
                         //TODO: Change date format.
                         String start = dpStartDate.getValue().format(dateFormatter);
                         String end = newValue.format(dateFormatter);
-                        makeActiveFilterButton(btnFilterTimeFrame, start + " - " + end);
+                        StringProperty selectedFilter = new SimpleStringProperty();
+                        selectedFilter.bind(Bindings.concat(start, " - ", end));
+                        makeCustomActiveFilterButton(btnFilterTimeFrame, selectedFilter);
                         changeLabel(lblTimeFrame, "Time frame", defaultColor);
                         nodesListTimeFrame.animateList(false);
                     } catch (ModelException ex) {
@@ -434,7 +445,7 @@ public class OverviewController implements Initializable {
     }
 
     private void removeUserFilter() {
-        btnFilterUser.setOnAction((event) -> {
+        btnFilterUser.getBtn().setOnAction((event) -> {
             cboUsers.getSelectionModel().clearSelection();
             hBoxFilter.getChildren().remove(btnFilterUser);
             refreshAfterRemovingOneFilter();
@@ -442,7 +453,7 @@ public class OverviewController implements Initializable {
     }
 
     private void removeProjectFilter() {
-        btnFilterProject.setOnAction((event) -> {
+        btnFilterProject.getBtn().setOnAction((event) -> {
             cboProjects.getSelectionModel().clearSelection();
             cboProjects.getItems().clear();
             cboClients.getSelectionModel().clearSelection();
@@ -452,7 +463,7 @@ public class OverviewController implements Initializable {
     }
 
     private void removeTimeFrameFilter() {
-        btnFilterTimeFrame.setOnAction((event) -> {
+        btnFilterTimeFrame.getBtn().setOnAction((event) -> {
             hBoxFilter.getChildren().remove(btnFilterTimeFrame);
             dpStartDate.setValue(null);
             dpEndDate.setValue(null);
@@ -523,9 +534,8 @@ public class OverviewController implements Initializable {
         label.setStyle(style);
     }
 
-    private void makeActiveFilterButton(JFXButton button, String text) {
-        button.setText(text);
-        button.getStyleClass().add("buttonFilteredItem");
+    private void makeCustomActiveFilterButton(ActiveFilterButton button, ObservableValue text) {
+        button.getSelectedFilter().bind(text);
 
 //        if (hBoxFilter.getChildren().contains(button)) {
 //            hBoxFilter.getChildren().remove(1);
@@ -535,7 +545,6 @@ public class OverviewController implements Initializable {
         if (!hBoxFilter.getChildren().contains(button)) {
             hBoxFilter.getChildren().add(button);
         }
-
     }
 
     private void setUpBarChart() {
@@ -550,6 +559,10 @@ public class OverviewController implements Initializable {
             String taskDescription = task.getDescription();
             XYChart.Series<String, Double> oneTaskBar = new XYChart.Series<>();
             XYChart.Data<String, Double> data = new XYChart.Data<>("Tasks", taskHoursTotal);
+            String projectInfo = task.getProject().getName() + " (" + task.getProject().getClient().getName() + ")";
+            //TODO: Fix the cut off labels.
+            //TODO: Fix the decimal format.
+            data.setNode(new HoverNode(task.getDescription(), projectInfo, taskHoursTotal));
             oneTaskBar.setName(taskDescription);
             oneTaskBar.getData().add(data);
             taskBars.add(oneTaskBar);
@@ -557,7 +570,7 @@ public class OverviewController implements Initializable {
         barChartTasks.getData().clear();
         barChartTasks.getData().addAll(taskBars);
         barChartTasks.getYAxis().setLabel("hours");
-        barChartTasks.setLegendSide(Side.RIGHT);
+        barChartTasks.setLegendVisible(false);
 
     }
 
@@ -567,10 +580,7 @@ public class OverviewController implements Initializable {
             displayUserFilter();
 
         } else {
-            //  just removing the column -------------------------------------------------------------------------------------------
-            //  we have to set constrains for tableCollumns just like elements on anchor pane, want to figure out how 
             tbvTasks.getColumns().remove(2);
-//            tbvTasks.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             cboUsers.getSelectionModel().select(currentUser);
             lblUser.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
             nodesListUser.setDisable(true);
@@ -579,10 +589,11 @@ public class OverviewController implements Initializable {
     }
 
     private void setToolTipsForButtons() {
+        //TODO: Fix the tooltips.
         toolTipManager.setToolTipForOneButton(btnClearFilters, "Clear all active filters");
-        toolTipManager.setToolTipForOneButton(btnFilterUser, "Clear user filter");
-        toolTipManager.setToolTipForOneButton(btnFilterProject, "Clear project filter");
-        toolTipManager.setToolTipForOneButton(btnFilterTimeFrame, "Clear time frame filter");
+        //toolTipManager.setToolTipForOneButton(btnFilterUser, "Clear user filter");
+        //toolTipManager.setToolTipForOneButton(btnFilterProject, "Clear project filter");
+        //toolTipManager.setToolTipForOneButton(btnFilterTimeFrame, "Clear time frame filter");
     }
 
 }

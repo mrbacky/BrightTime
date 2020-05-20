@@ -1,7 +1,9 @@
 package brighttime.be;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -14,16 +16,19 @@ public abstract class TaskBase {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty description = new SimpleStringProperty();
+    private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private Billability billability;
 
-    TaskBase(int id, String description, Billability billability) {
+    TaskBase(int id, String description, Project project, Billability billability) {
         this.id.set(id);
         this.description.set(description);
+        this.project.set(project);
         this.billability = billability;
     }
 
-    TaskBase(String description, Billability billability) {
+    TaskBase(String description, Project project, Billability billability) {
         this.description.set(description);
+        this.project.set(project);
         this.billability = billability;
     }
 
@@ -49,6 +54,18 @@ public abstract class TaskBase {
 
     public StringProperty descriptionProperty() {
         return description;
+    }
+
+    public Project getProject() {
+        return project.get();
+    }
+
+    public void setProject(Project value) {
+        project.set(value);
+    }
+
+    public ObjectProperty projectProperty() {
+        return project;
     }
 
     public enum Billability {
