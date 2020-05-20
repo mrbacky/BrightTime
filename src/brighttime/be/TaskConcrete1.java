@@ -12,35 +12,19 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class TaskConcrete1 extends TaskBase {
 
-    private final ObjectProperty<Project> project = new SimpleObjectProperty<>();
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
     private final ObjectProperty<User> user = new SimpleObjectProperty<>();
 
-    public TaskConcrete1(String description, Billability billability, Project project, User user) {
-
-        super(description, billability);
+    public TaskConcrete1(String description, Project project, Billability billability, User user) {
+        super(description, project, billability);
         this.user.set(user);
-        this.project.set(project);
     }
 
-    public TaskConcrete1(int id, String description, Billability billability, Project project, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
-        super(id, description, billability);
-        this.project.set(project);
+    public TaskConcrete1(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
+        super(id, description, project, billability);
         this.taskEntryList.set(taskEntryList);
         this.creationTime.set(creationTime);
-    }
-
-    public Project getProject() {
-        return project.get();
-    }
-
-    public void setProject(Project value) {
-        project.set(value);
-    }
-
-    public ObjectProperty projectProperty() {
-        return project;
     }
 
     public List<TaskEntry> getTaskEntryList() {

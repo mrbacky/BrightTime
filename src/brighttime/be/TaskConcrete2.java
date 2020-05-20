@@ -20,8 +20,8 @@ public class TaskConcrete2 extends TaskBase {
     private final StringProperty totalDurationString = new SimpleStringProperty();
     private final StringProperty totalCostString = new SimpleStringProperty();
 
-    public TaskConcrete2(int id, String description, TaskBase.Billability billability, int totalDurationSeconds, int rate) {
-        super(id, description, billability);
+    public TaskConcrete2(int id, String description, Project project, TaskBase.Billability billability, int totalDurationSeconds, int rate) {
+        super(id, description, project, billability);
         this.rate = rate;
         this.totalDurationSeconds.set(totalDurationSeconds);
     }
@@ -80,11 +80,6 @@ public class TaskConcrete2 extends TaskBase {
 
     public StringProperty totalCostStringProperty() {
         return totalCostString;
-    }
-
-    @Override
-    public String toString() {
-        return "TaskConcrete2{" + " " + totalDurationSeconds + ", " + totalDurationString + '}';
     }
 
 }

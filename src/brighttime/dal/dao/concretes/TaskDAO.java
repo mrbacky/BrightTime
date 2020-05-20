@@ -135,8 +135,8 @@ public class TaskDAO implements ITaskDAO {
                     newTask = new TaskConcrete1(
                             taskId,
                             rs.getString("description"),
-                            billability,
                             project,
+                            billability,
                             entryList,
                             modifiedDate);
                     taskMap.put(taskId, newTask);
@@ -201,11 +201,14 @@ public class TaskDAO implements ITaskDAO {
         List<TaskConcrete2> allTasks = new ArrayList<>();
         //TODO: Make one method like getAllTasksFiltered(), so there is only one database call. 
         String sql = "SELECT A2.id, A2.description, "
+                + "	A1.clientId, A1.clientName, "
+                + "	A1.projectId, A1.projectName, "
                 + "	SUM(A2.totalDuration) AS totalDuration, "
                 + "	A2.billability, A1.clientRate, A1.projectRate "
                 + "FROM "
                 + "	( "
-                + "	SELECT C.hourlyRate AS clientRate, P.hourlyRate AS projectRate, P.id AS projectId "
+                + "	SELECT C.id AS clientId, C.name AS clientName, c.hourlyRate AS clientRate, "
+                + "	P.hourlyRate AS projectRate, P.id AS projectId, P.name AS projectName "
                 + "	FROM Client C "
                 + "	JOIN Project P "
                 + "	ON C.id = P.clientId "
@@ -223,6 +226,8 @@ public class TaskDAO implements ITaskDAO {
                 + "	AS A2 "
                 + "ON A1.projectId = A2.projectId "
                 + "GROUP BY A2.id, A2.description, A2.billability, "
+                + "	A1.clientId, A1.clientName, "
+                + "	A1.projectId, A1.projectName, "
                 + "	A1.clientRate, A1.projectRate "
                 + "ORDER BY A2.description";
 
@@ -248,8 +253,12 @@ public class TaskDAO implements ITaskDAO {
                     rate = 0;
                 }
 
+                Client client = new Client(rs.getInt("clientId"), rs.getString("clientName"));
+                Project project = new Project(rs.getInt("projectId"), rs.getString("projectName"), client);
+
                 allTasks.add(new TaskConcrete2(rs.getInt("id"),
                         rs.getString("description"),
+                        project,
                         billability,
                         rs.getInt("totalDuration"),
                         rate
@@ -266,11 +275,14 @@ public class TaskDAO implements ITaskDAO {
         List<TaskConcrete2> filtered = new ArrayList<>();
 
         String sql = "SELECT A2.id, A2.description, "
+                + "	A1.clientId, A1.clientName, "
+                + "	A1.projectId, A1.projectName, "
                 + "	SUM(A2.totalDuration) AS totalDuration, "
                 + "	A2.billability, A1.clientRate, A1.projectRate "
                 + "FROM "
                 + "	( "
-                + "	SELECT C.hourlyRate AS clientRate, P.hourlyRate AS projectRate, P.id AS projectId "
+                + "	SELECT C.id AS clientId, C.name AS clientName, c.hourlyRate AS clientRate, "
+                + "	P.hourlyRate AS projectRate, P.id AS projectId, P.name AS projectName "
                 + "	FROM Client C "
                 + "	JOIN Project P "
                 + "	ON C.id = P.clientId "
@@ -326,8 +338,12 @@ public class TaskDAO implements ITaskDAO {
                     rate = 0;
                 }
 
+                Client client = new Client(rs.getInt("clientId"), rs.getString("clientName"));
+                Project project = new Project(rs.getInt("projectId"), rs.getString("projectName"), client);
+
                 filtered.add(new TaskConcrete2(rs.getInt("id"),
                         rs.getString("description"),
+                        project,
                         billability,
                         rs.getInt("totalDuration"),
                         rate
@@ -359,6 +375,8 @@ public class TaskDAO implements ITaskDAO {
         sql += "	) AS A2 "
                 + "ON A1.projectId = A2.projectId "
                 + "GROUP BY A2.id, A2.description, A2.billability, "
+                + "	A1.clientId, A1.clientName, "
+                + "	A1.projectId, A1.projectName, "
                 + "	A1.clientRate, A1.projectRate "
                 + "ORDER BY A2.description";
         return sql;

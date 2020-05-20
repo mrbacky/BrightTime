@@ -80,6 +80,8 @@ public class UserDAO implements IUserDAO {
             }
 
         } catch (SQLException ex) {
+            //log in database
+            //Warning, Information, Error
             throw new DalException(ex.getMessage());
         }
     }

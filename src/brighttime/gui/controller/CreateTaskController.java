@@ -256,7 +256,7 @@ public class CreateTaskController implements Initializable {
         } else {
             billability = TaskBase.Billability.NON_BILLABLE;
         }
-        TaskConcrete1 newTask = new TaskConcrete1(txtDescription.getText().trim(), billability, cboProject.getSelectionModel().getSelectedItem(), user);
+        TaskConcrete1 newTask = new TaskConcrete1(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), billability, user);
 //      task.setCreationTime(LocalDateTime.now());
         return newTask;
     }
