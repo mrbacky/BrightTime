@@ -108,6 +108,8 @@ public interface BllFacade {
 
     List<User> getUsers() throws BllException;
 
-    public User authenticateUser(String username, String password) throws BllException;
+    User authenticateUser(String username, String password) throws BllException;
+
+    User createUser(User user) throws BllException;
 
 }

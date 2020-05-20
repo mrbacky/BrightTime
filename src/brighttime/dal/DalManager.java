@@ -161,4 +161,10 @@ public class DalManager implements DalFacade {
             throw new DalException(ex.getMessage());
         }
     }
+
+    @Override
+    public User createUser(User user) throws DalException {
+        return userDAO.createUser(user);
+        
+    }
 }

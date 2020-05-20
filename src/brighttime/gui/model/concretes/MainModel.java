@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -204,5 +205,14 @@ public class MainModel implements IMainModel {
 
         this.taskMapListener = taskMapListener;
         taskMap.addListener(taskMapListener);
+    }
+
+    @Override
+    public User createUser(User user) throws ModelException {
+        try {
+            return bllManager.createUser(user);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 }

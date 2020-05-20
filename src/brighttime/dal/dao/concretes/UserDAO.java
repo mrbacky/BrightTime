@@ -72,9 +72,7 @@ public class UserDAO implements IUserDAO {
             String firstName = rs.getString("firstName");
             String lastName = rs.getString("lastName");
             int type = rs.getInt("userTypeId");
-            
-            
-            
+
             if (type == 1) {
                 return new User(id, firstName, lastName, User.UserType.ADMIN);
             } else {
@@ -88,4 +86,31 @@ public class UserDAO implements IUserDAO {
         }
     }
 
+    @Override
+    public User createUser(User user) throws DalException {
+
+        String sql = "INSERT INTO [User] (firstName, lastName, username, password, userTypeId) "
+                + "VALUES (?,?,?,?,?)";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getUserName());
+            ps.setString(4, user.getPassword());
+            //  UserType USER = id 2
+            ps.setInt(5, 2);
+            
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                user.setId(rs.getInt(1));
+            }
+            return user;
+        } catch (Exception ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
 }

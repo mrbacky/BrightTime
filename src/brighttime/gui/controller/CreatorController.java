@@ -4,6 +4,8 @@ import brighttime.gui.model.interfaces.IMainModel;
 import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
@@ -47,6 +49,7 @@ public class CreatorController implements Initializable {
         centervBox();
         showAdminClientModule();
         showAdminProjectModule();
+        showAdminUserModule();
     }
 
     public void setContr(RootController con) {
@@ -66,6 +69,12 @@ public class CreatorController implements Initializable {
     private void showAdminProjectModule() {
         btnProjects.setOnAction((event) -> {
             rootContr.loadAdminProjectModule();
+        });
+    }
+
+    private void showAdminUserModule() {
+        btnUsers.setOnAction((ActionEvent event) -> {
+            rootContr.loadAdminUserModule();
         });
     }
 

@@ -87,6 +87,8 @@ public interface IMainModel {
 
     User getUser();
 
-    public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
+    void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
+
+    User createUser(User user) throws ModelException;
 
 }

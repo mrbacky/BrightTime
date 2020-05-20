@@ -232,4 +232,19 @@ public class BllManager implements BllFacade {
         }
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     * @throws BllException
+     */
+    @Override
+    public User createUser(User user) throws BllException {
+        try {
+            return dalManager.createUser(user);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
 }

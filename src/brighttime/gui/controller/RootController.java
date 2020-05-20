@@ -21,6 +21,7 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -47,6 +48,7 @@ public class RootController implements Initializable {
     private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview_1.fxml";
     private final String LOGIN_VIEW = "/brighttime/gui/view/Login.fxml";
     private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
+    private final String ADMIN_USERS_MODULE = "/brighttime/gui/view/ManageUsers.fxml";
 
     @FXML
     private AnchorPane anchorPaneRoot;
@@ -107,6 +109,7 @@ public class RootController implements Initializable {
 //        hideAdminMenu();
         showAdminClientModule();
         showAdminProjectModule();
+        showAdminUserModule();
 //        taskMapListener = (MapChangeListener.Change<? extends LocalDate, ? extends List<TaskConcrete1>> change) -> {
 //            System.out.println("adding");
 //            controller.initTasks();
@@ -158,7 +161,11 @@ public class RootController implements Initializable {
                 ManageProjectsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
-//                isListening = false;
+                //                isListening = false;
+            } else if (module.equals(ADMIN_USERS_MODULE)) {
+                ManageUsersController controller = fxmlLoader.getController();
+                controller.injectMainModel(mainModel);
+                controller.initializeView();
             } else if (module.equals(OVERVIEW_MODULE)) {
                 OverviewController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
@@ -258,6 +265,16 @@ public class RootController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    void loadAdminUserModule() {
+        loadModule(ADMIN_USERS_MODULE);
+    }
+
+    private void showAdminUserModule() {
+        btnUsers.setOnAction((ActionEvent event) -> {
+            loadAdminUserModule();
+        });
     }
 
 }

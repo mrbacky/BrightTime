@@ -40,6 +40,11 @@
     -fx-background-radius :  10 10 10 10;
 }
 
+.creatorStackPanePadding{
+    -fx-padding: 15px;
+    
+}
+
 .txtCommon{
     -fx-border-radius: 20px;
     -fx-background-radius: 10 10 10 10;
