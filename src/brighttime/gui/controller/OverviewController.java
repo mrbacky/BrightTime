@@ -580,6 +580,7 @@ public class OverviewController implements Initializable {
             displayUserFilter();
 
         } else {
+            tbvTasks.getColumns().remove(2);
             cboUsers.getSelectionModel().select(currentUser);
             lblUser.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
             nodesListUser.setDisable(true);
