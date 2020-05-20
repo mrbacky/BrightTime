@@ -154,6 +154,7 @@ public class TimeTrackerController implements Initializable {
             ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
             taskModel.setTask(task);
             taskModel.setDate(date);
+            taskModel.initializeTaskModel();
             TaskItemController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
             controller.injectModel(taskModel);

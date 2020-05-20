@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.text.Format;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,6 +31,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -129,6 +131,19 @@ public class TaskItemController implements Initializable {
     public void setTaskDetails(TaskConcrete1 task) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        StringConverter sc = new StringConverter() {
+            @Override
+            public String toString(Object object) {
+                System.out.println("in toString in StringConverter");
+
+                return dtf.format(taskModel.getStartTime(taskModel.getObsEntries()));
+            }
+
+            @Override
+            public Object fromString(String string) {
+                return null;
+            }
+        };
 
         textFieldTaskDesc.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getDescription(), task.descriptionProperty()));
@@ -138,12 +153,12 @@ public class TaskItemController implements Initializable {
 
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
+        //lblStartTime.textProperty().bind(Bindings.createStringBinding(()
+        //        -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
 
-        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
-
-        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
+        lblStartTime.textProperty().bindBidirectional(taskModel.startTimeProperty(), sc);
+        //        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
+        //                -> dtf.format(taskModel.getEndTime()), taskModel.endTimeProperty()));
 
         lblDuration.textProperty().bind(Bindings.createStringBinding(()
                 -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -28,7 +29,7 @@ public interface ITaskModel {
 
     long formatToSec(String formatString);
 
-    LocalDateTime getStartTime();
+    LocalDateTime getStartTime(ObservableList<TaskEntry> entryList);
 
     LocalDateTime getEndTime();
 
@@ -61,5 +62,13 @@ public interface ITaskModel {
     void setupStartTimeListener();
 
     void setupEndTimeListener();
+
+    public void initializeTaskModel();
+    
+    ObservableList<TaskEntry> getObsEntries();
+    
+    void setUpDayEntryList();
+    
+    void setUpDayEntryListListener();
 
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -25,6 +29,8 @@ import javafx.beans.value.ObservableValue;
  *
  */
 public class TaskModel implements ITaskModel {
+
+    private static final String DATE_TIME_FORMAT = "HH:mm";
 
     private final BllFacade bllManager;
     private TaskConcrete1 task;
@@ -34,11 +40,30 @@ public class TaskModel implements ITaskModel {
     private final StringProperty stringDuration = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
+    private final ObservableList<TaskEntry> obsEntries = FXCollections.observableArrayList();
+
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
     public TaskModel(BllFacade bllManager) throws IOException {
         this.bllManager = bllManager;
-        setupStartTimeListener();
-        setupEndTimeListener();
+//        setupStartTimeListener();
+//        setupEndTimeListener();
+
+    }
+
+    @Override
+    public void initializeTaskModel() {
+
+        setUpDayEntryList();
+        setUpDayEntryListListener();
+        System.out.println("before set Start time (LocalDateTime) of task");
+        startTime.set(getStartTime(obsEntries));
+
+    }
+
+    @Override
+    public ObservableList<TaskEntry> getObsEntries() {
+        return obsEntries;
 
     }
 
@@ -61,12 +86,12 @@ public class TaskModel implements ITaskModel {
     }
 
     @Override
-    public LocalDateTime getStartTime() {
-        if (!getDayEntryList().isEmpty()) {
-
-            return bllManager.getStartTime(getDayEntryList());
+    public LocalDateTime getStartTime(ObservableList<TaskEntry> entryList) {
+        if (!entryList.isEmpty()) {
+            return bllManager.getStartTime(entryList);
+        } else {
+            return task.getCreationTime();
         }
-        return task.getCreationTime();
     }
 
     @Override
@@ -76,6 +101,7 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public ObjectProperty startTimeProperty() {
+        System.out.println("Inside startTimeProperty:" + startTime.toString());
         return startTime;
     }
 
@@ -204,6 +230,28 @@ public class TaskModel implements ITaskModel {
             System.out.println("in start time listener");
             endTime.set(newValue);
         });
+    }
+
+    @Override
+    public void setUpDayEntryList() {
+        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
+                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+        obsEntries.addAll(dayEntries);
+
+    }
+
+    @Override
+    public void setUpDayEntryListListener() {
+        
+//        obsEntries.addListener((ListChangeListener.Change<? extends TaskEntry> c) -> {
+//            startTime.set(getStartTime(obsEntries));
+//            
+//
+//            System.out.println("in obsEnties listener");
+//
+//        });
+
     }
 
 }

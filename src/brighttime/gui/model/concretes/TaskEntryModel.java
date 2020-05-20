@@ -140,8 +140,11 @@ public class TaskEntryModel implements ITaskEntryModel {
     public void setupStartTimeListener() {
         startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
+                System.out.println("old: " + taskEntry.getStartTime());
                 LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeLDT);
+                System.out.println(":: " + taskEntry.getStartTime());
+//                taskEntry.getTask().
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
         });
@@ -161,7 +164,10 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException {
         try {
+            
             bllManager.updateTaskEntryStartTime(taskEntry);
+            
+            
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
