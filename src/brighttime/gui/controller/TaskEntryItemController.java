@@ -47,6 +47,7 @@ public class TaskEntryItemController implements Initializable {
     @FXML
     private JFXTimePicker timePickerEndTime;
     private final AlertManager alertManager;
+    private TimeTrackerController timeTrackerController;
 
     public TaskEntryItemController() {
         this.alertManager = new AlertManager();
@@ -90,6 +91,8 @@ public class TaskEntryItemController implements Initializable {
             try {
                 taskEntry.setStartTime(LocalDateTime.of(entryDate, updatedStartTime));
                 taskEntryModel.updateTaskEntryStartTime(taskEntry);
+                //  workaround
+                timeTrackerController.initTasks();
 
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
@@ -115,6 +118,7 @@ public class TaskEntryItemController implements Initializable {
             try {
                 taskEntry.setEndTime(LocalDateTime.of(entryDate, updatedEndTime));
                 taskEntryModel.updateTaskEntryEndTime(taskEntry);
+                timeTrackerController.initTasks();
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
             }
@@ -124,5 +128,9 @@ public class TaskEntryItemController implements Initializable {
                 timePickerEndTime.show();
             });
         }
+    }
+
+    void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
+        this.timeTrackerController = timeTrackerController;
     }
 }

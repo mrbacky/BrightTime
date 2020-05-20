@@ -190,6 +190,7 @@ public class TaskItemController implements Initializable {
 
             TaskEntryItemController controller = fxmlLoader.getController();
             controller.injectTaskEntryModel(taskEntryModel);
+            controller.injectTimeTrackerController(timeTrackerController);
             vBoxTaskEntries.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,7 +213,7 @@ public class TaskItemController implements Initializable {
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
                 //  refresh
-//                timeTrackerController.initializeView();
+                timeTrackerController.initializeView();
 
 //                Platform.runLater(() -> {
 //                try {
