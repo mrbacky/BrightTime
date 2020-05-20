@@ -560,6 +560,8 @@ public class OverviewController implements Initializable {
             XYChart.Series<String, Double> oneTaskBar = new XYChart.Series<>();
             XYChart.Data<String, Double> data = new XYChart.Data<>("Tasks", taskHoursTotal);
             String projectInfo = task.getProject().getName() + " (" + task.getProject().getClient().getName() + ")";
+            //TODO: Fix the cut off labels.
+            //TODO: Fix the decimal format.
             data.setNode(new HoverNode(task.getDescription(), projectInfo, taskHoursTotal));
             oneTaskBar.setName(taskDescription);
             oneTaskBar.getData().add(data);
@@ -586,6 +588,7 @@ public class OverviewController implements Initializable {
     }
 
     private void setToolTipsForButtons() {
+        //TODO: Fix the tooltips.
         toolTipManager.setToolTipForOneButton(btnClearFilters, "Clear all active filters");
         //toolTipManager.setToolTipForOneButton(btnFilterUser, "Clear user filter");
         //toolTipManager.setToolTipForOneButton(btnFilterProject, "Clear project filter");
