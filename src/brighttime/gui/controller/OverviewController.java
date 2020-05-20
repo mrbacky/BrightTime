@@ -9,7 +9,6 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.ActiveFilterButton;
 import brighttime.gui.util.AlertManager;
-import brighttime.gui.util.HoverNode;
 import brighttime.gui.util.ToolTipManager;
 import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
@@ -44,9 +43,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -558,11 +560,9 @@ public class OverviewController implements Initializable {
             double taskHoursTotal = ((double) task.getTotalDurationSeconds() / 60) / 60;
             String taskDescription = task.getDescription();
             XYChart.Series<String, Double> oneTaskBar = new XYChart.Series<>();
-            XYChart.Data<String, Double> data = new XYChart.Data<>("Tasks", taskHoursTotal);
-            String projectInfo = task.getProject().getName() + " (" + task.getProject().getClient().getName() + ")";
-            //TODO: Fix the cut off labels.
-            //TODO: Fix the decimal format.
-            data.setNode(new HoverNode(task.getDescription(), projectInfo, taskHoursTotal));
+            XYChart.Data<String, Double> data = new XYChart.Data<>("tasks", taskHoursTotal);
+            data.setNode(new StackPane());
+            createToolTip(data, task);
             oneTaskBar.setName(taskDescription);
             oneTaskBar.getData().add(data);
             taskBars.add(oneTaskBar);
@@ -571,7 +571,20 @@ public class OverviewController implements Initializable {
         barChartTasks.getData().addAll(taskBars);
         barChartTasks.getYAxis().setLabel("hours");
         barChartTasks.setLegendVisible(false);
+    }
 
+    private void createToolTip(XYChart.Data<String, Double> xyPlot, TaskConcrete2 task) {
+        String projectInfo = task.getProject().getName() + " (" + task.getProject().getClient().getName() + ")";
+        String text
+                = task.getDescription() + System.lineSeparator()
+                + projectInfo + System.lineSeparator()
+                + task.getTotalDurationString() + " hours";
+        Tooltip toolTip = new Tooltip(text);
+        toolTip.setShowDelay(Duration.seconds(0));
+        Tooltip.install(xyPlot.getNode(), toolTip);
+
+        xyPlot.getNode().setOnMouseEntered(mEvent -> xyPlot.getNode().getStyleClass().add("onBarchartColumnHover"));
+        xyPlot.getNode().setOnMouseExited(mEvent -> xyPlot.getNode().getStyleClass().remove("onBarchartColumnHover"));
     }
 
     private void setUpUserRules() {
@@ -589,11 +602,10 @@ public class OverviewController implements Initializable {
     }
 
     private void setToolTipsForButtons() {
-        //TODO: Fix the tooltips.
         toolTipManager.setToolTipForOneButton(btnClearFilters, "Clear all active filters");
-        //toolTipManager.setToolTipForOneButton(btnFilterUser, "Clear user filter");
-        //toolTipManager.setToolTipForOneButton(btnFilterProject, "Clear project filter");
-        //toolTipManager.setToolTipForOneButton(btnFilterTimeFrame, "Clear time frame filter");
+        toolTipManager.setToolTipForOneActiveFilterButton(btnFilterUser, "Clear user filter");
+        toolTipManager.setToolTipForOneActiveFilterButton(btnFilterProject, "Clear project filter");
+        toolTipManager.setToolTipForOneActiveFilterButton(btnFilterTimeFrame, "Clear time frame filter");
     }
 
 }
