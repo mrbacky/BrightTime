@@ -24,7 +24,6 @@ public class EventLogDAO implements IEventLogDAO {
 
     @Override
     public void logEvent(EventLog log) throws DalException {
-        //TODO: Not tested.
         String sql = "INSERT INTO EventLog (recordedDate, type, description, username) "
                 + "VALUES (SYSDATETIME(), ?, ?, ?)";
 

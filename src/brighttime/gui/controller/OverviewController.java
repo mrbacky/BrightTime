@@ -9,6 +9,7 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.ActiveFilterButton;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.DatePickerCustomizer;
 import brighttime.gui.util.ToolTipManager;
 import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
@@ -18,6 +19,7 @@ import com.jfoenix.controls.JFXNodesList;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAdjusters;
@@ -49,6 +51,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 
 /**
  * FXML Controller class
@@ -58,47 +63,11 @@ import javafx.util.Duration;
 public class OverviewController implements Initializable {
 
     @FXML
-    private TableView<TaskConcrete2> tbvTasks;
-
+    private HBox hBoxFilter;
     @FXML
-    private TableColumn<TaskConcrete2, String> colTaskDescription;
+    private Label lblProject;
     @FXML
-    private TableColumn<TaskConcrete2, String> colHours;
-    @FXML
-    private TableColumn<TaskConcrete2, String> colCost;
-
-    private IMainModel mainModel;
-    private final AlertManager alertManager;
-    private final ToolTipManager toolTipManager;
-    private final ValidationManager validationManager;
-
-    @FXML
-    private JFXComboBox<User> cboUsers;
-    @FXML
-    private JFXComboBox<Client> cboClients;
-    @FXML
-    private JFXComboBox<Project> cboProjects;
-    @FXML
-    private JFXButton btnThisWeek;
-    @FXML
-    private JFXButton btnThisMonth;
-    @FXML
-    private JFXDatePicker dpStartDate;
-    @FXML
-    private JFXDatePicker dpEndDate;
-    @FXML
-    private JFXButton btnLastWeek;
-    @FXML
-    private JFXButton btnLastMonth;
-    @FXML
-    private JFXButton btnClearFilters;
-    @FXML
-    private BarChart<String, Double> barChartTasks;
-
-    @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    private GridPane grid;
+    private Label lblTimeFrame;
     @FXML
     private JFXNodesList nodesListUser;
     @FXML
@@ -106,21 +75,57 @@ public class OverviewController implements Initializable {
     @FXML
     private JFXNodesList nodesListTimeFrame;
     @FXML
-    private HBox hBoxFilter;
+    private JFXComboBox<User> cboUsers;
     @FXML
-    private Label lblProject;
+    private JFXComboBox<Client> cboClients;
     @FXML
-    private Label lblTimeFrame;
+    private JFXComboBox<Project> cboProjects;
+    @FXML
+    private JFXDatePicker datePickerStart;
+    @FXML
+    private JFXDatePicker datePickerEnd;
+    @FXML
+    private JFXButton btnThisWeek;
+    @FXML
+    private JFXButton btnThisMonth;
+    @FXML
+    private JFXButton btnLastWeek;
+    @FXML
+    private JFXButton btnLastMonth;
+    @FXML
+    private JFXButton btnClearFilters;
 
     private final ActiveFilterButton btnFilterUser = new ActiveFilterButton();
     private final ActiveFilterButton btnFilterProject = new ActiveFilterButton();
     private final ActiveFilterButton btnFilterTimeFrame = new ActiveFilterButton();
 
-    //TODO: Maybe move to CSS
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private GridPane grid;
+    @FXML
+    private TableView<TaskConcrete2> tbvTasks;
+    @FXML
+    private TableColumn<TaskConcrete2, String> colTaskDescription;
+    @FXML
+    private TableColumn<TaskConcrete2, String> colHours;
+    @FXML
+    private TableColumn<TaskConcrete2, String> colCost;
+    @FXML
+    private BarChart<String, Double> barChartTasks;
+
+    private IMainModel mainModel;
+    private final AlertManager alertManager;
+    private final ToolTipManager toolTipManager;
+    private final ValidationManager validationManager;
+    private final DatePickerCustomizer datePickerCustomizer;
+
+    //TODO: Move to CSS.
     String defaultColor = "-fx-text-fill: #435A9A";
     String highlightColor = "-fx-text-fill: #F0C326";
 
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.US);
+    StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
 
     @FXML
     private Label lblUser;
@@ -130,6 +135,7 @@ public class OverviewController implements Initializable {
         this.alertManager = new AlertManager();
         this.toolTipManager = new ToolTipManager();
         this.validationManager = new ValidationManager();
+        this.datePickerCustomizer = new DatePickerCustomizer();
     }
 
     /**
@@ -140,25 +146,27 @@ public class OverviewController implements Initializable {
     }
 
     void initializeView() {
-
-//        displayUserFilter();      this one is called in setUpUserRules();
+//      displayUserFilter();      this one is called in setUpUserRules();
         displayProjectFilter();
         displayTimeFrameFilter();
-        removeUserFilter();
-        removeProjectFilter();
-        removeTimeFrameFilter();
+
         setUsersIntoComboBox();
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
+        setDateRestrictions();
         setValidators();
         setTable();
+
         selectUser();
         selectClient();
         selectProject();
         listenDatePickerStart();
         listenDatePickerEnd();
+
+        removeUserFilter();
+        removeProjectFilter();
+        removeTimeFrameFilter();
         clearAllFilters();
-        setToolTipsForButtons();
 
         //  this is important for hiding user combo box and stuff
         setUpUserRules();
@@ -170,18 +178,13 @@ public class OverviewController implements Initializable {
             }
         });
 
-        //TODO: Fix table column widths.
-//        ObservableValue<Number> w1 = tbvTasks.widthProperty().multiply(0.465);
-//        ObservableValue<Number> w2 = tbvTasks.widthProperty().multiply(0.25);
-//        colTaskDescription.prefWidthProperty().bind(w1);
-//        colHours.prefWidthProperty().bind(w2);
-//        colCost.prefWidthProperty().bind(w2);
-        //barChartTasks.setTitle("Amount of hours for each task");
+        //TODO: Refactor this.
         setUpBarChart();
         tbvTasks.getItems().addListener((ListChangeListener.Change<? extends TaskConcrete2> c) -> {
             setUpBarChart();
         });
 
+        setToolTipsForButtons();
     }
 
     void injectMainModel(IMainModel mainModel) {
@@ -237,6 +240,13 @@ public class OverviewController implements Initializable {
         });
     }
 
+    private void setDateRestrictions() {
+        datePickerCustomizer.disableFutureDates(datePickerStart);
+        datePickerCustomizer.changeWrittenFutureDateToCurrentDate(datePickerStart);
+        datePickerCustomizer.disableFutureDates(datePickerEnd);
+        datePickerCustomizer.changeWrittenFutureDateToCurrentDate(datePickerEnd);
+    }
+
     private void setValidators() {
         validationManager.comboBoxValidation(cboClients, "No client selected.");
         validationManager.comboBoxValidation(cboProjects, "No project selected.");
@@ -258,8 +268,7 @@ public class OverviewController implements Initializable {
         cboUsers.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-
+                    mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
                     //  added rule ------------------------------------------------------------------------------------------------------------
                     if (currentUser.getType() == User.UserType.ADMIN) {
                         StringProperty selectedFilter = new SimpleStringProperty();
@@ -286,7 +295,7 @@ public class OverviewController implements Initializable {
         cboProjects.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, dpStartDate.getValue(), dpEndDate.getValue()));
+                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, datePickerStart.getValue(), datePickerEnd.getValue()));
                     StringProperty selectedFilter = new SimpleStringProperty();
                     selectedFilter.bind(Bindings.concat(newVal.nameProperty(), " (", newVal.clientProperty(), ")"));
                     makeCustomActiveFilterButton(btnFilterProject, selectedFilter);
@@ -300,22 +309,10 @@ public class OverviewController implements Initializable {
     }
 
     private void listenDatePickerStart() {
-        dpStartDate.valueProperty().addListener((observable, oldValue, newValue) -> {
+        datePickerStart.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                if (dpEndDate.getValue() != null) {
-                    try {
-                        mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), newValue, dpEndDate.getValue()));
-                        //TODO: Change date format.
-                        String startDate = newValue.format(dateFormatter);
-                        String endDate = dpEndDate.getValue().format(dateFormatter);
-                        StringProperty selectedFilter = new SimpleStringProperty();
-                        selectedFilter.bind(Bindings.concat(startDate, " - ", endDate));
-                        makeCustomActiveFilterButton(btnFilterTimeFrame, selectedFilter);
-                        changeLabel(lblTimeFrame, "Time frame", defaultColor);
-                        nodesListTimeFrame.animateList(false);
-                    } catch (ModelException ex) {
-                        alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
-                    }
+                if (datePickerEnd.getValue() != null) {
+                    filterByTimeFrame(datePickerStart, newValue);
                 } else {
                     changeLabel(lblTimeFrame, "Please select an end date.", highlightColor);
                 }
@@ -324,23 +321,10 @@ public class OverviewController implements Initializable {
     }
 
     private void listenDatePickerEnd() {
-        dpEndDate.valueProperty().addListener((observable, oldValue, newValue) -> {
+        datePickerEnd.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                if (dpStartDate.getValue() != null) {
-
-                    try {
-                        mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), newValue));
-                        //TODO: Change date format.
-                        String start = dpStartDate.getValue().format(dateFormatter);
-                        String end = newValue.format(dateFormatter);
-                        StringProperty selectedFilter = new SimpleStringProperty();
-                        selectedFilter.bind(Bindings.concat(start, " - ", end));
-                        makeCustomActiveFilterButton(btnFilterTimeFrame, selectedFilter);
-                        changeLabel(lblTimeFrame, "Time frame", defaultColor);
-                        nodesListTimeFrame.animateList(false);
-                    } catch (ModelException ex) {
-                        alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
-                    }
+                if (datePickerStart.getValue() != null) {
+                    filterByTimeFrame(datePickerEnd, newValue);
                 } else {
                     changeLabel(lblTimeFrame, "Please select a start date.", highlightColor);
                 }
@@ -348,69 +332,79 @@ public class OverviewController implements Initializable {
         });
     }
 
+    private void filterByTimeFrame(JFXDatePicker datePicker, LocalDate date) {
+        if (checkTimeFrame()) {
+            try {
+                changeToCorrectDateInTextField(datePicker, date);
+                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
+                updateAfterTimeFrameFiltering();
+            } catch (ModelException ex) {
+                alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
+            }
+        } else {
+            changeToCorrectDateInTextField(datePicker, date);
+            alertManager.showAlert("The time frame is invalid.", "The end date is before the start date. Please check the selection.");
+            changeLabel(lblTimeFrame, "Please select a valid end date.", highlightColor);
+        }
+    }
+
+    private boolean checkTimeFrame() {
+        return datePickerStart.getValue().isBefore(datePickerEnd.getValue()) || datePickerStart.getValue().isEqual(datePickerEnd.getValue());
+    }
+
+    private void changeToCorrectDateInTextField(JFXDatePicker datePicker, LocalDate date) {
+        StringConverter<LocalDate> dateConverter = new LocalDateStringConverter() {
+            @Override
+            public LocalDate fromString(String string) {
+                return date;
+            }
+        };
+        datePicker.setConverter(dateConverter);
+    }
+
+    private void updateAfterTimeFrameFiltering() {
+        String startDate = datePickerStart.getValue().format(dateFormatter);
+        String endDate = datePickerEnd.getValue().format(dateFormatter);
+        StringProperty selectedFilter = new SimpleStringProperty();
+        selectedFilter.bind(Bindings.concat(startDate, " - ", endDate));
+        makeCustomActiveFilterButton(btnFilterTimeFrame, selectedFilter);
+        changeLabel(lblTimeFrame, "Time frame", defaultColor);
+    }
+
     @FXML
     private void handleThisWeek(ActionEvent event) {
-        try {
-            LocalDate firstDayOfThisWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            LocalDate lastDayOfThisWeek = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate firstDayOfThisWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate lastDayOfThisWeek = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        datePickerStart.setValue(firstDayOfThisWeek);
+        datePickerEnd.setValue(lastDayOfThisWeek);
 
-            dpStartDate.setValue(firstDayOfThisWeek);
-            dpEndDate.setValue(lastDayOfThisWeek);
-            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not filter in this week", "An error occured: " + ex.getMessage());
-        }
     }
 
     @FXML
     private void handleThisMonth(ActionEvent event) {
-        try {
-            LocalDate today = LocalDate.now();
-            LocalDate firstDayInThisMonth = today.withDayOfMonth(1);
-            LocalDate endDayInThisMonth = today.withDayOfMonth(today.lengthOfMonth());
-
-            dpStartDate.setValue(firstDayInThisMonth);
-            dpEndDate.setValue(endDayInThisMonth);
-            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not filter in this month", "An error occured: " + ex.getMessage());
-        }
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayInThisMonth = today.withDayOfMonth(1);
+        LocalDate endDayInThisMonth = today.withDayOfMonth(today.lengthOfMonth());
+        datePickerStart.setValue(firstDayInThisMonth);
+        datePickerEnd.setValue(endDayInThisMonth);
     }
 
     @FXML
     private void handleLastWeek(ActionEvent event) {
-        try {
-            LocalDate firstDayOfLastWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.MONDAY);
-            LocalDate lastDayOfLastWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.SUNDAY);
-
-            dpStartDate.setValue(firstDayOfLastWeek);
-            dpEndDate.setValue(lastDayOfLastWeek);
-
-            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not filter in this week", "An error occured: " + ex.getMessage());
-        }
+        LocalDate firstDayOfLastWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.MONDAY);
+        LocalDate lastDayOfLastWeek = LocalDate.now().minusWeeks(1).with(DayOfWeek.SUNDAY);
+        datePickerStart.setValue(firstDayOfLastWeek);
+        datePickerEnd.setValue(lastDayOfLastWeek);
     }
 
     @FXML
     private void handleLastMonth(ActionEvent event) {
-        try {
-            LocalDate today = LocalDate.now();
-            LocalDate lastMonth = today.minusMonths(1);
-            LocalDate firstDayOfLastMonth = lastMonth.withDayOfMonth(1);
-            LocalDate lastDayOfLastMonth = lastMonth.withDayOfMonth(lastMonth.lengthOfMonth());
-
-            dpStartDate.setValue(firstDayOfLastMonth);
-            dpEndDate.setValue(lastDayOfLastMonth);
-
-            mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
-
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not filter in this month", "An error occured: " + ex.getMessage());
-        }
-
+        LocalDate today = LocalDate.now();
+        LocalDate lastMonth = today.minusMonths(1);
+        LocalDate firstDayOfLastMonth = lastMonth.withDayOfMonth(1);
+        LocalDate lastDayOfLastMonth = lastMonth.withDayOfMonth(lastMonth.lengthOfMonth());
+        datePickerStart.setValue(firstDayOfLastMonth);
+        datePickerEnd.setValue(lastDayOfLastMonth);
     }
 
     private void displayUserFilter() {
@@ -440,7 +434,7 @@ public class OverviewController implements Initializable {
             nodesListTimeFrame.animateList();
         });
         nodesListTimeFrame.setOnMouseExited((event) -> {
-            if (!dpStartDate.isShowing() && !dpEndDate.isShowing()) {
+            if (!datePickerStart.isShowing() && !datePickerEnd.isShowing()) {
                 nodesListTimeFrame.animateList(false);
             }
         });
@@ -467,14 +461,14 @@ public class OverviewController implements Initializable {
     private void removeTimeFrameFilter() {
         btnFilterTimeFrame.getBtn().setOnAction((event) -> {
             hBoxFilter.getChildren().remove(btnFilterTimeFrame);
-            dpStartDate.setValue(null);
-            dpEndDate.setValue(null);
+            datePickerStart.setValue(null);
+            datePickerEnd.setValue(null);
             refreshAfterRemovingOneFilter();
         });
     }
 
     private void refreshAfterRemovingOneFilter() {
-        //TODO: Exceptions.
+        //TODO: Exceptions for removing one filter.
         try {
             if (checkAllFilterEmpty()) {
                 if (currentUser.getType() == User.UserType.ADMIN) {
@@ -482,7 +476,7 @@ public class OverviewController implements Initializable {
                 }
                 mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), null, null, null));
             } else {
-                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), dpStartDate.getValue(), dpEndDate.getValue()));
+                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
             }
         } catch (ModelException ex) {
             Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -504,8 +498,8 @@ public class OverviewController implements Initializable {
                 cboClients.getSelectionModel().clearSelection();
                 cboProjects.getSelectionModel().clearSelection();
                 cboProjects.getItems().clear();
-                dpStartDate.setValue(null);
-                dpEndDate.setValue(null);
+                datePickerStart.setValue(null);
+                datePickerEnd.setValue(null);
                 //  added rule --------------------------------------------------------------------------------------------------------------------
                 if (currentUser.getType() == User.UserType.ADMIN) {
                     mainModel.getAllTasks();
@@ -519,16 +513,14 @@ public class OverviewController implements Initializable {
     }
 
     private Boolean checkAllFilterEmpty() {
-
         if (currentUser.getType() == User.UserType.ADMIN) {
             System.out.println("current user: " + currentUser.getFirstName());
-            return cboUsers.getValue() == null && cboProjects.getValue() == null && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+            return cboUsers.getValue() == null && cboProjects.getValue() == null && datePickerStart.getValue() == null && datePickerEnd.getValue() == null;
         } else {
             //  added rule --------------------------------------------------------------------------------------------------------------------
             System.out.println("current user: " + currentUser.getFirstName());
-            return cboUsers.getValue() == currentUser && cboProjects.getValue() == null && dpStartDate.getValue() == null && dpEndDate.getValue() == null;
+            return cboUsers.getValue() == currentUser && cboProjects.getValue() == null && datePickerStart.getValue() == null && datePickerEnd.getValue() == null;
         }
-
     }
 
     private void changeLabel(Label label, String text, String style) {
@@ -538,12 +530,6 @@ public class OverviewController implements Initializable {
 
     private void makeCustomActiveFilterButton(ActiveFilterButton button, ObservableValue text) {
         button.getSelectedFilter().bind(text);
-
-//        if (hBoxFilter.getChildren().contains(button)) {
-//            hBoxFilter.getChildren().remove(1);
-//        }
-//        hBoxFilter.getChildren().add(1, button);
-        //  Exception after selecting different project. Adding duplicate node. -----------------------------------------------------------------
         if (!hBoxFilter.getChildren().contains(button)) {
             hBoxFilter.getChildren().add(button);
         }

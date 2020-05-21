@@ -9,6 +9,7 @@ import brighttime.be.TaskEntry;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
+import brighttime.gui.util.DatePickerCustomizer;
 import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -29,7 +30,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.DateCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
@@ -74,6 +74,7 @@ public class CreateTaskController implements Initializable {
     private TimeTrackerController timeTrackerContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
+    private final DatePickerCustomizer datePickerCustomizer;
     private User user;
 
     private Boolean manualMode;
@@ -82,13 +83,14 @@ public class CreateTaskController implements Initializable {
     private Boolean end = false;
     private Boolean timeInterval = false;
 
-    //TODO: Decide if 12HourView or 24HourView. Or the user's system.
-    StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
     StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
+    //TODO: Change all to 24HourView!
+    StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
+        this.datePickerCustomizer = new DatePickerCustomizer();
     }
 
     /**
@@ -96,9 +98,8 @@ public class CreateTaskController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         normalMode();
-        setDateRestriction();
+        setDateRestrictions();
         setTimeRestriction();
         display24HourView();
         displayFormattedDate();
@@ -271,32 +272,9 @@ public class CreateTaskController implements Initializable {
         return newTask;
     }
 
-    private void setDateRestriction() {
-        //TODO: Disables future dates.
-        datePicker.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(empty || date.isAfter(LocalDate.now()));
-            }
-        });
-
-        //If a futute date is written, show alert and change to current date.
-        StringConverter<LocalDate> dateConverter = new LocalDateStringConverter() {
-            @Override
-            public LocalDate fromString(String string) {
-                LocalDate date = super.fromString(string);
-                if (date.isAfter(LocalDate.now())) {
-                    //TODO: Why does the alert crash the program?
-                    //alertManager.showAlert("The date is in the future.", "Please write or select a valid date.");
-                    return LocalDate.now();
-                    //return lastVal;
-                } else {
-                    return date;
-                }
-            }
-        };
-        datePicker.setConverter(dateConverter);
+    private void setDateRestrictions() {
+        datePickerCustomizer.disableFutureDates(datePicker);
+        datePickerCustomizer.changeWrittenFutureDateToCurrentDate(datePicker);
     }
 
     private void setTimeRestriction() {
@@ -321,13 +299,15 @@ public class CreateTaskController implements Initializable {
         });
     }
 
+    private void displayFormattedDate() {
+        datePicker.converterProperty().setValue(dateConverter);
+    }
+
     private void display24HourView() {
         timePickerStart.set24HourView(true);
         timePickerStart.converterProperty().setValue(timeConverter);
-    }
-
-    private void displayFormattedDate() {
-        datePicker.converterProperty().setValue(dateConverter);
+        timePickerEnd.set24HourView(true);
+        timePickerEnd.converterProperty().setValue(timeConverter);
     }
 
     private void listenDatePicker() {

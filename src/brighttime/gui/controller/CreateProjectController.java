@@ -46,7 +46,6 @@ public class CreateProjectController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
     void injectManageProjectsController(ManageProjectsController contr) {

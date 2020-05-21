@@ -212,7 +212,7 @@ public class TaskDAO implements ITaskDAO {
     @Override
     public List<TaskConcrete2> getAllTasks() throws DalException {
         List<TaskConcrete2> allTasks = new ArrayList<>();
-        //TODO: Make one method like getAllTasksFiltered(), so there is only one database call. 
+
         String sql = "SELECT A2.id, A2.description, "
                 + "	A1.clientId, A1.clientName, "
                 + "	A1.projectId, A1.projectName, "

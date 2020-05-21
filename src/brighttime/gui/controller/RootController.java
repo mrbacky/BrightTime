@@ -264,7 +264,7 @@ public class RootController implements Initializable {
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException ex) {
-                //TODO:
+                //TODO: Exceptions for logout.
                 Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

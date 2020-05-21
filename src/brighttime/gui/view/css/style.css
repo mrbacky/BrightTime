@@ -218,13 +218,6 @@
     /*-fx-prompt-text-fill: white;*/
 }
 
-.buttonFilteredItem{
-    /*TODO: fix the look of the buttons!*/
-    -fx-font-weight: bold;
-    -fx-text-fill: #435A9A;
-    -fx-padding: 0 20 20 0;
-}
-
 .table-view{
     -fx-border-style: solid;
     -fx-border-width: 0.1;

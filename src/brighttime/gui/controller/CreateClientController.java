@@ -42,7 +42,6 @@ public class CreateClientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
     void injectManageClientsController(ManageClientsController contr) {
