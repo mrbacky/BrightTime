@@ -468,13 +468,9 @@ public class OverviewController implements Initializable {
     }
 
     private void refreshAfterRemovingOneFilter() {
-        //TODO: Exceptions for removing one filter.
         try {
-            if (checkAllFilterEmpty()) {
-                if (currentUser.getType() == User.UserType.ADMIN) {
-                    mainModel.getAllTasks();
-                }
-                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), null, null, null));
+            if (currentUser.getType() == User.UserType.ADMIN && checkAllFilterEmpty()) {
+                mainModel.getAllTasks();
             } else {
                 mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
             }
@@ -513,14 +509,7 @@ public class OverviewController implements Initializable {
     }
 
     private Boolean checkAllFilterEmpty() {
-        if (currentUser.getType() == User.UserType.ADMIN) {
-            System.out.println("current user: " + currentUser.getFirstName());
-            return cboUsers.getValue() == null && cboProjects.getValue() == null && datePickerStart.getValue() == null && datePickerEnd.getValue() == null;
-        } else {
-            //  added rule --------------------------------------------------------------------------------------------------------------------
-            System.out.println("current user: " + currentUser.getFirstName());
-            return cboUsers.getValue() == currentUser && cboProjects.getValue() == null && datePickerStart.getValue() == null && datePickerEnd.getValue() == null;
-        }
+        return cboUsers.getValue() == null && cboProjects.getValue() == null && datePickerStart.getValue() == null && datePickerEnd.getValue() == null;
     }
 
     private void changeLabel(Label label, String text, String style) {
