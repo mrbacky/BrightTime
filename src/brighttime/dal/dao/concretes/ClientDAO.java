@@ -1,6 +1,7 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import brighttime.dal.dao.interfaces.IEventLogDAO;
 
 /**
  *
@@ -20,9 +22,11 @@ import java.util.List;
 public class ClientDAO implements IClientDAO {
 
     private final IConnectionManager connection;
+    private final IEventLogDAO logDAO;
 
     public ClientDAO() throws IOException {
         this.connection = new ConnectionManager();
+        this.logDAO = new EventLogDAO();
     }
 
     @Override
@@ -42,6 +46,8 @@ public class ClientDAO implements IClientDAO {
             }
             return client;
         } catch (SQLException ex) {
+            //TODO:
+            logDAO.logEvent(new EventLog(EventLog.EventType.ERROR, ex.getMessage(), ""));
             throw new DalException(ex.getMessage());
         }
     }

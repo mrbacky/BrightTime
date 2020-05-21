@@ -247,23 +247,26 @@ public class RootController implements Initializable {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-
-        try {
-            Stage logOutStage;
-            logOutStage = (Stage) btnLogout.getScene().getWindow();
-            logOutStage.close();
-            Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(LOGIN_VIEW));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.getIcons().add(icon);
-            stage.setTitle("BrightTime");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+        boolean logout = alertManager.showConfirmation("Logout confirmation", "Are you sure you want to log out?");
+        if (logout) {
+            try {
+                Stage logOutStage;
+                logOutStage = (Stage) btnLogout.getScene().getWindow();
+                logOutStage.close();
+                Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(LOGIN_VIEW));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setResizable(false);
+                stage.getIcons().add(icon);
+                stage.setTitle("BrightTime");
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException ex) {
+                //TODO:
+                Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
