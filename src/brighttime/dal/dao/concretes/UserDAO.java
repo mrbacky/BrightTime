@@ -110,8 +110,14 @@ public class UserDAO implements IUserDAO {
             ps.setString(3, user.getUsername());
             ps.setString(4, user.getPassword());
             //  UserType USER = id 2
-            ps.setInt(5, 2);
+            if (user.getType() == User.UserType.ADMIN) {
+                ps.setInt(5, 1);
+                System.out.println("int for admin");
+            } else {
+                ps.setInt(5, 2);
+                System.out.println("int for user");
 
+            }
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();

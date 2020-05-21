@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,59 +14,78 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<GridPane styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateUserController">
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateUserController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="312.0" minWidth="10.0" prefWidth="306.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="279.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="10.0" prefWidth="500.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <StackPane GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <StackPane maxWidth="1.7976931348623157E308">
          <children>
-            <JFXTextField fx:id="textFieldFirstName" promptText="First name">
+            <JFXComboBox fx:id="cboUserType" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" styleClass="txtCommon" StackPane.alignment="CENTER_RIGHT">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin></JFXComboBox>
+            <Label prefHeight="17.0" prefWidth="111.0" styleClass="labelForms" text="User type:" StackPane.alignment="CENTER_LEFT" />
+         </children>
+         <GridPane.margin>
+            <Insets top="5.0" />
+         </GridPane.margin>
+         <padding>
+            <Insets bottom="10.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </StackPane>
+      <StackPane styleClass="txtCreateUserMiddle" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         <children>
+            <JFXTextField fx:id="textFieldFirstName" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" StackPane.alignment="CENTER_RIGHT">
                <styleClass>
                   <String fx:value="txtCommon" />
                   <String fx:value="txtName" />
                </styleClass>
             </JFXTextField>
+            <Label prefHeight="17.0" prefWidth="111.0" styleClass="labelForms" text="First name:" StackPane.alignment="CENTER_LEFT" />
          </children>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
          <padding>
-            <Insets bottom="7.5" left="15.0" right="7.5" top="15.0" />
+            <Insets bottom="7.5" left="15.0" right="15.0" top="10.0" />
          </padding>
       </StackPane>
-      <StackPane prefHeight="35.0" prefWidth="270.0" GridPane.columnIndex="1">
+      <StackPane prefHeight="35.0" prefWidth="270.0" styleClass="txtCreateUserMiddle" GridPane.rowIndex="2">
          <children>
-            <JFXTextField fx:id="textFieldLastName" promptText="Last name">
+            <JFXTextField fx:id="textFieldLastName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" StackPane.alignment="CENTER_RIGHT">
                <styleClass>
                   <String fx:value="txtCommon" />
                   <String fx:value="txtName" />
                </styleClass>
             </JFXTextField>
+            <Label prefHeight="17.0" prefWidth="111.0" styleClass="labelForms" text="Last name:" StackPane.alignment="CENTER_LEFT" />
          </children>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
          <padding>
-            <Insets bottom="7.5" left="7.5" right="7.5" top="15.0" />
+            <Insets bottom="7.5" left="15.0" right="15.0" top="7.5" />
          </padding>
       </StackPane>
-      <StackPane prefHeight="35.0" prefWidth="270.0" GridPane.rowIndex="1">
+      <StackPane prefHeight="35.0" prefWidth="270.0" styleClass="txtCreateUserMiddle" GridPane.rowIndex="3">
          <children>
-            <JFXTextField fx:id="textFieldUserName" prefHeight="27.0" prefWidth="300.0" promptText="Username">
+            <JFXTextField fx:id="textFieldUserName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" StackPane.alignment="CENTER_RIGHT">
                <styleClass>
                   <String fx:value="txtCommon" />
                   <String fx:value="txtName" />
                </styleClass>
             </JFXTextField>
+            <Label prefHeight="17.0" prefWidth="111.0" styleClass="labelForms" text="Username:" StackPane.alignment="CENTER_LEFT" />
          </children>
          <GridPane.margin>
             <Insets />
@@ -72,7 +94,7 @@
             <Insets bottom="15.0" left="15.0" right="7.5" top="7.5" />
          </padding>
       </StackPane>
-      <StackPane GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+      <StackPane styleClass="txtCreateUserMiddle" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -80,26 +102,56 @@
             <Insets bottom="15.0" left="7.5" right="7.5" top="7.5" />
          </padding>
          <children>
-            <JFXTextField fx:id="textFieldPassword" prefHeight="27.0" prefWidth="300.0" promptText="Password">
+            <Label prefHeight="21.0" prefWidth="165.0" styleClass="labelForms" text="Password confirmation:" StackPane.alignment="CENTER_LEFT" />
+            <JFXPasswordField fx:id="passField2" maxHeight="-Infinity" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" StackPane.alignment="CENTER_RIGHT">
                <styleClass>
-                  <String fx:value="txtCommon" />
                   <String fx:value="txtName" />
+                  <String fx:value="txtCommon" />
                </styleClass>
-            </JFXTextField>
+            </JFXPasswordField>
          </children>
       </StackPane>
-      <StackPane prefHeight="50.0" prefWidth="41.0" GridPane.columnIndex="3" />
-      <JFXButton fx:id="btnAdd" contentDisplay="GRAPHIC_ONLY" ellipsisString="" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="4">
-         <graphic>
-            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@assets/plus_48px.png" />
-               </image>
-            </ImageView>
-         </graphic>
+      <StackPane styleClass="txtCreateUserMiddle" GridPane.rowIndex="4">
          <padding>
-            <Insets right="10.0" top="5.0" />
+            <Insets bottom="15.0" left="7.5" right="7.5" top="7.5" />
          </padding>
-      </JFXButton>
+         <children>
+            <JFXPasswordField fx:id="passField1" maxHeight="-Infinity" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" StackPane.alignment="CENTER_RIGHT">
+               <styleClass>
+                  <String fx:value="txtName" />
+                  <String fx:value="txtCommon" />
+               </styleClass>
+            </JFXPasswordField>
+            <Label prefHeight="17.0" prefWidth="111.0" styleClass="labelForms" text="Password:" StackPane.alignment="CENTER_LEFT" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="6">
+         <children>
+            <JFXButton fx:id="btnAdd" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" StackPane.alignment="CENTER_RIGHT">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/plus_48px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <StackPane.margin>
+                  <Insets bottom="10.0" right="60.0" />
+               </StackPane.margin>
+            </JFXButton>
+            <JFXButton fx:id="btnClearInfo" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleClearInfo" prefHeight="40.0" prefWidth="40.0" styleClass="rootButtons" StackPane.alignment="CENTER_RIGHT">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/broom_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <StackPane.margin>
+                  <Insets bottom="10.0" right="15.0" />
+               </StackPane.margin>
+            </JFXButton>
+         </children>
+      </StackPane>
    </children>
 </GridPane>
