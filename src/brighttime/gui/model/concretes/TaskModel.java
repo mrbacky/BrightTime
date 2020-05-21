@@ -1,5 +1,6 @@
 package brighttime.gui.model.concretes;
 
+import brighttime.be.EventLog;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.bll.BllFacade;
@@ -163,7 +164,13 @@ public class TaskModel implements ITaskModel {
 //    }
     @Override
     public void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException {
-        try {
+        try {            
+            bllManager.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Created a task entry for the task \"" + task.getDescription()
+                    + "\" in the project \"" + task.getProject().getName()
+                    + "\". Time frame: " + tempStartTime + " - " + tempEndTime,
+                    task.getUser().getUsername()));
             TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
             bllManager.createTaskEntry(newTaskEntry);

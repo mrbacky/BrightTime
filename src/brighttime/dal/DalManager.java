@@ -1,6 +1,7 @@
 package brighttime.dal;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
@@ -8,11 +9,13 @@ import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
 import brighttime.be.User;
 import brighttime.dal.dao.concretes.ClientDAO;
+import brighttime.dal.dao.concretes.EventLogDAO;
 import brighttime.dal.dao.concretes.ProjectDAO;
 import brighttime.dal.dao.concretes.TaskDAO;
 import brighttime.dal.dao.concretes.TaskEntryDAO;
 import brighttime.dal.dao.concretes.UserDAO;
 import brighttime.dal.dao.interfaces.IClientDAO;
+import brighttime.dal.dao.interfaces.IEventLogDAO;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
@@ -21,8 +24,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,6 +36,7 @@ public class DalManager implements DalFacade {
     private final ITaskDAO taskDAO;
     private final ITaskEntryDAO taskEntryDAO;
     private IUserDAO userDAO;
+    private IEventLogDAO eventLog;
 
     public DalManager() throws IOException {
         clientDAO = new ClientDAO();
@@ -42,6 +44,7 @@ public class DalManager implements DalFacade {
         taskDAO = new TaskDAO();
         taskEntryDAO = new TaskEntryDAO();
         userDAO = new UserDAO();
+        eventLog = new EventLogDAO();
     }
 
     @Override
@@ -165,6 +168,12 @@ public class DalManager implements DalFacade {
     @Override
     public User createUser(User user) throws DalException {
         return userDAO.createUser(user);
-        
+
     }
+
+    @Override
+    public void logEvent(EventLog log) throws DalException {
+        eventLog.logEvent(log);
+    }
+
 }

@@ -1,6 +1,7 @@
 package brighttime.bll;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
@@ -111,5 +112,7 @@ public interface BllFacade {
     User authenticateUser(String username, String password) throws BllException;
 
     User createUser(User user) throws BllException;
+
+    void logEvent(EventLog log) throws BllException;
 
 }

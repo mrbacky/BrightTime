@@ -1,6 +1,7 @@
 package brighttime.bll;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskBase;
@@ -24,8 +25,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -242,6 +241,15 @@ public class BllManager implements BllFacade {
     public User createUser(User user) throws BllException {
         try {
             return dalManager.createUser(user);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void logEvent(EventLog log) throws BllException {
+        try {
+            dalManager.logEvent(log);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }

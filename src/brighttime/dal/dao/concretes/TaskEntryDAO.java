@@ -1,9 +1,11 @@
 package brighttime.dal.dao.concretes;
 
+import brighttime.be.EventLog;
 import brighttime.be.TaskEntry;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
+import brighttime.dal.dao.interfaces.IEventLogDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,9 +20,11 @@ import java.sql.SQLException;
 public class TaskEntryDAO implements ITaskEntryDAO {
 
     private final IConnectionManager connection;
+    private final IEventLogDAO logDAO;
 
     public TaskEntryDAO() throws IOException {
         this.connection = new ConnectionManager();
+        this.logDAO = new EventLogDAO();
     }
 
     @Override
@@ -44,6 +48,13 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             }
             return taskEntry;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful task entry creation for the task \"" + taskEntry.getDescription()
+                    + "\" in the project \"" + taskEntry.getTask().getProject().getName()
+                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
+                    + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
     }
@@ -60,12 +71,17 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
             System.out.println("edited start Time in DAO");
-
+            return taskEntry;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful task entry update (start time) for the task \"" + taskEntry.getDescription()
+                    + "\" in the project \"" + taskEntry.getTask().getProject().getName()
+                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
+                    + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
-
-        return taskEntry;
     }
 
     @Override
@@ -80,11 +96,18 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
             System.out.println("edited endTime in DAO");
+            return taskEntry;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful task entry update (end time) for the task \"" + taskEntry.getDescription()
+                    + "\" in the project \"" + taskEntry.getTask().getProject().getName()
+                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
+                    + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
 
-        return taskEntry;
     }
 
 }

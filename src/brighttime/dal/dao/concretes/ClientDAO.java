@@ -46,8 +46,11 @@ public class ClientDAO implements IClientDAO {
             }
             return client;
         } catch (SQLException ex) {
-            //TODO:
-            logDAO.logEvent(new EventLog(EventLog.EventType.ERROR, ex.getMessage(), ""));
+            //TODO: EventLog. Is this correct?
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful client creation: " + client.getName() + ". " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
     }
@@ -66,11 +69,14 @@ public class ClientDAO implements IClientDAO {
             while (rs.next()) {
                 clients.add(new Client(rs.getInt("id"), rs.getString("name")));
             }
-
+            return clients;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful getting clients. " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
-        return clients;
     }
 
 }

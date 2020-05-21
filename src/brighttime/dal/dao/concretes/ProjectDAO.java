@@ -1,10 +1,12 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.be.Project;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
+import brighttime.dal.dao.interfaces.IEventLogDAO;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,9 +23,11 @@ import java.util.List;
 public class ProjectDAO implements IProjectDAO {
 
     private final IConnectionManager connection;
+    private final IEventLogDAO logDAO;
 
     public ProjectDAO() throws IOException {
         this.connection = new ConnectionManager();
+        this.logDAO = new EventLogDAO();
     }
 
     @Override
@@ -44,6 +48,13 @@ public class ProjectDAO implements IProjectDAO {
             }
             return project;
         } catch (SQLException ex) {
+            //TODO: EventLog. Is this correct?
+            //Unsuccessful project creation for "Lego": GGG.
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful project creation for \"" + project.getClient().getName() + "\": "
+                    + project.getName() + ". " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
     }
@@ -64,11 +75,14 @@ public class ProjectDAO implements IProjectDAO {
             while (rs.next()) {
                 projects.add(new Project(rs.getInt("id"), rs.getString("name"), client));
             }
-
+            return projects;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful getting projects. " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
-        return projects;
     }
 
 }

@@ -14,23 +14,24 @@ public class User {
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty firstName = new SimpleStringProperty();
     private final StringProperty lastName = new SimpleStringProperty();
-    private final StringProperty userName = new SimpleStringProperty();
+    private final StringProperty username = new SimpleStringProperty();
     private final StringProperty password = new SimpleStringProperty();
 
     private UserType type;
 
-    public User(String firstName, String lastName, String userName, String password, UserType type) {
+    public User(String firstName, String lastName, String username, String password, UserType type) {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
-        this.userName.set(userName);
+        this.username.set(username);
         this.password.set(password);
         this.type = type;
     }
 
-    public User(int id, String firstName, String lastName, UserType type) {
+    public User(int id, String firstName, String lastName, String username, UserType type) {
         this.id.set(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
+        this.username.set(username);
         this.type = type;
     }
 
@@ -99,16 +100,16 @@ public class User {
         return password;
     }
 
-    public String getUserName() {
-        return userName.get();
+    public String getUsername() {
+        return username.get();
     }
 
-    public void setUserName(String value) {
-        userName.set(value);
+    public void setUsername(String value) {
+        username.set(value);
     }
 
-    public StringProperty userNameProperty() {
-        return userName;
+    public StringProperty usernameProperty() {
+        return username;
     }
 
 }

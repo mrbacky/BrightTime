@@ -1,6 +1,7 @@
 package brighttime.dal;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
@@ -92,5 +93,7 @@ public interface DalFacade {
     public User authenticateUser(String username, String password) throws DalException;
 
     public User createUser(User user) throws DalException;
+
+    void logEvent(EventLog log) throws DalException;
 
 }

@@ -1,6 +1,7 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
+import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskBase;
@@ -11,6 +12,7 @@ import brighttime.be.User;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
+import brighttime.dal.dao.interfaces.IEventLogDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
@@ -33,10 +35,12 @@ import java.util.Map;
 public class TaskDAO implements ITaskDAO {
 
     private final IConnectionManager connection;
+    private final IEventLogDAO logDAO;
     private final ITaskEntryDAO taskEntryDAO;
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
+        this.logDAO = new EventLogDAO();
         this.taskEntryDAO = new TaskEntryDAO();
     }
 
@@ -69,6 +73,11 @@ public class TaskDAO implements ITaskDAO {
 
             return task;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful task creation for \"" + task.getProject().getName() + "\": "
+                    + task.getDescription() + ". " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
     }
@@ -171,6 +180,10 @@ public class TaskDAO implements ITaskDAO {
             }
             return dateMap;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful getting tasks for the Time Tracker. " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
     }
@@ -264,10 +277,14 @@ public class TaskDAO implements ITaskDAO {
                         rate
                 ));
             }
+            return allTasks;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful getting tasks for the Overview. " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
-        return allTasks;
     }
 
     @Override
@@ -349,10 +366,14 @@ public class TaskDAO implements ITaskDAO {
                         rate
                 ));
             }
+            return filtered;
         } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful getting filtered tasks for the Overview. " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
-        return filtered;
     }
 
     private String buildSql(String sql, Filter filter) {
