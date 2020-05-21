@@ -42,7 +42,7 @@
 
 .creatorStackPanePadding{
     -fx-padding: 15px;
-    
+
 }
 
 .txtCommon{
@@ -53,6 +53,11 @@
     -fx-padding: 3.5 5 3.5 5;
     -jfx-label-float: true;    
     -fx-prompt-text-fill: #435A9A;
+}
+
+.txtCreateUserMiddle{
+    -fx-padding: 10 15 10 15;
+
 }
 
 .txtName{
@@ -291,4 +296,24 @@
 .lblActiveFilter{
     -fx-text-fill: white;
     -fx-font-size: 10;
+}
+
+.btnUserExpand{
+    -fx-background-color: #435A9A;
+    -fx-background-radius: 15 15 15 15;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+
+
+}
+
+
+
+
+.labelForms{
+    /*-fx-padding: 10 0 0 0;*/
+    -fx-font-size: 15px;
+    /*-fx-font-weight: bold;*/
+    -fx-text-fill: white;
 }

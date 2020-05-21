@@ -26,4 +26,11 @@ public class AlertManager {
         if (alert.getResult() == ButtonType.OK) {
         }
     }
+
+    public void showSuccess(String headerText, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setHeaderText(headerText);
+        alert.showAndWait();
+    }
 }
