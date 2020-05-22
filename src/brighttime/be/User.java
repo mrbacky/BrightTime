@@ -1,9 +1,12 @@
 package brighttime.be;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.ComboBox;
 
 /**
  *
@@ -16,23 +19,31 @@ public class User {
     private final StringProperty lastName = new SimpleStringProperty();
     private final StringProperty username = new SimpleStringProperty();
     private final StringProperty password = new SimpleStringProperty();
+    private final StringProperty userType = new SimpleStringProperty();
 
     private UserType type;
 
+    //  contructor for creating User
     public User(String firstName, String lastName, String username, String password, UserType type) {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.username.set(username);
         this.password.set(password);
         this.type = type;
-    }
 
+    }
+    //contructor for viewing users in Administration section
+    
+
+    //  constructor for getting user from DB
     public User(int id, String firstName, String lastName, String username, UserType type) {
         this.id.set(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.username.set(username);
         this.type = type;
+        //  setting String usertype from enum
+        this.userType.set(type.toString());
     }
 
     public int getId() {
@@ -85,7 +96,7 @@ public class User {
 
     @Override
     public String toString() {
-        return getFirstName() + " " + getLastName();
+        return getFirstName() + " " + getLastName() + " " + getUsername() + " " + getUserType();
     }
 
     public String getPassword() {
@@ -110,6 +121,18 @@ public class User {
 
     public StringProperty usernameProperty() {
         return username;
+    }
+
+    public String getUserType() {
+        return userType.get();
+    }
+
+    public void setUserType(String value) {
+        userType.set(value);
+    }
+
+    public StringProperty userTypeProperty() {
+        return userType;
     }
 
 }

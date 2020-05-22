@@ -150,6 +150,14 @@ public class TaskDAO implements ITaskDAO {
                             modifiedDate,
                             user);
                     taskMap.put(taskId, newTask);
+//                    newTask = new TaskConcrete1(
+//                            taskId,
+//                            rs.getString("description"),
+//                            project,
+//                            billability,
+//                            entryList,
+//                            modifiedDate);
+//                    taskMap.put(taskId, newTask);
 
                 } else {
                     newTask = taskMap.get(taskId);

@@ -157,4 +157,47 @@ public class UserDAO implements IUserDAO {
         }
     }
 
+    @Override
+    public User updateUserDetails(User updatedUser) throws DalException {
+
+        String sql = "UPDATE [User]\n"
+                + "SET firstName = ?, lastName = ?, username = ?, userTypeId = ?\n"
+                + "WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, updatedUser.getFirstName());
+            ps.setString(2, updatedUser.getLastName());
+            ps.setString(3, updatedUser.getUsername());
+
+            if (updatedUser.getType() == User.UserType.ADMIN) {
+                ps.setInt(4, 1);
+            } else {
+                ps.setInt(4, 2);
+            }
+            ps.setInt(5, updatedUser.getId());
+
+            ps.executeUpdate();
+
+        } catch (Exception ex) {
+            throw new DalException(ex.getMessage());
+        }
+        return updatedUser;
+    }
+
+    @Override
+    public User deleteUser(User selectedUser) throws DalException {
+        String sql = "DELETE FROM [User] WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, selectedUser.getId());
+            ps.execute();
+        } catch (Exception ex) {
+            throw new DalException(ex.getMessage());
+        }
+        return selectedUser;
+    }
+
 }

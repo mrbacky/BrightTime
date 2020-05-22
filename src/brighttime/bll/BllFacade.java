@@ -118,4 +118,8 @@ public interface BllFacade {
 
     void logEvent(EventLog log) throws BllException;
 
+    User updateUserDetails(User updatedUser) throws BllException;
+
+    public User deleteUser(User selectedUser) throws BllException;
+
 }

@@ -18,4 +18,8 @@ public interface IUserDAO {
 
     boolean checkUsernameAvailability(String username) throws DalException;
 
+    public User updateUserDetails(User updatedUser) throws DalException;
+
+    User deleteUser(User selectedUser) throws DalException;
+
 }

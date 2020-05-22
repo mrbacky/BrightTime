@@ -100,4 +100,8 @@ public interface DalFacade {
 
     void logEvent(EventLog log) throws DalException;
 
+    User updateUserDetails(User updatedUser) throws DalException;
+
+    User deleteUser(User selectedUser) throws DalException;
+
 }
