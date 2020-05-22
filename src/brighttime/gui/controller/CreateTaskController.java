@@ -198,6 +198,7 @@ public class CreateTaskController implements Initializable {
                     try {
                         TaskConcrete1 newTask = makeTask();
                         mainModel.addTask(newTask);
+                        clearInputs();
 //                        timeTrackerContr.initTasks();
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
@@ -207,6 +208,7 @@ public class CreateTaskController implements Initializable {
                         TaskConcrete1 newTask = makeTask();
                         TaskConcrete1 newTaskWithEntry = makeTaskEntry(newTask);
                         mainModel.addTask(newTaskWithEntry);
+                        clearInputs();
 //                        timeTrackerContr.initTasks();
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
@@ -214,6 +216,15 @@ public class CreateTaskController implements Initializable {
                 }
             }
         });
+    }
+
+    private void clearInputs() {
+        txtDescription.clear();
+        cboClient.getSelectionModel().clearSelection();
+        cboProject.getSelectionModel().clearSelection();
+        datePicker.setValue(null);
+        timePickerStart.setValue(null);
+        timePickerEnd.setValue(null);
     }
 
     private boolean validateInput() {
@@ -265,7 +276,7 @@ public class CreateTaskController implements Initializable {
     private TaskConcrete1 makeTaskEntry(TaskConcrete1 newTask) {
         LocalDateTime startDateTime = LocalDateTime.of(datePicker.getValue(), timePickerStart.getValue());
         LocalDateTime endDateTime = LocalDateTime.of(datePicker.getValue(), timePickerEnd.getValue());
-        TaskEntry entry = new TaskEntry(newTask, newTask.getDescription(), startDateTime, endDateTime);
+        TaskEntry entry = new TaskEntry(newTask, startDateTime, endDateTime);
         List<TaskEntry> list = new ArrayList();
         list.add(entry);
         newTask.setTaskEntryList(list);
@@ -280,7 +291,7 @@ public class CreateTaskController implements Initializable {
     private void setTimeRestriction() {
         //TODO: If a future time is written or chosen, show alert and write the current time.
         datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEqual(LocalDate.now())) {
+            if (newValue != null && newValue.isEqual(LocalDate.now())) {
                 StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter() {
                     @Override
                     public LocalTime fromString(String string) {

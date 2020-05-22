@@ -5,8 +5,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -16,7 +14,6 @@ public class TaskEntry {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final ObjectProperty<TaskConcrete1> task = new SimpleObjectProperty<>();
-    private final StringProperty description = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
 
@@ -28,9 +25,8 @@ public class TaskEntry {
         this.endTime.set(endTime);
     }
 
-    public TaskEntry(TaskConcrete1 task, String description, LocalDateTime startTime, LocalDateTime endTime) {
+    public TaskEntry(TaskConcrete1 task, LocalDateTime startTime, LocalDateTime endTime) {
         this.task.set(task);
-        this.description.set(description);
         this.startTime.set(startTime);
         this.endTime.set(endTime);
     }
@@ -57,18 +53,6 @@ public class TaskEntry {
 
     public ObjectProperty taskProperty() {
         return task;
-    }
-
-    public String getDescription() {
-        return description.get();
-    }
-
-    public void setDescription(String value) {
-        description.set(value);
-    }
-
-    public StringProperty descriptionProperty() {
-        return description;
     }
 
     public LocalDateTime getStartTime() {

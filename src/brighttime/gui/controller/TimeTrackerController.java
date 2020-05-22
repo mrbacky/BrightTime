@@ -78,7 +78,6 @@ public class TimeTrackerController implements Initializable {
 //        mainModel.getTasks().removeListener(taskMapListener);
 //        System.out.println("Object is destroyed by the Garbage Collector");
 //    }
-
     public void initializeView() {
         try {
             setUser();

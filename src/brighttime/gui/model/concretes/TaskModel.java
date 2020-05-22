@@ -171,7 +171,7 @@ public class TaskModel implements ITaskModel {
                     + "\" in the project \"" + task.getProject().getName()
                     + "\". Time frame: " + tempStartTime + " - " + tempEndTime,
                     task.getUser().getUsername()));
-            TaskEntry newTaskEntry = new TaskEntry(task, task.getDescription(), tempStartTime, tempEndTime);
+            TaskEntry newTaskEntry = new TaskEntry(task, tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
             bllManager.createTaskEntry(newTaskEntry);
 //  call createTaskEntry from DB here

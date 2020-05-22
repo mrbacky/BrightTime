@@ -50,7 +50,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful task entry creation for the task \"" + taskEntry.getDescription()
+                    "Unsuccessful task entry creation for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                     + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
                     + ex.getMessage(),
@@ -75,7 +75,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful task entry update (start time) for the task \"" + taskEntry.getDescription()
+                    "Unsuccessful task entry update (start time) for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                     + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
                     + ex.getMessage(),
@@ -100,7 +100,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful task entry update (end time) for the task \"" + taskEntry.getDescription()
+                    "Unsuccessful task entry update (end time) for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                     + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
                     + ex.getMessage(),
