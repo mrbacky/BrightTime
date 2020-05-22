@@ -154,8 +154,10 @@ public class MainModel implements IMainModel {
                     user.getUsername()));
 
             TaskConcrete1 freshTask = bllManager.createTask(task);
-            List<TaskEntry> entryList = new ArrayList();
-            freshTask.setTaskEntryList(entryList);
+            if (freshTask.getTaskEntryList().isEmpty()) {
+                List<TaskEntry> entryList = new ArrayList();
+                freshTask.setTaskEntryList(entryList);
+            }
             System.out.println("date " + freshTask.getCreationTime().toLocalDate());
             List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
             if (taskList == null) {
