@@ -79,7 +79,42 @@ public class ProjectDAO implements IProjectDAO {
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful getting projects. " + ex.getMessage(),
+                    "Unsuccessful getting projects for the client \"" + client.getName() + "\". " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<Project> getAllProjects() throws DalException {
+        List<Project> projects = new ArrayList<>();
+        String sql = "SELECT P.id AS projectId, P.name AS projectName, P.hourlyRate AS projectRate, "
+                + "	C.id AS clientId, C.name AS clientName, C.hourlyRate AS clientRate "
+                + "FROM Project AS P "
+                + "JOIN Client AS C "
+                + "	ON P.clientId = C.id "
+                + "ORDER BY P.name";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int rate = rs.getInt("projectRate");
+                if (rate == 0) {
+                    rate = rs.getInt("clientRate");
+                }
+                projects.add(new Project(
+                        rs.getInt("projectId"),
+                        rs.getString("projectName"),
+                        new Client(rs.getInt("clientId"), rs.getString("clientName"), rs.getInt("clientRate")),
+                        rate));
+            }
+            return projects;
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful getting all projects. " + ex.getMessage(),
                     "System"));
             throw new DalException(ex.getMessage());
         }

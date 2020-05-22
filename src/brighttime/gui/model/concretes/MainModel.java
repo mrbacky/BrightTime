@@ -28,7 +28,7 @@ import javafx.collections.ObservableMap;
  * @author rado
  */
 public class MainModel implements IMainModel {
-    
+
     private final BllFacade bllManager;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
@@ -37,21 +37,21 @@ public class MainModel implements IMainModel {
     private final ObservableList<User> userList = FXCollections.observableArrayList();
     private User user;
     private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
-    
+
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
     }
-    
+
     @Override
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     @Override
     public User getUser() {
         return user;
     }
-    
+
     @Override
     public void addClient(Client client) throws ModelException {
         //TODO: EventLog: Same try catch for two BLL methods?
@@ -68,7 +68,7 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public void loadClients() throws ModelException {
         try {
@@ -83,32 +83,35 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public ObservableList<Client> getClientList() {
         return clientList;
     }
-    
+
     @Override
-    public Project addProject(Project project) throws ModelException {
+    public void addProject(Project project) throws ModelException {
         try {
             bllManager.logEvent(new EventLog(
                     EventLog.EventType.INFORMATION,
                     "Created the project for the client \"" + project.getClient().getName() + "\": "
                     + project.getName() + ", " + project.getHourlyRate() + " DKK/hour.",
                     user.getUsername()));
-            return bllManager.createProject(project);
+            Project newProject = bllManager.createProject(project);
+            projectList.add(newProject);
+            Comparator<Project> byName = Comparator.comparing(Project::getName);
+            FXCollections.sort(projectList, byName);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public void loadProjects(Client client) throws ModelException {
         try {
             bllManager.logEvent(new EventLog(
                     EventLog.EventType.INFORMATION,
-                    "Loaded all projects.",
+                    "Loaded all projects for the client \"" + client.getName() + "\".",
                     user.getUsername()));
             List<Project> allProjects = bllManager.getProjects(client);
             projectList.clear();
@@ -117,12 +120,27 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
+    @Override
+    public void loadAllProjects() throws ModelException {
+        try {
+            bllManager.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Loaded all projects.",
+                    user.getUsername()));
+            List<Project> allProjects = bllManager.getAllProjects();
+            projectList.clear();
+            projectList.addAll(allProjects);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
     @Override
     public ObservableList<Project> getProjectList() {
         return projectList;
     }
-    
+
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
         try {
@@ -132,7 +150,7 @@ public class MainModel implements IMainModel {
                     "Created the task in the project \"" + task.getProject().getName() + "\": "
                     + task.getDescription() + ".",
                     user.getUsername()));
-            
+
             TaskConcrete1 freshTask = bllManager.createTask(task);
             List<TaskEntry> entryList = new ArrayList();
             freshTask.setTaskEntryList(entryList);
@@ -146,19 +164,19 @@ public class MainModel implements IMainModel {
                 taskList.add(0, freshTask);
                 taskMap.remove(freshTask.getCreationTime().toLocalDate());
                 taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
-                
+
             }
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
-        
+
     }
-    
+
     @Override
     public ObservableMap<LocalDate, List<TaskConcrete1>> getTasks() {
         return taskMap;
     }
-    
+
     @Override
     public void loadTasks(User user) throws ModelException {
         try {
@@ -178,12 +196,12 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public ObservableList<TaskConcrete2> getTaskList() {
         return taskList;
     }
-    
+
     @Override
     public void getAllTasks() throws ModelException {
         try {
@@ -202,7 +220,7 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public void getAllTasksFiltered(Filter filter) throws ModelException {
         try {
@@ -221,7 +239,7 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public void loadUsers() throws ModelException {
         try {
@@ -236,22 +254,22 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     @Override
     public ObservableList<User> getUserList() {
         return userList;
     }
-    
+
     @Override
     public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener) {
         if (this.taskMapListener != null) {
             taskMap.removeListener(this.taskMapListener);
         }
-        
+
         this.taskMapListener = taskMapListener;
         taskMap.addListener(taskMapListener);
     }
-    
+
     @Override
     public User createUser(User user) throws ModelException {
         try {
@@ -264,5 +282,5 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
 }

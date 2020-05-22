@@ -19,7 +19,7 @@ public interface IProjectDAO {
      * @throws DalException
      */
     Project createProject(Project project) throws DalException;
-    
+
     /**
      * Gets the projects for a selected client.
      *
@@ -28,5 +28,7 @@ public interface IProjectDAO {
      * @throws DalException
      */
     List<Project> getProjects(Client client) throws DalException;
+
+    List<Project> getAllProjects() throws DalException;
 
 }

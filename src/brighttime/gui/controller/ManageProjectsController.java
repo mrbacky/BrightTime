@@ -1,5 +1,8 @@
 package brighttime.gui.controller;
 
+import brighttime.be.Client;
+import brighttime.be.Project;
+import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
 import java.io.IOException;
@@ -11,8 +14,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -23,12 +28,18 @@ public class ManageProjectsController implements Initializable {
 
     @FXML
     private StackPane stackPane;
-    @FXML
-    private VBox vBox;
 
     private final String CREATE_PROJECT_FXML = "/brighttime/gui/view/CreateProject.fxml";
     private IMainModel mainModel;
     private final AlertManager alertManager;
+    @FXML
+    private TableView<Project> tblProjects;
+    @FXML
+    private TableColumn<Project, String> colName;
+    @FXML
+    private TableColumn<Project, Client> colClient;
+    @FXML
+    private TableColumn<Project, Integer> colRate;
 
     public ManageProjectsController() {
         this.alertManager = new AlertManager();
@@ -47,6 +58,7 @@ public class ManageProjectsController implements Initializable {
 
     public void initializeView() {
         setUpProjectCreator();
+        setTable();        
     }
 
     private void setUpProjectCreator() {
@@ -62,6 +74,18 @@ public class ManageProjectsController implements Initializable {
 
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setTable() {
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colClient.setCellValueFactory(new PropertyValueFactory<>("client"));
+        colRate.setCellValueFactory(new PropertyValueFactory<>("hourlyRate"));
+        tblProjects.setItems(mainModel.getProjectList());
+        try {
+            mainModel.loadAllProjects();
+        } catch (ModelException ex) {
+            Logger.getLogger(ManageProjectsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -56,6 +56,8 @@ public interface BllFacade {
      */
     List<Project> getProjects(Client client) throws BllException;
 
+    List<Project> getAllProjects() throws BllException;
+
     /**
      * Creates a new task in the database.
      *

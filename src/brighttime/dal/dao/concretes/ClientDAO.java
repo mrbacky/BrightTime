@@ -20,26 +20,26 @@ import brighttime.dal.dao.interfaces.IEventLogDAO;
  * @author annem
  */
 public class ClientDAO implements IClientDAO {
-    
+
     private final IConnectionManager connection;
     private final IEventLogDAO logDAO;
-    
+
     public ClientDAO() throws IOException {
         this.connection = new ConnectionManager();
         this.logDAO = new EventLogDAO();
     }
-    
+
     @Override
     public Client createClient(Client client) throws DalException {
         String sql = "INSERT INTO Client (name, hourlyRate) "
                 + "VALUES (?,?)";
-        
+
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, client.getName());
             pstmt.setInt(2, client.getHourlyRate());
             pstmt.executeUpdate();
-            
+
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 client.setId(rs.getInt(1));
@@ -54,17 +54,17 @@ public class ClientDAO implements IClientDAO {
             throw new DalException(ex.getMessage());
         }
     }
-    
+
     @Override
     public List<Client> getClients() throws DalException {
         List<Client> clients = new ArrayList<>();
         String sql = "SELECT id, name, hourlyRate "
                 + "  FROM Client"
                 + "  ORDER BY name";
-        
+
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
-            
+
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 clients.add(new Client(rs.getInt("id"), rs.getString("name"), rs.getInt("hourlyRate")));
@@ -73,10 +73,10 @@ public class ClientDAO implements IClientDAO {
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful getting clients. " + ex.getMessage(),
+                    "Unsuccessful getting all clients. " + ex.getMessage(),
                     "System"));
             throw new DalException(ex.getMessage());
         }
     }
-    
+
 }

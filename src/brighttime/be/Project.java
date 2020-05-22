@@ -29,6 +29,13 @@ public class Project {
         this.client.set(client); //maybe change this
         this.hourlyRate.set(hourlyRate);
     }
+    
+    public Project(int id, String name, Client client, int hourlyRate) {
+        this.id.set(id);
+        this.name.set(name);
+        this.client.set(client); //maybe change this
+        this.hourlyRate.set(hourlyRate);
+    }
 
     public int getId() {
         return id.get();

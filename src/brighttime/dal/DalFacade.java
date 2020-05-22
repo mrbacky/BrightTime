@@ -53,6 +53,8 @@ public interface DalFacade {
      */
     List<Project> getProjects(Client client) throws DalException;
 
+    List<Project> getAllProjects() throws DalException;
+
     /**
      * Creates a new task in the database.
      *

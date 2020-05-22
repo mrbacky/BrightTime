@@ -92,6 +92,15 @@ public class BllManager implements BllFacade {
     }
 
     @Override
+    public List<Project> getAllProjects() throws BllException {
+        try {
+            return dalManager.getAllProjects();
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
     public TaskConcrete1 createTask(TaskConcrete1 task) throws BllException {
         try {
             return dalManager.createTask(task);
