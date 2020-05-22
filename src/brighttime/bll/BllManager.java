@@ -25,6 +25,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -252,6 +254,25 @@ public class BllManager implements BllFacade {
             dalManager.logEvent(log);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public User updateUserDetails(User updatedUser) throws BllException {
+        try {
+            return dalManager.updateUserDetails(updatedUser);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public User deleteUser(User selectedUser) throws BllException {
+        try {
+            return dalManager.deleteUser(selectedUser);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+
         }
     }
 

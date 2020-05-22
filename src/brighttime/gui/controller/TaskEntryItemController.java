@@ -24,6 +24,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseDragEvent;
 
 /**
  * FXML Controller class
@@ -48,6 +49,8 @@ public class TaskEntryItemController implements Initializable {
     private JFXTimePicker timePickerEndTime;
     private final AlertManager alertManager;
     private TimeTrackerController timeTrackerController;
+    private LocalTime oldStartTime;
+    private LocalTime oldEndTime;
 
     public TaskEntryItemController() {
         this.alertManager = new AlertManager();
@@ -65,6 +68,8 @@ public class TaskEntryItemController implements Initializable {
     public void injectTaskEntryModel(ITaskEntryModel taskEntryModel) {
         this.taskEntryModel = taskEntryModel;
         setTaskEntryDetails(taskEntryModel.getTaskEntry());
+        setOldStartTime();
+        setOldEndTime();
 
     }
 
@@ -84,21 +89,22 @@ public class TaskEntryItemController implements Initializable {
 
     @FXML
     private void handleEditStartTime(Event event) throws ModelException {
-        TaskEntry taskEntry = taskEntryModel.getTaskEntry();
         LocalTime updatedStartTime = timePickerStartTime.getValue();
+        TaskEntry taskEntry = taskEntryModel.getTaskEntry();
         LocalDate entryDate = taskEntry.getStartTime().toLocalDate();
-        if (updatedStartTime.isBefore(taskEntry.getEndTime().toLocalTime())) {
+        if (updatedStartTime.isBefore(taskEntry.getEndTime().toLocalTime()) && !updatedStartTime.equals(oldStartTime)) {
             try {
                 taskEntry.setStartTime(LocalDateTime.of(entryDate, updatedStartTime));
                 taskEntryModel.updateTaskEntryStartTime(taskEntry);
+                oldStartTime = taskEntry.getStartTime().toLocalTime();
                 //  workaround
                 timeTrackerController.initTasks();
-
+                System.out.println("startTime: " + taskEntry.getStartTime());
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
             }
 
-        } else {
+        } else if (updatedStartTime.isAfter(taskEntry.getEndTime().toLocalTime())) {
             Platform.runLater(() -> {
                 alertManager.showAlert("Invalid input", "Start time has to be before end time");
                 timePickerStartTime.show();
@@ -114,23 +120,37 @@ public class TaskEntryItemController implements Initializable {
         TaskEntry taskEntry = taskEntryModel.getTaskEntry();
         LocalTime updatedEndTime = timePickerEndTime.getValue();
         LocalDate entryDate = taskEntry.getEndTime().toLocalDate();
-        if (updatedEndTime.isAfter(taskEntry.getStartTime().toLocalTime())) {
+
+        if (updatedEndTime.isAfter(taskEntry.getStartTime().toLocalTime()) && !updatedEndTime.equals(oldEndTime)) {
             try {
                 taskEntry.setEndTime(LocalDateTime.of(entryDate, updatedEndTime));
                 taskEntryModel.updateTaskEntryEndTime(taskEntry);
+//                oldEndTime = taskEntry.getEndTime().toLocalTime();
+                System.out.println("endTime: " + taskEntry.getEndTime());
                 timeTrackerController.initTasks();
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
             }
-        } else {
+        } else if (updatedEndTime.isBefore(taskEntry.getStartTime().toLocalTime())) {
             Platform.runLater(() -> {
                 alertManager.showAlert("Invalid input", "End time has to be after start time");
                 timePickerEndTime.show();
             });
         }
+
     }
 
     void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
         this.timeTrackerController = timeTrackerController;
     }
+
+    private void setOldStartTime() {
+        oldStartTime = taskEntryModel.getTaskEntry().getStartTime().toLocalTime();
+    }
+
+    private void setOldEndTime() {
+        oldEndTime = taskEntryModel.getTaskEntry().getEndTime().toLocalTime();
+
+    }
+
 }

@@ -16,4 +16,8 @@ public interface IUserDAO {
 
     public User createUser(User user) throws DalException;
 
+    public User updateUserDetails(User updatedUser) throws DalException;
+
+    User deleteUser(User selectedUser) throws DalException;
+
 }

@@ -2,7 +2,9 @@
 
 <?import com.jfoenix.controls.JFXToggleNode?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -60,14 +62,23 @@
                      <children>
                         <StackPane minHeight="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TableView fx:id="tbvUsers">
+                              <TableView fx:id="tbvUsers" editable="true">
                                  <columns>
-                                    <TableColumn prefWidth="75.0" text="C1" />
-                                    <TableColumn prefWidth="75.0" text="C2" />
+                                    <TableColumn fx:id="colFirstName" prefWidth="75.0" text="First name" />
+                                    <TableColumn fx:id="colLastName" prefWidth="75.0" text="Last name" />
+                                    <TableColumn fx:id="colUserName" prefWidth="75.0" text="Username" />
+                                    <TableColumn fx:id="colUserType" prefWidth="75.0" text="User type" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
+                                 <contextMenu>
+                                    <ContextMenu fx:id="contextMenu">
+                                       <items>
+                                          <MenuItem fx:id="menuItemDeleteUser" mnemonicParsing="false" onAction="#handleDeleteUser" text="Delete" />
+                                       </items>
+                                    </ContextMenu>
+                                 </contextMenu>
                               </TableView>
                            </children>
                         </StackPane>
