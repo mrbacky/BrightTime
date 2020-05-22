@@ -14,9 +14,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,8 +31,10 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -71,7 +77,7 @@ public class ManageUsersController implements Initializable {
     @FXML
     private TableColumn<User, String> colUserName;
     @FXML
-    private TableColumn<User, String> colUserType;
+    private TableColumn<User, User.UserType> colUserType;
     @FXML
     private ContextMenu contextMenu;
     @FXML
@@ -120,8 +126,8 @@ public class ManageUsersController implements Initializable {
         colLastName.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         colLastName.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         colUserName.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-        colUserType.setCellValueFactory(cellData -> cellData.getValue().userTypeProperty());
 
+//        colUserType.setCellValueFactory(cellData -> cellData.getValue().userTypeProperty().t);
         enableEditableCollumns();
     }
 
@@ -147,14 +153,28 @@ public class ManageUsersController implements Initializable {
             updateUserDetails(updatedUser);
         });
 
-        colUserType.setCellFactory(TextFieldTableCell.forTableColumn());
-        colUserType.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
-            e.getTableView().getItems().get(e.getTablePosition().getRow()).setType(User.UserType.valueOf(e.getNewValue()));
-            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-            updateUserDetails(updatedUser);
-            System.out.println("in usertype col");
+        ObservableList<User.UserType> userTypes = FXCollections.observableArrayList(User.UserType.values());
+        colUserType.setCellValueFactory((TableColumn.CellDataFeatures<User, User.UserType> param) -> {
+            User user = param.getValue();
+            return new SimpleObjectProperty<User.UserType>(user.getType());
         });
 
+        colUserType.setCellFactory(ComboBoxTableCell.forTableColumn(userTypes));
+        colUserType.setOnEditCommit((TableColumn.CellEditEvent<User, User.UserType> e) -> {
+            e.getTableView().getItems().get(e.getTablePosition().getRow()).setType(e.getNewValue());
+//            TablePosition<User, User.UserType> pos = event.getTablePosition();
+            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
+            updateUserDetails(updatedUser);
+
+        });
+
+//        colUserType.setCellFactory(TextFieldTableCell.forTableColumn());
+//        colUserType.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
+//            e.getTableView().getItems().get(e.getTablePosition().getRow()).setType(User.UserType.valueOf(e.getNewValue()));
+//            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
+//            updateUserDetails(updatedUser);
+//            System.out.println("in usertype col");
+//        });
     }
 
     @FXML
@@ -187,7 +207,6 @@ public class ManageUsersController implements Initializable {
             controller.injectMainModel(mainModel);
             controller.injectContr(this);
             controller.initializeView();
-//            vboxCreateUsers.getChildren().clear();
             vboxCreateUsers.getChildren().add(root);
         } catch (IOException ex) {
 

@@ -45,7 +45,6 @@ public class CreateUserController implements Initializable {
     private JFXPasswordField passField2;
     @FXML
     private JFXPasswordField passField1;
-
     private final AlertManager alertManager;
     private IMainModel mainModel;
     private String password1;

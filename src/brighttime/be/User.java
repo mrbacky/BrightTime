@@ -33,6 +33,7 @@ public class User {
 
     }
     //contructor for viewing users in Administration section
+    
 
     //  constructor for getting user from DB
     public User(int id, String firstName, String lastName, String username, UserType type) {
