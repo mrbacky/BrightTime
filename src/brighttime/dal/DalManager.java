@@ -176,4 +176,14 @@ public class DalManager implements DalFacade {
         eventLog.logEvent(log);
     }
 
+    @Override
+    public User updateUserDetails(User updatedUser) throws DalException {
+        return userDAO.updateUserDetails(updatedUser);
+    }
+
+    @Override
+    public User deleteUser(User selectedUser) throws DalException {
+        return userDAO.deleteUser(selectedUser);
+    }
+
 }

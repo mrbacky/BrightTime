@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -248,15 +250,38 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public User createUser(User user) throws ModelException {
+    public void createUser(User user) throws ModelException {
         try {
             bllManager.logEvent(new EventLog(
                     EventLog.EventType.INFORMATION,
                     "Created the user: " + user.getUsername() + ".",
                     user.getUsername()));
-            return bllManager.createUser(user);
+            User newUser = bllManager.createUser(user);
+            userList.add(newUser);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public User updateUserDetails(User updatedUser) throws ModelException {
+        try {
+
+            return bllManager.updateUserDetails(updatedUser);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+
+    }
+
+    @Override
+    public void deleteUser(User selectedUser) throws ModelException {
+        try {
+            User deletedUser = bllManager.deleteUser(selectedUser);
+            userList.remove(deletedUser);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+
         }
     }
 

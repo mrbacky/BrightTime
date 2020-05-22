@@ -21,10 +21,12 @@ public class TaskConcrete1 extends TaskBase {
         this.user.set(user);
     }
 
-    public TaskConcrete1(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime) {
+    public TaskConcrete1(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime, User user) {
         super(id, description, project, billability);
         this.taskEntryList.set(taskEntryList);
         this.creationTime.set(creationTime);
+        this.user.set(user);
+
     }
 
     public List<TaskEntry> getTaskEntryList() {
