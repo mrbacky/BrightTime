@@ -23,10 +23,9 @@ public interface IMainModel {
      * Adds a new client.
      *
      * @param client The new client.
-     * @return The created client from the database.
      * @throws ModelException
      */
-    Client addClient(Client client) throws ModelException;
+    void addClient(Client client) throws ModelException;
 
     /**
      * Gets the clients and adds them to an ObservableList.

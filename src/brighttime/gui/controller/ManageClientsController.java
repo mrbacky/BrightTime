@@ -1,5 +1,6 @@
 package brighttime.gui.controller;
 
+import brighttime.be.Client;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
 import java.io.IOException;
@@ -11,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -23,12 +26,16 @@ public class ManageClientsController implements Initializable {
 
     @FXML
     private StackPane stackPane;
-    @FXML
-    private VBox vBox;
 
     private final String CREATE_CLIENT_FXML = "/brighttime/gui/view/CreateClient.fxml";
     private IMainModel mainModel;
     private final AlertManager alertManager;
+    @FXML
+    private TableView<Client> tblClients;
+    @FXML
+    private TableColumn<Client, String> colName;
+    @FXML
+    private TableColumn<Client, Integer> colRate;
 
     public ManageClientsController() {
         this.alertManager = new AlertManager();
@@ -47,6 +54,7 @@ public class ManageClientsController implements Initializable {
 
     public void initializeView() {
         setUpClientCreator();
+        setTable();
     }
 
     private void setUpClientCreator() {
@@ -63,6 +71,12 @@ public class ManageClientsController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void setTable() {
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colRate.setCellValueFactory(new PropertyValueFactory<>("hourlyRate"));
+        tblClients.setItems(mainModel.getClientList());
     }
 
 }

@@ -25,6 +25,12 @@ public class Client {
         this.hourlyRate.set(hourlyRate);
     }
 
+    public Client(int id, String name, int hourlyRate) {
+        this.id.set(id);
+        this.name.set(name);
+        this.hourlyRate.set(hourlyRate);
+    }
+
     public int getId() {
         return id.get();
     }

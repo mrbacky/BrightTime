@@ -42,7 +42,7 @@ public class MockTaskDAO implements ITaskDAO {
     }
 
     private void createClient() {
-        grumsen = new Client(0, "Grumsen Development");
+        grumsen = new Client(0, "Grumsen Development", 1000);
     }
 
     private void createProject() {

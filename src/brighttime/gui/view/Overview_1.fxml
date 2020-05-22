@@ -37,9 +37,9 @@
                      <children>
                         <TableView fx:id="tbvTasks" prefHeight="260.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="colTaskDescription" maxWidth="1.7976931348623157E308" prefWidth="-1.0" text="Task description" />
+                            <TableColumn id="tableColLeft" fx:id="colTaskDescription" maxWidth="1.7976931348623157E308" prefWidth="-1.0" text="Task description" />
                             <TableColumn id="tableCol" fx:id="colHours" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="-1.0" text="Hours" />
-                              <TableColumn id="tableCol" fx:id="colCost" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="-1.0" text="Cost" />
+                              <TableColumn id="tableColRight" fx:id="colCost" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="-1.0" text="Cost" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
