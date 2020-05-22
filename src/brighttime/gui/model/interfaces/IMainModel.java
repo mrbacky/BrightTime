@@ -91,6 +91,6 @@ public interface IMainModel {
 
     boolean checkUsernameAvailability(String username) throws ModelException;
 
-    User createUser(User user) throws ModelException;
+    void createUser(User user) throws ModelException;
 
 }

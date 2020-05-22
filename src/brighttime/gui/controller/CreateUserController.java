@@ -134,15 +134,7 @@ public class CreateUserController implements Initializable {
             alertManager.showAlert("No username was entered.", "Please enter a username.");
             return false;
         }
-        try {
-            if (!mainModel.checkUsernameAvailability(textFieldUserName.getText())) {
-                alertManager.showAlert("Someone already has this username.", "Try another username.");
-                return false;
-            }
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not check the availibility of the username.", "An error occured: " + ex.getMessage());
-            return false;
-        }
+        
         if (password1.isEmpty()) {
             alertManager.showAlert("No password was entered.", "Please enter a password.");
             return false;

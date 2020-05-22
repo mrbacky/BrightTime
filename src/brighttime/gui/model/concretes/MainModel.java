@@ -12,6 +12,7 @@ import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
+import brighttime.gui.model.util.InputValidator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,7 @@ import javafx.collections.ObservableMap;
 public class MainModel implements IMainModel {
 
     private final BllFacade bllManager;
+    private final InputValidator inputValidator;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
     private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
@@ -40,6 +42,7 @@ public class MainModel implements IMainModel {
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
+        this.inputValidator = new InputValidator();
     }
 
     @Override
@@ -284,15 +287,25 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public User createUser(User user) throws ModelException {
-        try {
-            bllManager.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Created the user: " + user.getUsername() + ".",
-                    user.getUsername()));
-            return bllManager.createUser(user);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
+    public void createUser(User user) throws ModelException {
+        if (!inputValidator.usernameCheck(user.getUsername())) {
+            throw new ModelException("The username is invalid. Please try another username.");
+        }
+        if (!inputValidator.passwordCheck(user.getPassword())) {
+            throw new ModelException("The password is invalid. Please enter another password.");
+        }
+        if (checkUsernameAvailability(user.getUsername())) {
+            try {
+                bllManager.logEvent(new EventLog(
+                        EventLog.EventType.INFORMATION,
+                        "Created the user: " + user.getUsername() + ".",
+                        user.getUsername()));
+                bllManager.createUser(user);
+            } catch (BllException ex) {
+                throw new ModelException(ex.getMessage());
+            }
+        } else {
+            throw new ModelException("Someone already has this username. Please try another username.");
         }
     }
 
