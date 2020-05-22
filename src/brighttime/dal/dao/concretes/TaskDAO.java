@@ -147,7 +147,8 @@ public class TaskDAO implements ITaskDAO {
                             project,
                             billability,
                             entryList,
-                            modifiedDate);
+                            modifiedDate,
+                            user);
                     taskMap.put(taskId, newTask);
 
                 } else {

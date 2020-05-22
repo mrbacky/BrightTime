@@ -83,9 +83,9 @@ public class CreateTaskController implements Initializable {
     private Boolean end = false;
     private Boolean timeInterval = false;
 
-    StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
+    private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
     //TODO: Change all to 24HourView!
-    StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
+    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();

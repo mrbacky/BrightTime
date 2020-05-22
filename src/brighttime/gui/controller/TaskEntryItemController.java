@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -24,6 +26,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 
 /**
  * FXML Controller class
@@ -36,22 +40,23 @@ public class TaskEntryItemController implements Initializable {
 
     @FXML
     private JFXTextField textFieldTaskEntryDesc;
-
-    @FXML
-    private JFXButton btnRemoveTask;
-    private ITaskEntryModel taskEntryModel;
-    @FXML
-    private Label lblDuration;
     @FXML
     private JFXTimePicker timePickerStartTime;
     @FXML
     private JFXTimePicker timePickerEndTime;
+    @FXML
+    private Label lblDuration;
+    @FXML
+    private JFXButton btnRemoveTask;
+
+    private ITaskEntryModel taskEntryModel;
     private final AlertManager alertManager;
     private TimeTrackerController timeTrackerController;
 
+    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
+
     public TaskEntryItemController() {
         this.alertManager = new AlertManager();
-
     }
 
     /**
@@ -59,7 +64,7 @@ public class TaskEntryItemController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        display24HourView();
     }
 
     public void injectTaskEntryModel(ITaskEntryModel taskEntryModel) {
@@ -133,4 +138,12 @@ public class TaskEntryItemController implements Initializable {
     void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
         this.timeTrackerController = timeTrackerController;
     }
+
+    private void display24HourView() {
+        timePickerStartTime.set24HourView(true);
+        timePickerStartTime.converterProperty().setValue(timeConverter);
+        timePickerEndTime.set24HourView(true);
+        timePickerEndTime.converterProperty().setValue(timeConverter);
+    }
+
 }

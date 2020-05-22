@@ -121,11 +121,11 @@ public class OverviewController implements Initializable {
     private final DatePickerCustomizer datePickerCustomizer;
 
     //TODO: Move to CSS.
-    String defaultColor = "-fx-text-fill: #435A9A";
-    String highlightColor = "-fx-text-fill: #F0C326";
+    private final String defaultColor = "-fx-text-fill: #435A9A";
+    private final String highlightColor = "-fx-text-fill: #F0C326";
 
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.US);
-    StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.US);
+    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
 
     @FXML
     private Label lblUser;

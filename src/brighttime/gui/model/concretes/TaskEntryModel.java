@@ -10,14 +10,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 /**
@@ -180,10 +176,10 @@ public class TaskEntryModel implements ITaskEntryModel {
     }
 
     private void logEvent(TaskEntry taskEntry) throws BllException {
-        //TODO: EventLog check exception handling.
+        //TODO: EventLog check exception handling.        
         bllManager.logEvent(new EventLog(
                 EventLog.EventType.INFORMATION,
-                "Updated a task entry in the task \"" + taskEntry.getDescription()
+                "Updated a task entry in the task \"" + taskEntry.getTask().getDescription()
                 + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                 + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime(),
                 taskEntry.getTask().getUser().getUsername()));
