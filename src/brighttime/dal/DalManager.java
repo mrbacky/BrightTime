@@ -175,6 +175,15 @@ public class DalManager implements DalFacade {
     }
 
     @Override
+    public boolean checkUsernameAvailability(String username) throws DalException {
+        try {
+            return userDAO.checkUsernameAvailability(username);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
     public User createUser(User user) throws DalException {
         return userDAO.createUser(user);
 
@@ -182,7 +191,11 @@ public class DalManager implements DalFacade {
 
     @Override
     public void logEvent(EventLog log) throws DalException {
-        eventLog.logEvent(log);
+        try {
+            eventLog.logEvent(log);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
     }
 
 }

@@ -89,6 +89,8 @@ public interface IMainModel {
 
     void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
 
+    boolean checkUsernameAvailability(String username) throws ModelException;
+
     User createUser(User user) throws ModelException;
 
 }

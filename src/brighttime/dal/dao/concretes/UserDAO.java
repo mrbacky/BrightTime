@@ -133,4 +133,28 @@ public class UserDAO implements IUserDAO {
         }
     }
 
+    @Override
+    public boolean checkUsernameAvailability(String username) throws DalException {
+        String sql = "SELECT username "
+                + "FROM [User] "
+                + "WHERE username = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, username);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                return false;
+            }
+            return true;
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful username availability check. " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
 }

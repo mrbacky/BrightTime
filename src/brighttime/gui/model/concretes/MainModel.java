@@ -271,6 +271,19 @@ public class MainModel implements IMainModel {
     }
 
     @Override
+    public boolean checkUsernameAvailability(String username) throws ModelException {
+        try {
+            bllManager.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Checked the availability of the username: " + username + ".",
+                    user.getUsername()));
+            return bllManager.checkUsernameAvailability(username);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
     public User createUser(User user) throws ModelException {
         try {
             bllManager.logEvent(new EventLog(

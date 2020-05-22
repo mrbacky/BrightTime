@@ -94,6 +94,8 @@ public interface DalFacade {
 
     public User authenticateUser(String username, String password) throws DalException;
 
+    boolean checkUsernameAvailability(String username) throws DalException;
+
     public User createUser(User user) throws DalException;
 
     void logEvent(EventLog log) throws DalException;
