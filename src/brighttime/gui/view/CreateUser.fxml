@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" hgap="20.0" styleClass="createItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateUserController">
+<GridPane alignment="CENTER" hgap="20.0" styleClass="createItem" stylesheets="@css/style.css" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.CreateUserController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" />
       <ColumnConstraints hgrow="SOMETIMES" />
@@ -23,62 +23,57 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Label styleClass="labelForms" text="First name:" />
-      <JFXTextField fx:id="textFieldFirstName" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="1">
+      <JFXTextField fx:id="textFieldFirstName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="First name">
+         <styleClass>
+            <String fx:value="txtCommon" />
+            <String fx:value="txtName" />
+         </styleClass>
+         <GridPane.margin>
+            <Insets bottom="5.0" />
+         </GridPane.margin>
+      </JFXTextField>
+      <JFXTextField fx:id="textFieldUserName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Email address" GridPane.rowIndex="1">
          <styleClass>
             <String fx:value="txtCommon" />
             <String fx:value="txtName" />
          </styleClass>
       </JFXTextField>
-      <Label styleClass="labelForms" text="Username:" GridPane.rowIndex="2">
-         <GridPane.margin>
-            <Insets top="10.0" />
-         </GridPane.margin></Label>
-      <JFXTextField fx:id="textFieldUserName" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="3">
+      <JFXPasswordField fx:id="passField1" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Password" GridPane.rowIndex="2">
          <styleClass>
             <String fx:value="txtCommon" />
             <String fx:value="txtName" />
          </styleClass>
-      </JFXTextField>
-      <Label styleClass="labelForms" text="Password:" GridPane.rowIndex="4">
          <GridPane.margin>
-            <Insets top="10.0" />
-         </GridPane.margin></Label>
-      <JFXPasswordField fx:id="passField1" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="5">
-         <styleClass>
-            <String fx:value="txtName" />
-            <String fx:value="txtCommon" />
-         </styleClass>
+            <Insets top="5.0" />
+         </GridPane.margin>
       </JFXPasswordField>
-      <Label styleClass="labelForms" text="Last name:" GridPane.columnIndex="1" />
-      <JFXTextField fx:id="textFieldLastName" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <JFXTextField fx:id="textFieldLastName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Last name" GridPane.columnIndex="1">
+         <GridPane.margin>
+            <Insets bottom="5.0" />
+         </GridPane.margin>
          <styleClass>
             <String fx:value="txtCommon" />
             <String fx:value="txtName" />
          </styleClass>
       </JFXTextField>
-      <Label styleClass="labelForms" text="User type:" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <GridPane.margin>
-            <Insets top="10.0" />
-         </GridPane.margin></Label>
-      <JFXComboBox fx:id="cboUserType" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" styleClass="txtCommon" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Label styleClass="labelForms" text="Password confirmation:" GridPane.columnIndex="1" GridPane.rowIndex="4">
-         <GridPane.margin>
-            <Insets top="10.0" />
-         </GridPane.margin></Label>
-      <JFXPasswordField fx:id="passField2" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <JFXComboBox fx:id="cboUserType" labelFloat="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="User type" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <styleClass>
-            <String fx:value="txtName" />
             <String fx:value="txtCommon" />
+            <String fx:value="txtName" />
+         </styleClass></JFXComboBox>
+      <JFXPasswordField fx:id="passField2" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Password confirmation" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <styleClass>
+            <String fx:value="txtCommon" />
+            <String fx:value="txtName" />
          </styleClass>
+         <GridPane.margin>
+            <Insets top="5.0" />
+         </GridPane.margin>
       </JFXPasswordField>
-      <HBox nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <HBox nodeOrientation="RIGHT_TO_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
             <JFXButton fx:id="btnAdd" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="30.0">
                <graphic>
@@ -103,11 +98,16 @@
             <Insets />
          </GridPane.margin>
          <padding>
-            <Insets top="10.0" />
+            <Insets bottom="-10.0" top="-10.0" />
          </padding>
       </HBox>
+      <Label styleClass="error-label" text="Use 8 or more characters with a mix of letters and numbers." GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin>
+      </Label>
    </children>
    <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="10.0" />
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
    </padding>
 </GridPane>
