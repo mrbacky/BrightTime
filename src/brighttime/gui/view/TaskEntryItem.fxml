@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane minWidth="-Infinity" prefHeight="40.0" prefWidth="700.0" styleClass="viewSubItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
+<AnchorPane minWidth="-Infinity" prefHeight="40.0" prefWidth="700.0" styleClass="viewSubItem" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskEntryItemController">
     <children>
         <StackPane layoutX="10.0" layoutY="10.0" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="370.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -53,6 +53,6 @@
         </StackPane>
     </children>
     <padding>
-        <Insets left="40.0" />
+        <Insets left="30.0" />
     </padding>
 </AnchorPane>

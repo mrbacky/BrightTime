@@ -31,7 +31,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
@@ -55,13 +54,6 @@ public class CreateTaskController implements Initializable {
     private JFXToggleNode tglBillability;
     @FXML
     private JFXButton btnAdd;
-
-    @FXML
-    private StackPane stack1;
-    @FXML
-    private StackPane stack2;
-    @FXML
-    private StackPane stack3;
 
     @FXML
     private JFXDatePicker datePicker;
@@ -128,16 +120,16 @@ public class CreateTaskController implements Initializable {
 
     void manualMode() {
         manualMode = true;
-        grid.add(stack1, 0, 1, 1, 1);
-        grid.add(stack2, 1, 1, 1, 1);
-        grid.add(stack3, 2, 1, 1, 1);
+        grid.add(datePicker, 0, 1, 1, 1);
+        grid.add(timePickerStart, 1, 1, 1, 1);
+        grid.add(timePickerEnd, 2, 1, 1, 1);
     }
 
     void normalMode() {
         manualMode = false;
-        grid.getChildren().remove(stack1);
-        grid.getChildren().remove(stack2);
-        grid.getChildren().remove(stack3);
+        grid.getChildren().remove(datePicker);
+        grid.getChildren().remove(timePickerStart);
+        grid.getChildren().remove(timePickerEnd);
     }
 
     private void setUser() {

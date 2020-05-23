@@ -26,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -37,7 +38,6 @@ public class TimeTrackerController implements Initializable {
 
     @FXML
     private VBox vBoxMain;
-    @FXML
     private VBox vBoxCreator;
     @FXML
     private JFXButton btnSwitchMode;
@@ -51,6 +51,8 @@ public class TimeTrackerController implements Initializable {
     private LocalDate date = LocalDate.MIN;
     private User user;
     int i = 0;
+    @FXML
+    private GridPane grid;
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -114,8 +116,7 @@ public class TimeTrackerController implements Initializable {
             controller.injectTimeTrackerController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();
-            vBoxCreator.getChildren().clear();
-            vBoxCreator.getChildren().add(root);
+            grid.add(root, 0, 0);
 
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);

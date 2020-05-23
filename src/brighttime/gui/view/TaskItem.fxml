@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minWidth="-Infinity" prefWidth="750.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
+<AnchorPane minWidth="-Infinity" prefWidth="730.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
     <children>
         <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" styleClass="viewItem" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
             <children>
-                <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="20.0" text="─" textFill="WHITE">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" text="─" textFill="WHITE">
                             <StackPane.margin>
                                 <Insets />
                             </StackPane.margin>
@@ -26,11 +26,11 @@
                   <Label fx:id="lblStartTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" styleClass="txtCommon" StackPane.alignment="CENTER_LEFT" />
                     </children>
                 </StackPane>
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <ToggleButton fx:id="btnExpandTask" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#expandTaskItem" prefHeight="25.0" prefWidth="25.0" styleClass="rootButtons">
+                        <ToggleButton fx:id="btnExpandTask" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#expandTaskItem" styleClass="rootButtons">
                             <graphic>
-                                <ImageView fx:id="imgExpandCollapse" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fx:id="imgExpandCollapse" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@assets/expand.png" />
                                     </image>
@@ -39,7 +39,7 @@
                         </ToggleButton>
                     </children>
                 </StackPane>
-                <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="550.0" AnchorPane.topAnchor="0.0">
+                <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="540.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <JFXTextField fx:id="textFieldTaskDesc">
                      <styleClass>
@@ -48,7 +48,7 @@
                      </styleClass></JFXTextField>
                     </children>
                 </StackPane>
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <JFXTextField fx:id="textFieldProject">
                      <styleClass>
@@ -57,7 +57,7 @@
                      </styleClass></JFXTextField>
                     </children>
                 </StackPane>
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <JFXTextField fx:id="textFieldClient">
                      <styleClass>

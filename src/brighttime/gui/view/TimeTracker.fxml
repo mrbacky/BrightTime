@@ -5,29 +5,38 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TimeTrackerController">
     <children>
         <Label alignment="CENTER" layoutY="-2.0" styleClass="labelHeaderTitle" text="Time Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
         <Label layoutX="26.0" layoutY="54.0" styleClass="labelMenuItem" text="New Task" AnchorPane.leftAnchor="26.0" />
-        <AnchorPane layoutY="78.0" prefHeight="103.0" prefWidth="580.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="78.0">
-            <children>
-            <VBox fx:id="vBoxCreator" prefHeight="104.0" prefWidth="580.0" AnchorPane.bottomAnchor="-11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            </children>
-        </AnchorPane>
-        <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="185.0" prefHeight="215.0" prefWidth="600.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="185.0">
-            <content>
-                <VBox id="vBoxMain" fx:id="vBoxMain">
-                    <padding>
-                        <Insets top="10.0" />
-                    </padding>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-                </VBox>
-            </content>
-        </ScrollPane>
+      <GridPane fx:id="grid" layoutX="10.0" layoutY="78.0" vgap="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="78.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+            <RowConstraints vgrow="ALWAYS" />
+         </rowConstraints>
+         <children>
+              <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" stylesheets="@css/style.css" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                  <content>
+                      <VBox id="vBoxMain" fx:id="vBoxMain">
+                          <padding>
+                              <Insets top="10.0" />
+                          </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                      </VBox>
+                  </content>
+              </ScrollPane>
+         </children>
+      </GridPane>
       <JFXButton fx:id="btnSwitchMode" layoutY="54.0" text="Switch Mode" AnchorPane.rightAnchor="26.0" />
     </children>
 </AnchorPane>
