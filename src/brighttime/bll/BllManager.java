@@ -294,4 +294,18 @@ public class BllManager implements BllFacade {
         }
     }
 
+    @Override
+    public Client updateClient(Client selectedClient) throws BllException {
+        try {
+            return dalManager.updateClient(selectedClient);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Client deleteClient(Client selectedClient) throws BllException {
+        return dalManager.deleteClient(selectedClient);
+    }
+
 }

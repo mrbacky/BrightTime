@@ -97,4 +97,8 @@ public interface IMainModel {
 
     void deleteUser(User selectedUser) throws ModelException;
 
+    void updateClient(Client selectedClient) throws ModelException;
+
+    void deleteClient(Client c) throws ModelException;
+
 }

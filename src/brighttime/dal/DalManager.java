@@ -208,4 +208,10 @@ public class DalManager implements DalFacade {
         return userDAO.deleteUser(selectedUser);
     }
 
+    @Override
+    public Client updateClient(Client selectedClient) throws DalException {
+        return clientDAO.updateClient(selectedClient);
+        
+    }
+
 }

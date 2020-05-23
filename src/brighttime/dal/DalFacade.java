@@ -104,4 +104,8 @@ public interface DalFacade {
 
     User deleteUser(User selectedUser) throws DalException;
 
+    Client updateClient(Client selectedClient) throws DalException;
+
+    public Client deleteClient(Client selectedClient);
+
 }

@@ -79,4 +79,9 @@ public class ClientDAO implements IClientDAO {
         }
     }
 
+    @Override
+    public Client updateClient(Client selectedClient) throws DalException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
