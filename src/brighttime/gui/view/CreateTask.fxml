@@ -73,7 +73,7 @@
                     </ImageView>
                 </graphic>
             </JFXButton>
-      <JFXDatePicker fx:id="datePicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="180.0" styleClass="dateTimePicker" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <JFXDatePicker fx:id="datePicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="220.0" styleClass="dateTimePicker" GridPane.halignment="CENTER" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets bottom="10.0" left="30.0" />
          </GridPane.margin>
