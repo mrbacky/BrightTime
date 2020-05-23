@@ -337,4 +337,24 @@ public class MainModel implements IMainModel {
         }
     }
 
+    @Override
+    public void updateClient(Client selectedClient) throws ModelException {
+        try {
+            Client updatedClient = bllManager.updateClient(selectedClient);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteClient(Client selectedClient) throws ModelException {
+        try {
+            Client deletedClient = bllManager.deleteClient(selectedClient);
+            clientList.remove(deletedClient);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+
+    }
+
 }

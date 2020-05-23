@@ -66,18 +66,18 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public void updateClient(Client client) throws DalException {
+    public Client updateClient(Client client) throws DalException {
         try {
-            clientDAO.updateClient(client);
+            return clientDAO.updateClient(client);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
     }
 
     @Override
-    public void deleteClient(Client client) throws DalException {
+    public Client deleteClient(Client client) throws DalException {
         try {
-            clientDAO.deleteClient(client);
+            return clientDAO.deleteClient(client);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }

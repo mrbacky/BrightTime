@@ -35,9 +35,7 @@ public interface DalFacade {
      */
     List<Client> getClients() throws DalException;
 
-    void updateClient(Client client) throws DalException;
 
-    void deleteClient(Client client) throws DalException;
 
     /**
      * Creates a new project in the database.
@@ -107,5 +105,9 @@ public interface DalFacade {
     User updateUserDetails(User updatedUser) throws DalException;
 
     User deleteUser(User selectedUser) throws DalException;
+
+    Client updateClient(Client selectedClient) throws DalException;
+
+    Client deleteClient(Client selectedClient) throws DalException;
 
 }

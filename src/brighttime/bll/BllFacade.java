@@ -122,4 +122,8 @@ public interface BllFacade {
 
     public User deleteUser(User selectedUser) throws BllException;
 
+    Client updateClient(Client selectedClient) throws BllException;
+
+    Client deleteClient(Client selectedClient) throws BllException;
+
 }

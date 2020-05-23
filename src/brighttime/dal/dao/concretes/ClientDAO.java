@@ -69,7 +69,6 @@ public class ClientDAO implements IClientDAO {
             while (rs.next()) {
                 clients.add(new Client(rs.getInt("id"), rs.getString("name"), rs.getInt("hourlyRate")));
             }
-            return clients;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
@@ -77,10 +76,12 @@ public class ClientDAO implements IClientDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
+        return clients;
+
     }
 
     @Override
-    public void updateClient(Client client) throws DalException {
+    public Client updateClient(Client client) throws DalException {
         String sql = "UPDATE Client SET name = ?, hourlyRate = ? WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {
@@ -96,10 +97,11 @@ public class ClientDAO implements IClientDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
+        return client;
     }
 
     @Override
-    public void deleteClient(Client client) throws DalException {
+    public Client deleteClient(Client client) throws DalException {
         //TODO: Ask about deletion.
         String sql = "DELETE FROM Client WHERE id = ?";
 
@@ -114,6 +116,7 @@ public class ClientDAO implements IClientDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
+        return client;
     }
 
 }
