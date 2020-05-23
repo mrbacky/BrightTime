@@ -302,7 +302,7 @@
 
 .labelForms{
     /*-fx-padding: 10 0 0 0;*/
-    -fx-font-size: 15px;
-    /*-fx-font-weight: bold;*/
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
 }
