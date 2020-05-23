@@ -1,12 +1,9 @@
 package brighttime.be;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.ComboBox;
 
 /**
  *
@@ -33,7 +30,6 @@ public class User {
 
     }
     //contructor for viewing users in Administration section
-    
 
     //  constructor for getting user from DB
     public User(int id, String firstName, String lastName, String username, UserType type) {
@@ -96,7 +92,7 @@ public class User {
 
     @Override
     public String toString() {
-        return getFirstName() + " " + getLastName() + " " + getUsername() + " " + getUserType();
+        return getFirstName() + " " + getLastName();
     }
 
     public String getPassword() {
