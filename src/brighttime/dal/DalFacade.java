@@ -57,6 +57,10 @@ public interface DalFacade {
 
     List<Project> getAllProjects() throws DalException;
 
+    void updateProject(Project project) throws DalException;
+
+    void deleteProject(Project project) throws DalException;
+
     /**
      * Creates a new task in the database.
      *

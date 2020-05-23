@@ -120,4 +120,42 @@ public class ProjectDAO implements IProjectDAO {
         }
     }
 
+    @Override
+    public void updateProject(Project project) throws DalException {
+        String sql = "UPDATE Project SET name = ?, hourlyRate = ?, clientId = ? WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, project.getName());
+            pstmt.setInt(2, project.getHourlyRate());
+            pstmt.setInt(3, project.getClient().getId());
+            pstmt.setInt(4, project.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful updating the project \"" + project.getName() + "\". " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteProject(Project project) throws DalException {
+        //TODO: Ask about deletion.
+        String sql = "DELETE FROM Project WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, project.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful deleting the project \"" + project.getName() + "\". " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
 }

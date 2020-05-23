@@ -31,4 +31,8 @@ public interface IProjectDAO {
 
     List<Project> getAllProjects() throws DalException;
 
+    void updateProject(Project project) throws DalException;
+
+    void deleteProject(Project project) throws DalException;
+
 }

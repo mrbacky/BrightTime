@@ -111,6 +111,24 @@ public class DalManager implements DalFacade {
     }
 
     @Override
+    public void updateProject(Project project) throws DalException {
+        try {
+            projectDAO.updateProject(project);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteProject(Project project) throws DalException {
+        try {
+            projectDAO.deleteProject(project);
+        } catch (DalException ex) {
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
     public TaskConcrete1 createTask(TaskConcrete1 task) throws DalException {
         try {
             return taskDAO.createTask(task);
