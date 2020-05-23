@@ -52,7 +52,7 @@
     -jfx-unfocus-color: transparent;    
     -fx-padding: 3.5 5 3.5 5;
     -jfx-label-float: true;    
-    -fx-prompt-text-fill: #435A9A;
+    -fx-prompt-text-fill: black;
 }
 
 .txtCreateUserMiddle{
@@ -257,12 +257,6 @@
 #tableColRight{
     -fx-alignment: CENTER_RIGHT;  
     -fx-padding: 0 10 0 0;
-}
-
-.cboLogin{
-    -fx-background-color: white;
-    -fx-background-radius: 10 10 10 10;
-    -fx-padding: 0 10 0 10;
 }
 
 .btnLogin{
