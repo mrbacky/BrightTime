@@ -188,6 +188,8 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public User deleteUser(User selectedUser) throws DalException {
+        //TODO: Ask if a user with tasks should be deleted or not? Maybe delete the user and keep the tasks.
+        //Or not allow user deletion if the user has tasks.
         String sql = "DELETE FROM [User] WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {

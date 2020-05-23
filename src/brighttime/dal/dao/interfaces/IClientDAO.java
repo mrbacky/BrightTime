@@ -27,4 +27,8 @@ public interface IClientDAO {
      */
     List<Client> getClients() throws DalException;
 
+    void updateClient(Client client) throws DalException;
+
+    void deleteClient(Client client) throws DalException;
+
 }

@@ -79,4 +79,41 @@ public class ClientDAO implements IClientDAO {
         }
     }
 
+    @Override
+    public void updateClient(Client client) throws DalException {
+        String sql = "UPDATE Client SET name = ?, hourlyRate = ? WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, client.getName());
+            pstmt.setInt(2, client.getHourlyRate());
+            pstmt.setInt(3, client.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful updating the client \"" + client.getName() + "\". " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteClient(Client client) throws DalException {
+        //TODO: Ask about deletion.
+        String sql = "DELETE FROM Client WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, client.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful deleting the client \"" + client.getName() + "\". " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
 }
