@@ -334,12 +334,22 @@ public class MainModel implements IMainModel {
 
     @Override
     public void deleteUser(User selectedUser) throws ModelException {
+        //TODO: EventLog
+        //TODO: Should there be a try catch on each method?
         try {
-            User deletedUser = bllManager.deleteUser(selectedUser);
-            userList.remove(deletedUser);
+            if (bllManager.hasTask(selectedUser)) {
+                User deletedUser = bllManager.inactivateUser(selectedUser);
+                userList.remove(deletedUser);
+            } else {
+                try {
+                    User deletedUser = bllManager.deleteUser(selectedUser);
+                    userList.remove(deletedUser);
+                } catch (BllException ex) {
+                    throw new ModelException(ex.getMessage());
+                }
+            }
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
-
         }
     }
 

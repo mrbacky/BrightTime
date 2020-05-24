@@ -37,4 +37,6 @@ public interface ITaskDAO {
 
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
+    boolean hasTask(User user) throws DalException;
+
 }

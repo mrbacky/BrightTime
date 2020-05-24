@@ -412,4 +412,29 @@ public class TaskDAO implements ITaskDAO {
         return sql;
     }
 
+    @Override
+    public boolean hasTask(User user) throws DalException {
+        String sql = "SELECT TOP (1) id "
+                + "FROM Task "
+                + "WHERE userId = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, user.getId());
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            //TODO: EventLog, edit message.
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful in checking if the user has a task. " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+        return false;
+    }
+
 }

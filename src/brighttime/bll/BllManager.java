@@ -25,8 +25,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -70,6 +68,24 @@ public class BllManager implements BllFacade {
     public List<Client> getClients() throws BllException {
         try {
             return dalManager.getClients();
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Client updateClient(Client selectedClient) throws BllException {
+        try {
+            return dalManager.updateClient(selectedClient);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Client deleteClient(Client selectedClient) throws BllException {
+        try {
+            return dalManager.deleteClient(selectedClient);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
@@ -285,28 +301,27 @@ public class BllManager implements BllFacade {
     }
 
     @Override
+    public boolean hasTask(User user) throws BllException {
+        try {
+            return dalManager.hasTask(user);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public User inactivateUser(User user) throws BllException {
+        try {
+            return dalManager.inactivateUser(user);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
     public User deleteUser(User selectedUser) throws BllException {
         try {
             return dalManager.deleteUser(selectedUser);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-
-        }
-    }
-
-    @Override
-    public Client updateClient(Client selectedClient) throws BllException {
-        try {
-            return dalManager.updateClient(selectedClient);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public Client deleteClient(Client selectedClient) throws BllException {
-        try {
-            return dalManager.deleteClient(selectedClient);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }

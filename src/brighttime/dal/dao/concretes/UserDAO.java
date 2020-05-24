@@ -23,6 +23,8 @@ public class UserDAO implements IUserDAO {
 
     private final IConnectionManager connection;
     private final IEventLogDAO logDAO;
+    private final int activeStatus = 1;
+    private final int inactiveStatus = 2;
 
     public UserDAO() throws IOException {
         this.connection = new ConnectionManager();
@@ -36,10 +38,12 @@ public class UserDAO implements IUserDAO {
                 + "FROM [User] AS U "
                 + "JOIN UserType AS UT "
                 + "ON U.userTypeId = UT.id "
+                + "WHERE statusId = ? "
                 + "ORDER BY U.firstName";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, activeStatus);
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -66,12 +70,13 @@ public class UserDAO implements IUserDAO {
     @Override
     public User authenticateUser(String username, String password) throws DalException {
         String sql = "SELECT id, firstName, lastName, userTypeId "
-                + "FROM [User] WHERE username = ? AND password = ?";
+                + "FROM [User] WHERE username = ? AND password = ? AND statusId = ?";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
+            pstmt.setInt(3, activeStatus);
 
             ResultSet rs = pstmt.executeQuery();
             rs.next();
@@ -99,28 +104,29 @@ public class UserDAO implements IUserDAO {
     @Override
     public User createUser(User user) throws DalException {
 
-        String sql = "INSERT INTO [User] (firstName, lastName, username, password, userTypeId) "
-                + "VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO [User] (firstName, lastName, username, password, userTypeId, statusId) "
+                + "VALUES (?,?,?,?,?,?)";
 
         try (Connection con = connection.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, user.getFirstName());
-            ps.setString(2, user.getLastName());
-            ps.setString(3, user.getUsername());
-            ps.setString(4, user.getPassword());
+            pstmt.setString(1, user.getFirstName());
+            pstmt.setString(2, user.getLastName());
+            pstmt.setString(3, user.getUsername());
+            pstmt.setString(4, user.getPassword());
             //  UserType USER = id 2
             if (user.getType() == User.UserType.ADMINISTRATOR) {
-                ps.setInt(5, 1);
+                pstmt.setInt(5, 1);
                 System.out.println("int for admin");
             } else {
-                ps.setInt(5, 2);
+                pstmt.setInt(5, 2);
                 System.out.println("int for user");
 
             }
-            ps.executeUpdate();
+            pstmt.setInt(6, activeStatus);
+            pstmt.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 user.setId(rs.getInt(1));
             }
@@ -158,48 +164,71 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public User updateUserDetails(User updatedUser) throws DalException {
+    public User updateUserDetails(User user) throws DalException {
 
-        String sql = "UPDATE [User]\n"
-                + "SET firstName = ?, lastName = ?, username = ?, userTypeId = ?\n"
+        String sql = "UPDATE [User] "
+                + "SET firstName = ?, lastName = ?, username = ?, userTypeId = ? "
                 + "WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(sql);
 
-            ps.setString(1, updatedUser.getFirstName());
-            ps.setString(2, updatedUser.getLastName());
-            ps.setString(3, updatedUser.getUsername());
+            pstmt.setString(1, user.getFirstName());
+            pstmt.setString(2, user.getLastName());
+            pstmt.setString(3, user.getUsername());
 
-            if (updatedUser.getType() == User.UserType.ADMINISTRATOR) {
-                ps.setInt(4, 1);
+            if (user.getType() == User.UserType.ADMINISTRATOR) {
+                pstmt.setInt(4, 1);
             } else {
-                ps.setInt(4, 2);
+                pstmt.setInt(4, 2);
             }
-            ps.setInt(5, updatedUser.getId());
+            pstmt.setInt(5, user.getId());
 
-            ps.executeUpdate();
+            pstmt.executeUpdate();
 
         } catch (Exception ex) {
             throw new DalException(ex.getMessage());
         }
-        return updatedUser;
+        return user;
     }
 
     @Override
-    public User deleteUser(User selectedUser) throws DalException {
-        //TODO: Ask if a user with tasks should be deleted or not? Maybe delete the user and keep the tasks.
-        //Or not allow user deletion if the user has tasks.
+    public User inactivateUser(User user) throws DalException {
+        String sql = "UPDATE [User] "
+                + "SET statusId = ? "
+                + "WHERE id = ?";
+
+        try (Connection con = connection.getConnection()) {
+            PreparedStatement psmt = con.prepareStatement(sql);
+            psmt.setInt(1, inactiveStatus);
+            psmt.setInt(2, user.getId());
+            psmt.executeUpdate();
+            return user;
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful inactivating the user \"" + user.getUsername() + "\". " + ex.getMessage(),
+                    "System"));
+            throw new DalException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public User deleteUser(User user) throws DalException {
         String sql = "DELETE FROM [User] WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, selectedUser.getId());
-            ps.execute();
-        } catch (Exception ex) {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, user.getId());
+            pstmt.executeUpdate();
+            return user;
+        } catch (SQLException ex) {
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.ERROR,
+                    "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + ex.getMessage(),
+                    "System"));
             throw new DalException(ex.getMessage());
         }
-        return selectedUser;
     }
 
 }

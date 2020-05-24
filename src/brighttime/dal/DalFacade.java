@@ -35,6 +35,10 @@ public interface DalFacade {
      */
     List<Client> getClients() throws DalException;
 
+    Client updateClient(Client selectedClient) throws DalException;
+
+    Client deleteClient(Client selectedClient) throws DalException;
+
     /**
      * Creates a new project in the database.
      *
@@ -106,10 +110,10 @@ public interface DalFacade {
 
     User updateUserDetails(User updatedUser) throws DalException;
 
+    boolean hasTask(User user) throws DalException;
+
+    User inactivateUser(User user) throws DalException;
+
     User deleteUser(User selectedUser) throws DalException;
-
-    Client updateClient(Client selectedClient) throws DalException;
-
-    Client deleteClient(Client selectedClient) throws DalException;
 
 }

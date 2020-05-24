@@ -37,6 +37,10 @@ public interface BllFacade {
      */
     List<Client> getClients() throws BllException;
 
+    Client updateClient(Client selectedClient) throws BllException;
+
+    Client deleteClient(Client selectedClient) throws BllException;
+
     /**
      * Creates a new project in the database.
      *
@@ -120,10 +124,10 @@ public interface BllFacade {
 
     User updateUserDetails(User updatedUser) throws BllException;
 
-    public User deleteUser(User selectedUser) throws BllException;
+    boolean hasTask(User user) throws BllException;
 
-    Client updateClient(Client selectedClient) throws BllException;
+    User inactivateUser(User user) throws BllException;
 
-    Client deleteClient(Client selectedClient) throws BllException;
+    User deleteUser(User selectedUser) throws BllException;
 
 }

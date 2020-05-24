@@ -69,6 +69,7 @@ public class ClientDAO implements IClientDAO {
             while (rs.next()) {
                 clients.add(new Client(rs.getInt("id"), rs.getString("name"), rs.getInt("hourlyRate")));
             }
+            return clients;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
@@ -76,8 +77,6 @@ public class ClientDAO implements IClientDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
-        return clients;
-
     }
 
     @Override
@@ -90,6 +89,7 @@ public class ClientDAO implements IClientDAO {
             pstmt.setInt(2, client.getHourlyRate());
             pstmt.setInt(3, client.getId());
             pstmt.executeUpdate();
+            return client;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
@@ -97,7 +97,6 @@ public class ClientDAO implements IClientDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
-        return client;
     }
 
     @Override
@@ -109,6 +108,7 @@ public class ClientDAO implements IClientDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, client.getId());
             pstmt.executeUpdate();
+            return client;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
@@ -116,7 +116,6 @@ public class ClientDAO implements IClientDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
-        return client;
     }
 
 }
