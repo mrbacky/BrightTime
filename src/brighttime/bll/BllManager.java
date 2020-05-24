@@ -243,7 +243,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public boolean checkUsernameAvailability(String username) throws BllException {
+    public int checkUsernameAvailability(String username) throws BllException {
         try {
             return dalManager.checkUsernameAvailability(username);
         } catch (DalException ex) {

@@ -225,8 +225,8 @@ public class ManageUsersController implements Initializable {
         try {
             mainModel.updateUserDetails(updatedUser);
         } catch (ModelException ex) {
-            Logger.getLogger(ManageUsersController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            alertManager.showAlert("Could not update the new user details.", "An error occured: " + ex.getMessage());
+            }
 
     }
 

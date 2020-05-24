@@ -108,7 +108,7 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public boolean checkUsernameAvailability(String username) throws DalException {
+    public int checkUsernameAvailability(String username) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

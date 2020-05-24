@@ -112,7 +112,7 @@ public interface BllFacade {
 
     User authenticateUser(String username, String password) throws BllException;
 
-    boolean checkUsernameAvailability(String username) throws BllException;
+    int checkUsernameAvailability(String username) throws BllException;
 
     User createUser(User user) throws BllException;
 

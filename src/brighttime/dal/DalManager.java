@@ -211,7 +211,7 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public boolean checkUsernameAvailability(String username) throws DalException {
+    public int checkUsernameAvailability(String username) throws DalException {
         try {
             return userDAO.checkUsernameAvailability(username);
         } catch (DalException ex) {

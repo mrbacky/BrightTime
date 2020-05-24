@@ -46,7 +46,7 @@ public class UserDAO implements IUserDAO {
                 String rsType = rs.getString("userTypeName");
                 User.UserType type;
 
-                if (rsType.equals("Administrator")) {
+                if (rsType.equals("ADMINISTRATOR")) {
                     type = User.UserType.ADMINISTRATOR;
                 } else {
                     type = User.UserType.STANDARD;
@@ -134,8 +134,8 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public boolean checkUsernameAvailability(String username) throws DalException {
-        String sql = "SELECT username "
+    public int checkUsernameAvailability(String username) throws DalException {
+        String sql = "SELECT id "
                 + "FROM [User] "
                 + "WHERE username = ?";
 
@@ -145,9 +145,8 @@ public class UserDAO implements IUserDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                return false;
+                return rs.getInt("id");
             }
-            return true;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
@@ -155,6 +154,7 @@ public class UserDAO implements IUserDAO {
                     "System"));
             throw new DalException(ex.getMessage());
         }
+        return 0;
     }
 
     @Override

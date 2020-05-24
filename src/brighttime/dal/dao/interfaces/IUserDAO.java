@@ -16,7 +16,7 @@ public interface IUserDAO {
 
     public User createUser(User user) throws DalException;
 
-    boolean checkUsernameAvailability(String username) throws DalException;
+    int checkUsernameAvailability(String username) throws DalException;
 
     public User updateUserDetails(User updatedUser) throws DalException;
 

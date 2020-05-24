@@ -278,12 +278,12 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public boolean checkUsernameAvailability(String username) throws ModelException {
+    public int checkUsernameAvailability(String username) throws ModelException {
         try {
-            bllManager.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Checked the availability of the username: " + username + ".",
-                    user.getUsername()));
+//                bllManager.logEvent(new EventLog(
+//                        EventLog.EventType.INFORMATION,
+//                        "Checked the availability of the username: " + username + ".",
+//                        user.getUsername()));
             return bllManager.checkUsernameAvailability(username);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
@@ -298,7 +298,7 @@ public class MainModel implements IMainModel {
         if (!inputValidator.passwordCheck(user.getPassword())) {
             throw new ModelException("The password is invalid. Please enter another password.");
         }
-        if (checkUsernameAvailability(user.getUsername())) {
+        if (checkUsernameAvailability(user.getUsername()) == 0) {
             try {
                 bllManager.logEvent(new EventLog(
                         EventLog.EventType.INFORMATION,
@@ -316,11 +316,18 @@ public class MainModel implements IMainModel {
 
     @Override
     public User updateUserDetails(User updatedUser) throws ModelException {
-        try {
-
-            return bllManager.updateUserDetails(updatedUser);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
+        if (!inputValidator.usernameCheck(user.getUsername())) {
+            throw new ModelException("The username is invalid. Please try another username.");
+        }
+        int result = checkUsernameAvailability(updatedUser.getUsername());
+        if (result == 0 || result == updatedUser.getId()) {
+            try {
+                return bllManager.updateUserDetails(updatedUser);
+            } catch (BllException ex) {
+                throw new ModelException(ex.getMessage());
+            }
+        } else {
+            throw new ModelException("Someone already has this username. Please try another username.");
         }
 
     }

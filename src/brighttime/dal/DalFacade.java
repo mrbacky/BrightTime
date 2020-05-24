@@ -35,8 +35,6 @@ public interface DalFacade {
      */
     List<Client> getClients() throws DalException;
 
-
-
     /**
      * Creates a new project in the database.
      *
@@ -100,7 +98,7 @@ public interface DalFacade {
 
     public User authenticateUser(String username, String password) throws DalException;
 
-    boolean checkUsernameAvailability(String username) throws DalException;
+    int checkUsernameAvailability(String username) throws DalException;
 
     public User createUser(User user) throws DalException;
 
