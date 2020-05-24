@@ -157,7 +157,7 @@ public class MainModel implements IMainModel {
                     user.getUsername()));
 
             TaskConcrete1 freshTask = bllManager.createTask(task);
-            if (freshTask.getTaskEntryList().isEmpty()) {
+            if (freshTask.getTaskEntryList() == null) {
                 List<TaskEntry> entryList = new ArrayList();
                 freshTask.setTaskEntryList(entryList);
             }
