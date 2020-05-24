@@ -83,8 +83,11 @@
                      </image>
                   </ImageView>
                </graphic>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </JFXButton>
-            <JFXButton fx:id="btnAdd" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="30.0">
+            <JFXButton fx:id="btnAdd" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" styleClass="rootButtons">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -92,6 +95,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </JFXButton>
          </children>
          <GridPane.margin>
