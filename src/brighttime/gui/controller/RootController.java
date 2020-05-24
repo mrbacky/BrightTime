@@ -92,7 +92,7 @@ public class RootController implements Initializable {
 
     private void setUser() {
         user = mainModel.getUser();
-        if (user.getType().equals(User.UserType.USER)) {
+        if (user.getType().equals(User.UserType.STANDARD)) {
             Node nodeList = vBoxRootButtons.getChildren().get(2);
             vBoxRootButtons.getChildren().remove(nodeList);
         }

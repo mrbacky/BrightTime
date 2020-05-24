@@ -82,10 +82,10 @@ public class CreateUserController implements Initializable {
                 String userType = cboUserType.getValue();
 
                 if (validateInput()) {
-                    if (userType.equals("Admin")) {
-                        mainModel.createUser(new User(firstName, lastName, userName, password1, User.UserType.ADMIN));
+                    if (userType.equals("Administrator")) {
+                        mainModel.createUser(new User(firstName, lastName, userName, password1, User.UserType.ADMINISTRATOR));
                     } else {
-                        mainModel.createUser(new User(firstName, lastName, userName, password1, User.UserType.USER));
+                        mainModel.createUser(new User(firstName, lastName, userName, password1, User.UserType.STANDARD));
 
                     }
                     handleClearInfo(event);
@@ -101,8 +101,8 @@ public class CreateUserController implements Initializable {
     }
 
     private void initUserTypeComboBox() {
-        cboUserType.getItems().add("Admin");
-        cboUserType.getItems().add("User");
+        cboUserType.getItems().add("Administrator");
+        cboUserType.getItems().add("Standard");
     }
 
     @FXML
@@ -133,7 +133,7 @@ public class CreateUserController implements Initializable {
             alertManager.showAlert("No username was entered.", "Please enter a username.");
             return false;
         }
-        
+
         if (password1.isEmpty()) {
             alertManager.showAlert("No password was entered.", "Please enter a password.");
             return false;

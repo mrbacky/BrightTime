@@ -46,10 +46,10 @@ public class UserDAO implements IUserDAO {
                 String rsType = rs.getString("userTypeName");
                 User.UserType type;
 
-                if (rsType.equals("Admin")) {
-                    type = User.UserType.ADMIN;
+                if (rsType.equals("Administrator")) {
+                    type = User.UserType.ADMINISTRATOR;
                 } else {
-                    type = User.UserType.USER;
+                    type = User.UserType.STANDARD;
                 }
                 users.add(new User(rs.getInt("id"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("username"), type));
             }
@@ -82,9 +82,9 @@ public class UserDAO implements IUserDAO {
 
             User.UserType userType;
             if (type == 1) {
-                userType = User.UserType.ADMIN;
+                userType = User.UserType.ADMINISTRATOR;
             } else {
-                userType = User.UserType.USER;
+                userType = User.UserType.STANDARD;
             }
             return new User(id, firstName, lastName, username, userType);
         } catch (SQLException ex) {
@@ -110,7 +110,7 @@ public class UserDAO implements IUserDAO {
             ps.setString(3, user.getUsername());
             ps.setString(4, user.getPassword());
             //  UserType USER = id 2
-            if (user.getType() == User.UserType.ADMIN) {
+            if (user.getType() == User.UserType.ADMINISTRATOR) {
                 ps.setInt(5, 1);
                 System.out.println("int for admin");
             } else {
@@ -171,7 +171,7 @@ public class UserDAO implements IUserDAO {
             ps.setString(2, updatedUser.getLastName());
             ps.setString(3, updatedUser.getUsername());
 
-            if (updatedUser.getType() == User.UserType.ADMIN) {
+            if (updatedUser.getType() == User.UserType.ADMINISTRATOR) {
                 ps.setInt(4, 1);
             } else {
                 ps.setInt(4, 2);

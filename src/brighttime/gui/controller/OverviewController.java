@@ -270,7 +270,7 @@ public class OverviewController implements Initializable {
                 try {
                     mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
                     //  added rule ------------------------------------------------------------------------------------------------------------
-                    if (currentUser.getType() == User.UserType.ADMIN) {
+                    if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
                         StringProperty selectedFilter = new SimpleStringProperty();
                         selectedFilter.bind(Bindings.concat(newVal.firstNameProperty(), " ", newVal.lastNameProperty()));
                         makeCustomActiveFilterButton(btnFilterUser, selectedFilter);
@@ -469,7 +469,7 @@ public class OverviewController implements Initializable {
 
     private void refreshAfterRemovingOneFilter() {
         try {
-            if (currentUser.getType() == User.UserType.ADMIN && checkAllFilterEmpty()) {
+            if (currentUser.getType() == User.UserType.ADMINISTRATOR && checkAllFilterEmpty()) {
                 mainModel.getAllTasks();
             } else {
                 mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
@@ -487,7 +487,7 @@ public class OverviewController implements Initializable {
                 hBoxFilter.getChildren().remove(btnFilterProject);
                 hBoxFilter.getChildren().remove(btnFilterTimeFrame);
                 //  added rules --------------------------------------------------------------------------------------------------------------------
-                if (currentUser.getType() == User.UserType.ADMIN) {
+                if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
                     hBoxFilter.getChildren().remove(btnFilterUser);
                     cboUsers.getSelectionModel().clearSelection();
                 }
@@ -497,9 +497,9 @@ public class OverviewController implements Initializable {
                 datePickerStart.setValue(null);
                 datePickerEnd.setValue(null);
                 //  added rule --------------------------------------------------------------------------------------------------------------------
-                if (currentUser.getType() == User.UserType.ADMIN) {
+                if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
                     mainModel.getAllTasks();
-                } else if (currentUser.getType() == User.UserType.USER) {
+                } else if (currentUser.getType() == User.UserType.STANDARD) {
                     mainModel.getAllTasksFiltered(new Filter(currentUser, null, null, null));
                 }
             } catch (ModelException ex) {
@@ -564,7 +564,7 @@ public class OverviewController implements Initializable {
 
     private void setUpUserRules() {
         currentUser = mainModel.getUser();
-        if (currentUser.getType() == User.UserType.ADMIN) {
+        if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
             displayUserFilter();
 
         } else {

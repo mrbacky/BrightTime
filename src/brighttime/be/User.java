@@ -79,7 +79,7 @@ public class User {
     }
 
     public enum UserType {
-        USER, ADMIN
+        ADMINISTRATOR, STANDARD
     }
 
     public UserType getType() {

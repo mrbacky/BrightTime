@@ -304,7 +304,6 @@ public class MainModel implements IMainModel {
                         EventLog.EventType.INFORMATION,
                         "Created the user: " + user.getUsername() + ".",
                         user.getUsername()));
-                bllManager.createUser(user);
                 User newUser = bllManager.createUser(user);
                 userList.add(newUser);
             } catch (BllException ex) {
