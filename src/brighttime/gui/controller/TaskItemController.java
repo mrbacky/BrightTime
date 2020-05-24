@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +31,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -116,12 +118,14 @@ public class TaskItemController implements Initializable {
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
         setTaskDetails(taskModel.getTask());
-        if (taskModel.getDayEntryList().isEmpty()) {
+
+        if (taskModel.getObsEntries().isEmpty()) {
             btnExpandTask.setDisable(true);
             imgExpandCollapse.setImage(null);
         }
 
         if (taskModel.getTask().getBillability() == TaskConcrete1.Billability.NON_BILLABLE) {
+            btnExpandTask.setDisable(false);
             imgMoneyBag.setVisible(false);
         }
     }
@@ -129,6 +133,30 @@ public class TaskItemController implements Initializable {
     public void setTaskDetails(TaskConcrete1 task) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+
+        StringConverter startTimeConverter = new StringConverter() {
+            @Override
+            public String toString(Object object) {
+                return dtf.format(taskModel.getStartTime());
+            }
+
+            @Override
+            public Object fromString(String string) {
+                return null;
+            }
+        };
+
+        StringConverter endTimeConverter = new StringConverter() {
+            @Override
+            public String toString(Object object) {
+                return dtf.format(taskModel.getEndTime());
+            }
+
+            @Override
+            public Object fromString(String string) {
+                return null;
+            }
+        };
 
         textFieldTaskDesc.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getDescription(), task.descriptionProperty()));
@@ -139,15 +167,17 @@ public class TaskItemController implements Initializable {
         textFieldProject.textProperty().bind(Bindings.createStringBinding(()
                 -> task.getProject().getName(), task.getProject().nameProperty()));
 
-        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
+        lblStartTime.textProperty().bindBidirectional(taskModel.startTimeProperty(), startTimeConverter);
+        lblEndTime.textProperty().bindBidirectional(taskModel.endTimeProperty(), endTimeConverter);
 
-        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
+        lblDuration.textProperty().bindBidirectional(taskModel.stringDurationProperty());
 
-        lblDuration.textProperty().bind(Bindings.createStringBinding(()
-                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
-
+//        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
+//                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
+//        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
+//                -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
+//        lblDuration.textProperty().bind(Bindings.createStringBinding(()
+//                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
 //        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(task).toSeconds()));
     }
 
@@ -156,7 +186,7 @@ public class TaskItemController implements Initializable {
 
         if (btnExpandTask.isSelected()) {
             imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
-            if (!taskModel.getDayEntryList().isEmpty()) {
+            if (!taskModel.getObsEntries().isEmpty()) {
                 initTaskEntries();
             }
         } else {
@@ -171,7 +201,7 @@ public class TaskItemController implements Initializable {
 
     public void initTaskEntries() {
         vBoxTaskEntries.getChildren().clear();
-        List<TaskEntry> dayEntries = taskModel.getDayEntryList();
+        List<TaskEntry> dayEntries = taskModel.getObsEntries();
         for (TaskEntry entry : dayEntries) {
             addEntryItem(entry);
         }
@@ -184,9 +214,7 @@ public class TaskItemController implements Initializable {
 
             ITaskEntryModel taskEntryModel = ModelCreator.getInstance().createTaskEntryModel();
             taskEntryModel.setTaskEntry(taskEntry);
-            taskEntryModel.setStartTime(taskEntry.getStartTime().toLocalTime());
-            taskEntryModel.setEndTime(taskEntry.getEndTime().toLocalTime());
-            taskEntryModel.setStringDuration(taskEntryModel.secToFormat(taskEntryModel.calculateDuration(taskEntry).toSeconds()));
+            taskEntryModel.initializeTaskEntryModel();
 
             TaskEntryItemController controller = fxmlLoader.getController();
             controller.injectTaskEntryModel(taskEntryModel);
@@ -212,9 +240,17 @@ public class TaskItemController implements Initializable {
                 imgPlayPause.setImage(PLAY_ICON_IMAGE);
                 tempEndTime = LocalDateTime.now().withNano(0);
                 taskModel.addTaskEntry(tempStartTime, tempEndTime);
+                //  if this task date is not today, initTasks so the new task with entry today will be created.
+                if (taskModel.getDate().equals(LocalDate.now())) {
+                    //  auto expand
+                    initTaskEntries();
+                    imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
+                    btnExpandTask.setSelected(true);
+                } else {
+                    timeTrackerController.initTasks();
+                }
                 //  refresh
-                timeTrackerController.initializeView();
-
+//                timeTrackerController.initializeView();
 //                Platform.runLater(() -> {
 //                try {
 //                    taskModel.addTaskEntry(tempStartTime, tempEndTime);

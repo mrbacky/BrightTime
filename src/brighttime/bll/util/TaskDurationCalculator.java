@@ -17,10 +17,12 @@ public class TaskDurationCalculator {
     }
 
     public Duration calculateTaskDuration(List<TaskEntry> entryList) {
+
         Duration totalDuration = Duration.ZERO;
         for (TaskEntry entry : entryList) {
             totalDuration = totalDuration.plus(entryDurationCalculator.calculateDuration(entry));
         }
+
         return totalDuration;
     }
 

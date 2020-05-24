@@ -11,14 +11,19 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -26,6 +31,8 @@ import javafx.beans.value.ObservableValue;
  *
  */
 public class TaskModel implements ITaskModel {
+
+    private static final String DATE_TIME_FORMAT = "HH:mm";
 
     private final BllFacade bllManager;
     private TaskConcrete1 task;
@@ -36,19 +43,43 @@ public class TaskModel implements ITaskModel {
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
 
+    private final ObservableList<TaskEntry> obsEntries = FXCollections.observableArrayList((TaskEntry taskEntry) -> {
+        return new Observable[]{
+            taskEntry.startTimeProperty(),
+            taskEntry.endTimeProperty(),
+            stringDuration
+        };
+    });
+//    private ObservableList<TaskEntry> obsE = FXCollections.observableArrayList((taskEntry) -> new Observable[]{
+//        taskEntry.startTimeProperty()
+//    });
+
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+
     public TaskModel(BllFacade bllManager) throws IOException {
         this.bllManager = bllManager;
-        setupStartTimeListener();
-        setupEndTimeListener();
+//        setupStartTimeListener();
+//        setupEndTimeListener();
 
     }
 
     @Override
+    public void initializeTaskModel() {
+
+        setUpDayEntryList();
+        setUpDayEntryListListener();
+        setTaskStartTime();
+        setTaskEndTime();
+        setTaskDuration();
+    }
+
+    @Override
     public LocalDateTime getEndTime() {
-        if (!getDayEntryList().isEmpty()) {
-            return bllManager.getEndTime(getDayEntryList());
-        }
-        return task.getCreationTime();
+//        if (!getDayEntryList().isEmpty()) {
+//            return bllManager.getEndTime(getDayEntryList());
+//        }
+//        return task.getCreationTime();
+        return endTime.get();
     }
 
     @Override
@@ -63,11 +94,12 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public LocalDateTime getStartTime() {
-        if (!getDayEntryList().isEmpty()) {
-
-            return bllManager.getStartTime(getDayEntryList());
-        }
-        return task.getCreationTime();
+//        if (!entryList.isEmpty()) {
+//            return bllManager.getStartTime(entryList);
+//        } else {
+//            return task.getCreationTime();
+//        }
+        return startTime.get();
     }
 
     @Override
@@ -97,10 +129,12 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public List getDayEntryList() {
-        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
-                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
-        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
-        return dayEntries;
+//        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
+//                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+//        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+//        return dayEntries;
+
+        return null;
     }
 
     @Override
@@ -164,16 +198,22 @@ public class TaskModel implements ITaskModel {
 //    }
     @Override
     public void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException {
-        try {            
+        try {
             bllManager.logEvent(new EventLog(
                     EventLog.EventType.INFORMATION,
                     "Created a task entry for the task \"" + task.getDescription()
                     + "\" in the project \"" + task.getProject().getName()
                     + "\". Time frame: " + tempStartTime + " - " + tempEndTime,
                     task.getUser().getUsername()));
+
             TaskEntry newTaskEntry = new TaskEntry(task, tempStartTime, tempEndTime);
             task.getTaskEntryList().add(newTaskEntry);
             bllManager.createTaskEntry(newTaskEntry);
+            obsEntries.add(newTaskEntry);
+//            setTaskStartTime();
+//            setTaskEndTime();
+//            setTaskDuration();
+
 //  call createTaskEntry from DB here
 //  TODO: create entryList in task OBJ if the list does not exist
 //        if (task.getTaskEntryList().isEmpty()) {
@@ -211,6 +251,56 @@ public class TaskModel implements ITaskModel {
             System.out.println("in start time listener");
             endTime.set(newValue);
         });
+    }
+
+    @Override
+    public void setUpDayEntryList() {
+        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
+                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+        dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+        obsEntries.addAll(dayEntries);
+
+    }
+
+    @Override
+    public void setUpDayEntryListListener() {
+
+        obsEntries.addListener((ListChangeListener.Change<? extends TaskEntry> c) -> {
+            setTaskStartTime();
+            setTaskEndTime();
+            setTaskDuration();
+            System.out.println("in obsEnties listener");
+        });
+    }
+
+    @Override
+    public ObservableList<TaskEntry> getObsEntries() {
+        return obsEntries;
+    }
+
+    private void setTaskStartTime() {
+        if (obsEntries.isEmpty()) {
+            startTime.set(task.getCreationTime());
+        } else {
+            startTime.set(bllManager.getStartTime(obsEntries));
+        }
+    }
+
+    private void setTaskEndTime() {
+        if (obsEntries.isEmpty()) {
+            endTime.set(task.getCreationTime());
+        } else {
+            endTime.set(bllManager.getEndTime(obsEntries));
+        }
+
+    }
+
+    private void setTaskDuration() {
+        if (obsEntries.isEmpty()) {
+            stringDuration.set("00:00:00");
+        } else {
+            stringDuration.set(bllManager.secToFormat(bllManager.calculateTaskDuration(obsEntries).toSeconds()));
+        }
     }
 
 }
