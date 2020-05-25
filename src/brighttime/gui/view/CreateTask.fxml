@@ -27,33 +27,28 @@
       <RowConstraints vgrow="ALWAYS" />
    </rowConstraints>
    <children>
-            <JFXTextField fx:id="txtDescription" prefHeight="27.0" prefWidth="280.0" promptText="Add Description" GridPane.hgrow="ALWAYS">
-         <styleClass>
-            <String fx:value="txtCommon" />
-            <String fx:value="txtName" />
-            <String fx:value="txtNameSpecial" />
-         </styleClass>
+            <JFXTextField fx:id="txtDescription" prefHeight="27.0" prefWidth="280.0" promptText="Add a description" styleClass="txtCommon" GridPane.hgrow="ALWAYS">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </JFXTextField>
-            <JFXComboBox fx:id="cboClient" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="150.0" promptText="Select Client" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
-         <styleClass>
-            <String fx:value="cboCommon" />
-            <String fx:value="cboClient" />
-         </styleClass>
+            <JFXComboBox fx:id="cboClient" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Select a client" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
          <GridPane.margin>
             <Insets right="10.0" />
          </GridPane.margin>
+         <styleClass>
+            <String fx:value="txtCommon" />
+            <String fx:value="cboCommon" />
+         </styleClass>
       </JFXComboBox>
-            <JFXComboBox fx:id="cboProject" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="150.0" promptText="Select Project" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
-         <styleClass>
-            <String fx:value="cboCommon" />
-            <String fx:value="cboProject" />
-         </styleClass>
+            <JFXComboBox fx:id="cboProject" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Select a project" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS">
          <GridPane.margin>
             <Insets right="10.0" />
          </GridPane.margin>
+         <styleClass>
+            <String fx:value="txtCommon" />
+            <String fx:value="cboCommon" />
+         </styleClass>
       </JFXComboBox>
       <JFXToggleNode fx:id="tglBillability" contentDisplay="GRAPHIC_ONLY" selected="true" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
          <graphic>
@@ -73,20 +68,23 @@
                     </ImageView>
                 </graphic>
             </JFXButton>
-      <JFXDatePicker fx:id="datePicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="220.0" styleClass="dateTimePicker" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <JFXDatePicker fx:id="datePicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="220.0" promptText="Date" styleClass="dateTimePicker" GridPane.halignment="CENTER" GridPane.rowIndex="1">
          <GridPane.margin>
-            <Insets bottom="10.0" left="30.0" />
+            <Insets bottom="10.0" left="30.0" top="10.0" />
          </GridPane.margin>
       </JFXDatePicker>
-      <JFXTimePicker fx:id="timePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="135.0" styleClass="dateTimePicker" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <JFXTimePicker fx:id="timePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="135.0" promptText="Start time" styleClass="dateTimePicker" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
          <GridPane.margin>
-            <Insets bottom="10.0" left="20.0" />
+            <Insets bottom="10.0" left="20.0" top="10.0" />
          </GridPane.margin>
       </JFXTimePicker>
-      <JFXTimePicker fx:id="timePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="135.0" styleClass="dateTimePicker" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+      <JFXTimePicker fx:id="timePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="135.0" promptText="End time" styleClass="dateTimePicker" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
          <GridPane.margin>
-            <Insets bottom="10.0" left="20.0" />
+            <Insets bottom="10.0" left="20.0" top="10.0" />
          </GridPane.margin>
       </JFXTimePicker>
    </children>
+   <padding>
+      <Insets bottom="5.0" top="5.0" />
+   </padding>
 </GridPane>

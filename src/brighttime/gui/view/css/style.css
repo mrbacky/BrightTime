@@ -49,25 +49,11 @@
     -fx-border-radius: 20px;
     -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;
-    -jfx-unfocus-color: transparent;    
-    -fx-padding: 3.5 5 3.5 5;
-    -jfx-label-float: true;    
-    -fx-prompt-text-fill: gray;
-}
-
-.txtCreateUserMiddle{
-    -fx-padding: 10 15 10 15;
-
-}
-
-.txtName{
+    -jfx-unfocus-color: transparent;
     -jfx-focus-color: #F0C326;
-}
-
-.txtNameSpecial{
-    -fx-border-radius: 10px;
-    -fx-border-color: #F0C326;
-    -fx-text-fill: #F0C326;
+    -fx-padding: 3.5 5 3.5 5;
+    -jfx-label-float: true;
+    -fx-prompt-text-fill: gray;
 }
 
 .txtClient{    
@@ -78,12 +64,6 @@
     -jfx-focus-color: #00A99D; 
 }
 
-.txtProjectSpecial{
-    -fx-border-radius: 10px;
-    -fx-border-color: #00A99D;
-    -fx-text-fill: #00A99D;
-}
-
 .txtTime{
     -jfx-focus-color: #D11149;   
 }
@@ -92,33 +72,8 @@
     -jfx-focus-color: #963484;    
 }
 
-.cboCommon{
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10 10 10 10;
-    -fx-background-color: white;    
-    -jfx-unfocus-color: transparent;    
+.cboCommon{   
     -fx-padding: 0 10 0 10;
-
-    -fx-prompt-text-fill: #435A9A;
-}
-
-.cboClient{    
-    /*or this color #E40066*/
-    -fx-border-color: #F17105;
-    -jfx-focus-color: #F17105;
-}
-
-.cboClient .cell{
-    -fx-text-fill: #F17105;
-}
-
-.cboProject{
-    -fx-border-color: #00A99D;
-    -jfx-focus-color: #00A99D;
-}
-
-.cboProject .cell{
-    -fx-text-fill: #00A99D;
 }
 
 .error-label {
@@ -130,10 +85,6 @@
 .scroll-pane{
     /*-fx-background: white;
     -fx-border-color: purple;*/
-}
-
-.grid-pane{
-    -fx-grid-lines-visible: false;
 }
 
 .labelHeaderTitle{
@@ -161,18 +112,21 @@
 }
 
 .dateTimePicker{    
-    -jfx-default-color: #D11149;
+    -jfx-default-color: #F0C326;
 }
 
 .dateTimePicker .jfx-text-field{
     -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;
-    -fx-prompt-text-fill: #435A9A;
-    -fx-text-fill: black;
-    /*-jfx-label-float: true;*/
-    -jfx-focus-color: #D11149;
-    -jfx-unfocus-color: transparent;
+    -fx-prompt-text-fill: #F0C326;
     -fx-alignment: CENTER;
+    -jfx-label-float: true;
+    -jfx-focus-color: #F0C326;
+    -jfx-unfocus-color: transparent;    
+}
+
+.datePickerFilter .jfx-text-field{
+    -fx-font-size: 10;
 }
 
 #btnPlayPause{
@@ -217,29 +171,6 @@
     -fx-text-fill: #435A9A;
     -fx-font-weight: bold;
     -fx-font-size: 10;
-}
-
-.datePickerFilter{    
-    -jfx-default-color: #00A99D;
-}
-
-.datePickerFilter .jfx-text-field{
-    -fx-background-radius: 10 10 10 10;
-    -fx-background-color: white;
-    -fx-prompt-text-fill: lightgray;
-    -fx-text-fill: #435A9A;
-    -fx-font-size: 10;
-    -fx-alignment: CENTER;
-    -jfx-label-float: true;
-    -jfx-focus-color: #00A99D;
-    -jfx-unfocus-color: transparent;
-}
-
-.jfx-date-picker .jfx-text-field{
-    /*-jfx-unfocus-color: white;*/
-    /*-jfx-default-color: white;*/
-    /*-fx-text-fill: white;*/
-    /*-fx-prompt-text-fill: white;*/
 }
 
 .table-view{

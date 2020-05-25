@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXNodesList?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -138,15 +139,23 @@
                                     <Insets right="6.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXDatePicker fx:id="datePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" promptText="start date" styleClass="datePickerFilter">
+                              <JFXDatePicker fx:id="datePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" promptText="Start date">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
+                                 <styleClass>
+                                    <String fx:value="dateTimePicker" />
+                                    <String fx:value="datePickerFilter" />
+                                 </styleClass>
                               </JFXDatePicker>
-                              <JFXDatePicker fx:id="datePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" promptText="end date" styleClass="datePickerFilter" GridPane.columnIndex="1">
+                              <JFXDatePicker fx:id="datePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" promptText="End date" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
+                                 <styleClass>
+                                    <String fx:value="dateTimePicker" />
+                                    <String fx:value="datePickerFilter" />
+                                 </styleClass>
                               </JFXDatePicker>
                            </children>
                            <padding>
