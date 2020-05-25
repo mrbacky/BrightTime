@@ -20,6 +20,21 @@ public class User {
 
     private UserType type;
 
+    public enum UserType {
+        ADMINISTRATOR {
+            @Override
+            public String toString() {
+                return "Admin";
+            }
+        },
+        STANDARD {
+            @Override
+            public String toString() {
+                return "Standard";
+            }
+        }
+    }
+
     //  contructor for creating User
     public User(String firstName, String lastName, String username, String password, UserType type) {
         this.firstName.set(firstName);
@@ -76,10 +91,6 @@ public class User {
 
     public StringProperty lastNameProperty() {
         return lastName;
-    }
-
-    public enum UserType {
-        ADMINISTRATOR, STANDARD
     }
 
     public UserType getType() {
