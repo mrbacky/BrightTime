@@ -52,7 +52,7 @@
     -jfx-unfocus-color: transparent;    
     -fx-padding: 3.5 5 3.5 5;
     -jfx-label-float: true;    
-    -fx-prompt-text-fill: black;
+    -fx-prompt-text-fill: gray;
 }
 
 .txtCreateUserMiddle{
