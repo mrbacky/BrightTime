@@ -214,6 +214,9 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;
+    -fx-text-fill: #435A9A;
+    -fx-font-weight: bold;
+    -fx-font-size: 10;
 }
 
 .jfx-date-picker .jfx-text-field{
