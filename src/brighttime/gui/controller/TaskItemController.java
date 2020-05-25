@@ -246,8 +246,10 @@ public class TaskItemController implements Initializable {
                     initTaskEntries();
                     imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
                     btnExpandTask.setSelected(true);
+                    btnExpandTask.setDisable(false);
+
                 } else {
-                    timeTrackerController.initTasks();
+                    timeTrackerController.initializeView();
                 }
                 //  refresh
 //                timeTrackerController.initializeView();

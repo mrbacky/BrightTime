@@ -1,6 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.be.TaskConcrete1;
+import brighttime.be.TaskEntry;
 import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
@@ -20,10 +21,13 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -90,8 +94,6 @@ public class TimeTrackerController implements Initializable {
             initTasks();
 
             switchLoggingMode();
-            System.out.println("called");
-            System.out.println("called");
 
         } catch (ModelException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,10 +129,12 @@ public class TimeTrackerController implements Initializable {
         vBoxMain.getChildren().clear();
         Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTasks();
         Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+
         orderedMap.putAll(taskList);
         for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
             LocalDate dateKey = entry.getKey();
             List<TaskConcrete1> taskListValue = entry.getValue();
+
             if (!dateKey.equals(date)) {
 
                 String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
@@ -141,6 +145,7 @@ public class TimeTrackerController implements Initializable {
                 date = dateKey;
             }
             for (TaskConcrete1 task : taskListValue) {
+
                 addTaskItem(task);
             }
         }
@@ -149,6 +154,7 @@ public class TimeTrackerController implements Initializable {
 
     private void addTaskItem(TaskConcrete1 task) {
         try {
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
             Parent root = fxmlLoader.load();
             ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
@@ -162,6 +168,7 @@ public class TimeTrackerController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     void injectCreateTaskController(CreateTaskController contr) {

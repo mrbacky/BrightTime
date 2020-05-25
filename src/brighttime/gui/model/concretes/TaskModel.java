@@ -207,9 +207,9 @@ public class TaskModel implements ITaskModel {
                     task.getUser().getUsername()));
 
             TaskEntry newTaskEntry = new TaskEntry(task, tempStartTime, tempEndTime);
-            task.getTaskEntryList().add(newTaskEntry);
-            bllManager.createTaskEntry(newTaskEntry);
-            obsEntries.add(newTaskEntry);
+            TaskEntry freshTaskEntry = bllManager.createTaskEntry(newTaskEntry);
+            task.getTaskEntryList().add(freshTaskEntry);
+            setUpDayEntryList();
 //            setTaskStartTime();
 //            setTaskEndTime();
 //            setTaskDuration();
@@ -258,6 +258,7 @@ public class TaskModel implements ITaskModel {
         List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
                 -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
         dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
+        obsEntries.clear();
         obsEntries.addAll(dayEntries);
 
     }
@@ -269,7 +270,6 @@ public class TaskModel implements ITaskModel {
             setTaskStartTime();
             setTaskEndTime();
             setTaskDuration();
-            System.out.println("in obsEnties listener");
         });
     }
 
