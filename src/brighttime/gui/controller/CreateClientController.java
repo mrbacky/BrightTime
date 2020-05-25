@@ -54,8 +54,13 @@ public class CreateClientController implements Initializable {
 
     void initializeView() throws IOException {
         System.out.println("in CreateClient page");
-        validationManager.inputValidation(txtName, "No name written.");
+        setValidators();
         addClient();
+    }
+
+    private void setValidators() {
+        validationManager.inputValidation(txtName, "No name written.");
+        validationManager.inputValidation(txtHourlyRate, "Optional.");
     }
 
     /**
@@ -70,6 +75,7 @@ public class CreateClientController implements Initializable {
                         hourlyRate = Integer.parseInt(txtHourlyRate.getText().trim());
                     }
                     mainModel.addClient(new Client(txtName.getText().trim(), hourlyRate));
+                    clearInputs();
                     System.out.println("Action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the client.", "An error occured: " + ex.getMessage());
@@ -78,6 +84,11 @@ public class CreateClientController implements Initializable {
                 alertManager.showAlert("No client name was entered.", "Please enter a name for the new client.");
             }
         });
+    }
+
+    private void clearInputs() {
+        txtName.clear();
+        txtHourlyRate.clear();
     }
 
 }

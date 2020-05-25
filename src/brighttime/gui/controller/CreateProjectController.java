@@ -103,7 +103,7 @@ public class CreateProjectController implements Initializable {
                             cboClient.getSelectionModel().getSelectedItem(),
                             hourlyRate)
                     );
-                    System.out.println("Action event is working!");
+                    clearInputs();
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the project.", "An error occured: " + ex.getMessage());
                 }
@@ -113,6 +113,12 @@ public class CreateProjectController implements Initializable {
                 alertManager.showAlert("No client is selected.", "Please select a client.");
             }
         });
+    }
+
+    private void clearInputs() {
+        txtName.clear();
+        cboClient.getSelectionModel().clearSelection();
+        txtHourlyRate.clear();
     }
 
 }
