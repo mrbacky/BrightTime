@@ -91,15 +91,23 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <JFXComboBox fx:id="cboClients" prefHeight="30.0" prefWidth="190.0" promptText="Client" styleClass="cboCommon">
+                              <JFXComboBox fx:id="cboClients" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0" prefWidth="190.0" promptText="Select a client">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
                                  <GridPane.margin>
                                     <Insets bottom="5.0" top="5.0" />
                                  </GridPane.margin>
+                                 <styleClass>
+                                    <String fx:value="txtCommon" />
+                                    <String fx:value="cboCommon" />
+                                 </styleClass>
                               </JFXComboBox>
-                              <JFXComboBox fx:id="cboProjects" minHeight="-Infinity" prefHeight="30.0" prefWidth="190.0" promptText="Project" styleClass="cboCommon" GridPane.rowIndex="1" />
+                              <JFXComboBox fx:id="cboProjects" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0" prefWidth="190.0" promptText="Select a project" GridPane.rowIndex="1">
+                                 <styleClass>
+                                    <String fx:value="txtCommon" />
+                                    <String fx:value="cboCommon" />
+                                 </styleClass></JFXComboBox>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -175,13 +183,17 @@
                               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <JFXComboBox fx:id="cboUsers" prefHeight="30.0" prefWidth="190.0" promptText="User" styleClass="cboCommon">
+                              <JFXComboBox fx:id="cboUsers" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0" prefWidth="190.0" promptText="Select a user">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
                                  <GridPane.margin>
                                     <Insets bottom="2.0" top="5.0" />
                                  </GridPane.margin>
+                                 <styleClass>
+                                    <String fx:value="txtCommon" />
+                                    <String fx:value="cboCommon" />
+                                 </styleClass>
                               </JFXComboBox>
                            </children>
                            <padding>
