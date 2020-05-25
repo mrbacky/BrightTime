@@ -219,6 +219,22 @@
     -fx-font-size: 10;
 }
 
+.datePickerFilter{    
+    -jfx-default-color: #00A99D;
+}
+
+.datePickerFilter .jfx-text-field{
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: white;
+    -fx-prompt-text-fill: lightgray;
+    -fx-text-fill: #435A9A;
+    -fx-font-size: 10;
+    -fx-alignment: CENTER;
+    -jfx-label-float: true;
+    -jfx-focus-color: #00A99D;
+    -jfx-unfocus-color: transparent;
+}
+
 .jfx-date-picker .jfx-text-field{
     /*-jfx-unfocus-color: white;*/
     /*-jfx-default-color: white;*/
