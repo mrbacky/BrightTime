@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -66,5 +67,9 @@ public interface ITaskEntryModel {
     void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException;
 
     void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException;
+
+    void initializeTaskEntryModel();
+    
+   
 
 }

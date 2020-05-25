@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -36,6 +37,7 @@ public class MainModel implements IMainModel {
     private final InputValidator inputValidator;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
+
     private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
     private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
     private final ObservableList<User> userList = FXCollections.observableArrayList();
@@ -148,34 +150,50 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
-        try {
-            //Created the task in the project "LEGO":
-            bllManager.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Created the task in the project \"" + task.getProject().getName() + "\": "
-                    + task.getDescription() + ".",
-                    user.getUsername()));
 
-            TaskConcrete1 freshTask = bllManager.createTask(task);
-            if (freshTask.getTaskEntryList() == null) {
-                List<TaskEntry> entryList = new ArrayList();
-                freshTask.setTaskEntryList(entryList);
-            }
-            System.out.println("date " + freshTask.getCreationTime().toLocalDate());
-            List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
-            if (taskList == null) {
-                taskList = new ArrayList<>();
-                taskList.add(freshTask);
-                taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
-            } else {
-                taskList.add(0, freshTask);
-                taskMap.remove(freshTask.getCreationTime().toLocalDate());
-                taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+        //Created the task in the project "LEGO":
+        Thread t = new Thread(() -> {
+            try {
+                long startTimeT = System.currentTimeMillis();
+                bllManager.logEvent(new EventLog(
+                        EventLog.EventType.INFORMATION,
+                        "Created the task in the project \"" + task.getProject().getName() + "\": "
+                        + task.getDescription() + ".",
+                        user.getUsername()));
+                System.out.println("Time Thread log " + (System.currentTimeMillis() - startTimeT) + "--------------------------------------------");
 
+                startTimeT = System.currentTimeMillis();
+                TaskConcrete1 freshTask = bllManager.createTask(task);
+                System.out.println("Time Thread createTask " + (System.currentTimeMillis() - startTimeT) + "--------------------------------------------");
+
+                Platform.runLater(() -> { // Puts this on EventQueue to be handled by FX Application Thread
+                    long startTime = System.currentTimeMillis();
+                    if (freshTask.getTaskEntryList() == null) {
+                        List<TaskEntry> entryList = new ArrayList();
+                        freshTask.setTaskEntryList(entryList);
+                    }
+                    System.out.println("date " + freshTask.getCreationTime().toLocalDate());
+                    List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
+                    if (taskList == null) {
+                        taskList = new ArrayList<>();
+                        taskList.add(freshTask);
+                        taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+                    } else {
+                        taskList.add(0, freshTask);
+                        taskMap.remove(freshTask.getCreationTime().toLocalDate());
+                        taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+
+                    }
+                    System.out.println("Time runLater GUI elements " + (System.currentTimeMillis() - startTime) + "--------------------------------------------");
+
+                });
+            } catch (BllException ex) {
+                Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex); // TODO
             }
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
         }
+        );
+        t.setDaemon(true);
+        t.start();
 
     }
 
@@ -191,6 +209,7 @@ public class MainModel implements IMainModel {
                     EventLog.EventType.INFORMATION,
                     "Loaded all tasks for the Time Tracker.",
                     user.getUsername()));
+
             Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user);
 //            if(taskMapListener!=null)
             //  temp removal

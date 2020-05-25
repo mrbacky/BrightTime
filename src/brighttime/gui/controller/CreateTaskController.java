@@ -186,6 +186,7 @@ public class CreateTaskController implements Initializable {
         //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
         btnAdd.setOnAction((event) -> {//   change name method.
             if (validateInput()) {
+                // Slow part
                 if (!manualMode) {
                     try {
                         TaskConcrete1 newTask = makeTask();
@@ -206,6 +207,7 @@ public class CreateTaskController implements Initializable {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                     }
                 }
+                // Slow part
             }
         });
     }

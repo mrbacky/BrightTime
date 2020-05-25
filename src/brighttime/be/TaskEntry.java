@@ -79,4 +79,9 @@ public class TaskEntry {
         return endTime;
     }
 
+    @Override
+    public String toString() {
+        return getTask().getDescription() + " " + startTime + " " + endTime;
+    }
+
 }

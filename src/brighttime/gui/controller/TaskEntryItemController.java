@@ -103,8 +103,7 @@ public class TaskEntryItemController implements Initializable {
                 taskEntryModel.updateTaskEntryStartTime(taskEntry);
                 oldStartTime = taskEntry.getStartTime().toLocalTime();
                 //  workaround
-                timeTrackerController.initTasks();
-                System.out.println("startTime: " + taskEntry.getStartTime());
+//                timeTrackerController.initTasks();    -----------------------------------------------------------------------------------------------
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
             }
@@ -130,9 +129,10 @@ public class TaskEntryItemController implements Initializable {
             try {
                 taskEntry.setEndTime(LocalDateTime.of(entryDate, updatedEndTime));
                 taskEntryModel.updateTaskEntryEndTime(taskEntry);
-//                oldEndTime = taskEntry.getEndTime().toLocalTime();
+                oldEndTime = taskEntry.getEndTime().toLocalTime();
                 System.out.println("endTime: " + taskEntry.getEndTime());
-                timeTrackerController.initTasks();
+                //  workaround
+//                timeTrackerController.initTasks();    -----------------------------------------------------------------------------------------------
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
             }
@@ -157,7 +157,6 @@ public class TaskEntryItemController implements Initializable {
         oldEndTime = taskEntryModel.getTaskEntry().getEndTime().toLocalTime();
 
     }
-
 
     private void display24HourView() {
         timePickerStartTime.set24HourView(true);

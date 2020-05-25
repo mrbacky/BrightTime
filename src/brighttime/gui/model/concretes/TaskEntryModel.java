@@ -33,6 +33,14 @@ public class TaskEntryModel implements ITaskEntryModel {
 
     public TaskEntryModel(BllFacade bllManager) {
         this.bllManager = bllManager;
+
+    }
+
+    @Override
+    public void initializeTaskEntryModel() {
+        setStartTime(taskEntry.getStartTime().toLocalTime());
+        setEndTime(taskEntry.getEndTime().toLocalTime());
+        setStringDuration(secToFormat(calculateDuration(taskEntry).toSeconds()));
         setupStartTimeListener();
         setupEndTimeListener();
     }
@@ -139,6 +147,7 @@ public class TaskEntryModel implements ITaskEntryModel {
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
                 LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeLDT);
+                System.out.println("taskEntry startTime: " + taskEntry.getStartTime());
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
         });
@@ -160,6 +169,7 @@ public class TaskEntryModel implements ITaskEntryModel {
         try {
             logEvent(taskEntry);
             bllManager.updateTaskEntryStartTime(taskEntry);
+
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
