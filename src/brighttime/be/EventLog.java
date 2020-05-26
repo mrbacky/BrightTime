@@ -8,12 +8,10 @@ public class EventLog {
 
     private EventType type;
     private String description;
-    private String username;
 
-    public EventLog(EventType type, String description, String username) {
+    public EventLog(EventType type, String description) {
         this.type = type;
         this.description = description;
-        this.username = username;
     }
 
     public enum EventType {
@@ -34,14 +32,6 @@ public class EventLog {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
 }

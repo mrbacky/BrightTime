@@ -151,6 +151,14 @@ public class ManageUsersController implements Initializable {
             e.getTableView().getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
             User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
             updateUserDetails(updatedUser);
+
+//            Søren pseudo code:            
+//            String oldvalue = e.getNewValue();
+//            User dbResult = updateUserDetails(updatedUser);
+//            if (dbResult == null) //was not allowed
+//               e.getTableView().getItems().get(e.getTablePosition().getRow()).setUsername(oldvalue);
+//            
+//            updateUserDetails(updatedUser);
         });
 
         ObservableList<User.UserType> userTypes = FXCollections.observableArrayList(User.UserType.values());
@@ -226,7 +234,7 @@ public class ManageUsersController implements Initializable {
             mainModel.updateUserDetails(updatedUser);
         } catch (ModelException ex) {
             alertManager.showAlert("Could not update the new user details.", "An error occured: " + ex.getMessage());
-            }
+        }
 
     }
 

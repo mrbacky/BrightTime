@@ -1,6 +1,5 @@
 package brighttime.gui.model.concretes;
 
-import brighttime.be.EventLog;
 import brighttime.be.TaskEntry;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
@@ -167,7 +166,6 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException {
         try {
-            logEvent(taskEntry);
             bllManager.updateTaskEntryStartTime(taskEntry);
 
         } catch (BllException ex) {
@@ -178,21 +176,10 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException {
         try {
-            logEvent(taskEntry);
             bllManager.updateTaskEntryEndTime(taskEntry);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
-    }
-
-    private void logEvent(TaskEntry taskEntry) throws BllException {
-        //TODO: EventLog check exception handling.        
-        bllManager.logEvent(new EventLog(
-                EventLog.EventType.INFORMATION,
-                "Updated a task entry in the task \"" + taskEntry.getTask().getDescription()
-                + "\" in the project \"" + taskEntry.getTask().getProject().getName()
-                + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime(),
-                taskEntry.getTask().getUser().getUsername()));
     }
 
 }

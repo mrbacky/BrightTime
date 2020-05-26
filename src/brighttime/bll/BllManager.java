@@ -283,15 +283,6 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public void logEvent(EventLog log) throws BllException {
-        try {
-            dalManager.logEvent(log);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
-    @Override
     public User updateUserDetails(User updatedUser) throws BllException {
         try {
             return dalManager.updateUserDetails(updatedUser);

@@ -1,4 +1,4 @@
-package brighttime.gui.model.util;
+package brighttime.gui.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

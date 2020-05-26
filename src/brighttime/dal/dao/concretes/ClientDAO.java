@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import brighttime.dal.dao.interfaces.IEventLogDAO;
+import java.util.Arrays;
 
 /**
  *
@@ -44,13 +45,16 @@ public class ClientDAO implements IClientDAO {
             if (rs != null && rs.next()) {
                 client.setId(rs.getInt(1));
             }
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Created the client: " + client.getName() + ", " + client.getHourlyRate() + " DKK/hour."));
+
             return client;
         } catch (SQLException ex) {
-            //TODO: EventLog. Is this correct?
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful client creation: " + client.getName() + ". " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful client creation: " + client.getName() + ". " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
@@ -69,12 +73,16 @@ public class ClientDAO implements IClientDAO {
             while (rs.next()) {
                 clients.add(new Client(rs.getInt("id"), rs.getString("name"), rs.getInt("hourlyRate")));
             }
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Loaded all clients."));
+
             return clients;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful getting all clients. " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful getting all clients. " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
@@ -89,31 +97,39 @@ public class ClientDAO implements IClientDAO {
             pstmt.setInt(2, client.getHourlyRate());
             pstmt.setInt(3, client.getId());
             pstmt.executeUpdate();
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Updated the client \"" + client.getName() + "\"."));
+
             return client;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful updating the client \"" + client.getName() + "\". " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful updating the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
 
     @Override
     public Client deleteClient(Client client) throws DalException {
-        //TODO: Ask about deletion.
+        //TODO: Change deletion method.
         String sql = "DELETE FROM Client WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, client.getId());
             pstmt.executeUpdate();
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Deleted the client \"" + client.getName() + "\"."));
+
             return client;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful deleting the client \"" + client.getName() + "\". " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful deleting the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }

@@ -120,8 +120,6 @@ public interface BllFacade {
 
     User createUser(User user) throws BllException;
 
-    void logEvent(EventLog log) throws BllException;
-
     User updateUserDetails(User updatedUser) throws BllException;
 
     boolean hasTask(User user) throws BllException;

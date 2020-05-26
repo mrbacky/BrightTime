@@ -1,12 +1,11 @@
 package brighttime.gui.model.concretes;
 
-import brighttime.be.EventLog;
 import brighttime.be.User;
 import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IAuthenticationModel;
-import brighttime.gui.model.util.InputValidator;
+import brighttime.gui.util.InputValidator;
 
 /**
  *
@@ -31,10 +30,6 @@ public class AuthenticationModel implements IAuthenticationModel {
             throw new ModelException("The password is invalid. Please try again.");
         }
         try {
-            bllManager.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Authenticate user.",
-                    username));
             return bllManager.authenticateUser(username, password);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());

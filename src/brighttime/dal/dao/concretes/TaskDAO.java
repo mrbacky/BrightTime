@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,13 +72,17 @@ public class TaskDAO implements ITaskDAO {
                 }
             }
 
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Created the task in the project \"" + task.getProject().getName() + "\": "
+                    + task.getDescription() + "."));
+
             return task;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
                     "Unsuccessful task creation for \"" + task.getProject().getName() + "\": "
-                    + task.getDescription() + ". " + ex.getMessage(),
-                    "System"));
+                    + task.getDescription() + ". " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
@@ -187,12 +192,16 @@ public class TaskDAO implements ITaskDAO {
 
                 dateMap = buildDateMap(dateMap, newTask, dateOfTask);
             }
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Loaded all tasks for the Time Tracker."));
+
             return dateMap;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful getting tasks for the Time Tracker. " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful getting tasks for the Time Tracker. " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
@@ -258,7 +267,6 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                //TODO: Is it necessary to get unused info?
                 String rsBillability = rs.getString("billability");
 
                 int rate;
@@ -286,12 +294,16 @@ public class TaskDAO implements ITaskDAO {
                         rate
                 ));
             }
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Loaded all tasks for the Overview."));
+
             return allTasks;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful getting tasks for the Overview. " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful getting tasks for the Overview. " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
@@ -346,8 +358,6 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                //TODO: Is it necessary to get unused info?
-
                 String rsBillability = rs.getString("billability");
 
                 int rate;
@@ -375,12 +385,16 @@ public class TaskDAO implements ITaskDAO {
                         rate
                 ));
             }
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Loaded all filtered tasks for the Overview."));
+
             return filtered;
         } catch (SQLException ex) {
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful getting filtered tasks for the Overview. " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful getting filtered tasks for the Overview. " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
     }
@@ -414,6 +428,8 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public boolean hasTask(User user) throws DalException {
+        boolean hasTask = false;
+
         String sql = "SELECT TOP (1) id "
                 + "FROM Task "
                 + "WHERE userId = ?";
@@ -424,17 +440,20 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                return true;
+                hasTask = true;
             }
+
+            logDAO.logEvent(new EventLog(
+                    EventLog.EventType.INFORMATION,
+                    "Checked if the user has a task."));
         } catch (SQLException ex) {
             //TODO: EventLog, edit message.
             logDAO.logEvent(new EventLog(
                     EventLog.EventType.ERROR,
-                    "Unsuccessful in checking if the user has a task. " + ex.getMessage(),
-                    "System"));
+                    "Unsuccessful in checking if the user has a task. " + Arrays.toString(ex.getStackTrace())));
             throw new DalException(ex.getMessage());
         }
-        return false;
+        return hasTask;
     }
 
 }

@@ -246,7 +246,7 @@ public class DalManager implements DalFacade {
 
     @Override
     public User inactivateUser(User user) throws DalException {
-        return userDAO.inactivateUser(user);
+        return userDAO.deactivateUser(user);
     }
 
     @Override
