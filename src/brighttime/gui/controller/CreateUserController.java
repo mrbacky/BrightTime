@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brighttime.gui.controller;
 
 import brighttime.be.User;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.InputValidator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
@@ -43,6 +39,7 @@ public class CreateUserController implements Initializable {
     @FXML
     private JFXPasswordField passField1;
     private final AlertManager alertManager;
+    private final InputValidator inputValidator;
     private IMainModel mainModel;
     private String password1;
     private String password2;
@@ -50,6 +47,7 @@ public class CreateUserController implements Initializable {
 
     public CreateUserController() {
         this.alertManager = new AlertManager();
+        this.inputValidator = new InputValidator();
     }
 
     /**
@@ -134,6 +132,11 @@ public class CreateUserController implements Initializable {
             return false;
         }
 
+        if (!inputValidator.usernameCheck(textFieldUserName.getText())) {
+            alertManager.showAlert("The username is invalid.", "Please try another username.");
+            return false;
+        }
+
         if (password1.isEmpty()) {
             alertManager.showAlert("No password was entered.", "Please enter a password.");
             return false;
@@ -142,11 +145,15 @@ public class CreateUserController implements Initializable {
             alertManager.showAlert("No password confirmation was entered.", "Please enter a password confirmation.");
             return false;
         }
-        if (!passField1.getText().equals(passField2.getText())) {
+        if (!password1.equals(password2)) {
             System.out.println("p1: " + password1);
             System.out.println("p2: " + password2);
 
             alertManager.showAlert("The password didn't match.", "Try again.");
+            return false;
+        }
+        if (!inputValidator.passwordCheck(password1)) {
+            alertManager.showAlert("The password is invalid.", "Please enter another password, which satisfies the requirements.");
             return false;
         }
         return true;

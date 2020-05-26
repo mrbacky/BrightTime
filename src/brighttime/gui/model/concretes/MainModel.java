@@ -263,21 +263,11 @@ public class MainModel implements IMainModel {
 
     @Override
     public void createUser(User user) throws ModelException {
-        if (!inputValidator.usernameCheck(user.getUsername())) {
-            throw new ModelException("The username is invalid. Please try another username.");
-        }
-        if (!inputValidator.passwordCheck(user.getPassword())) {
-            throw new ModelException("The password is invalid. Please enter another password.");
-        }
-        if (checkUsernameAvailability(user.getUsername()) == 0) {
-            try {
-                User newUser = bllManager.createUser(user);
-                userList.add(newUser);
-            } catch (BllException ex) {
-                throw new ModelException(ex.getMessage());
-            }
-        } else {
-            throw new ModelException("Someone already has this username. Please try another username.");
+        try {
+            User newUser = bllManager.createUser(user);
+            userList.add(newUser);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
         }
     }
 
@@ -286,17 +276,11 @@ public class MainModel implements IMainModel {
         if (!inputValidator.usernameCheck(user.getUsername())) {
             throw new ModelException("The username is invalid. Please try another username.");
         }
-        int result = checkUsernameAvailability(updatedUser.getUsername());
-        if (result == 0 || result == updatedUser.getId()) {
-            try {
-                return bllManager.updateUserDetails(updatedUser);
-            } catch (BllException ex) {
-                throw new ModelException(ex.getMessage());
-            }
-        } else {
-            throw new ModelException("Someone already has this username. Please try another username.");
+        try {
+            return bllManager.updateUserDetails(updatedUser);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
         }
-
     }
 
     @Override

@@ -1,7 +1,6 @@
 package brighttime.bll;
 
 import brighttime.be.Client;
-import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskBase;
@@ -275,19 +274,28 @@ public class BllManager implements BllFacade {
      */
     @Override
     public User createUser(User user) throws BllException {
-        try {
-            return dalManager.createUser(user);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
+        if (checkUsernameAvailability(user.getUsername()) == 0) {
+            try {
+                return dalManager.createUser(user);
+            } catch (DalException ex) {
+                throw new BllException(ex.getMessage());
+            }
+        } else {
+            throw new BllException("Someone already has this username. Please try another username.");
         }
     }
 
     @Override
     public User updateUserDetails(User updatedUser) throws BllException {
-        try {
-            return dalManager.updateUserDetails(updatedUser);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
+        int result = checkUsernameAvailability(updatedUser.getUsername());
+        if (result == 0 || result == updatedUser.getId()) {
+            try {
+                return dalManager.updateUserDetails(updatedUser);
+            } catch (DalException ex) {
+                throw new BllException(ex.getMessage());
+            }
+        } else {
+            throw new BllException("Someone already has this username. Please try another username.");
         }
     }
 
