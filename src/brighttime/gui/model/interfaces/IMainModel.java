@@ -89,8 +89,6 @@ public interface IMainModel {
 
     void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
 
-    int checkUsernameAvailability(String username) throws ModelException;
-
     void createUser(User user) throws ModelException;
 
     User updateUserDetails(User updatedUser) throws ModelException;

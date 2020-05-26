@@ -9,6 +9,7 @@ import brighttime.be.User;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.InputValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -83,9 +84,11 @@ public class ManageUsersController implements Initializable {
     @FXML
     private MenuItem menuItemDeleteUser;
     private final AlertManager alertManager;
+    private final InputValidator inputValidator;
 
     public ManageUsersController() {
         this.alertManager = new AlertManager();
+        this.inputValidator = new InputValidator();
     }
 
     /**
@@ -150,9 +153,14 @@ public class ManageUsersController implements Initializable {
         colUserName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
             e.getTableView().getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
             User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-            updateUserDetails(updatedUser);
 
-//            Søren pseudo code:            
+            if (inputValidator.usernameCheck(updatedUser.getUsername())) {
+                updateUserDetails(updatedUser);
+            } else {
+                alertManager.showAlert("The username is invalid.", "Please try another username.");
+            }
+
+//            Søren pseudo code (I am too tired to do this... but you can try if you want.):            
 //            String oldvalue = e.getNewValue();
 //            User dbResult = updateUserDetails(updatedUser);
 //            if (dbResult == null) //was not allowed

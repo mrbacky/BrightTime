@@ -32,7 +32,6 @@ import javafx.collections.ObservableMap;
 public class MainModel implements IMainModel {
 
     private final BllFacade bllManager;
-    private final InputValidator inputValidator;
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
 
@@ -44,7 +43,6 @@ public class MainModel implements IMainModel {
 
     public MainModel(BllFacade bllManager) {
         this.bllManager = bllManager;
-        this.inputValidator = new InputValidator();
     }
 
     @Override
@@ -252,16 +250,6 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public int checkUsernameAvailability(String username) throws ModelException {
-        try {
-
-            return bllManager.checkUsernameAvailability(username);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
     public void createUser(User user) throws ModelException {
         try {
             User newUser = bllManager.createUser(user);
@@ -273,9 +261,6 @@ public class MainModel implements IMainModel {
 
     @Override
     public User updateUserDetails(User updatedUser) throws ModelException {
-        if (!inputValidator.usernameCheck(user.getUsername())) {
-            throw new ModelException("The username is invalid. Please try another username.");
-        }
         try {
             return bllManager.updateUserDetails(updatedUser);
         } catch (BllException ex) {
