@@ -122,10 +122,6 @@ public interface BllFacade {
 
     User updateUserDetails(User updatedUser) throws BllException;
 
-    boolean hasTask(User user) throws BllException;
-
-    User inactivateUser(User user) throws BllException;
-
     User deleteUser(User selectedUser) throws BllException;
 
 }

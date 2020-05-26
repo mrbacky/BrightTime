@@ -148,7 +148,7 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public User inactivateUser(User user) throws DalException {
+    public User deactivateUser(User user) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

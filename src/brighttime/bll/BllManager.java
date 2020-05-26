@@ -292,27 +292,15 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public boolean hasTask(User user) throws BllException {
+    public User deleteUser(User user) throws BllException {
+        User selected;
         try {
-            return dalManager.hasTask(user);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public User inactivateUser(User user) throws BllException {
-        try {
-            return dalManager.inactivateUser(user);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public User deleteUser(User selectedUser) throws BllException {
-        try {
-            return dalManager.deleteUser(selectedUser);
+            if (dalManager.hasTask(user)) {
+                selected = dalManager.deactivateUser(user);
+            } else {
+                selected = dalManager.deleteUser(user);
+            }
+            return selected;
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
