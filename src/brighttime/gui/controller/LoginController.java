@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brighttime.gui.controller;
 
 import brighttime.be.User;
@@ -11,6 +6,7 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IAuthenticationModel;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.InputValidator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -32,7 +28,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javax.swing.JTree;
 
 /**
  * FXML Controller class
@@ -44,6 +39,8 @@ public class LoginController implements Initializable {
     private final String ROOT_PATH = "/brighttime/gui/view/Root.fxml";
     private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
     private final AlertManager alertManager;
+    private final InputValidator inputValidator;
+
     @FXML
     private JFXTextField txtUsername;
     @FXML
@@ -55,6 +52,7 @@ public class LoginController implements Initializable {
 
     public LoginController() throws ModelException {
         alertManager = new AlertManager();
+        this.inputValidator = new InputValidator();
         try {
             authenticationModel = ModelCreator.getInstance().createAuthenticationModel();
         } catch (IOException ex) {
@@ -79,7 +77,9 @@ public class LoginController implements Initializable {
 
     @FXML
     private void loginBtnPressed(ActionEvent event) {
-        authenticateUser();
+        if (validateInput()) {
+            authenticateUser();
+        }
     }
 
     private void fieldValidator() {
@@ -147,6 +147,26 @@ public class LoginController implements Initializable {
         Stage loginStage;
         loginStage = (Stage) btnLogIn.getScene().getWindow();
         loginStage.close();
+    }
+
+    private boolean validateInput() {
+        if (txtUsername.getText().trim().isEmpty()) {
+            alertManager.showAlert("No username was entered.", "Please enter a username.");
+            return false;
+        }
+        if (!inputValidator.usernameCheck(txtUsername.getText())) {
+            alertManager.showAlert("The username is invalid.", "Please try again.");
+            return false;
+        }
+        if (txtPassword.getText().trim().isEmpty()) {
+            alertManager.showAlert("No password was entered.", "Please enter a password.");
+            return false;
+        }
+        if (!inputValidator.passwordCheck(txtPassword.getText())) {
+            alertManager.showAlert("The password is invalid.", "Please try again.");
+            return false;
+        }
+        return true;
     }
 
 }
