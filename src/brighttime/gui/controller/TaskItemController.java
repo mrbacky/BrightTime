@@ -7,20 +7,16 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.ITaskEntryModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import brighttime.gui.util.AlertManager;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +27,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -143,6 +138,7 @@ public class TaskItemController implements Initializable {
 
     private void showTaskEntries() {
         imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
+        btnExpandTask.setSelected(true);
         if (!taskModel.getObsEntries().isEmpty()) {
             initTaskEntries();
         }
@@ -170,6 +166,7 @@ public class TaskItemController implements Initializable {
             taskEntryModel.initializeTaskEntryModel();
             TaskEntryItemController controller = fxmlLoader.getController();
             controller.injectTaskEntryModel(taskEntryModel);
+            controller.initializeView();
             vBoxTaskEntries.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);

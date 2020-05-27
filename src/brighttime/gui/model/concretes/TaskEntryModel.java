@@ -146,7 +146,6 @@ public class TaskEntryModel implements ITaskEntryModel {
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
                 LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeLDT);
-                System.out.println("taskEntry startTime: " + taskEntry.getStartTime());
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
         });

@@ -37,7 +37,7 @@ import javafx.util.converter.LocalTimeStringConverter;
  */
 public class TaskEntryItemController implements Initializable {
 
-    private static final String DATE_TIME_FORMAT = "HH:mm";
+    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
 
     @FXML
     private JFXTextField textFieldTaskEntryDesc;
@@ -50,12 +50,11 @@ public class TaskEntryItemController implements Initializable {
     @FXML
     private JFXButton btnRemoveTask;
 
-    private ITaskEntryModel taskEntryModel;
     private final AlertManager alertManager;
+
     private LocalTime oldStartTime;
     private LocalTime oldEndTime;
-
-    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
+    private ITaskEntryModel taskEntryModel;
 
     public TaskEntryItemController() {
         this.alertManager = new AlertManager();
@@ -66,85 +65,19 @@ public class TaskEntryItemController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        display24HourView();
     }
 
     public void injectTaskEntryModel(ITaskEntryModel taskEntryModel) {
         this.taskEntryModel = taskEntryModel;
+
+    }
+
+    void initializeView() {
         setTaskEntryDetails(taskEntryModel.getTaskEntry());
         setOldStartTime();
         setOldEndTime();
-
+        display24HourView();
     }
-
-    public void setTaskEntryDetails(TaskEntry taskEntry) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-        textFieldTaskEntryDesc.textProperty().bind(Bindings.createStringBinding(()
-                -> taskEntry.getTask().getDescription(), taskEntryModel.entryDescriptionProperty()));
-
-        timePickerStartTime.valueProperty().bindBidirectional(taskEntryModel.startTimeProperty());
-        timePickerEndTime.valueProperty().bindBidirectional(taskEntryModel.endTimeProperty());
-
-        lblDuration.textProperty().bind(taskEntryModel.stringDurationProperty());
-
-//        lblDuration.textProperty().bind(Bindings.createStringBinding(()
-//                -> taskEntryModel.secToFormat(taskEntryModel.calculateDuration(taskEntry).toSeconds()), taskEntryModel.stringDurationProperty()));
-    }
-
-    @FXML
-    private void handleEditStartTime(Event event) throws ModelException {
-        LocalTime updatedStartTime = timePickerStartTime.getValue();
-        TaskEntry taskEntry = taskEntryModel.getTaskEntry();
-        LocalDate entryDate = taskEntry.getStartTime().toLocalDate();
-        if (updatedStartTime.isBefore(taskEntry.getEndTime().toLocalTime()) && !updatedStartTime.equals(oldStartTime)) {
-            try {
-                taskEntry.setStartTime(LocalDateTime.of(entryDate, updatedStartTime));
-                taskEntryModel.updateTaskEntryStartTime(taskEntry);
-                oldStartTime = taskEntry.getStartTime().toLocalTime();
-                //  workaround
-//                timeTrackerController.initTasks();    -----------------------------------------------------------------------------------------------
-            } catch (ModelException ex) {
-                alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
-            }
-
-        } else if (updatedStartTime.isAfter(taskEntry.getEndTime().toLocalTime())) {
-            Platform.runLater(() -> {
-                alertManager.showAlert("Invalid input", "Start time has to be before end time");
-                timePickerStartTime.show();
-
-            });
-        }
-
-    }
-
-    @FXML
-    private void handleEditEndTime(Event event) throws ModelException {
-
-        TaskEntry taskEntry = taskEntryModel.getTaskEntry();
-        LocalTime updatedEndTime = timePickerEndTime.getValue();
-        LocalDate entryDate = taskEntry.getEndTime().toLocalDate();
-
-        if (updatedEndTime.isAfter(taskEntry.getStartTime().toLocalTime()) && !updatedEndTime.equals(oldEndTime)) {
-            try {
-                taskEntry.setEndTime(LocalDateTime.of(entryDate, updatedEndTime));
-                taskEntryModel.updateTaskEntryEndTime(taskEntry);
-                oldEndTime = taskEntry.getEndTime().toLocalTime();
-                System.out.println("endTime: " + taskEntry.getEndTime());
-                //  workaround
-//                timeTrackerController.initTasks();    -----------------------------------------------------------------------------------------------
-            } catch (ModelException ex) {
-                alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
-            }
-        } else if (updatedEndTime.isBefore(taskEntry.getStartTime().toLocalTime())) {
-            Platform.runLater(() -> {
-                alertManager.showAlert("Invalid input", "End time has to be after start time");
-                timePickerEndTime.show();
-            });
-        }
-
-    }
-
-    
 
     private void setOldStartTime() {
         oldStartTime = taskEntryModel.getTaskEntry().getStartTime().toLocalTime();
@@ -160,6 +93,58 @@ public class TaskEntryItemController implements Initializable {
         timePickerStartTime.converterProperty().setValue(timeConverter);
         timePickerEndTime.set24HourView(true);
         timePickerEndTime.converterProperty().setValue(timeConverter);
+    }
+
+    public void setTaskEntryDetails(TaskEntry taskEntry) {
+        textFieldTaskEntryDesc.setText(taskEntry.getTask().getDescription());
+        timePickerStartTime.valueProperty().bindBidirectional(taskEntryModel.startTimeProperty());
+        timePickerEndTime.valueProperty().bindBidirectional(taskEntryModel.endTimeProperty());
+        lblDuration.textProperty().bind(taskEntryModel.stringDurationProperty());
+    }
+
+    @FXML
+    private void handleEditStartTime(Event event) throws ModelException {
+        LocalTime updatedStartTime = timePickerStartTime.getValue();
+        TaskEntry taskEntry = taskEntryModel.getTaskEntry();
+        LocalDate entryDate = taskEntry.getStartTime().toLocalDate();
+        if (updatedStartTime.isBefore(taskEntry.getEndTime().toLocalTime()) && !updatedStartTime.equals(oldStartTime)) {
+            try {
+                taskEntry.setStartTime(LocalDateTime.of(entryDate, updatedStartTime));
+                taskEntryModel.updateTaskEntryStartTime(taskEntry);
+                oldStartTime = taskEntry.getStartTime().toLocalTime();
+            } catch (ModelException ex) {
+                alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
+            }
+
+        } else if (updatedStartTime.isAfter(taskEntry.getEndTime().toLocalTime())) {
+            Platform.runLater(() -> {
+                alertManager.showAlert("Invalid input", "Start time has to be before end time");
+                timePickerStartTime.show();
+            });
+        }
+
+    }
+
+    @FXML
+    private void handleEditEndTime(Event event) throws ModelException {
+        TaskEntry taskEntry = taskEntryModel.getTaskEntry();
+        LocalTime updatedEndTime = timePickerEndTime.getValue();
+        LocalDate entryDate = taskEntry.getEndTime().toLocalDate();
+        if (updatedEndTime.isAfter(taskEntry.getStartTime().toLocalTime()) && !updatedEndTime.equals(oldEndTime)) {
+            try {
+                taskEntry.setEndTime(LocalDateTime.of(entryDate, updatedEndTime));
+                taskEntryModel.updateTaskEntryEndTime(taskEntry);
+                oldEndTime = taskEntry.getEndTime().toLocalTime();
+            } catch (ModelException ex) {
+                alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());
+            }
+        } else if (updatedEndTime.isBefore(taskEntry.getStartTime().toLocalTime())) {
+            Platform.runLater(() -> {
+                alertManager.showAlert("Invalid input", "End time has to be after start time");
+                timePickerEndTime.show();
+            });
+        }
+
     }
 
 }
