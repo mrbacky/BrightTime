@@ -280,7 +280,6 @@ public class TaskModel implements ITaskModel {
 
     private void setTaskEndTime() {
         if (obsEntries.isEmpty()) {
-            System.out.println("in empty obs list setTaskEndTime? ");
             endTime.set(task.getCreationTime());
         } else {
             endTime.set(bllManager.getEndTime(obsEntries));

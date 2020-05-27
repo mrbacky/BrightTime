@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane minWidth="-Infinity" prefWidth="730.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
+<AnchorPane minWidth="-Infinity" prefWidth="730.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TaskItemController">
     <children>
         <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" styleClass="viewItem" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
             <children>
@@ -28,7 +28,7 @@
                 </StackPane>
                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <ToggleButton fx:id="btnExpandTask" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#expandTaskItem" styleClass="rootButtons">
+                        <ToggleButton fx:id="btnExpandTask" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handleExpandAndCollapseTask" styleClass="rootButtons">
                             <graphic>
                                 <ImageView fx:id="imgExpandCollapse" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                     <image>

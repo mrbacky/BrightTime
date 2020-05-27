@@ -52,7 +52,6 @@ public class TaskEntryItemController implements Initializable {
 
     private ITaskEntryModel taskEntryModel;
     private final AlertManager alertManager;
-    private TimeTrackerController timeTrackerController;
     private LocalTime oldStartTime;
     private LocalTime oldEndTime;
 
@@ -145,9 +144,7 @@ public class TaskEntryItemController implements Initializable {
 
     }
 
-    void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
-        this.timeTrackerController = timeTrackerController;
-    }
+    
 
     private void setOldStartTime() {
         oldStartTime = taskEntryModel.getTaskEntry().getStartTime().toLocalTime();

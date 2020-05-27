@@ -182,6 +182,7 @@ public class TimeTrackerController implements Initializable {
             TaskItemController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
             controller.injectModel(taskModel);
+            controller.initializeView();
             vBoxMain.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
