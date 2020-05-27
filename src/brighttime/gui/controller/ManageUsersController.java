@@ -118,7 +118,7 @@ public class ManageUsersController implements Initializable {
         }
     }
 
-    private void initTableView() {
+    public void initTableView() {
         initCols();
         tbvUsers.setItems(mainModel.getUserList());
 
@@ -137,9 +137,16 @@ public class ManageUsersController implements Initializable {
     private void enableEditableCollumns() {
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colFirstName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
-            e.getTableView().getItems().get(e.getTablePosition().getRow()).setFirstName(e.getNewValue());
-            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-            updateUserDetails(updatedUser);
+            User u = tbvUsers.getItems().get(e.getTablePosition().getRow());
+
+            try {
+                e.getTableView().getItems().get(e.getTablePosition().getRow()).setFirstName(e.getNewValue());
+                mainModel.updateUserDetails(u);
+            } catch (ModelException ex) {
+                initTableView();
+                alertManager.showAlert("sddsd", "asdasd " + ex.getMessage());
+
+            }
         });
 
         colLastName.setCellFactory(TextFieldTableCell.forTableColumn());

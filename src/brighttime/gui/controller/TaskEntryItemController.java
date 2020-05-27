@@ -109,8 +109,15 @@ public class TaskEntryItemController implements Initializable {
         LocalDate entryDate = taskEntry.getStartTime().toLocalDate();
         if (updatedStartTime.isBefore(taskEntry.getEndTime().toLocalTime()) && !updatedStartTime.equals(oldStartTime)) {
             try {
+                //  not good to set here i guess
+
                 taskEntry.setStartTime(LocalDateTime.of(entryDate, updatedStartTime));
+
                 taskEntryModel.updateTaskEntryStartTime(taskEntry);
+
+                //  LocalTime localStartTime = timePickerStartTime.getValue();
+                //  LocalTime freshDBStartTime = taskEntryModel.updateTaskEntryStartTime(taskEntry,localStartTime );
+                //  taskEntry.setStartTime(LocalDateTime.of(entryDate, freshDBStartTime));
                 oldStartTime = taskEntry.getStartTime().toLocalTime();
             } catch (ModelException ex) {
                 alertManager.showAlert("An error occured", "Check your internet connection." + ex.getMessage());

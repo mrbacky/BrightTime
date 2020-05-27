@@ -32,12 +32,6 @@ public interface ITaskEntryModel {
 
     String secToFormat(long sec);
 
-    String getEntryDescription();
-
-    void setEntryDescription(String value);
-
-    StringProperty entryDescriptionProperty();
-
     public void setTaskEntry(TaskEntry taskEntry);
 
     TaskEntry getTaskEntry();
@@ -69,7 +63,7 @@ public interface ITaskEntryModel {
     void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException;
 
     void initializeTaskEntryModel();
-    
-   
+
+    void setTaskEntryModelDetails();
 
 }

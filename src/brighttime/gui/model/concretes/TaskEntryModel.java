@@ -22,26 +22,81 @@ import javafx.beans.value.ObservableValue;
 public class TaskEntryModel implements ITaskEntryModel {
 
     private BllFacade bllManager;
-
-    private final StringProperty stringDuration = new SimpleStringProperty();
-    private final StringProperty entryDescription = new SimpleStringProperty();
     private TaskEntry taskEntry;
-    private final ObjectProperty<LocalTime> startTime = new SimpleObjectProperty<>();
+
     private final ObjectProperty<LocalDate> date = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalTime> endTime = new SimpleObjectProperty<>();
+    private final StringProperty stringDuration = new SimpleStringProperty();
 
     public TaskEntryModel(BllFacade bllManager) {
         this.bllManager = bllManager;
-
     }
 
     @Override
     public void initializeTaskEntryModel() {
+        setTaskEntryModelDetails();
+        setupStartTimeListener();
+        setupEndTimeListener();
+    }
+
+    @Override
+    public void setTaskEntryModelDetails() {
         setStartTime(taskEntry.getStartTime().toLocalTime());
         setEndTime(taskEntry.getEndTime().toLocalTime());
         setStringDuration(secToFormat(calculateDuration(taskEntry).toSeconds()));
-        setupStartTimeListener();
-        setupEndTimeListener();
+    }
+
+    @Override
+    public void setupStartTimeListener() {
+        startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
+            if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
+                LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
+                taskEntry.setStartTime(startTimeLDT);
+                stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
+            }
+        });
+    }
+
+    @Override
+    public void setupEndTimeListener() {
+        endTime.addListener((observable, oldValue, newValue) -> {
+            if (newValue.isAfter(taskEntry.getStartTime().toLocalTime())) {
+                LocalDateTime endTimeLDT = LocalDateTime.of(getDate(), newValue);
+                taskEntry.setEndTime(endTimeLDT);
+                stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
+            }
+        });
+    }
+
+    @Override
+    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException {
+        try {
+            bllManager.updateTaskEntryStartTime(taskEntry);
+//          return freshTaskEntryStartTime or not.... it has to be edited in model right?
+//  we need OK from DB as well here 
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException {
+        try {
+            bllManager.updateTaskEntryEndTime(taskEntry);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void setTaskEntry(TaskEntry taskEntry) {
+        this.taskEntry = taskEntry;
+    }
+
+    @Override
+    public TaskEntry getTaskEntry() {
+        return taskEntry;
     }
 
     @Override
@@ -91,7 +146,7 @@ public class TaskEntryModel implements ITaskEntryModel {
 
     @Override
     public String getStringDuration() {
-        return secToFormat(calculateDuration(taskEntry).toSeconds());
+        return stringDuration.get();
     }
 
     @Override
@@ -113,72 +168,6 @@ public class TaskEntryModel implements ITaskEntryModel {
     public String secToFormat(long sec) {
         return bllManager.secToFormat(sec);
 
-    }
-
-    @Override
-    public String getEntryDescription() {
-        return entryDescription.get();
-    }
-
-    @Override
-    public void setEntryDescription(String value) {
-        entryDescription.set(value);
-    }
-
-    @Override
-    public StringProperty entryDescriptionProperty() {
-        return entryDescription;
-    }
-
-    @Override
-    public void setTaskEntry(TaskEntry taskEntry) {
-        this.taskEntry = taskEntry;
-    }
-
-    @Override
-    public TaskEntry getTaskEntry() {
-        return taskEntry;
-    }
-
-    @Override
-    public void setupStartTimeListener() {
-        startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
-            if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
-                LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
-                taskEntry.setStartTime(startTimeLDT);
-                stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
-            }
-        });
-    }
-
-    @Override
-    public void setupEndTimeListener() {
-        endTime.addListener((observable, oldValue, newValue) -> {
-            if (newValue.isAfter(taskEntry.getStartTime().toLocalTime())) {
-                LocalDateTime endTimeLDT = LocalDateTime.of(getDate(), newValue);
-                taskEntry.setEndTime(endTimeLDT);
-                stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
-            }
-        });
-    }
-
-    @Override
-    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException {
-        try {
-            bllManager.updateTaskEntryStartTime(taskEntry);
-
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException {
-        try {
-            bllManager.updateTaskEntryEndTime(taskEntry);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
     }
 
 }
