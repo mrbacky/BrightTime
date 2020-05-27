@@ -129,7 +129,11 @@ public class OverviewController implements Initializable {
 
     @FXML
     private Label lblUser;
+    @FXML
+    private JFXButton btnTableSize;
+
     private User currentUser;
+    int i = 0;
 
     public OverviewController() {
         this.alertManager = new AlertManager();
@@ -185,6 +189,7 @@ public class OverviewController implements Initializable {
         });
 
         setToolTipsForButtons();
+        changeTableSize();
     }
 
     void injectMainModel(IMainModel mainModel) {
@@ -582,6 +587,19 @@ public class OverviewController implements Initializable {
         toolTipManager.setToolTipForOneActiveFilterButton(btnFilterUser, "Clear user filter");
         toolTipManager.setToolTipForOneActiveFilterButton(btnFilterProject, "Clear project filter");
         toolTipManager.setToolTipForOneActiveFilterButton(btnFilterTimeFrame, "Clear time frame filter");
+    }
+
+    private void changeTableSize() {
+        btnTableSize.setOnAction((event) -> {
+            if (i % 2 == 0) {
+                tbvTasks.setPrefHeight(502);
+                btnTableSize.setText("Reduce table");
+            } else if (i % 2 == 1) {
+                tbvTasks.setPrefHeight(160);
+                btnTableSize.setText("Extend table");
+            }
+            i++;
+        });
     }
 
 }

@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="830.0" prefWidth="785.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
+<AnchorPane id="AnchorPane" prefWidth="785.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.OverviewController">
    <children>
       <StackPane layoutX="-0.3333333432674408" layoutY="119.66666412353516" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="135.0">
          <children>
@@ -34,9 +34,10 @@
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <TableView fx:id="tbvTasks" prefHeight="260.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                        <TableView fx:id="tbvTasks" prefHeight="160.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                           <columns>
                             <TableColumn id="tableColLeft" fx:id="colTaskDescription" maxWidth="1.7976931348623157E308" prefWidth="-1.0" text="Task description" />
                             <TableColumn id="tableCol" fx:id="colHours" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="-1.0" text="Hours" />
@@ -46,7 +47,7 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <BarChart fx:id="barChartTasks" GridPane.rowIndex="1">
+                        <BarChart fx:id="barChartTasks" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="323.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -54,9 +55,14 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
+                        <JFXButton fx:id="btnTableSize" styleClass="labelMenuItem" text="Extend table" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets top="-25.0" />
+                           </GridPane.margin>
+                        </JFXButton>
                      </children>
                      <padding>
-                        <Insets bottom="20.0" left="20.0" right="6.0" top="20.0" />
+                        <Insets left="20.0" right="6.0" top="20.0" />
                      </padding>
                   </GridPane>
               </content>
