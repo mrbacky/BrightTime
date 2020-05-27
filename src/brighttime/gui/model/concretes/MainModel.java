@@ -172,17 +172,13 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void loadTasks(User user) throws ModelException {
+    public void loadTasks(User user, LocalDate startDate, LocalDate endDate) throws ModelException {
         try {
-            LocalDate start = LocalDate.parse("2020-05-18");
-            LocalDate end = LocalDate.parse("2020-05-24");
-            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user, start, end);
-//            if(taskMapListener!=null)
+            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user, startDate, endDate);
             //  temp removal
             taskMap.removeListener(taskMapListener);
             taskMap.clear();
             taskMap.putAll(allTasks);
-//            if(taskMapListener!=null)
             taskMap.addListener(taskMapListener);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());

@@ -11,10 +11,12 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import java.io.IOException;
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.chrono.Chronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +25,12 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -49,6 +56,9 @@ public class TimeTrackerController implements Initializable {
 
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
+
+    private LocalDate taskFilterStartDate;
+    private LocalDate taskFilterEndDate;
 
     private CreateTaskController createTaskContr;
     private IMainModel mainModel;
@@ -93,16 +103,15 @@ public class TimeTrackerController implements Initializable {
 //    }
     public void initializeView() {
         try {
+            setInitialFilter();
             setUser();
             setUpTaskMapListener();
             setUpTaskCreator();
 
-            mainModel.loadTasks(user);
+            mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
             initTasks();
 
             switchLoggingMode();
-            datePickerStart.converterProperty().setValue(dateConverter);
-            datePickerEnd.converterProperty().setValue(dateConverter);
 
         } catch (ModelException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,6 +207,36 @@ public class TimeTrackerController implements Initializable {
             i++;
         });
 
+    }
+
+    @FXML
+    private void handleFilterTasksStartDate(Event event) {
+        try {
+            mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
+            initTasks();
+        } catch (ModelException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @FXML
+    private void handleFilterTasksEndDate(Event event) {
+        try {
+            mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
+            initTasks();
+        } catch (ModelException ex) {
+            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setInitialFilter() {
+        taskFilterStartDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        taskFilterEndDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        datePickerStart.setValue(taskFilterStartDate);
+        datePickerEnd.setValue(taskFilterEndDate);
+        datePickerStart.converterProperty().setValue(dateConverter);
+        datePickerEnd.converterProperty().setValue(dateConverter);
     }
 
 }

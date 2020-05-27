@@ -71,7 +71,7 @@ public interface IMainModel {
 
     ObservableMap<LocalDate, List<TaskConcrete1>> getTasks();
 
-    void loadTasks(User user) throws ModelException;
+    void loadTasks(User user, LocalDate startDate, LocalDate endDate) throws ModelException;
 
     ObservableList<TaskConcrete2> getTaskList();
 
