@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TimeTrackerController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.TimeTrackerController">
     <children>
         <Label alignment="CENTER" layoutY="-2.0" styleClass="labelHeaderTitle" text="Time Tracker" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
         <Label layoutX="26.0" layoutY="54.0" styleClass="labelMenuItem" text="New Task" AnchorPane.leftAnchor="26.0" />
@@ -40,8 +40,8 @@
               </ScrollPane>
             <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <children>
-                  <JFXDatePicker fx:id="datePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onHiding="#handleFilterTasksStartDate" prefHeight="27.0" prefWidth="180.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER" />
-                  <JFXDatePicker fx:id="datePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onHiding="#handleFilterTasksEndDate" prefHeight="27.0" prefWidth="180.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER">
+                  <JFXDatePicker fx:id="datePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onHiding="#handleFilterTasksStartDate" prefHeight="27.0" prefWidth="220.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER" />
+                  <JFXDatePicker fx:id="datePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onHiding="#handleFilterTasksEndDate" prefHeight="27.0" prefWidth="220.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>

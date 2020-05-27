@@ -93,40 +93,42 @@ public class TaskDAO implements ITaskDAO {
         Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
         Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
-        String sql = "SELECT A1.id AS taskId, A1.description, A1.modifiedDate, A1.billability, "
-                + "	A1.projectId, A1.projectName, "
-                + "	A1.clientId, A1.clientName, "
-                + "	A2.taskEntryId, A2.startTime, A2.endTime "
-                + "FROM "
-                + "	( "
-                + "	SELECT T.id, T.description, T.modifiedDate, T.billability, "
+        String sql = "SELECT	T.id AS taskId, T.description, T.modifiedDate, T.billability, "
                 + "		P.id AS projectId, P.name AS projectName, "
-                + "		C.id AS clientId, C.name AS clientName "
-                + "	FROM Task T "
-                + "	JOIN Project P "
-                + "	ON T.projectId = P.id "
-                + "	JOIN Client C "
-                + "	ON P.clientId = C.id "
-                + "	WHERE T.modifiedDate BETWEEN ? AND GETDATE() AND T.userId = ? "
-                + "	) "
-                + "	AS A1 "
-                + "LEFT JOIN "
-                + "	( "
-                + "	SELECT TE.id AS taskEntryId, TE.startTime, TE.endTime, TE.taskId "
-                + "	FROM TaskEntry TE "
-                + "	WHERE TE.startTime BETWEEN ? AND ? "
-                + "	) "
-                + "	AS A2 "
-                + "ON A1.id = A2.taskId "
-                + "ORDER BY A1.modifiedDate DESC, A2.startTime DESC";
+                + "		C.id AS clientId, C.name AS clientName, "
+                + "		TE.id AS taskEntryId, TE.startTime, TE.endTime "
+                + "FROM TaskEntry TE "
+                + "JOIN Task T ON TE.taskId = T.id "
+                + "JOIN Project P ON T.projectId = P.id "
+                + "JOIN Client C ON P.clientId = C.id "
+                + "WHERE	T.userId = ? "
+                + "		AND ? <= TE.startTime "
+                + "		AND TE.startTime < ? "
+                + " "
+                + "UNION "
+                + " "
+                + "SELECT	T.id AS taskId, T.description, T.modifiedDate, T.billability, "
+                + "		P.id AS projectId, P.name AS projectName, "
+                + "		C.id AS clientId, C.name AS clientName, "
+                + "		taskEntryId = NULL, startTime = NULL, endTime = NULL "
+                + "FROM Task T "
+                + "JOIN Project P ON T.projectId = P.id "
+                + "JOIN Client C ON P.clientId = C.id "
+                + "WHERE	T.userId = ? "
+                + "		AND ? <= T.modifiedDate "
+                + "		AND T.modifiedDate < ? "
+                + "		AND NOT EXISTS (SELECT * FROM TaskEntry TE WHERE T.id = TE.taskId) "
+                + " "
+                + "ORDER BY startTime DESC, modifiedDate DESC";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setDate(1, Date.valueOf(start));
-            //pstmt.setDate(2, Date.valueOf(end.plusDays(1)));
-            pstmt.setInt(2, user.getId());
-            pstmt.setDate(3, Date.valueOf(start));
-            pstmt.setDate(4, Date.valueOf(end.plusDays(1)));
+            pstmt.setInt(1, user.getId());
+            pstmt.setDate(2, Date.valueOf(start));
+            pstmt.setDate(3, Date.valueOf(end.plusDays(1)));
+            pstmt.setInt(4, user.getId());
+            pstmt.setDate(5, Date.valueOf(start));
+            pstmt.setDate(6, Date.valueOf(end.plusDays(1)));
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
