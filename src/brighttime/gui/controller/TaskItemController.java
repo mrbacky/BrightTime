@@ -101,7 +101,7 @@ public class TaskItemController implements Initializable {
     }
 
     private void setEmptyTaskStyle() {
-        if (taskModel.getObsEntries().isEmpty()) {
+        if (taskModel.getDayEntryList().isEmpty()) {
             btnExpandTask.setDisable(true);
             imgExpandCollapse.setImage(null);
         }
@@ -139,7 +139,7 @@ public class TaskItemController implements Initializable {
     private void showTaskEntries() {
         imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
         btnExpandTask.setSelected(true);
-        if (!taskModel.getObsEntries().isEmpty()) {
+        if (!taskModel.getDayEntryList().isEmpty()) {
             initTaskEntries();
         }
     }
@@ -151,7 +151,7 @@ public class TaskItemController implements Initializable {
 
     public void initTaskEntries() {
         vBoxTaskEntries.getChildren().clear();
-        List<TaskEntry> dayEntries = taskModel.getObsEntries();
+        List<TaskEntry> dayEntries = taskModel.getDayEntryList();
         for (TaskEntry entry : dayEntries) {
             addEntryItem(entry);
         }

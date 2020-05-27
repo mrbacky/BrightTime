@@ -21,14 +21,6 @@ public interface ITaskModel {
 
     TaskConcrete1 getTask();
 
-    Duration calculateDuration(TaskEntry taskEntry);
-
-    Duration calculateTaskDuration(List<TaskEntry> entryList);
-
-    String secToFormat(long sec);
-
-    long formatToSec(String formatString);
-
     LocalDateTime getStartTime();
 
     LocalDateTime getEndTime();
@@ -47,28 +39,20 @@ public interface ITaskModel {
 
     LocalDate getDate();
 
-    List getDayEntryList();
-
-    void setDayEntryList(List value);
-
-    ObjectProperty dayEntryListProperty();
-
     String getStringDuration();
 
     void setStringDuration(String value);
 
     StringProperty stringDurationProperty();
 
-    void setupStartTimeListener();
-
-    void setupEndTimeListener();
-
     public void initializeTaskModel();
 
-    ObservableList<TaskEntry> getObsEntries();
+    ObservableList<TaskEntry> getDayEntryList();
 
-    void setUpDayEntryList();
+    void setupDayEntryList();
 
     void setUpDayEntryListListener();
+
+    void setTaskModelDetails();
 
 }
