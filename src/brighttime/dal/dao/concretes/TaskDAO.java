@@ -88,7 +88,8 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException {
+        //TODO: The method is IN PROGRESS.
         Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
         Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
@@ -106,14 +107,14 @@ public class TaskDAO implements ITaskDAO {
                 + "	ON T.projectId = P.id "
                 + "	JOIN Client C "
                 + "	ON P.clientId = C.id "
-                + "	WHERE T.modifiedDate BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE() AND T.userId = ? "
+                + "	WHERE T.modifiedDate BETWEEN ? AND GETDATE() AND T.userId = ? "
                 + "	) "
                 + "	AS A1 "
                 + "LEFT JOIN "
                 + "	( "
                 + "	SELECT TE.id AS taskEntryId, TE.startTime, TE.endTime, TE.taskId "
                 + "	FROM TaskEntry TE "
-                + "	WHERE TE.startTime BETWEEN DATEADD(DD, -30, CONVERT(DATE,GETDATE())) AND GETDATE() "
+                + "	WHERE TE.startTime BETWEEN ? AND ? "
                 + "	) "
                 + "	AS A2 "
                 + "ON A1.id = A2.taskId "
@@ -121,7 +122,11 @@ public class TaskDAO implements ITaskDAO {
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, user.getId());
+            pstmt.setDate(1, Date.valueOf(start));
+            //pstmt.setDate(2, Date.valueOf(end.plusDays(1)));
+            pstmt.setInt(2, user.getId());
+            pstmt.setDate(3, Date.valueOf(start));
+            pstmt.setDate(4, Date.valueOf(end.plusDays(1)));
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {

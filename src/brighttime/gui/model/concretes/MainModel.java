@@ -11,7 +11,6 @@ import brighttime.bll.BllException;
 import brighttime.bll.BllFacade;
 import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
-import brighttime.gui.util.InputValidator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -175,7 +174,9 @@ public class MainModel implements IMainModel {
     @Override
     public void loadTasks(User user) throws ModelException {
         try {
-            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user);
+            LocalDate start = LocalDate.parse("2020-05-18");
+            LocalDate end = LocalDate.parse("2020-05-24");
+            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user, start, end);
 //            if(taskMapListener!=null)
             //  temp removal
             taskMap.removeListener(taskMapListener);

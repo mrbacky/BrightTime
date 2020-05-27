@@ -77,7 +77,7 @@ public interface BllFacade {
      * @return A map with a list of tasks (containing entries) for each day.
      * @throws BllException
      */
-    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws BllException;
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws BllException;
 
     Duration calculateDuration(TaskEntry taskEntry);
 

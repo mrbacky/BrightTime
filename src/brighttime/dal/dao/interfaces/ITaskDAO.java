@@ -25,13 +25,15 @@ public interface ITaskDAO {
     TaskConcrete1 createTask(TaskConcrete1 task) throws DalException;
 
     /**
-     * Gets the tasks logged between today and 30 days ago of the user.
+     * Gets the tasks logged by the user between two dates.
      *
      * @param user The user.
-     * @return A map with a list of tasks (containing entries) for each day.
+     * @param start The start date.
+     * @param end The end date.
+     * @return A map with a list of tasks (containing entries) for each date.
      * @throws DalException
      */
-    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws DalException;
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException;
 
     List<TaskConcrete2> getAllTasks() throws DalException;
 

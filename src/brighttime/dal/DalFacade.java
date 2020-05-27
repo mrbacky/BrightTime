@@ -73,13 +73,15 @@ public interface DalFacade {
     TaskConcrete1 createTask(TaskConcrete1 task) throws DalException;
 
     /**
-     * Gets the tasks logged between today and 30 days ago of the user.
+     * Gets the tasks logged between the start date and end date of the user.
      *
      * @param user The user.
-     * @return A map with a list of tasks (containing entries) for each day.
+     * @param start
+     * @param end
+     * @return A map with a list of tasks (containing entries) for each date.
      * @throws DalException
      */
-    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user) throws DalException;
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException;
 
     /**
      * Creates a task entry in the database.

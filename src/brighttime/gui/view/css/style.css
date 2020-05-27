@@ -129,6 +129,26 @@
     -fx-font-size: 10;
 }
 
+/*Refactor later as it is probably repeated.*/
+.datePickerTimeTracker{
+    -jfx-default-color: #F0C326;
+    -fx-border-width: 2;
+    -fx-border-color: #435A9A;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: #435A9A;
+}
+
+.datePickerTimeTracker .jfx-text-field{    
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: white;
+    -fx-prompt-text-fill: #F0C326;
+    -fx-alignment: CENTER;
+    -jfx-label-float: true;
+    -jfx-focus-color: #F0C326;
+    -jfx-unfocus-color: transparent;    
+}
+
 #btnPlayPause{
     -fx-background-color: transparent;
 }

@@ -1,7 +1,6 @@
 package brighttime.gui.controller;
 
 import brighttime.be.TaskConcrete1;
-import brighttime.be.TaskEntry;
 import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.ModelException;
@@ -9,29 +8,31 @@ import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import brighttime.gui.util.AlertManager;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.chrono.Chronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalDateStringConverter;
 
 /**
  * FXML Controller class
@@ -57,6 +58,12 @@ public class TimeTrackerController implements Initializable {
     int i = 0;
     @FXML
     private GridPane grid;
+    @FXML
+    private JFXDatePicker datePickerStart;
+    @FXML
+    private JFXDatePicker datePickerEnd;
+
+    private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -94,6 +101,8 @@ public class TimeTrackerController implements Initializable {
             initTasks();
 
             switchLoggingMode();
+            datePickerStart.converterProperty().setValue(dateConverter);
+            datePickerEnd.converterProperty().setValue(dateConverter);
 
         } catch (ModelException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
