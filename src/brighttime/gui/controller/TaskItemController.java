@@ -40,10 +40,8 @@ import javafx.util.StringConverter;
  */
 public class TaskItemController implements Initializable {
 
-    private static final String DATE_TIME_FORMAT = "HH:mm";
+    private final String DATE_TIME_FORMAT = "HH:mm";
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
-
-//    private ImageView PLAY_ICON_IMAGE = new ImageView("/brighttime/gui/view/assets/play.png");
     private final Image PLAY_ICON_IMAGE = new Image("/brighttime/gui/view/assets/play.png");
     private final Image PAUSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/pause.png");
     private final Image EXPAND_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
@@ -65,12 +63,6 @@ public class TaskItemController implements Initializable {
     private ImageView imgPlayPause;
     @FXML
     private ImageView imgExpandCollapse;
-
-    private TimeTrackerController timeTrackerController;
-    private ITaskModel taskModel;
-    private final AlertManager alertManager;
-    private LocalDateTime tempStartTime;
-    private LocalDateTime tempEndTime;
     @FXML
     private Label lblEndTime;
     @FXML
@@ -79,6 +71,13 @@ public class TaskItemController implements Initializable {
     private Label lblDuration;
     @FXML
     private ImageView imgMoneyBag;
+
+    private final AlertManager alertManager;
+
+    private LocalDateTime tempStartTime;
+    private LocalDateTime tempEndTime;
+    private TimeTrackerController timeTracker;
+    private ITaskModel taskModel;
 
     public TaskItemController() {
         this.alertManager = new AlertManager();
@@ -89,114 +88,69 @@ public class TaskItemController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-
-        /*
-        
-        task Helper class (util package)
-        Create task model
-        move all of the task dato from here to task Model
-        inject task model to this contr instead of setTask method
-            alt.    implement factory for injecting the model
-        move all of the logic for calculating duration from BEs to BLL
-        access this functionality through contr - model - bll
-        
-        what about main model ???
-        
-        
-        
-        
-        
-        
-         */
     }
 
-    public void injectTimeTrackerController(TimeTrackerController timeTrackerController) {
-        this.timeTrackerController = timeTrackerController;
+    void injectTimeTrackerController(TimeTrackerController timeTracker) {
+        this.timeTracker = timeTracker;
     }
 
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
-        setTaskDetails(taskModel.getTask());
 
+    }
+
+    void initializeView() {
+        setTaskDetails(taskModel.getTask());
+        setEmptyTaskStyle();
+        setNonBillableTaskStyle();
+    }
+
+    private void setEmptyTaskStyle() {
         if (taskModel.getObsEntries().isEmpty()) {
             btnExpandTask.setDisable(true);
             imgExpandCollapse.setImage(null);
         }
+    }
 
+    private void setNonBillableTaskStyle() {
         if (taskModel.getTask().getBillability() == TaskConcrete1.Billability.NON_BILLABLE) {
-            btnExpandTask.setDisable(false);
             imgMoneyBag.setVisible(false);
         }
     }
 
     public void setTaskDetails(TaskConcrete1 task) {
-
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-        StringConverter startTimeConverter = new StringConverter() {
-            @Override
-            public String toString(Object object) {
-                return dtf.format(taskModel.getStartTime());
-            }
+        textFieldTaskDesc.setText(task.getDescription());
+        textFieldClient.setText(task.getProject().getClient().getName());
+        textFieldProject.setText(task.getProject().getName());
+        lblStartTime.textProperty().bindBidirectional(taskModel.startTimeProperty(), dtf.toFormat());
+        lblEndTime.textProperty().bindBidirectional(taskModel.endTimeProperty(), dtf.toFormat());
+        lblDuration.textProperty().bind(taskModel.stringDurationProperty());
 
-            @Override
-            public Object fromString(String string) {
-                return null;
-            }
-        };
-
-        StringConverter endTimeConverter = new StringConverter() {
-            @Override
-            public String toString(Object object) {
-                return dtf.format(taskModel.getEndTime());
-            }
-
-            @Override
-            public Object fromString(String string) {
-                return null;
-            }
-        };
-
-        textFieldTaskDesc.textProperty().bind(Bindings.createStringBinding(()
-                -> task.getDescription(), task.descriptionProperty()));
-
-        textFieldClient.textProperty().bind(Bindings.createStringBinding(()
-                -> task.getProject().getClient().getName(), task.getProject().getClient().nameProperty()));
-
-        textFieldProject.textProperty().bind(Bindings.createStringBinding(()
-                -> task.getProject().getName(), task.getProject().nameProperty()));
-
-        lblStartTime.textProperty().bindBidirectional(taskModel.startTimeProperty(), startTimeConverter);
-        lblEndTime.textProperty().bindBidirectional(taskModel.endTimeProperty(), endTimeConverter);
-
-        lblDuration.textProperty().bindBidirectional(taskModel.stringDurationProperty());
-
-//        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
-//                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
-//        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
-//                -> dtf.format(taskModel.getEndTime()), taskModel.startTimeProperty()));
-//        lblDuration.textProperty().bind(Bindings.createStringBinding(()
-//                -> taskModel.secToFormat(taskModel.calculateTaskDuration(taskModel.getDayEntryList()).toSeconds()), taskModel.stringDurationProperty()));
-//        textFieldDuration.setText(taskModel.secToFormat(taskModel.calculateTaskDuration(task).toSeconds()));
     }
 
     @FXML
-    private void expandTaskItem(ActionEvent event) {
+    private void handleExpandAndCollapseTask(ActionEvent event) {
 
         if (btnExpandTask.isSelected()) {
-            imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
-            if (!taskModel.getObsEntries().isEmpty()) {
-                initTaskEntries();
-            }
+            showTaskEntries();
         } else {
-            imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
-            vBoxTaskEntries.getChildren().clear();
+            hideTaskEntries();
         }
-//        if (!taskModel.getTask().getTaskEntryList().isEmpty()) {
-//
-//        }
 
+    }
+
+    private void showTaskEntries() {
+        imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
+        if (!taskModel.getObsEntries().isEmpty()) {
+            initTaskEntries();
+        }
+    }
+
+    private void hideTaskEntries() {
+        imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
+        vBoxTaskEntries.getChildren().clear();
     }
 
     public void initTaskEntries() {
@@ -211,14 +165,11 @@ public class TaskItemController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ENTRY_ITEM_FXML));
             Parent root = fxmlLoader.load();
-
             ITaskEntryModel taskEntryModel = ModelCreator.getInstance().createTaskEntryModel();
             taskEntryModel.setTaskEntry(taskEntry);
             taskEntryModel.initializeTaskEntryModel();
-
             TaskEntryItemController controller = fxmlLoader.getController();
             controller.injectTaskEntryModel(taskEntryModel);
-            controller.injectTimeTrackerController(timeTrackerController);
             vBoxTaskEntries.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
@@ -228,44 +179,33 @@ public class TaskItemController implements Initializable {
     @FXML
     private void handlePlayPauseTask(ActionEvent event) {
         if (btnPlayPause.isSelected()) {
-            imgPlayPause.setImage(PAUSE_ICON_IMAGE);
-            LocalDate date = LocalDate.now();
-            LocalTime startTime = LocalTime.now();
-
-            LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
-
-            tempStartTime = LocalDateTime.now().withNano(0);
+            playTask();
         } else {
-            try {
-                imgPlayPause.setImage(PLAY_ICON_IMAGE);
-                tempEndTime = LocalDateTime.now().withNano(0);
-                taskModel.addTaskEntry(tempStartTime, tempEndTime);
-                //  if this task date is not today, initTasks so the new task with entry today will be created.
-                if (taskModel.getDate().equals(LocalDate.now())) {
-                    //  auto expand
-                    initTaskEntries();
-                    imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
-                    btnExpandTask.setSelected(true);
-                    btnExpandTask.setDisable(false);
-
-                } else {
-                    timeTrackerController.initializeView();
-                }
-                //  refresh
-//                timeTrackerController.initializeView();
-//                Platform.runLater(() -> {
-//                try {
-//                    taskModel.addTaskEntry(tempStartTime, tempEndTime);
-//                    timeTrackerController.initializeView();
-//                } catch (ModelException ex) {
-//                    Logger.getLogger(TaskItemController.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            });
-            } catch (ModelException ex) {
-                alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
-            }
-
+            pauseTask();
         }
+    }
+
+    private void playTask() {
+        imgPlayPause.setImage(PAUSE_ICON_IMAGE);
+        tempStartTime = LocalDateTime.now().withNano(0);
+    }
+
+    private void pauseTask() {
+        try {
+            imgPlayPause.setImage(PLAY_ICON_IMAGE);
+            tempEndTime = LocalDateTime.now().withNano(0);
+            taskModel.addTaskEntry(tempStartTime, tempEndTime);
+            //  if this task is from the past ,reload everything so the new empty task will be created for current day..
+            if (taskModel.getDate().equals(LocalDate.now())) {
+                //  auto expand
+                showTaskEntries();
+            } else {//  workaround
+                timeTracker.initializeView();
+            }
+        } catch (ModelException ex) {
+            alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());
+        }
+
     }
 
 }
