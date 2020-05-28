@@ -1,7 +1,6 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
-import brighttime.be.EventLog;
 import brighttime.be.Project;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
@@ -48,17 +47,15 @@ public class ProjectDAO implements IProjectDAO {
                 project.setId(rs.getInt(1));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
                     "Created the project for the client \"" + project.getClient().getName() + "\": "
-                    + project.getName() + ", " + project.getHourlyRate() + " DKK/hour."));
+                    + project.getName() + ", " + project.getHourlyRate() + " DKK/hour.");
 
             return project;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
                     "Unsuccessful project creation for \"" + project.getClient().getName() + "\": "
-                    + project.getName() + ". " + Arrays.toString(ex.getStackTrace())));
+                    + project.getName() + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -80,15 +77,13 @@ public class ProjectDAO implements IProjectDAO {
                 projects.add(new Project(rs.getInt("id"), rs.getString("name"), client));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all projects for the client \"" + client.getName() + "\"."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Loaded all projects for the client \"" + client.getName() + "\".");
 
             return projects;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting projects for the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful getting projects for the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -119,15 +114,13 @@ public class ProjectDAO implements IProjectDAO {
                         rate));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all projects."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Loaded all projects.");
 
             return projects;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting all projects. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful getting all projects. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -144,13 +137,11 @@ public class ProjectDAO implements IProjectDAO {
             pstmt.setInt(4, project.getId());
             pstmt.executeUpdate();
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Updated the project \"" + project.getName() + "\"."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Updated the project \"" + project.getName() + "\".");
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful updating the project \"" + project.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful updating the project \"" + project.getName() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -165,13 +156,11 @@ public class ProjectDAO implements IProjectDAO {
             pstmt.setInt(1, project.getId());
             pstmt.executeUpdate();
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Deleted the project \"" + project.getName() + "\"."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Deleted the project \"" + project.getName() + "\".");
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful deleting the project \"" + project.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful deleting the project \"" + project.getName() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }

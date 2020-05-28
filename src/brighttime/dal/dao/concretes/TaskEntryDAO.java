@@ -1,6 +1,5 @@
 package brighttime.dal.dao.concretes;
 
-import brighttime.be.EventLog;
 import brighttime.be.TaskEntry;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
@@ -47,21 +46,19 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             if (rs != null && rs.next()) {
                 taskEntry.setId(rs.getInt(1));
             }
-            
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
+
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
                     "Created a task entry for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
-                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime()));
-            
+                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime());
+
             return taskEntry;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
                     "Unsuccessful task entry creation for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                     + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
-                    + Arrays.toString(ex.getStackTrace())));
+                    + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -78,17 +75,16 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
             System.out.println("edited start Time in DAO");
-            
+
             logEvent(taskEntry);
-            
+
             return taskEntry;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
                     "Unsuccessful task entry update (start time) for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                     + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
-                    + Arrays.toString(ex.getStackTrace())));
+                    + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -105,17 +101,16 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
             System.out.println("edited endTime in DAO");
-            
+
             logEvent(taskEntry);
-            
+
             return taskEntry;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
                     "Unsuccessful task entry update (end time) for the task \"" + taskEntry.getTask().getDescription()
                     + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                     + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
-                    + Arrays.toString(ex.getStackTrace())));
+                    + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
 
@@ -123,11 +118,10 @@ public class TaskEntryDAO implements ITaskEntryDAO {
 
     private void logEvent(TaskEntry taskEntry) throws DalException {
         //TODO: EventLog check exception handling.        
-        logDAO.logEvent(new EventLog(
-                EventLog.EventType.INFORMATION,
+        logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
                 "Updated a task entry in the task \"" + taskEntry.getTask().getDescription()
                 + "\" in the project \"" + taskEntry.getTask().getProject().getName()
-                + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime()));
+                + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime());
     }
 
 }

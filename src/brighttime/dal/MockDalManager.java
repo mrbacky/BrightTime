@@ -1,7 +1,6 @@
 package brighttime.dal;
 
 import brighttime.be.Client;
-import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
@@ -98,17 +97,7 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public void logEvent(EventLog log) throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public List<Project> getAllProjects() throws DalException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int checkUsernameAvailability(String username) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

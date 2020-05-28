@@ -1,7 +1,6 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
-import brighttime.be.EventLog;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
@@ -46,15 +45,13 @@ public class ClientDAO implements IClientDAO {
                 client.setId(rs.getInt(1));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Created the client: " + client.getName() + ", " + client.getHourlyRate() + " DKK/hour."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Created the client: " + client.getName() + ", " + client.getHourlyRate() + " DKK/hour.");
 
             return client;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful client creation: " + client.getName() + ". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful client creation: " + client.getName() + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -74,15 +71,13 @@ public class ClientDAO implements IClientDAO {
                 clients.add(new Client(rs.getInt("id"), rs.getString("name"), rs.getInt("hourlyRate")));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all clients."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Loaded all clients.");
 
             return clients;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting all clients. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful getting all clients. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -98,15 +93,13 @@ public class ClientDAO implements IClientDAO {
             pstmt.setInt(3, client.getId());
             pstmt.executeUpdate();
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Updated the client \"" + client.getName() + "\"."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Updated the client \"" + client.getName() + "\".");
 
             return client;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful updating the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful updating the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -121,15 +114,13 @@ public class ClientDAO implements IClientDAO {
             pstmt.setInt(1, client.getId());
             pstmt.executeUpdate();
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Deleted the client \"" + client.getName() + "\"."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Deleted the client \"" + client.getName() + "\".");
 
             return client;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful deleting the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful deleting the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }

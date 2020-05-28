@@ -1,7 +1,6 @@
 package brighttime.dal.dao.concretes;
 
 import brighttime.be.Client;
-import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskBase;
@@ -72,17 +71,15 @@ public class TaskDAO implements ITaskDAO {
                 }
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
                     "Created the task in the project \"" + task.getProject().getName() + "\": "
-                    + task.getDescription() + "."));
+                    + task.getDescription() + ".");
 
             return task;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
                     "Unsuccessful task creation for \"" + task.getProject().getName() + "\": "
-                    + task.getDescription() + ". " + Arrays.toString(ex.getStackTrace())));
+                    + task.getDescription() + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -200,15 +197,13 @@ public class TaskDAO implements ITaskDAO {
                 dateMap = buildDateMap(dateMap, newTask, dateOfTask);
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all tasks for the Time Tracker."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Loaded all tasks for the Time Tracker.");
 
             return dateMap;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting tasks for the Time Tracker. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful getting tasks for the Time Tracker. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -302,15 +297,13 @@ public class TaskDAO implements ITaskDAO {
                 ));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all tasks for the Overview."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Loaded all tasks for the Overview.");
 
             return allTasks;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting tasks for the Overview. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful getting tasks for the Overview. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -393,15 +386,13 @@ public class TaskDAO implements ITaskDAO {
                 ));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all filtered tasks for the Overview."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Loaded all filtered tasks for the Overview.");
 
             return filtered;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting filtered tasks for the Overview. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful getting filtered tasks for the Overview. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -450,14 +441,12 @@ public class TaskDAO implements ITaskDAO {
                 hasTask = true;
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Checked if the user has a task."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
+                    "Checked if the user has a task.");
         } catch (SQLException ex) {
             //TODO: EventLog, edit message.
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful in checking if the user has a task. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                    "Unsuccessful in checking if the user has a task. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
         return hasTask;

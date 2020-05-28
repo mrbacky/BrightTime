@@ -1,12 +1,12 @@
 package brighttime.dal.dao.concretes;
 
-import brighttime.be.EventLog;
 import brighttime.be.User;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
 import brighttime.dal.dao.interfaces.IEventLogDAO;
 import brighttime.dal.dao.interfaces.IUserDAO;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,15 +59,11 @@ public class UserDAO implements IUserDAO {
                 users.add(new User(rs.getInt("id"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("username"), type));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Loaded all users."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Loaded all users.");
 
             return users;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful getting users. " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful getting users. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -97,15 +93,11 @@ public class UserDAO implements IUserDAO {
                 userType = User.UserType.STANDARD;
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Authenticated user: " + username + "."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Authenticated user: " + username + ".");
 
             return new User(id, firstName, lastName, username, userType);
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful authentication: " + username + ". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful authentication: " + username + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -140,45 +132,19 @@ public class UserDAO implements IUserDAO {
                 user.setId(rs.getInt(1));
             }
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Created the user: " + user.getUsername() + "."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Created the user: " + user.getUsername() + ".");
 
             return user;
-        } catch (Exception ex) {
-            logDAO.logEvent(new EventLog(EventLog.EventType.ERROR,
-                    "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace())));
-            throw new DalException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public int checkUsernameAvailability(String username) throws DalException {
-        int id = 0;
-        String sql = "SELECT id "
-                + "FROM [User] "
-                + "WHERE username = ?";
-
-        try (Connection con = connection.getConnection()) {
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, username);
-
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                id = rs.getInt("id");
+        } catch (SQLServerException e) {
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(e.getStackTrace()));
+            if (e.getErrorCode() == 2627) {
+                throw new DalException("Someone already has this username. Please try another username.");
             }
-
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Checked the availability of the username: " + username + "."));
-
-        } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful username availability check. " + Arrays.toString(ex.getStackTrace())));
+            throw new DalException(e.getMessage());
+        } catch (Exception ex) {
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
-        return id;
     }
 
     @Override
@@ -202,14 +168,16 @@ public class UserDAO implements IUserDAO {
             pstmt.setInt(5, user.getId());
 
             pstmt.executeUpdate();
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Updated the information of the user: " + user.getUsername() + ".");
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Updated the information of the user: " + user.getUsername() + "."));
+        } catch (SQLServerException e) {
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful information update of the user: " + user.getUsername() + ". " + Arrays.toString(e.getStackTrace()));
+            if (e.getErrorCode() == 2627) {
+                throw new DalException("Someone already has this username. Please try another username.");
+            }
+            throw new DalException(e.getMessage());
         } catch (Exception ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful information update of the user: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful information update of the user: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
         return user;
@@ -227,15 +195,11 @@ public class UserDAO implements IUserDAO {
             psmt.setInt(2, user.getId());
             psmt.executeUpdate();
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Deactivated the user: " + user.getUsername() + "."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Deactivated the user: " + user.getUsername() + ".");
 
             return user;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful deactivating the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deactivating the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }
@@ -249,15 +213,11 @@ public class UserDAO implements IUserDAO {
             pstmt.setInt(1, user.getId());
             pstmt.executeUpdate();
 
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.INFORMATION,
-                    "Deleted the user: " + user.getUsername() + "."));
+            logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Deleted the user: " + user.getUsername() + ".");
 
             return user;
         } catch (SQLException ex) {
-            logDAO.logEvent(new EventLog(
-                    EventLog.EventType.ERROR,
-                    "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace())));
+            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
     }

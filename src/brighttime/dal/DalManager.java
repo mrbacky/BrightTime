@@ -1,7 +1,6 @@
 package brighttime.dal;
 
 import brighttime.be.Client;
-import brighttime.be.EventLog;
 import brighttime.be.Filter;
 import brighttime.be.Project;
 import brighttime.be.TaskEntry;
@@ -211,27 +210,9 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public int checkUsernameAvailability(String username) throws DalException {
-        try {
-            return userDAO.checkUsernameAvailability(username);
-        } catch (DalException ex) {
-            throw new DalException(ex.getMessage());
-        }
-    }
-
-    @Override
     public User createUser(User user) throws DalException {
         return userDAO.createUser(user);
 
-    }
-
-    @Override
-    public void logEvent(EventLog log) throws DalException {
-        try {
-            eventLog.logEvent(log);
-        } catch (DalException ex) {
-            throw new DalException(ex.getMessage());
-        }
     }
 
     @Override

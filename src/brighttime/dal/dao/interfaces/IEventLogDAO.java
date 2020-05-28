@@ -1,7 +1,7 @@
 package brighttime.dal.dao.interfaces;
 
-import brighttime.be.EventLog;
 import brighttime.dal.DalException;
+import brighttime.dal.dao.concretes.EventLogDAO;
 
 /**
  *
@@ -9,6 +9,6 @@ import brighttime.dal.DalException;
  */
 public interface IEventLogDAO {
 
-    void logEvent(EventLog log) throws DalException;
+    void logEvent(EventLogDAO.EventType type, String description) throws DalException;
 
 }

@@ -257,15 +257,6 @@ public class BllManager implements BllFacade {
         }
     }
 
-    @Override
-    public int checkUsernameAvailability(String username) throws BllException {
-        try {
-            return dalManager.checkUsernameAvailability(username);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
     /**
      *
      * @param user
@@ -274,28 +265,19 @@ public class BllManager implements BllFacade {
      */
     @Override
     public User createUser(User user) throws BllException {
-        if (checkUsernameAvailability(user.getUsername()) == 0) {
-            try {
-                return dalManager.createUser(user);
-            } catch (DalException ex) {
-                throw new BllException(ex.getMessage());
-            }
-        } else {
-            throw new BllException("Someone already has this username. Please try another username.");
+        try {
+            return dalManager.createUser(user);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
         }
     }
 
     @Override
     public User updateUserDetails(User updatedUser) throws BllException {
-        int result = checkUsernameAvailability(updatedUser.getUsername());
-        if (result == 0 || result == updatedUser.getId()) {
-            try {
-                return dalManager.updateUserDetails(updatedUser);
-            } catch (DalException ex) {
-                throw new BllException(ex.getMessage());
-            }
-        } else {
-            throw new BllException("Someone already has this username. Please try another username.");
+        try {
+            return dalManager.updateUserDetails(updatedUser);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
         }
     }
 
