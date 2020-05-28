@@ -43,8 +43,7 @@ public class TaskModel implements ITaskModel {
         this.dayEntryList = FXCollections.observableArrayList((TaskEntry taskEntry) -> {
             return new Observable[]{
                 taskEntry.startTimeProperty(),
-                taskEntry.endTimeProperty(),
-                stringDuration
+                taskEntry.endTimeProperty()
             };
         });
 

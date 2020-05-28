@@ -51,8 +51,8 @@ public class TaskEntryModel implements ITaskEntryModel {
     public void setupStartTimeListener() {
         startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
-                LocalDateTime startTimeLDT = LocalDateTime.of(getDate(), newValue);
-                taskEntry.setStartTime(startTimeLDT);
+                LocalDateTime startTimeFull = LocalDateTime.of(getDate(), newValue);
+                taskEntry.setStartTime(startTimeFull);
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
         });
@@ -62,27 +62,27 @@ public class TaskEntryModel implements ITaskEntryModel {
     public void setupEndTimeListener() {
         endTime.addListener((observable, oldValue, newValue) -> {
             if (newValue.isAfter(taskEntry.getStartTime().toLocalTime())) {
-                LocalDateTime endTimeLDT = LocalDateTime.of(getDate(), newValue);
-                taskEntry.setEndTime(endTimeLDT);
+                LocalDateTime endTimeFull = LocalDateTime.of(getDate(), newValue);
+                taskEntry.setEndTime(endTimeFull);
                 stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
             }
         });
     }
 
     @Override
-    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException {
+    public void updateTaskEntryStartTime() throws ModelException {
         try {
+            //  TODO: We don't need to return TASK ENTRY, change to void ------------------------------------------------------------
             bllManager.updateTaskEntryStartTime(taskEntry);
-//          return freshTaskEntryStartTime or not.... it has to be edited in model right?
-//  we need OK from DB as well here 
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
     }
 
     @Override
-    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException {
+    public void updateTaskEntryEndTime() throws ModelException {
         try {
+            //  TODO: We don't need to return TASK ENTRY, change to void ------------------------------------------------------------
             bllManager.updateTaskEntryEndTime(taskEntry);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());

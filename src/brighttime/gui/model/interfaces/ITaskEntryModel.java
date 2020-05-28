@@ -58,9 +58,9 @@ public interface ITaskEntryModel {
 
     void setupEndTimeListener();
 
-    void updateTaskEntryStartTime(TaskEntry taskEntry) throws ModelException;
+    void updateTaskEntryStartTime() throws ModelException;
 
-    void updateTaskEntryEndTime(TaskEntry taskEntry) throws ModelException;
+    void updateTaskEntryEndTime() throws ModelException;
 
     void initializeTaskEntryModel();
 
