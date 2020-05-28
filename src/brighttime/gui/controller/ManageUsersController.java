@@ -15,24 +15,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -40,9 +35,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -70,7 +63,6 @@ public class ManageUsersController implements Initializable {
     @FXML
     private VBox vboxCreateUsers;
 
-    private IMainModel mainModel;
     @FXML
     private TableColumn<User, String> colFirstName;
     @FXML
@@ -83,8 +75,11 @@ public class ManageUsersController implements Initializable {
     private ContextMenu contextMenu;
     @FXML
     private MenuItem menuItemDeleteUser;
+
     private final AlertManager alertManager;
     private final InputValidator inputValidator;
+
+    private IMainModel mainModel;
 
     public ManageUsersController() {
         this.alertManager = new AlertManager();
@@ -119,9 +114,9 @@ public class ManageUsersController implements Initializable {
     }
 
     public void initTableView() {
+        tbvUsers.getItems().clear();
         initCols();
         tbvUsers.setItems(mainModel.getUserList());
-
     }
 
     private void initCols() {
@@ -129,75 +124,111 @@ public class ManageUsersController implements Initializable {
         colLastName.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         colLastName.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         colUserName.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
+        colUserType.setCellValueFactory((TableColumn.CellDataFeatures<User, User.UserType> param) -> {
+            User user = param.getValue();
+            return new SimpleObjectProperty<>(user.getType());
+        });
 
-//        colUserType.setCellValueFactory(cellData -> cellData.getValue().userTypeProperty().t);
-        enableEditableCollumns();
+        setupEditableColumns();
     }
 
-    private void enableEditableCollumns() {
+    public void setupEditableColumns() {
+        setupFirstNameCol();
+        setupLastNameCol();
+        setupUsernameCol();
+        setupUsertypeCol();
+    }
+
+    private void setupFirstNameCol() {
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colFirstName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
             User u = tbvUsers.getItems().get(e.getTablePosition().getRow());
-
+            String oldFirstName = e.getOldValue();
             try {
-                e.getTableView().getItems().get(e.getTablePosition().getRow()).setFirstName(e.getNewValue());
+                u.setFirstName(e.getNewValue());
                 mainModel.updateUserDetails(u);
             } catch (ModelException ex) {
-                initTableView();
-                alertManager.showAlert("sddsd", "asdasd " + ex.getMessage());
+                Platform.runLater(() -> {
+                    u.setFirstName(oldFirstName);
+                    e.getTableView().getColumns().get(0).setVisible(false);
+                    e.getTableView().getColumns().get(0).setVisible(true);
+                    alertManager.showAlert("Could not edit user's first name", "Error: " + ex);
+                });
 
             }
         });
+    }
 
+    private void setupLastNameCol() {
         colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
         colLastName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
-            e.getTableView().getItems().get(e.getTablePosition().getRow()).setLastName(e.getNewValue());
-            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-            updateUserDetails(updatedUser);
+            User u = tbvUsers.getItems().get(e.getTablePosition().getRow());
+            String oldLastName = e.getOldValue();
+            try {
+                u.setLastName(e.getNewValue());
+                mainModel.updateUserDetails(u);
+            } catch (ModelException ex) {
+                Platform.runLater(() -> {
+                    u.setLastName(oldLastName);
+                    e.getTableView().getColumns().get(1).setVisible(false);
+                    e.getTableView().getColumns().get(1).setVisible(true);
+                    alertManager.showAlert("Could not edit user's last name", "Error: " + ex);
+                });
+
+            }
         });
 
+    }
+
+    private void setupUsernameCol() {
         colUserName.setCellFactory(TextFieldTableCell.forTableColumn());
         colUserName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
-            e.getTableView().getItems().get(e.getTablePosition().getRow()).setUsername(e.getNewValue());
-            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-
-            if (inputValidator.usernameCheck(updatedUser.getUsername())) {
-                updateUserDetails(updatedUser);
+            User u = tbvUsers.getItems().get(e.getTablePosition().getRow());
+            String oldUserName = e.getOldValue();
+            if (inputValidator.usernameCheck(u.getUsername())) {
+                try {
+                    u.setUsername(e.getNewValue());
+                    mainModel.updateUserDetails(u);
+                } catch (ModelException ex) {
+                    Platform.runLater(() -> {
+                        u.setUsername(oldUserName);
+                        e.getTableView().getColumns().get(2).setVisible(false);
+                        e.getTableView().getColumns().get(2).setVisible(true);
+                        alertManager.showAlert("Could not edit user name", "Error: " + ex.getMessage());
+                    });
+                }
             } else {
-                alertManager.showAlert("The username is invalid.", "Please try another username.");
+                Platform.runLater(() -> {
+                    u.setUsername(oldUserName);
+                    e.getTableView().getColumns().get(2).setVisible(false);
+                    e.getTableView().getColumns().get(2).setVisible(true);
+                    alertManager.showAlert("The username is invalid.", "Please try another username.");
+                });
+
             }
-
-//            Søren pseudo code (I am too tired to do this... but you can try if you want.):            
-//            String oldvalue = e.getNewValue();
-//            User dbResult = updateUserDetails(updatedUser);
-//            if (dbResult == null) //was not allowed
-//               e.getTableView().getItems().get(e.getTablePosition().getRow()).setUsername(oldvalue);
-//            
-//            updateUserDetails(updatedUser);
         });
+    }
 
+    private void setupUsertypeCol() {
         ObservableList<User.UserType> userTypes = FXCollections.observableArrayList(User.UserType.values());
-        colUserType.setCellValueFactory((TableColumn.CellDataFeatures<User, User.UserType> param) -> {
-            User user = param.getValue();
-            return new SimpleObjectProperty<User.UserType>(user.getType());
-        });
 
         colUserType.setCellFactory(ComboBoxTableCell.forTableColumn(userTypes));
         colUserType.setOnEditCommit((TableColumn.CellEditEvent<User, User.UserType> e) -> {
-            e.getTableView().getItems().get(e.getTablePosition().getRow()).setType(e.getNewValue());
-//            TablePosition<User, User.UserType> pos = event.getTablePosition();
-            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-            updateUserDetails(updatedUser);
+            User u = e.getTableView().getItems().get(e.getTablePosition().getRow());
+            User.UserType oldUserType = e.getOldValue();
+            try {
+                u.setType(e.getNewValue());
+                mainModel.updateUserDetails(u);
+            } catch (ModelException ex) {
+                Platform.runLater(() -> {
+                    u.setType(oldUserType);
+                    e.getTableView().getColumns().get(3).setVisible(false);
+                    e.getTableView().getColumns().get(3).setVisible(true);
+                    alertManager.showAlert("Could not edit user type.", "Error: " + ex.getMessage());
+                });
 
+            }
         });
-
-//        colUserType.setCellFactory(TextFieldTableCell.forTableColumn());
-//        colUserType.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
-//            e.getTableView().getItems().get(e.getTablePosition().getRow()).setType(User.UserType.valueOf(e.getNewValue()));
-//            User updatedUser = tbvUsers.getItems().get(e.getTablePosition().getRow());
-//            updateUserDetails(updatedUser);
-//            System.out.println("in usertype col");
-//        });
     }
 
     @FXML
@@ -236,23 +267,6 @@ public class ManageUsersController implements Initializable {
         }
     }
 
-    private void setupTableViewListener() {
-
-//        mainModel.getUserList().addListener((ListChangeListener.Change<? extends User> c) -> {
-//            System.out.println("update");
-//
-//        });
-    }
-
-    private void updateUserDetails(User updatedUser) {
-        try {
-            mainModel.updateUserDetails(updatedUser);
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not update the new user details.", "An error occured: " + ex.getMessage());
-        }
-
-    }
-
     @FXML
     private void handleDeleteUser(ActionEvent event) {
         User u = tbvUsers.getSelectionModel().getSelectedItem();
@@ -268,6 +282,15 @@ public class ManageUsersController implements Initializable {
             }
         }
 
+    }
+
+    private void setupTableViewListener() {
+        //  i guess we dont need this, will check later
+
+//        mainModel.getUserList().addListener((ListChangeListener.Change<? extends User> c) -> {
+//            System.out.println("update");
+//
+//        });
     }
 
 }

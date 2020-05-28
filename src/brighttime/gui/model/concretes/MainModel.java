@@ -256,6 +256,7 @@ public class MainModel implements IMainModel {
         }
     }
 
+    
     @Override
     public User updateUserDetails(User updatedUser) throws ModelException {
         try {
