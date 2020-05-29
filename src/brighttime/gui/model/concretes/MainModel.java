@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -124,46 +126,17 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
-
-        //Created the task in the project "LEGO":
-        Thread t = new Thread(() -> {
+        ExecutorService exec = Executors.newSingleThreadExecutor();
+        exec.execute(() -> {
             try {
-                long startTimeT = System.currentTimeMillis();
-                System.out.println("Time Thread log " + (System.currentTimeMillis() - startTimeT) + "--------------------------------------------");
-
-                startTimeT = System.currentTimeMillis();
                 TaskConcrete1 freshTask = bllManager.createTask(task);
-                System.out.println("Time Thread createTask " + (System.currentTimeMillis() - startTimeT) + "--------------------------------------------");
-
-                Platform.runLater(() -> { // Puts this on EventQueue to be handled by FX Application Thread
-                    long startTime = System.currentTimeMillis();
-                    if (freshTask.getTaskEntryList() == null) {
-                        List<TaskEntry> entryList = new ArrayList();
-                        freshTask.setTaskEntryList(entryList);
-                    }
-                    System.out.println("date " + freshTask.getCreationTime().toLocalDate());
-                    List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
-                    if (taskList == null) {
-                        taskList = new ArrayList<>();
-                        taskList.add(freshTask);
-                        taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
-                    } else {
-                        taskList.add(0, freshTask);
-                        taskMap.remove(freshTask.getCreationTime().toLocalDate());
-                        taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
-
-                    }
-                    System.out.println("Time runLater GUI elements " + (System.currentTimeMillis() - startTime) + "--------------------------------------------");
-
+                Platform.runLater(() -> {
+                    addTaskLocally(freshTask);
                 });
             } catch (BllException ex) {
-                Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex); // TODO
+                Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        );
-        t.setDaemon(true);
-        t.start();
-
+        });
     }
 
     @Override
@@ -175,7 +148,7 @@ public class MainModel implements IMainModel {
     public void loadTasks(User user, LocalDate startDate, LocalDate endDate) throws ModelException {
         try {
             Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user, startDate, endDate);
-            //  temp removal
+            //  temp removal of listener
             taskMap.removeListener(taskMapListener);
             taskMap.clear();
             taskMap.putAll(allTasks);
@@ -256,7 +229,6 @@ public class MainModel implements IMainModel {
         }
     }
 
-    
     @Override
     public User updateUserDetails(User updatedUser) throws ModelException {
         try {
@@ -294,6 +266,24 @@ public class MainModel implements IMainModel {
             throw new ModelException(ex.getMessage());
         }
 
+    }
+
+    private void addTaskLocally(TaskConcrete1 freshTask) {
+        if (freshTask.getTaskEntryList() == null) {
+            List<TaskEntry> entryList = new ArrayList();
+            freshTask.setTaskEntryList(entryList);
+        }
+        List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
+        if (taskList == null) {
+            taskList = new ArrayList<>();
+            taskList.add(freshTask);
+            taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+        } else {
+            taskList.add(0, freshTask);
+            taskMap.remove(freshTask.getCreationTime().toLocalDate());
+            taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+
+        }
     }
 
 }
