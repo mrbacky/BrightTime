@@ -39,8 +39,8 @@ public class TaskItemController implements Initializable {
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
     private final Image PLAY_ICON_IMAGE = new Image("/brighttime/gui/view/assets/play.png");
     private final Image PAUSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/pause.png");
-    private final Image EXPAND_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
-    private final Image COLLAPSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
+    private final Image COLLAPSED_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
+    private final Image EXPANDED_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
 
     @FXML
     private ToggleButton btnExpandTask;
@@ -137,15 +137,16 @@ public class TaskItemController implements Initializable {
     }
 
     private void showTaskEntries() {
-        imgExpandCollapse.setImage(COLLAPSE_ICON_IMAGE);
+        imgExpandCollapse.setImage(EXPANDED_ICON_IMAGE);
         btnExpandTask.setSelected(true);
+        btnExpandTask.setDisable(false);
         if (!taskModel.getDayEntryList().isEmpty()) {
             initTaskEntries();
         }
     }
 
     private void hideTaskEntries() {
-        imgExpandCollapse.setImage(EXPAND_ICON_IMAGE);
+        imgExpandCollapse.setImage(COLLAPSED_ICON_IMAGE);
         vBoxTaskEntries.getChildren().clear();
     }
 
