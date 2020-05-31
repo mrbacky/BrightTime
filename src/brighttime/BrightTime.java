@@ -25,7 +25,7 @@ public class BrightTime extends Application {
 
         Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
         stage.getIcons().add(icon);
-        stage.setTitle("BrightTime");
+        stage.setTitle("bright time");
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(BrightTime.class.getResource(LOGIN_VIEW));
         Parent root = fxmlLoader.load();

@@ -1,10 +1,7 @@
 package brighttime.gui.controller;
 
 import brighttime.BrightTime;
-import brighttime.be.TaskConcrete1;
-import brighttime.be.TaskEntry;
 import brighttime.be.User;
-import brighttime.gui.model.ModelCreator;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.util.ToolTipManager;
@@ -12,23 +9,17 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -68,14 +59,15 @@ public class RootController implements Initializable {
     private JFXButton btnProjects;
     @FXML
     private JFXButton btnUsers;
-    private IMainModel mainModel;
-    private User user;
-    private final AlertManager alertManager;
-    private final ToolTipManager toolTipManager;
     @FXML
     private JFXButton btnLogout;
     @FXML
     private VBox vBoxRootButtons;
+    private final ToolTipManager toolTipManager;
+    private final AlertManager alertManager;
+
+    private IMainModel mainModel;
+    private User user;
 
     public RootController() {
         alertManager = new AlertManager();
@@ -99,69 +91,39 @@ public class RootController implements Initializable {
     }
 
     public void initializeView() {
-
         setUser();
-
         loadModule(TIME_TRACKER_MODULE);
         setToolTipsForButtons();
         displayAdminMenuItems();
-//        showAdminMenu();
-//        hideAdminMenu();
         showAdminClientModule();
         showAdminProjectModule();
         showAdminUserModule();
-//        taskMapListener = (MapChangeListener.Change<? extends LocalDate, ? extends List<TaskConcrete1>> change) -> {
-//            System.out.println("adding");
-//            controller.initTasks();
-//        };
 
     }
-//    boolean isListening = false;
-//    private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
-
-//          Multithreading
-//          ON DESTRUCT, finialize ----------------------------------------------------------------------------------------------------------
-//    public void createTaskMapListener() {
-//
-//        if (isListening == true) {
-//            mainModel.getTaskMap().addListener(taskMapListener);
-//            System.out.println("adding");
-//        } else {
-//            mainModel.getTaskMap().removeListener(taskMapListener);
-//            System.out.println("removing");
-//        }
-//
-//    }
-    TimeTrackerController controller;
 
     public void loadModule(String module) {
         try {
-//            System.gc();
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(BrightTime.class.getResource(module));
             Parent root = fxmlLoader.load();
 
             if (module.equals(TIME_TRACKER_MODULE)) {
-                controller = fxmlLoader.getController();
+                TimeTrackerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
-//                isListening = true;
             } else if (module.equals(ADMIN_MENU_MODULE)) {
                 CreatorController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
                 controller.setContr(this);
-//                isListening = false;
             } else if (module.equals(ADMIN_CLIENTS_MODULE)) {
                 ManageClientsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
-//                isListening = false;
             } else if (module.equals(ADMIN_PROJECTS_MODULE)) {
                 ManageProjectsController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
-                //                isListening = false;
             } else if (module.equals(ADMIN_USERS_MODULE)) {
                 ManageUsersController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
@@ -170,9 +132,7 @@ public class RootController implements Initializable {
                 OverviewController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
-//                isListening = false;
             }
-//            createTaskMapListener();
             rootBorderPane.setCenter(root);
         } catch (IOException ex) {
             alertManager.showAlert("Could not load module.", "An error occured:" + ex.getMessage());
@@ -182,6 +142,11 @@ public class RootController implements Initializable {
     @FXML
     private void loadTimeTrackerModule(ActionEvent event) {
         loadModule(TIME_TRACKER_MODULE);
+    }
+
+    @FXML
+    private void loadOverviewModule(ActionEvent event) {
+        loadModule(OVERVIEW_MODULE);
     }
 
     @FXML
@@ -195,6 +160,10 @@ public class RootController implements Initializable {
 
     void loadAdminProjectModule() {
         loadModule(ADMIN_PROJECTS_MODULE);
+    }
+
+    void loadAdminUserModule() {
+        loadModule(ADMIN_USERS_MODULE);
     }
 
     void displayAdminMenuItems() {
@@ -231,11 +200,6 @@ public class RootController implements Initializable {
         });
     }
 
-    @FXML
-    private void loadOverviewModule(ActionEvent event) {
-        loadModule(OVERVIEW_MODULE);
-    }
-
     private void setToolTipsForButtons() {
         toolTipManager.setToolTipForOneButton(btnTimeTracker, "Time Tracker");
         toolTipManager.setToolTipForOneButton(btnOverview, "Overview");
@@ -260,7 +224,7 @@ public class RootController implements Initializable {
                 Stage stage = new Stage();
                 stage.setResizable(false);
                 stage.getIcons().add(icon);
-                stage.setTitle("BrightTime");
+                stage.setTitle("bright time");
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException ex) {
@@ -268,10 +232,6 @@ public class RootController implements Initializable {
                 Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-
-    void loadAdminUserModule() {
-        loadModule(ADMIN_USERS_MODULE);
     }
 
     private void showAdminUserModule() {
