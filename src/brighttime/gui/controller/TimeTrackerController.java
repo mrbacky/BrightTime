@@ -65,7 +65,7 @@ public class TimeTrackerController implements Initializable {
     private LocalDate date = LocalDate.MIN;
     private User user;
 
-    private final AlertManager alertManager;    
+    private final AlertManager alertManager;
     private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
     private IMainModel mainModel;
     int i = 0;
@@ -95,12 +95,9 @@ public class TimeTrackerController implements Initializable {
             setUser();
             setUpTaskMapListener();
             setUpTaskCreator();
-
             mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
             initTasks();
-
             switchLoggingMode();
-
         } catch (ModelException ex) {
             Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -126,7 +123,7 @@ public class TimeTrackerController implements Initializable {
             grid.add(root, 0, 0);
 
         } catch (IOException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not set up task creator panel", "Error: " + ex.getMessage());
         }
     }
 
@@ -159,7 +156,6 @@ public class TimeTrackerController implements Initializable {
 
     public void addTaskItem(TaskConcrete1 task) {
         try {
-
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
             Parent root = fxmlLoader.load();
             ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
@@ -172,7 +168,7 @@ public class TimeTrackerController implements Initializable {
             controller.initializeView();
             vBoxMain.getChildren().add(root);
         } catch (IOException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not create a task", "Error: " + ex.getMessage());
         }
 
     }

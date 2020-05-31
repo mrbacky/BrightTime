@@ -42,6 +42,10 @@ import javafx.util.converter.LocalTimeStringConverter;
  */
 public class CreateTaskController implements Initializable {
 
+    //TODO: Change all to 24HourView!
+    private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
+    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
+
     @FXML
     private GridPane grid;
     @FXML
@@ -62,22 +66,19 @@ public class CreateTaskController implements Initializable {
     @FXML
     private JFXTimePicker timePickerEnd;
 
-    private IMainModel mainModel;
-    private TimeTrackerController timeTrackerContr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
     private final DatePickerCustomizer datePickerCustomizer;
+
+    private IMainModel mainModel;
     private User user;
+    private TimeTrackerController timeTrackerContr;
 
     private Boolean manualMode;
     private Boolean date = false;
     private Boolean start = false;
     private Boolean end = false;
     private Boolean timeInterval = false;
-
-    private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
-    //TODO: Change all to 24HourView!
-    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
 
     public CreateTaskController() {
         this.alertManager = new AlertManager();
@@ -90,6 +91,20 @@ public class CreateTaskController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    void injectMainModel(IMainModel mainModel) {
+        this.mainModel = mainModel;
+    }
+
+    void initializeView() throws IOException {
+        timeTrackerContr.injectCreateTaskController(this);
+        setUser();
+        setClientsIntoComboBox();
+        setProjectsIntoComboBox();
+        setValidators();
+        addTask();
         normalMode();
         setDateRestrictions();
         setTimeRestriction();
@@ -98,19 +113,6 @@ public class CreateTaskController implements Initializable {
         listenDatePicker();
         listenTimePickerStart();
         listenTimePickerEnd();
-    }
-
-    void injectMainModel(IMainModel mainModel) {
-        this.mainModel = mainModel;
-    }
-
-    void initializeView() throws IOException {
-        setUser();
-        setClientsIntoComboBox();
-        setProjectsIntoComboBox();
-        setValidators();
-        addTask();
-        timeTrackerContr.injectCreateTaskController(this);
     }
 
     public void injectTimeTrackerController(TimeTrackerController timeTrackerContr) {
@@ -185,7 +187,7 @@ public class CreateTaskController implements Initializable {
         //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
         btnAdd.setOnAction((event) -> {//   change name method.
             if (validateInput()) {
-             
+
                 if (!manualMode) {
                     try {
                         TaskConcrete1 newTask = makeTask();
