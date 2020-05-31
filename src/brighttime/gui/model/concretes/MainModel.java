@@ -31,13 +31,13 @@ import javafx.collections.ObservableMap;
 public class MainModel implements IMainModel {
 
     private final BllFacade bllManager;
+    private User user;
+
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
-
-    private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
-    private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
     private final ObservableList<User> userList = FXCollections.observableArrayList();
-    private User user;
+    private final ObservableList<TaskConcrete2> taskList = FXCollections.observableArrayList();
+    private final ObservableMap<LocalDate, List<TaskConcrete1>> taskMap = FXCollections.observableHashMap();
     private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
 
     public MainModel(BllFacade bllManager) {
@@ -124,24 +124,14 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
-
-        //Created the task in the project "LEGO":
         Thread t = new Thread(() -> {
             try {
-                long startTimeT = System.currentTimeMillis();
-                System.out.println("Time Thread log " + (System.currentTimeMillis() - startTimeT) + "--------------------------------------------");
-
-                startTimeT = System.currentTimeMillis();
                 TaskConcrete1 freshTask = bllManager.createTask(task);
-                System.out.println("Time Thread createTask " + (System.currentTimeMillis() - startTimeT) + "--------------------------------------------");
-
-                Platform.runLater(() -> { // Puts this on EventQueue to be handled by FX Application Thread
-                    long startTime = System.currentTimeMillis();
+                Platform.runLater(() -> {
                     if (freshTask.getTaskEntryList() == null) {
                         List<TaskEntry> entryList = new ArrayList();
                         freshTask.setTaskEntryList(entryList);
                     }
-                    System.out.println("date " + freshTask.getCreationTime().toLocalDate());
                     List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
                     if (taskList == null) {
                         taskList = new ArrayList<>();
@@ -151,10 +141,7 @@ public class MainModel implements IMainModel {
                         taskList.add(0, freshTask);
                         taskMap.remove(freshTask.getCreationTime().toLocalDate());
                         taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
-
                     }
-                    System.out.println("Time runLater GUI elements " + (System.currentTimeMillis() - startTime) + "--------------------------------------------");
-
                 });
             } catch (BllException ex) {
                 Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex); // TODO
@@ -175,7 +162,7 @@ public class MainModel implements IMainModel {
     public void loadTasks(User user, LocalDate startDate, LocalDate endDate) throws ModelException {
         try {
             Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user, startDate, endDate);
-            //  temp removal
+            //  Temp removal of listener becouse putAll is not one action. It is loop of put commands onto task map.
             taskMap.removeListener(taskMapListener);
             taskMap.clear();
             taskMap.putAll(allTasks);
@@ -236,12 +223,15 @@ public class MainModel implements IMainModel {
         return userList;
     }
 
+    /**
+     * @param taskMapListener
+     * Setting up "Singleton" for listener so there is always one instance of taskMapListener attached to .
+     */
     @Override
     public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener) {
         if (this.taskMapListener != null) {
             taskMap.removeListener(this.taskMapListener);
         }
-
         this.taskMapListener = taskMapListener;
         taskMap.addListener(taskMapListener);
     }
@@ -256,7 +246,6 @@ public class MainModel implements IMainModel {
         }
     }
 
-    
     @Override
     public User updateUserDetails(User updatedUser) throws ModelException {
         try {

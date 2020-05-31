@@ -15,7 +15,7 @@
     <children>
         <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" styleClass="viewItem" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
             <children>
-                <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" minWidth="-Infinity" text="─" textFill="WHITE">
                             <StackPane.margin>
@@ -39,7 +39,7 @@
                         </ToggleButton>
                     </children>
                 </StackPane>
-                <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="540.0" AnchorPane.topAnchor="0.0">
+                <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="515.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <JFXTextField fx:id="textFieldTaskDesc">
                      <styleClass>
@@ -48,25 +48,25 @@
                      </styleClass></JFXTextField>
                     </children>
                 </StackPane>
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="385.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <JFXTextField fx:id="textFieldProject">
+                        <JFXTextField fx:id="textFieldClient">
                      <styleClass>
                         <String fx:value="txtCommon" />
                         <String fx:value="txtProject" />
                      </styleClass></JFXTextField>
                     </children>
                 </StackPane>
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="0.0">
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="255.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <JFXTextField fx:id="textFieldClient">
+                        <JFXTextField fx:id="textFieldProject">
                      <styleClass>
                         <String fx:value="txtCommon" />
                         <String fx:value="txtClient" />
                      </styleClass></JFXTextField>
                     </children>
                 </StackPane>
-                <StackPane prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="0.0">
+                <StackPane prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label fx:id="lblDuration" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="55.0" styleClass="txtCommon" text=" " />
                </children>
@@ -82,13 +82,16 @@
                                 </ImageView>
                             </graphic>
                             <StackPane.margin>
-                                <Insets right="35.0" />
+                                <Insets right="34.0" />
                             </StackPane.margin>
                         </ToggleButton>
                   <ImageView fx:id="imgMoneyBag" fitHeight="30.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
                      <image>
                         <Image url="@assets/icons8_money_bag_krona_96px.png" />
                      </image>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
                   </ImageView>
                     </children>
                 </StackPane>

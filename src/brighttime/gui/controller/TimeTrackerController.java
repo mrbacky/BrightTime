@@ -48,32 +48,31 @@ import javafx.util.converter.LocalDateStringConverter;
  */
 public class TimeTrackerController implements Initializable {
 
-    @FXML
-    private VBox vBoxMain;
-    private VBox vBoxCreator;
-    @FXML
-    private JFXButton btnSwitchMode;
-
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
+    private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
 
-    private LocalDate taskFilterStartDate;
-    private LocalDate taskFilterEndDate;
-
-    private CreateTaskController createTaskContr;
-    private IMainModel mainModel;
-    private final AlertManager alertManager;
-    private LocalDate date = LocalDate.MIN;
-    private User user;
-    int i = 0;
+    @FXML
+    private VBox vBoxMain;
+    @FXML
+    private JFXButton btnSwitchMode;
     @FXML
     private GridPane grid;
     @FXML
     private JFXDatePicker datePickerStart;
     @FXML
     private JFXDatePicker datePickerEnd;
+    private LocalDate taskFilterStartDate;
+    private LocalDate taskFilterEndDate;
 
-    private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
+    private CreateTaskController createTaskContr;
+    private LocalDate date = LocalDate.MIN;
+    private User user;
+
+    private final AlertManager alertManager;    
+    private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
+    private IMainModel mainModel;
+    int i = 0;
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -90,17 +89,10 @@ public class TimeTrackerController implements Initializable {
         this.mainModel = mainModel;
     }
 
-    private void setUser() {
+    public void setUser() {
         user = mainModel.getUser();
     }
 
-    private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
-
-//    @Override
-//    protected void finalize() throws Throwable {
-//        mainModel.getTasks().removeListener(taskMapListener);
-//        System.out.println("Object is destroyed by the Garbage Collector");
-//    }
     public void initializeView() {
         try {
             setInitialFilter();
@@ -118,16 +110,15 @@ public class TimeTrackerController implements Initializable {
         }
     }
 
-    private void setUpTaskMapListener() {
+    public void setUpTaskMapListener() {
         taskMapListener = (MapChangeListener.Change<? extends LocalDate, ? extends List<TaskConcrete1>> change) -> {
             initTasks();
-            System.out.println("init tasks");
         };
         mainModel.addTaskMapListener(taskMapListener);
 
     }
 
-    private void setUpTaskCreator() {
+    public void setUpTaskCreator() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_CREATOR_FXML));
 
@@ -170,7 +161,7 @@ public class TimeTrackerController implements Initializable {
 
     }
 
-    private void addTaskItem(TaskConcrete1 task) {
+    public void addTaskItem(TaskConcrete1 task) {
         try {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
@@ -190,11 +181,11 @@ public class TimeTrackerController implements Initializable {
 
     }
 
-    void injectCreateTaskController(CreateTaskController contr) {
+    public void injectCreateTaskController(CreateTaskController contr) {
         this.createTaskContr = contr;
     }
 
-    private void switchLoggingMode() {
+    public void switchLoggingMode() {
         btnSwitchMode.setText("Switch to manual logging");
         btnSwitchMode.getStyleClass().add("buttonSwitchMode");
         btnSwitchMode.setOnAction((event) -> {
