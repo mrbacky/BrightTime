@@ -200,6 +200,12 @@ public class RootController implements Initializable {
         });
     }
 
+    private void showAdminUserModule() {
+        btnUsers.setOnAction((ActionEvent event) -> {
+            loadAdminUserModule();
+        });
+    }
+
     private void setToolTipsForButtons() {
         toolTipManager.setToolTipForOneButton(btnTimeTracker, "Time Tracker");
         toolTipManager.setToolTipForOneButton(btnOverview, "Overview");
@@ -232,12 +238,6 @@ public class RootController implements Initializable {
                 Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-
-    private void showAdminUserModule() {
-        btnUsers.setOnAction((ActionEvent event) -> {
-            loadAdminUserModule();
-        });
     }
 
 }

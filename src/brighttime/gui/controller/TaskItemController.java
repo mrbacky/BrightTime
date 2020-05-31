@@ -35,7 +35,7 @@ import javafx.scene.layout.VBox;
  */
 public class TaskItemController implements Initializable {
 
-    private final String DATE_TIME_FORMAT = "HH:mm";
+    private final String TIME_FORMAT = "HH:mm";
     private final String TASK_ENTRY_ITEM_FXML = "/brighttime/gui/view/TaskEntryItem.fxml";
     private final Image PLAY_ICON_IMAGE = new Image("/brighttime/gui/view/assets/play.png");
     private final Image PAUSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/pause.png");
@@ -114,7 +114,7 @@ public class TaskItemController implements Initializable {
     }
 
     public void setTaskDetails(TaskConcrete1 task) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TIME_FORMAT);
 
         textFieldTaskDesc.setText(task.getDescription());
         textFieldClient.setText(task.getProject().getClient().getName());
@@ -170,7 +170,7 @@ public class TaskItemController implements Initializable {
             controller.initializeView();
             vBoxTaskEntries.getChildren().add(root);
         } catch (IOException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not get task entries.", "An error occured: " + ex.getMessage());
         }
     }
 
@@ -188,16 +188,18 @@ public class TaskItemController implements Initializable {
         tempStartTime = LocalDateTime.now().withNano(0);
     }
 
+    /**
+     * Create task entry inside the task after clicking pause button.
+     */
     private void pauseTask() {
         try {
             imgPlayPause.setImage(PLAY_ICON_IMAGE);
             tempEndTime = LocalDateTime.now().withNano(0);
             taskModel.addTaskEntry(tempStartTime, tempEndTime);
-            //  if this task is from the past ,reload everything so the new empty task will be created for current day..
+            //  if this task is from the past ,reload everything so the new empty task will be created for current day.
             if (taskModel.getDate().equals(LocalDate.now())) {
-                //  auto expand
-                showTaskEntries();
-            } else {//  workaround
+                showTaskEntries(); //  auto expand
+            } else {//  reload all
                 timeTracker.initializeView();
             }
         } catch (ModelException ex) {

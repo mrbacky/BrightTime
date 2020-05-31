@@ -57,7 +57,6 @@ public class CreateProjectController implements Initializable {
     }
 
     void initializeView() throws IOException {
-        System.out.println("in CreateProject page");
         setClientsIntoComboBox();
         setValidators();
         addProject();

@@ -62,7 +62,6 @@ public class ManageUsersController implements Initializable {
     private ToggleButton btnExpandCreateUser;
     @FXML
     private VBox vboxCreateUsers;
-
     @FXML
     private TableColumn<User, String> colFirstName;
     @FXML
@@ -101,15 +100,13 @@ public class ManageUsersController implements Initializable {
     public void initializeView() {
         loadUsers();
         initTableView();
-        setupTableViewListener();
-
     }
 
     private void loadUsers() {
         try {
             mainModel.loadUsers();
         } catch (ModelException ex) {
-            Logger.getLogger(ManageUsersController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not load users.", "An error occured: " + ex.getMessage());
         }
     }
 
@@ -154,7 +151,6 @@ public class ManageUsersController implements Initializable {
                     e.getTableView().getColumns().get(0).setVisible(true);
                     alertManager.showAlert("Could not edit user's first name", "Error: " + ex);
                 });
-
             }
         });
     }
@@ -174,7 +170,6 @@ public class ManageUsersController implements Initializable {
                     e.getTableView().getColumns().get(1).setVisible(true);
                     alertManager.showAlert("Could not edit user's last name", "Error: " + ex);
                 });
-
             }
         });
 
@@ -211,7 +206,6 @@ public class ManageUsersController implements Initializable {
 
     private void setupUsertypeCol() {
         ObservableList<User.UserType> userTypes = FXCollections.observableArrayList(User.UserType.values());
-
         colUserType.setCellFactory(ComboBoxTableCell.forTableColumn(userTypes));
         colUserType.setOnEditCommit((TableColumn.CellEditEvent<User, User.UserType> e) -> {
             User u = e.getTableView().getItems().get(e.getTablePosition().getRow());
@@ -226,7 +220,6 @@ public class ManageUsersController implements Initializable {
                     e.getTableView().getColumns().get(3).setVisible(true);
                     alertManager.showAlert("Could not edit user type.", "Error: " + ex.getMessage());
                 });
-
             }
         });
     }
@@ -255,7 +248,6 @@ public class ManageUsersController implements Initializable {
     public void setUpUserCreator() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(CREATE_USER_FXML));
-
             Parent root = fxmlLoader.load();
             CreateUserController controller = fxmlLoader.getController();
             controller.injectMainModel(mainModel);
@@ -263,7 +255,7 @@ public class ManageUsersController implements Initializable {
             controller.initializeView();
             vboxCreateUsers.getChildren().add(root);
         } catch (IOException ex) {
-
+            alertManager.showAlert("Could not set up the user creator.", "An error occured: " + ex.getMessage());
         }
     }
 
@@ -282,15 +274,6 @@ public class ManageUsersController implements Initializable {
             }
         }
 
-    }
-
-    private void setupTableViewListener() {
-        //  i guess we dont need this, will check later
-
-//        mainModel.getUserList().addListener((ListChangeListener.Change<? extends User> c) -> {
-//            System.out.println("update");
-//
-//        });
     }
 
 }

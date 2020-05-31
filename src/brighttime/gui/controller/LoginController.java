@@ -38,8 +38,6 @@ public class LoginController implements Initializable {
 
     private final String ROOT_PATH = "/brighttime/gui/view/Root.fxml";
     private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
-    private final AlertManager alertManager;
-    private final InputValidator inputValidator;
 
     @FXML
     private JFXTextField txtUsername;
@@ -47,6 +45,9 @@ public class LoginController implements Initializable {
     private JFXPasswordField txtPassword;
     @FXML
     private JFXButton btnLogIn;
+    
+    private final AlertManager alertManager;
+    private final InputValidator inputValidator;
     private IAuthenticationModel authenticationModel;
     private User user;
 
@@ -135,7 +136,6 @@ public class LoginController implements Initializable {
                     initializeRoot(user);
                     closeLogin();
                 });
-
             }
         } catch (ModelException ex) {
             alertManager.showAlert("Could not authenticate user.", "An error occured: " + ex.getMessage());

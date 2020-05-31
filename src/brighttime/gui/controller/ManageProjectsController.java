@@ -26,12 +26,10 @@ import javafx.scene.layout.StackPane;
  */
 public class ManageProjectsController implements Initializable {
 
+    private final String CREATE_PROJECT_FXML = "/brighttime/gui/view/CreateProject.fxml";
+
     @FXML
     private StackPane stackPane;
-
-    private final String CREATE_PROJECT_FXML = "/brighttime/gui/view/CreateProject.fxml";
-    private IMainModel mainModel;
-    private final AlertManager alertManager;
     @FXML
     private TableView<Project> tblProjects;
     @FXML
@@ -40,6 +38,9 @@ public class ManageProjectsController implements Initializable {
     private TableColumn<Project, Client> colClient;
     @FXML
     private TableColumn<Project, Integer> colRate;
+
+    private final AlertManager alertManager;
+    private IMainModel mainModel;
 
     public ManageProjectsController() {
         this.alertManager = new AlertManager();
@@ -58,22 +59,20 @@ public class ManageProjectsController implements Initializable {
 
     public void initializeView() {
         setUpProjectCreator();
-        setTable();        
+        setTable();
     }
 
     private void setUpProjectCreator() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(CREATE_PROJECT_FXML));
-
             Parent root = fxmlLoader.load();
             CreateProjectController controller = fxmlLoader.getController();
             controller.injectManageProjectsController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();
             stackPane.getChildren().add(root);
-
         } catch (IOException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not set up project creator.", "An error occured: " + ex.getMessage());
         }
     }
 
@@ -85,7 +84,8 @@ public class ManageProjectsController implements Initializable {
         try {
             mainModel.loadAllProjects();
         } catch (ModelException ex) {
-            Logger.getLogger(ManageProjectsController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not set up project table.", "An error occured: " + ex.getMessage());
+
         }
     }
 

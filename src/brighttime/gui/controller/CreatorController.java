@@ -44,7 +44,6 @@ public class CreatorController implements Initializable {
     }
 
     void initializeView() {
-        System.out.println("in Creator page");
         centervBox();
         showAdminClientModule();
         showAdminProjectModule();

@@ -24,13 +24,13 @@ public class CreateClientController implements Initializable {
     private JFXButton btnAdd;
     @FXML
     private JFXTextField txtName;
+    @FXML
+    private JFXTextField txtHourlyRate;
 
     private ManageClientsController contr;
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
-    @FXML
-    private JFXTextField txtHourlyRate;
 
     public CreateClientController() {
         this.alertManager = new AlertManager();
@@ -53,7 +53,6 @@ public class CreateClientController implements Initializable {
     }
 
     void initializeView() throws IOException {
-        System.out.println("in CreateClient page");
         setValidators();
         addClient();
     }
@@ -76,7 +75,6 @@ public class CreateClientController implements Initializable {
                     }
                     mainModel.addClient(new Client(txtName.getText().trim(), hourlyRate));
                     clearInputs();
-                    System.out.println("Action event is working!");
                 } catch (ModelException ex) {
                     alertManager.showAlert("Could not create the client.", "An error occured: " + ex.getMessage());
                 }
