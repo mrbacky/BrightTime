@@ -106,7 +106,6 @@ public class CreateTaskController implements Initializable {
 
     void initializeView() throws IOException {
         setUser();
-        System.out.println("in Creator page");
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
         setValidators();
@@ -186,13 +185,12 @@ public class CreateTaskController implements Initializable {
         //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
         btnAdd.setOnAction((event) -> {//   change name method.
             if (validateInput()) {
-                // Slow part
+             
                 if (!manualMode) {
                     try {
                         TaskConcrete1 newTask = makeTask();
                         mainModel.addTask(newTask);
                         clearInputs();
-//                        timeTrackerContr.initTasks();
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                     }
@@ -202,7 +200,6 @@ public class CreateTaskController implements Initializable {
                         TaskConcrete1 newTaskWithEntry = makeTaskEntry(newTask);
                         mainModel.addTask(newTaskWithEntry);
                         clearInputs();
-//                        timeTrackerContr.initTasks();
                     } catch (ModelException ex) {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                     }

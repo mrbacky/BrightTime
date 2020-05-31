@@ -262,9 +262,9 @@ public class OverviewController implements Initializable {
         colTaskDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colHours.setCellValueFactory(new PropertyValueFactory<>("totalDurationString"));
         colCost.setCellValueFactory(new PropertyValueFactory<>("totalCostString"));
-        tbvTasks.setItems(mainModel.getTaskList());
+        tbvTasks.setItems(mainModel.getOverviewTaskList());
         try {
-            mainModel.getAllTasks();
+            mainModel.loadOverviewTasks();
         } catch (ModelException ex) {
             alertManager.showAlert("Could not get the tasks.", "An error occured: " + ex.getMessage());
         }
@@ -274,7 +274,7 @@ public class OverviewController implements Initializable {
         cboUsers.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(newVal, cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
+                    mainModel.loadOverviewTasksFiltered(new Filter(newVal, cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
                     //  added rule ------------------------------------------------------------------------------------------------------------
                     if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
                         StringProperty selectedFilter = new SimpleStringProperty();
@@ -301,7 +301,7 @@ public class OverviewController implements Initializable {
         cboProjects.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
                 try {
-                    mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), newVal, datePickerStart.getValue(), datePickerEnd.getValue()));
+                    mainModel.loadOverviewTasksFiltered(new Filter(cboUsers.getValue(), newVal, datePickerStart.getValue(), datePickerEnd.getValue()));
                     StringProperty selectedFilter = new SimpleStringProperty();
                     selectedFilter.bind(Bindings.concat(newVal.nameProperty(), " (", newVal.clientProperty(), ")"));
                     makeCustomActiveFilterButton(btnFilterProject, selectedFilter);
@@ -342,7 +342,7 @@ public class OverviewController implements Initializable {
         if (checkTimeFrame()) {
             try {
                 changeToCorrectDateInTextField(datePicker, date);
-                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
+                mainModel.loadOverviewTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
                 updateAfterTimeFrameFiltering();
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not filter by date.", "An error occured: " + ex.getMessage());
@@ -476,9 +476,9 @@ public class OverviewController implements Initializable {
     private void refreshAfterRemovingOneFilter() {
         try {
             if (currentUser.getType() == User.UserType.ADMINISTRATOR && checkAllFilterEmpty()) {
-                mainModel.getAllTasks();
+                mainModel.loadOverviewTasks();
             } else {
-                mainModel.getAllTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
+                mainModel.loadOverviewTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
             }
         } catch (ModelException ex) {
             Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -504,9 +504,9 @@ public class OverviewController implements Initializable {
                 datePickerEnd.setValue(null);
                 //  added rule --------------------------------------------------------------------------------------------------------------------
                 if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
-                    mainModel.getAllTasks();
+                    mainModel.loadOverviewTasks();
                 } else if (currentUser.getType() == User.UserType.STANDARD) {
-                    mainModel.getAllTasksFiltered(new Filter(currentUser, null, null, null));
+                    mainModel.loadOverviewTasksFiltered(new Filter(currentUser, null, null, null));
                 }
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
@@ -533,7 +533,7 @@ public class OverviewController implements Initializable {
     private void setUpBarChart() {
         ObservableList<XYChart.Series<String, Double>> taskBars = FXCollections.observableArrayList();
 
-        List<TaskConcrete2> taskList = mainModel.getTaskList();
+        List<TaskConcrete2> taskList = mainModel.getOverviewTaskList();
         List<TaskConcrete2> tasksWithHours = taskList.stream().filter(task -> task.getTotalDurationSeconds() > 60).collect(Collectors.toList());
 
         for (TaskConcrete2 task : tasksWithHours) {

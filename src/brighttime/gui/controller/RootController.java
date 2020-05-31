@@ -124,10 +124,10 @@ public class RootController implements Initializable {
 //    public void createTaskMapListener() {
 //
 //        if (isListening == true) {
-//            mainModel.getTasks().addListener(taskMapListener);
+//            mainModel.getTaskMap().addListener(taskMapListener);
 //            System.out.println("adding");
 //        } else {
-//            mainModel.getTasks().removeListener(taskMapListener);
+//            mainModel.getTaskMap().removeListener(taskMapListener);
 //            System.out.println("removing");
 //        }
 //

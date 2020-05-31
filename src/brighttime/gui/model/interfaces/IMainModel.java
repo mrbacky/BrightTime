@@ -69,15 +69,15 @@ public interface IMainModel {
 
     void addTask(TaskConcrete1 task) throws ModelException;
 
-    ObservableMap<LocalDate, List<TaskConcrete1>> getTasks();
+    ObservableMap<LocalDate, List<TaskConcrete1>> getTaskMap();
 
     void loadTasks(User user, LocalDate startDate, LocalDate endDate) throws ModelException;
 
-    ObservableList<TaskConcrete2> getTaskList();
+    ObservableList<TaskConcrete2> getOverviewTaskList();
 
-    void getAllTasks() throws ModelException;
+    void loadOverviewTasks() throws ModelException;
 
-    void getAllTasksFiltered(Filter filter) throws ModelException;
+    void loadOverviewTasksFiltered(Filter filter) throws ModelException;
 
     void loadUsers() throws ModelException;
 
