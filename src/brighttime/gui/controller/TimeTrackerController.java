@@ -23,8 +23,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.MapChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -60,12 +58,12 @@ public class TimeTrackerController implements Initializable {
     private JFXDatePicker datePickerEnd;
     private LocalDate taskFilterStartDate;
     private LocalDate taskFilterEndDate;
+    private final AlertManager alertManager;
 
     private CreateTaskController createTaskContr;
     private LocalDate date = LocalDate.MIN;
     private User user;
 
-    private final AlertManager alertManager;
     private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
     private IMainModel mainModel;
     int i = 0;
@@ -85,22 +83,35 @@ public class TimeTrackerController implements Initializable {
         this.mainModel = mainModel;
     }
 
-    public void setUser() {
-        user = mainModel.getUser();
+    public void injectCreateTaskController(CreateTaskController contr) {
+        this.createTaskContr = contr;
     }
 
     public void initializeView() {
         try {
-            setInitialFilter();
             setUser();
+            setInitialFilter();
             setUpTaskMapListener();
             setUpTaskCreator();
             mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
             initTasks();
             switchLoggingMode();
         } catch (ModelException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Unable to load tasks.", "Error: " + ex.getMessage());
         }
+    }
+
+    public void setUser() {
+        user = mainModel.getUser();
+    }
+
+    public void setInitialFilter() {
+        taskFilterStartDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        taskFilterEndDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        datePickerStart.setValue(taskFilterStartDate);
+        datePickerEnd.setValue(taskFilterEndDate);
+        datePickerStart.converterProperty().setValue(dateConverter);
+        datePickerEnd.converterProperty().setValue(dateConverter);
     }
 
     public void setUpTaskMapListener() {
@@ -131,14 +142,11 @@ public class TimeTrackerController implements Initializable {
         vBoxMain.getChildren().clear();
         Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTaskMap();
         Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
-
         orderedMap.putAll(taskList);
         for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
             LocalDate dateKey = entry.getKey();
             List<TaskConcrete1> taskListValue = entry.getValue();
-
             if (!dateKey.equals(date)) {
-
                 String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
                 Label label = new Label(formatted);
                 label.getStyleClass().add("labelMenuItem");
@@ -147,11 +155,9 @@ public class TimeTrackerController implements Initializable {
                 date = dateKey;
             }
             for (TaskConcrete1 task : taskListValue) {
-
                 addTaskItem(task);
             }
         }
-
     }
 
     public void addTaskItem(TaskConcrete1 task) {
@@ -171,10 +177,6 @@ public class TimeTrackerController implements Initializable {
             alertManager.showAlert("Could not create a task", "Error: " + ex.getMessage());
         }
 
-    }
-
-    public void injectCreateTaskController(CreateTaskController contr) {
-        this.createTaskContr = contr;
     }
 
     public void switchLoggingMode() {
@@ -199,7 +201,7 @@ public class TimeTrackerController implements Initializable {
             mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
             initTasks();
         } catch (ModelException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
         }
 
     }
@@ -210,17 +212,8 @@ public class TimeTrackerController implements Initializable {
             mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
             initTasks();
         } catch (ModelException ex) {
-            Logger.getLogger(TimeTrackerController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
         }
-    }
-
-    private void setInitialFilter() {
-        taskFilterStartDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        taskFilterEndDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-        datePickerStart.setValue(taskFilterStartDate);
-        datePickerEnd.setValue(taskFilterEndDate);
-        datePickerStart.converterProperty().setValue(dateConverter);
-        datePickerEnd.converterProperty().setValue(dateConverter);
     }
 
 }
