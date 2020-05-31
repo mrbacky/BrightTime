@@ -24,7 +24,7 @@ public class User {
         ADMINISTRATOR {
             @Override
             public String toString() {
-                return "Admin";
+                return "Administrator";
             }
         },
         STANDARD {
