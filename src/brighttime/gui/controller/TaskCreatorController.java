@@ -184,8 +184,7 @@ public class TaskCreatorController implements Initializable {
      * Adds a new task.
      */
     private void addTask() {
-        //TODO: Should you be allowed to write wrong inputs and be stopped at creating the task. Or be stopped already at the wrong input?
-        btnAdd.setOnAction((event) -> {//   change name method.
+        btnAdd.setOnAction((event) -> {
             if (validateInput()) {
                 if (!manualMode) {
                     try {
