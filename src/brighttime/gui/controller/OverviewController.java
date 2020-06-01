@@ -25,8 +25,6 @@ import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
@@ -481,7 +479,7 @@ public class OverviewController implements Initializable {
                 mainModel.loadOverviewTasksFiltered(new Filter(cboUsers.getValue(), cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
             }
         } catch (ModelException ex) {
-            Logger.getLogger(OverviewController.class.getName()).log(Level.SEVERE, null, ex);
+            alertManager.showAlert("Could not refresh after clearing the filter.", "An error occured: " + ex.getMessage());
         }
     }
 
