@@ -43,6 +43,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             pstmt.setInt(3, taskEntry.getTask().getId());
             pstmt.setInt(4, taskEntry.getTask().getId());
             pstmt.executeUpdate();
+
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
                 taskEntry.setId(rs.getInt(1));
@@ -75,17 +76,12 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setObject(1, taskEntry.getStartTime());
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
-            System.out.println("edited start Time in DAO");
 
             logEvent(taskEntry);
 
             return taskEntry;
         } catch (SQLException ex) {
-            logDAO.logEvent(EventLogDAO.EventType.ERROR,
-                    "Unsuccessful task entry update (start time) for the task \"" + taskEntry.getTask().getDescription()
-                    + "\" in the project \"" + taskEntry.getTask().getProject().getName()
-                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
-                    + Arrays.toString(ex.getStackTrace()));
+            logError(taskEntry, "start time", ex);
             throw new DalException(ex.getMessage());
         }
     }
@@ -101,28 +97,30 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.setObject(1, taskEntry.getEndTime());
             ps.setInt(2, taskEntry.getId());
             ps.executeUpdate();
-            System.out.println("edited endTime in DAO");
 
             logEvent(taskEntry);
 
             return taskEntry;
         } catch (SQLException ex) {
-            logDAO.logEvent(EventLogDAO.EventType.ERROR,
-                    "Unsuccessful task entry update (end time) for the task \"" + taskEntry.getTask().getDescription()
-                    + "\" in the project \"" + taskEntry.getTask().getProject().getName()
-                    + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
-                    + Arrays.toString(ex.getStackTrace()));
+            logError(taskEntry, "end time", ex);
             throw new DalException(ex.getMessage());
         }
 
     }
 
     private void logEvent(TaskEntry taskEntry) throws DalException {
-        //TODO: EventLog check exception handling.        
         logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
                 "Updated a task entry in the task \"" + taskEntry.getTask().getDescription()
                 + "\" in the project \"" + taskEntry.getTask().getProject().getName()
                 + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime());
+    }
+
+    private void logError(TaskEntry taskEntry, String detail, SQLException ex) throws DalException {
+        logDAO.logEvent(EventLogDAO.EventType.ERROR,
+                "Unsuccessful task entry update (" + detail + ")for the task \"" + taskEntry.getTask().getDescription()
+                + "\" in the project \"" + taskEntry.getTask().getProject().getName()
+                + "\". Time frame: " + taskEntry.getStartTime() + " - " + taskEntry.getEndTime() + ". "
+                + Arrays.toString(ex.getStackTrace()));
     }
 
 }
