@@ -38,6 +38,8 @@ public class TaskDAO implements ITaskDAO {
     private final IConnectionManager connection;
     private final IEventLogDAO logDAO;
     private final ITaskEntryDAO taskEntryDAO;
+    private final String billable = "B";
+    private final String nonbillable = "N";
 
     public TaskDAO() throws IOException {
         this.connection = new ConnectionManager();
@@ -56,9 +58,9 @@ public class TaskDAO implements ITaskDAO {
             pstmt.setInt(2, task.getProject().getId());
 
             if (task.getBillability() == TaskBase.Billability.BILLABLE) {
-                pstmt.setString(3, String.valueOf('B'));
+                pstmt.setString(3, billable);
             } else if (task.getBillability() == TaskBase.Billability.NON_BILLABLE) {
-                pstmt.setString(3, String.valueOf('N'));
+                pstmt.setString(3, nonbillable);
             }
             pstmt.setInt(4, task.getUser().getId());
             pstmt.executeUpdate();
@@ -142,7 +144,7 @@ public class TaskDAO implements ITaskDAO {
 
                     TaskBase.Billability billability;
 
-                    if (rs.getString("billability").equals("B")) {
+                    if (rs.getString("billability").equals(billable)) {
                         billability = TaskBase.Billability.BILLABLE;
                     } else {
                         billability = TaskBase.Billability.NON_BILLABLE;
@@ -238,12 +240,12 @@ public class TaskDAO implements ITaskDAO {
                 int rate;
                 TaskBase.Billability billability;
 
-                if (rsBillability.equals("B")) {
+                if (rsBillability.equals(billable)) {
                     billability = TaskBase.Billability.BILLABLE;
                     rate = rs.getInt("projectRate");
                     if (rate == 0) {
                         rate = rs.getInt("clientRate");
-                    };
+                    }
                 } else {
                     billability = TaskBase.Billability.NON_BILLABLE;
                     rate = 0;
@@ -327,12 +329,12 @@ public class TaskDAO implements ITaskDAO {
                 int rate;
                 TaskBase.Billability billability;
 
-                if (rsBillability.equals("B")) {
+                if (rsBillability.equals(billable)) {
                     billability = TaskBase.Billability.BILLABLE;
                     rate = rs.getInt("projectRate");
                     if (rate == 0) {
                         rate = rs.getInt("clientRate");
-                    };
+                    }
                 } else {
                     billability = TaskBase.Billability.NON_BILLABLE;
                     rate = 0;
