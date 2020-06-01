@@ -6,7 +6,7 @@ import brighttime.dal.IConnectionManager;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import brighttime.dal.dao.IEventLogDAO;
+import java.sql.SQLException;
 import java.net.InetAddress;
 
 /**
@@ -19,7 +19,7 @@ public class EventLogDAO implements IEventLogDAO {
     private String ipAddress = "";
 
     public enum EventType {
-        INFORMATION, WARNING, ERROR
+        INFORMATION, ERROR
     }
 
     public EventLogDAO() throws IOException {
@@ -39,7 +39,7 @@ public class EventLogDAO implements IEventLogDAO {
             pstmt.setString(3, ipAddress);
             pstmt.executeUpdate();
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             throw new DalException(ex.getMessage());
         }
     }

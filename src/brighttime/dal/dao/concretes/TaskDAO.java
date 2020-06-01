@@ -87,7 +87,6 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException {
-        //TODO: The method is IN PROGRESS.
         Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
         Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
@@ -160,15 +159,6 @@ public class TaskDAO implements ITaskDAO {
                             modifiedDate,
                             user);
                     taskMap.put(taskId, newTask);
-//                    newTask = new TaskConcrete1(
-//                            taskId,
-//                            rs.getString("description"),
-//                            project,
-//                            billability,
-//                            entryList,
-//                            modifiedDate);
-//                    taskMap.put(taskId, newTask);
-
                 } else {
                     newTask = taskMap.get(taskId);
                 }

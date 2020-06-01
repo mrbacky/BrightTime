@@ -16,8 +16,8 @@ public interface IUserDAO {
 
     User authenticateUser(String username, String password) throws DalException;
 
-    User updateUserDetails(User updatedUser) throws DalException;
+    User updateUserDetails(User user) throws DalException;
 
-    User deleteUser(User selectedUser) throws DalException;
+    User deleteUser(User user) throws DalException;
 
 }
