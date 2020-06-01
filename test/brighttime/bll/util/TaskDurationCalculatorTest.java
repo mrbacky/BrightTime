@@ -60,4 +60,23 @@ public class TaskDurationCalculatorTest {
         assertEquals(expResult, result);
     }
 
+    @Test
+    public void testCalculateTaskDuration2() {
+        System.out.println("calculateTaskDuration");
+        List<TaskEntry> entryList = new ArrayList<>();
+        User user = new User(2, "Mike", "Wazowski", "m@gmail.com", User.UserType.STANDARD);
+        Client client = new Client(1, "Nike", 1000);
+        Project project = new Project(1, "Nike Air Max 7", client, 0);
+        TaskConcrete1 task = new TaskConcrete1(15, "update material", project, TaskBase.Billability.BILLABLE, entryList, LocalDateTime.now(), user);
+        entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T09:00:00"), LocalDateTime.parse("2020-05-05T11:30:00")));
+        entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T15:00:00"), LocalDateTime.parse("2020-05-05T15:30:00")));
+        entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T15:00:00"), LocalDateTime.parse("2020-05-05T16:00:00")));
+        entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T18:00:00"), LocalDateTime.parse("2020-05-05T22:00:00")));
+
+        TaskDurationCalculator instance = new TaskDurationCalculator();
+        Duration expResult = Duration.ofSeconds(28800);
+        Duration result = instance.calculateTaskDuration(entryList);
+        assertEquals(expResult, result);
+    }
+
 }
