@@ -107,10 +107,6 @@ public interface DalFacade {
 
     User updateUserDetails(User updatedUser) throws DalException;
 
-    boolean hasTask(User user) throws DalException;
-
     User deleteUser(User selectedUser) throws DalException;
-
-    User deactivateUser(User user) throws DalException;
 
 }
