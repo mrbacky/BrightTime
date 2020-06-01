@@ -203,7 +203,7 @@ public class TaskItemController implements Initializable {
             if (taskModel.getDate().equals(LocalDate.now())) {
                 showTaskEntries(); //  auto expand
             } else {//  reload all
-                timeTracker.initializeView();
+                timeTracker.loadAndInitTasks();
             }
         } catch (ModelException ex) {
             alertManager.showAlert("Could not store the logged entry.", "An error occured: " + ex.getMessage());

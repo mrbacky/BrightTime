@@ -88,14 +88,21 @@ public class TimeTrackerController implements Initializable {
     }
 
     public void initializeView() {
+
+        setUser();
+        setInitialFilter();
+        setUpTaskMapListener();
+        setUpTaskCreator();
+        loadAndInitTasks();
+        switchLoggingMode();
+
+    }
+
+    public void loadAndInitTasks() {
         try {
-            setUser();
-            setInitialFilter();
-            setUpTaskMapListener();
-            setUpTaskCreator();
             mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
             initTasks();
-            switchLoggingMode();
+
         } catch (ModelException ex) {
             alertManager.showAlert("Unable to load tasks.", "Error: " + ex.getMessage());
         }
