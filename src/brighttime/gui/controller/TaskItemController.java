@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -119,8 +120,10 @@ public class TaskItemController implements Initializable {
         textFieldTaskDesc.setText(task.getDescription());
         textFieldClient.setText(task.getProject().getClient().getName());
         textFieldProject.setText(task.getProject().getName());
-        lblStartTime.textProperty().bindBidirectional(taskModel.startTimeProperty(), dtf.toFormat());
-        lblEndTime.textProperty().bindBidirectional(taskModel.endTimeProperty(), dtf.toFormat());
+        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
+        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getEndTime()), taskModel.endTimeProperty()));
         lblDuration.textProperty().bind(taskModel.stringDurationProperty());
 
     }
