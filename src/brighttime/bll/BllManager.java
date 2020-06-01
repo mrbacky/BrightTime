@@ -15,7 +15,6 @@ import brighttime.dal.DalFacade;
 import java.io.IOException;
 import java.util.List;
 import brighttime.bll.util.DurationConverter;
-import brighttime.bll.util.DurationFormatter;
 import brighttime.bll.util.EntryDurationCalculator;
 import brighttime.bll.util.TaskDurationCalculator;
 import brighttime.bll.util.TaskIntervalCalculator;
@@ -38,7 +37,6 @@ public class BllManager implements BllFacade {
     private final TaskIntervalCalculator taskIntervalCalculator;
     private final CostCalculator costCalculator;
     private final CostFormatter costFormatter;
-    private final DurationFormatter durationFormatter;
 
     public BllManager(DalFacade dalManager) throws IOException {
         this.dalManager = dalManager;
@@ -48,7 +46,6 @@ public class BllManager implements BllFacade {
         taskIntervalCalculator = new TaskIntervalCalculator();
         costCalculator = new CostCalculator();
         costFormatter = new CostFormatter();
-        durationFormatter = new DurationFormatter();
     }
 
     @Override
@@ -134,7 +131,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public String secToFormat(long sec) {
+    public String secToFormat(int sec) {
         return durationConverter.secToFormat(sec);
     }
 
@@ -228,7 +225,7 @@ public class BllManager implements BllFacade {
 
     @Override
     public String formatDuration(int durationSeconds) {
-        return durationFormatter.formatDuration(durationSeconds);
+        return durationConverter.formatDuration(durationSeconds);
     }
 
     @Override

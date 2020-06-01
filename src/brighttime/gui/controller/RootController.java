@@ -33,13 +33,13 @@ import javafx.stage.Stage;
 public class RootController implements Initializable {
 
     private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
-    private final String ADMIN_MENU_MODULE = "/brighttime/gui/view/Creator.fxml";
-    private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/ManageClients.fxml";
-    private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/ManageProjects.fxml";
-    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview_1.fxml";
+    private final String ADMIN_MENU_MODULE = "/brighttime/gui/view/Administration.fxml";
+    private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/ClientsManager.fxml";
+    private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/ProjectsManager.fxml";
+    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
     private final String LOGIN_VIEW = "/brighttime/gui/view/Login.fxml";
     private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
-    private final String ADMIN_USERS_MODULE = "/brighttime/gui/view/ManageUsers.fxml";
+    private final String ADMIN_USERS_MODULE = "/brighttime/gui/view/UsersManager.fxml";
 
     @FXML
     private AnchorPane anchorPaneRoot;
@@ -112,20 +112,20 @@ public class RootController implements Initializable {
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
             } else if (module.equals(ADMIN_MENU_MODULE)) {
-                CreatorController controller = fxmlLoader.getController();
+                AdministrationController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
                 controller.setContr(this);
             } else if (module.equals(ADMIN_CLIENTS_MODULE)) {
-                ManageClientsController controller = fxmlLoader.getController();
+                ClientsManagerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
             } else if (module.equals(ADMIN_PROJECTS_MODULE)) {
-                ManageProjectsController controller = fxmlLoader.getController();
+                ProjectsManagerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
             } else if (module.equals(ADMIN_USERS_MODULE)) {
-                ManageUsersController controller = fxmlLoader.getController();
+                UsersManagerController controller = fxmlLoader.getController();
                 controller.injectMainModel(mainModel);
                 controller.initializeView();
             } else if (module.equals(OVERVIEW_MODULE)) {

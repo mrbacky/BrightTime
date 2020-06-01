@@ -40,7 +40,7 @@ import javafx.util.converter.LocalTimeStringConverter;
  *
  * @author annem
  */
-public class CreateTaskController implements Initializable {
+public class TaskCreatorController implements Initializable {
 
     //TODO: Change all to 24HourView!
     private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
@@ -80,7 +80,7 @@ public class CreateTaskController implements Initializable {
     private Boolean end = false;
     private Boolean timeInterval = false;
 
-    public CreateTaskController() {
+    public TaskCreatorController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
         this.datePickerCustomizer = new DatePickerCustomizer();

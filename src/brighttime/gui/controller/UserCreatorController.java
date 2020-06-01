@@ -20,7 +20,7 @@ import javafx.fxml.Initializable;
  *
  * @author rados
  */
-public class CreateUserController implements Initializable {
+public class UserCreatorController implements Initializable {
 
     @FXML
     private JFXTextField textFieldFirstName;
@@ -43,9 +43,9 @@ public class CreateUserController implements Initializable {
     private IMainModel mainModel;
     private String password1;
     private String password2;
-    private ManageUsersController contr;
+    private UsersManagerController contr;
 
-    public CreateUserController() {
+    public UserCreatorController() {
         this.alertManager = new AlertManager();
         this.inputValidator = new InputValidator();
     }
@@ -159,7 +159,7 @@ public class CreateUserController implements Initializable {
         return true;
     }
 
-    void injectContr(ManageUsersController contr) {
+    void injectContr(UsersManagerController contr) {
         this.contr = contr;
 
     }

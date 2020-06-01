@@ -25,9 +25,9 @@ import javafx.util.converter.IntegerStringConverter;
  *
  * @author annem
  */
-public class ManageClientsController implements Initializable {
+public class ClientsManagerController implements Initializable {
 
-    private final String CREATE_CLIENT_FXML = "/brighttime/gui/view/CreateClient.fxml";
+    private final String CREATE_CLIENT_FXML = "/brighttime/gui/view/ClientCreator.fxml";
 
     @FXML
     private StackPane stackPane;
@@ -45,7 +45,7 @@ public class ManageClientsController implements Initializable {
     private final AlertManager alertManager;
     private IMainModel mainModel;
 
-    public ManageClientsController() {
+    public ClientsManagerController() {
         this.alertManager = new AlertManager();
     }
 
@@ -69,7 +69,7 @@ public class ManageClientsController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(CREATE_CLIENT_FXML));
             Parent root = fxmlLoader.load();
-            CreateClientController controller = fxmlLoader.getController();
+            ClientCreatorController controller = fxmlLoader.getController();
             controller.injectManageClientsController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();

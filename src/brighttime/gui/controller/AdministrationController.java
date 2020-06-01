@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
@@ -16,7 +15,7 @@ import javafx.scene.layout.VBox;
  *
  * @author rados
  */
-public class CreatorController implements Initializable {
+public class AdministrationController implements Initializable {
 
     @FXML
     private ScrollPane scrollPane;

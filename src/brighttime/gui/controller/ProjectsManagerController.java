@@ -8,8 +8,6 @@ import brighttime.gui.util.AlertManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,9 +22,9 @@ import javafx.scene.layout.StackPane;
  *
  * @author annem
  */
-public class ManageProjectsController implements Initializable {
+public class ProjectsManagerController implements Initializable {
 
-    private final String CREATE_PROJECT_FXML = "/brighttime/gui/view/CreateProject.fxml";
+    private final String CREATE_PROJECT_FXML = "/brighttime/gui/view/ProjectCreator.fxml";
 
     @FXML
     private StackPane stackPane;
@@ -42,7 +40,7 @@ public class ManageProjectsController implements Initializable {
     private final AlertManager alertManager;
     private IMainModel mainModel;
 
-    public ManageProjectsController() {
+    public ProjectsManagerController() {
         this.alertManager = new AlertManager();
     }
 
@@ -66,7 +64,7 @@ public class ManageProjectsController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(CREATE_PROJECT_FXML));
             Parent root = fxmlLoader.load();
-            CreateProjectController controller = fxmlLoader.getController();
+            ProjectCreatorController controller = fxmlLoader.getController();
             controller.injectManageProjectsController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();

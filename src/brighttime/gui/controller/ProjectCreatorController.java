@@ -20,7 +20,7 @@ import javafx.fxml.Initializable;
  *
  * @author annem
  */
-public class CreateProjectController implements Initializable {
+public class ProjectCreatorController implements Initializable {
 
     @FXML
     private JFXTextField txtName;
@@ -32,11 +32,11 @@ public class CreateProjectController implements Initializable {
     private JFXButton btnAdd;
 
     private IMainModel mainModel;
-    private ManageProjectsController contr;
+    private ProjectsManagerController contr;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
 
-    public CreateProjectController() {
+    public ProjectCreatorController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
     }
@@ -48,7 +48,7 @@ public class CreateProjectController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-    void injectManageProjectsController(ManageProjectsController contr) {
+    void injectManageProjectsController(ProjectsManagerController contr) {
         this.contr = contr;
     }
 

@@ -1,8 +1,8 @@
 package brighttime.bll.util;
 
 /**
- * DurationConverter Class is used to convert the duration value in seconds to the
- * format hh:mm:ss and the other way around.
+ * DurationConverter Class is used to convert the duration value in seconds to
+ * the format hh:mm:ss and the other way around.
  *
  * @author Radoslav Backovsky
  */
@@ -14,8 +14,8 @@ public class DurationConverter {
      * @param sec The time in seconds.
      * @return The formatted time.
      */
-    public String secToFormat(long sec) {
-        long hours, mins, secs;
+    public String secToFormat(int sec) {
+        int hours, mins, secs;
         mins = (sec / 60);
         while (mins >= 60) {
             mins = mins % 60;
@@ -32,7 +32,7 @@ public class DurationConverter {
      * @param formatString The time in the format hh:mm:ss.
      * @return The time in seconds.
      */
-    public long formatToSec(String formatString) {
+    public int formatToSec(String formatString) {
         String[] format = formatString.split(":");
         long hh, mm, ss, hours_In_Sec, mins_In_Sec, totalSec;
         hh = Integer.parseInt(format[0]);
@@ -41,6 +41,17 @@ public class DurationConverter {
         hours_In_Sec = hh * 3600;
         mins_In_Sec = mm * 60;
         totalSec = hours_In_Sec + mins_In_Sec + ss;
-        return totalSec;
+        return (int) totalSec;
+    }
+
+    public String formatDuration(int durationSeconds) {
+        int hours, min;
+        min = (int) (durationSeconds / 60);
+        while (min > 60) {
+            min = min % 60;
+        }
+        hours = (int) ((durationSeconds / 60) / 60);
+        String formattedDuration = String.format("%02d h %02d min", hours, min);
+        return formattedDuration;
     }
 }

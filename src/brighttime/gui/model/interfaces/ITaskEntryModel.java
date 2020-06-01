@@ -30,7 +30,7 @@ public interface ITaskEntryModel {
 
     Duration calculateDuration(TaskEntry taskEntry);
 
-    String secToFormat(long sec);
+    String secToFormat(int sec);
 
     public void setTaskEntry(TaskEntry taskEntry);
 

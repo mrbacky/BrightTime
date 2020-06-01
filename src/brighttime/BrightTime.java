@@ -1,15 +1,11 @@
 package brighttime;
 
-import brighttime.gui.controller.LoginController;
-import brighttime.gui.model.ModelCreator;
-import brighttime.gui.model.interfaces.IAuthenticationModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *

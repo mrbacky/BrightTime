@@ -42,11 +42,11 @@ import javafx.scene.layout.VBox;
  *
  * @author rados
  */
-public class ManageUsersController implements Initializable {
+public class UsersManagerController implements Initializable {
 
     private final Image EXPAND_ICON_IMAGE = new Image("/brighttime/gui/view/assets/expand.png");
     private final Image COLLAPSE_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
-    private final String CREATE_USER_FXML = "/brighttime/gui/view/CreateUser.fxml";
+    private final String CREATE_USER_FXML = "/brighttime/gui/view/UserCreator.fxml";
 
     @FXML
     private VBox vBox;
@@ -80,7 +80,7 @@ public class ManageUsersController implements Initializable {
 
     private IMainModel mainModel;
 
-    public ManageUsersController() {
+    public UsersManagerController() {
         this.alertManager = new AlertManager();
         this.inputValidator = new InputValidator();
     }
@@ -249,7 +249,7 @@ public class ManageUsersController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(CREATE_USER_FXML));
             Parent root = fxmlLoader.load();
-            CreateUserController controller = fxmlLoader.getController();
+            UserCreatorController controller = fxmlLoader.getController();
             controller.injectMainModel(mainModel);
             controller.injectContr(this);
             controller.initializeView();

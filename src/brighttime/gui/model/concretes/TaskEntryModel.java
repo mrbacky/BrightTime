@@ -44,7 +44,7 @@ public class TaskEntryModel implements ITaskEntryModel {
     public void setTaskEntryModelDetails() {
         setStartTime(taskEntry.getStartTime().toLocalTime());
         setEndTime(taskEntry.getEndTime().toLocalTime());
-        setStringDuration(secToFormat(calculateDuration(taskEntry).toSeconds()));
+        setStringDuration(secToFormat((int) calculateDuration(taskEntry).toSeconds()));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class TaskEntryModel implements ITaskEntryModel {
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
                 LocalDateTime startTimeFull = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeFull);
-                stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
+                stringDuration.set(secToFormat((int) calculateDuration(taskEntry).toSeconds()));
             }
         });
     }
@@ -64,7 +64,7 @@ public class TaskEntryModel implements ITaskEntryModel {
             if (newValue.isAfter(taskEntry.getStartTime().toLocalTime())) {
                 LocalDateTime endTimeFull = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setEndTime(endTimeFull);
-                stringDuration.set(secToFormat(calculateDuration(taskEntry).toSeconds()));
+                stringDuration.set(secToFormat((int) calculateDuration(taskEntry).toSeconds()));
             }
         });
     }
@@ -165,7 +165,7 @@ public class TaskEntryModel implements ITaskEntryModel {
     }
 
     @Override
-    public String secToFormat(long sec) {
+    public String secToFormat(int sec) {
         return bllManager.secToFormat(sec);
 
     }

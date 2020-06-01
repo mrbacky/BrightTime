@@ -18,7 +18,7 @@ import javafx.fxml.Initializable;
  *
  * @author annem
  */
-public class CreateClientController implements Initializable {
+public class ClientCreatorController implements Initializable {
 
     @FXML
     private JFXButton btnAdd;
@@ -27,12 +27,12 @@ public class CreateClientController implements Initializable {
     @FXML
     private JFXTextField txtHourlyRate;
 
-    private ManageClientsController contr;
+    private ClientsManagerController contr;
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ValidationManager validationManager;
 
-    public CreateClientController() {
+    public ClientCreatorController() {
         this.alertManager = new AlertManager();
         this.validationManager = new ValidationManager();
     }
@@ -44,7 +44,7 @@ public class CreateClientController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-    void injectManageClientsController(ManageClientsController contr) {
+    void injectManageClientsController(ClientsManagerController contr) {
         this.contr = contr;
     }
 

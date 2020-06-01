@@ -43,7 +43,7 @@ import javafx.util.converter.LocalDateStringConverter;
 public class TimeTrackerController implements Initializable {
 
     private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
-    private final String TASK_CREATOR_FXML = "/brighttime/gui/view/CreateTask.fxml";
+    private final String TASK_CREATOR_FXML = "/brighttime/gui/view/TaskCreator.fxml";
     private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
 
     @FXML
@@ -60,7 +60,7 @@ public class TimeTrackerController implements Initializable {
     private LocalDate taskFilterEndDate;
     private final AlertManager alertManager;
 
-    private CreateTaskController createTaskContr;
+    private TaskCreatorController createTaskContr;
     private LocalDate date = LocalDate.MIN;
     private User user;
 
@@ -83,7 +83,7 @@ public class TimeTrackerController implements Initializable {
         this.mainModel = mainModel;
     }
 
-    public void injectCreateTaskController(CreateTaskController contr) {
+    public void injectCreateTaskController(TaskCreatorController contr) {
         this.createTaskContr = contr;
     }
 
@@ -127,7 +127,7 @@ public class TimeTrackerController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_CREATOR_FXML));
 
             Parent root = fxmlLoader.load();
-            CreateTaskController controller = fxmlLoader.getController();
+            TaskCreatorController controller = fxmlLoader.getController();
             controller.injectTimeTrackerController(this);
             controller.injectMainModel(mainModel);
             controller.initializeView();

@@ -82,7 +82,7 @@ public interface BllFacade {
 
     Duration calculateTaskDuration(List<TaskEntry> entryList);
 
-    String secToFormat(long sec);
+    String secToFormat(int sec);
 
     long formatToSec(String formatString);
 

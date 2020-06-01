@@ -77,7 +77,7 @@ public class TaskModel implements ITaskModel {
         if (!dayEntryList.isEmpty()) {
             startTime.set(bllManager.getStartTime(dayEntryList));
             endTime.set(bllManager.getEndTime(dayEntryList));
-            stringDuration.set(bllManager.secToFormat(bllManager.calculateTaskDuration(dayEntryList).toSeconds()));
+            stringDuration.set(bllManager.secToFormat((int) bllManager.calculateTaskDuration(dayEntryList).toSeconds()));
         } else {
             startTime.set(task.getCreationTime());
             endTime.set(task.getCreationTime());
