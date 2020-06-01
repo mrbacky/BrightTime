@@ -139,6 +139,7 @@ public class TimeTrackerController implements Initializable {
     }
 
     public void initTasks() {
+        date = LocalDate.MIN;
         vBoxMain.getChildren().clear();
         Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTaskMap();
         Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
