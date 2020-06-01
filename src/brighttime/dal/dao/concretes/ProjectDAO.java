@@ -61,7 +61,7 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public List<Project> getProjects(Client client) throws DalException {
+    public List<Project> getProjectsForAClient(Client client) throws DalException {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT id, name "
                 + "  FROM Project "

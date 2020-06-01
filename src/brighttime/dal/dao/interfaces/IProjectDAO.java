@@ -27,7 +27,7 @@ public interface IProjectDAO {
      * @return A list of projects.
      * @throws DalException
      */
-    List<Project> getProjects(Client client) throws DalException;
+    List<Project> getProjectsForAClient(Client client) throws DalException;
 
     List<Project> getAllProjects() throws DalException;
 

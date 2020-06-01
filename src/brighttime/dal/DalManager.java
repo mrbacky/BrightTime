@@ -8,13 +8,11 @@ import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
 import brighttime.be.User;
 import brighttime.dal.dao.concretes.ClientDAO;
-import brighttime.dal.dao.concretes.EventLogDAO;
 import brighttime.dal.dao.concretes.ProjectDAO;
 import brighttime.dal.dao.concretes.TaskDAO;
 import brighttime.dal.dao.concretes.TaskEntryDAO;
 import brighttime.dal.dao.concretes.UserDAO;
 import brighttime.dal.dao.interfaces.IClientDAO;
-import brighttime.dal.dao.interfaces.IEventLogDAO;
 import brighttime.dal.dao.interfaces.IProjectDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
@@ -34,8 +32,7 @@ public class DalManager implements DalFacade {
     private final IProjectDAO projectDAO;
     private final ITaskDAO taskDAO;
     private final ITaskEntryDAO taskEntryDAO;
-    private IUserDAO userDAO;
-    private IEventLogDAO eventLog;
+    private final IUserDAO userDAO;
 
     public DalManager() throws IOException {
         clientDAO = new ClientDAO();
@@ -43,7 +40,6 @@ public class DalManager implements DalFacade {
         taskDAO = new TaskDAO();
         taskEntryDAO = new TaskEntryDAO();
         userDAO = new UserDAO();
-        eventLog = new EventLogDAO();
     }
 
     @Override
@@ -92,9 +88,9 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public List<Project> getProjects(Client client) throws DalException {
+    public List<Project> getProjectsForAClient(Client client) throws DalException {
         try {
-            return projectDAO.getProjects(client);
+            return projectDAO.getProjectsForAClient(client);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
@@ -137,18 +133,18 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException {
         try {
-            return taskEntryDAO.createTaskEntry(taskEntry);
+            return taskDAO.getAllTasksWithEntries(user, start, end);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException {
+    public TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException {
         try {
-            return taskDAO.getAllTasksWithEntries(user, start, end);
+            return taskEntryDAO.createTaskEntry(taskEntry);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
@@ -161,7 +157,6 @@ public class DalManager implements DalFacade {
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
-
     }
 
     @Override
@@ -192,6 +187,12 @@ public class DalManager implements DalFacade {
     }
 
     @Override
+    public User createUser(User user) throws DalException {
+        return userDAO.createUser(user);
+
+    }
+
+    @Override
     public List<User> getUsers() throws DalException {
         try {
             return userDAO.getUsers();
@@ -210,12 +211,6 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public User createUser(User user) throws DalException {
-        return userDAO.createUser(user);
-
-    }
-
-    @Override
     public User updateUserDetails(User updatedUser) throws DalException {
         return userDAO.updateUserDetails(updatedUser);
     }
@@ -226,13 +221,13 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public User deactivateUser(User user) throws DalException {
-        return userDAO.deactivateUser(user);
+    public User deleteUser(User selectedUser) throws DalException {
+        return userDAO.deleteUser(selectedUser);
     }
 
     @Override
-    public User deleteUser(User selectedUser) throws DalException {
-        return userDAO.deleteUser(selectedUser);
+    public User deactivateUser(User user) throws DalException {
+        return userDAO.deactivateUser(user);
     }
 
 }

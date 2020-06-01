@@ -32,7 +32,7 @@ public class MockDalManager implements DalFacade {
     }
 
     @Override
-    public List<Project> getProjects(Client client) throws DalException {
+    public List<Project> getProjectsForAClient(Client client) throws DalException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

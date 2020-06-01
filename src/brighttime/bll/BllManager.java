@@ -102,7 +102,7 @@ public class BllManager implements BllFacade {
     @Override
     public List<Project> getProjects(Client client) throws BllException {
         try {
-            return dalManager.getProjects(client);
+            return dalManager.getProjectsForAClient(client);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }

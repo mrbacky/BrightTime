@@ -54,7 +54,7 @@ public interface DalFacade {
      * @return A list of projects.
      * @throws DalException
      */
-    List<Project> getProjects(Client client) throws DalException;
+    List<Project> getProjectsForAClient(Client client) throws DalException;
 
     List<Project> getAllProjects() throws DalException;
 
@@ -99,18 +99,18 @@ public interface DalFacade {
 
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
+    User createUser(User user) throws DalException;
+
     List<User> getUsers() throws DalException;
 
-    public User authenticateUser(String username, String password) throws DalException;
-
-    public User createUser(User user) throws DalException;
+    User authenticateUser(String username, String password) throws DalException;
 
     User updateUserDetails(User updatedUser) throws DalException;
 
     boolean hasTask(User user) throws DalException;
 
-    User deactivateUser(User user) throws DalException;
-
     User deleteUser(User selectedUser) throws DalException;
+
+    User deactivateUser(User user) throws DalException;
 
 }
