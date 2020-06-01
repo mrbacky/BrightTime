@@ -233,36 +233,9 @@ public class TaskDAO implements ITaskDAO {
     public List<TaskConcrete2> getAllTasks() throws DalException {
         List<TaskConcrete2> allTasks = new ArrayList<>();
 
-        String sql = "SELECT A2.id, A2.description, "
-                + "	A1.clientId, A1.clientName, "
-                + "	A1.projectId, A1.projectName, "
-                + "	SUM(A2.totalDuration) AS totalDuration, "
-                + "	A2.billability, A1.clientRate, A1.projectRate "
-                + "FROM "
-                + "	( "
-                + "	SELECT C.id AS clientId, C.name AS clientName, c.hourlyRate AS clientRate, "
-                + "	P.hourlyRate AS projectRate, P.id AS projectId, P.name AS projectName "
-                + "	FROM Client C "
-                + "	JOIN Project P "
-                + "	ON C.id = P.clientId "
-                + "	) "
-                + "	AS A1 "
-                + "JOIN "
-                + "	( "
-                + "	SELECT T.id, T.description, "
-                + "	(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
-                + "	T.billability, T.projectId "
-                + "	FROM Task T "
-                + "	LEFT JOIN TaskEntry TE "
-                + "	ON T.id = TE.taskId "
-                + "	) "
-                + "	AS A2 "
-                + "ON A1.projectId = A2.projectId "
-                + "GROUP BY A2.id, A2.description, A2.billability, "
-                + "	A1.clientId, A1.clientName, "
-                + "	A1.projectId, A1.projectName, "
-                + "	A1.clientRate, A1.projectRate "
-                + "ORDER BY A2.description";
+        String sql = "SELECT * "
+                + "FROM TasksForOverview "
+                + "ORDER BY description";
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -412,7 +385,7 @@ public class TaskDAO implements ITaskDAO {
             if (filter.getUser() != null || filter.getProject() != null) {
                 sql += "AND ";
             }
-            sql += "TE.startTime BETWEEN ? AND ? ";
+            sql += "? <= TE.startTime AND TE.startTime < ? ";
         }
         sql += "	) AS A2 "
                 + "ON A1.projectId = A2.projectId "
