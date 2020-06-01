@@ -21,11 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
-/**
- * @author rado - inspiration from BelTracker project (Greg, Nedas, David)
- * TaskModel is responsible for storing and manipulating with data of one task
- * displayed on UI
- */
+
 public class TaskModel implements ITaskModel {
 
     private final BllFacade bllManager;
