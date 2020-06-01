@@ -1,7 +1,6 @@
-package brighttime.dal.dao.interfaces;
+package brighttime.dal.dao;
 
 import brighttime.dal.DalException;
-import brighttime.dal.dao.concretes.EventLogDAO;
 
 /**
  *

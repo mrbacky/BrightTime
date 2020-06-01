@@ -1,4 +1,4 @@
-package brighttime.dal.dao.concretes;
+package brighttime.dal.dao;
 
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
@@ -6,7 +6,7 @@ import brighttime.dal.IConnectionManager;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import brighttime.dal.dao.interfaces.IEventLogDAO;
+import brighttime.dal.dao.IEventLogDAO;
 import java.net.InetAddress;
 
 /**
