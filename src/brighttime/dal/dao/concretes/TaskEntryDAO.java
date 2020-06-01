@@ -1,10 +1,11 @@
 package brighttime.dal.dao.concretes;
 
+import brighttime.dal.dao.EventLogDAO;
 import brighttime.be.TaskEntry;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
-import brighttime.dal.dao.interfaces.IEventLogDAO;
+import brighttime.dal.dao.IEventLogDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;
 import java.sql.Connection;

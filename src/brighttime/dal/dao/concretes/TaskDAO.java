@@ -1,5 +1,6 @@
 package brighttime.dal.dao.concretes;
 
+import brighttime.dal.dao.EventLogDAO;
 import brighttime.be.Client;
 import brighttime.be.Filter;
 import brighttime.be.Project;
@@ -11,7 +12,7 @@ import brighttime.be.User;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
-import brighttime.dal.dao.interfaces.IEventLogDAO;
+import brighttime.dal.dao.IEventLogDAO;
 import brighttime.dal.dao.interfaces.ITaskDAO;
 import brighttime.dal.dao.interfaces.ITaskEntryDAO;
 import java.io.IOException;

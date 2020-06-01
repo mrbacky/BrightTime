@@ -67,7 +67,7 @@ public class TaskDurationCalculatorTest {
         User user = new User(2, "Mike", "Wazowski", "m@gmail.com", User.UserType.STANDARD);
         Client client = new Client(1, "Nike", 1000);
         Project project = new Project(1, "Nike Air Max 7", client, 0);
-        TaskConcrete1 task = new TaskConcrete1(15, "update material", project, TaskBase.Billability.BILLABLE, entryList, LocalDateTime.now(), user);
+        TaskConcrete1 task = new TaskConcrete1(15, "update color", project, TaskBase.Billability.BILLABLE, entryList, LocalDateTime.now(), user);
         entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T09:00:00"), LocalDateTime.parse("2020-05-05T11:30:00")));
         entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T15:00:00"), LocalDateTime.parse("2020-05-05T15:30:00")));
         entryList.add(new TaskEntry(task, LocalDateTime.parse("2020-05-05T15:00:00"), LocalDateTime.parse("2020-05-05T16:00:00")));

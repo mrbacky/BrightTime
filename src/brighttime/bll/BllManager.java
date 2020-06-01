@@ -19,7 +19,6 @@ import brighttime.bll.util.DurationFormatter;
 import brighttime.bll.util.EntryDurationCalculator;
 import brighttime.bll.util.TaskDurationCalculator;
 import brighttime.bll.util.TaskIntervalCalculator;
-import brighttime.dal.MockDalManager;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,7 +32,6 @@ public class BllManager implements BllFacade {
 
     private final DurationConverter durationConverter;
     private final DalFacade dalManager;
-    private final DalFacade mockDalManager;
 
     private final EntryDurationCalculator entryDurationCalculator;
     private final TaskDurationCalculator taskDurationCalculator;
@@ -51,7 +49,6 @@ public class BllManager implements BllFacade {
         costCalculator = new CostCalculator();
         costFormatter = new CostFormatter();
         durationFormatter = new DurationFormatter();
-        mockDalManager = new MockDalManager();
     }
 
     @Override
