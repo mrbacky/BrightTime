@@ -20,6 +20,4 @@ public interface IUserDAO {
 
     User deleteUser(User selectedUser) throws DalException;
 
-    User deactivateUser(User user) throws DalException;
-
 }

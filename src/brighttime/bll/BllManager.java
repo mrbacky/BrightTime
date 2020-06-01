@@ -283,14 +283,8 @@ public class BllManager implements BllFacade {
 
     @Override
     public User deleteUser(User user) throws BllException {
-        User selected;
         try {
-            if (dalManager.hasTask(user)) {
-                selected = dalManager.deactivateUser(user);
-            } else {
-                selected = dalManager.deleteUser(user);
-            }
-            return selected;
+            return dalManager.deleteUser(user);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }

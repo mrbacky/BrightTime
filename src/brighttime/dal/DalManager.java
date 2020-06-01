@@ -216,18 +216,8 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public boolean hasTask(User user) throws DalException {
-        return taskDAO.hasTask(user);
-    }
-
-    @Override
-    public User deleteUser(User selectedUser) throws DalException {
-        return userDAO.deleteUser(selectedUser);
-    }
-
-    @Override
-    public User deactivateUser(User user) throws DalException {
-        return userDAO.deactivateUser(user);
+    public User deleteUser(User user) throws DalException {
+        return userDAO.deleteUser(user);
     }
 
 }

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,16 +64,23 @@ public class UserDAO implements IUserDAO {
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Created the user: " + user.getUsername() + ".");
 
             return user;
-        } catch (SQLServerException e) {
-            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(e.getStackTrace()));
-            if (e.getErrorCode() == 2627) {
+        } catch (Exception ex) {
+            if (ex instanceof SQLServerException && ((SQLServerException) ex).getErrorCode() == 2627) {
                 throw new DalException("Someone already has this username. Please try another username.");
             }
-            throw new DalException(e.getMessage());
-        } catch (Exception ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
+//        } catch (SQLServerException e) {
+//            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(e.getStackTrace()));
+//            if (e.getErrorCode() == 2627) {
+//                throw new DalException("Someone already has this username. Please try another username.");
+//            }
+//            throw new DalException(e.getMessage());
+//        } catch (Exception ex) {
+//            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful user creation: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace()));
+//            throw new DalException(ex.getMessage());
+//        }
     }
 
     @Override
@@ -107,7 +113,7 @@ public class UserDAO implements IUserDAO {
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Loaded all users.");
 
             return users;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful getting users. " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
@@ -141,7 +147,7 @@ public class UserDAO implements IUserDAO {
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Authenticated user: " + username + ".");
 
             return new User(id, firstName, lastName, username, userType);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful authentication: " + username + ". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
@@ -196,14 +202,19 @@ public class UserDAO implements IUserDAO {
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Deleted the user: " + user.getUsername() + ".");
 
             return user;
-        } catch (SQLException ex) {
-            logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
-            throw new DalException(ex.getMessage());
+        } catch (Exception ex) {
+            if (ex instanceof SQLServerException && ((SQLServerException) ex).getErrorCode() == 547) {
+                deactivateUser(user);
+                return user;
+            } else {
+                logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
+                throw new DalException(ex.getMessage());
+            }
+
         }
     }
 
-    @Override
-    public User deactivateUser(User user) throws DalException {
+    private User deactivateUser(User user) throws DalException {
         String sql = "UPDATE [User] "
                 + "SET statusId = ? "
                 + "WHERE id = ?";
@@ -217,7 +228,7 @@ public class UserDAO implements IUserDAO {
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Deactivated the user: " + user.getUsername() + ".");
 
             return user;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deactivating the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
             throw new DalException(ex.getMessage());
         }
