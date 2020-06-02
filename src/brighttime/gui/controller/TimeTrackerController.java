@@ -8,6 +8,7 @@ import brighttime.gui.model.ModelException;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.model.interfaces.ITaskModel;
 import brighttime.gui.util.AlertManager;
+import brighttime.gui.util.DatePickerCustomizer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import java.io.IOException;
@@ -57,10 +58,13 @@ public class TimeTrackerController implements Initializable {
     private JFXDatePicker datePickerStart;
     @FXML
     private JFXDatePicker datePickerEnd;
+
+    private final DatePickerCustomizer datePickerCustomizer;
+
     private LocalDate taskFilterStartDate;
     private LocalDate taskFilterEndDate;
-    private final AlertManager alertManager;
 
+    private final AlertManager alertManager;
     private TaskCreatorController createTaskContr;
     private LocalDate date = LocalDate.MIN;
     private User user;
@@ -71,6 +75,7 @@ public class TimeTrackerController implements Initializable {
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
+        this.datePickerCustomizer = new DatePickerCustomizer();
     }
 
     /**
@@ -91,7 +96,10 @@ public class TimeTrackerController implements Initializable {
     public void initializeView() {
 
         setUser();
+        setDateRestrictions();
         setInitialFilter();
+        listenStartDate();
+        listenEndDate();
         setUpTaskMapListener();
         setUpTaskCreator();
         loadAndInitTasks();
@@ -111,6 +119,13 @@ public class TimeTrackerController implements Initializable {
 
     public void setUser() {
         user = mainModel.getUser();
+    }
+
+    private void setDateRestrictions() {
+        datePickerCustomizer.disableFutureDates(datePickerStart);
+        datePickerCustomizer.changeWrittenFutureDateToCurrentDate(datePickerStart);
+        datePickerCustomizer.disableFutureDates(datePickerEnd);
+        datePickerCustomizer.changeWrittenFutureDateToCurrentDate(datePickerEnd);
     }
 
     public void setInitialFilter() {
@@ -204,25 +219,38 @@ public class TimeTrackerController implements Initializable {
 
     }
 
-    @FXML
-    private void handleFilterTasksStartDate(Event event) {
-        try {
-            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
-            initTasks();
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
-        }
-
+    private void listenStartDate() {
+        datePickerStart.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && datePickerEnd.getValue() != null) {
+                filterByTimeFrame();
+            }
+        });
     }
 
-    @FXML
-    private void handleFilterTasksEndDate(Event event) {
-        try {
-            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
-            initTasks();
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
+    private void listenEndDate() {
+        datePickerEnd.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && datePickerStart.getValue() != null) {
+                filterByTimeFrame();
+            }
+        });
+    }
+
+    private void filterByTimeFrame() {
+        if (checkTimeFrame()) {
+            try {
+                mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
+                initTasks();
+            } catch (ModelException ex) {
+                alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
+            }
+        } else {
+            alertManager.showAlert("The time frame is invalid.", "The end date is before the start date. Please check the selection.");
+
         }
+    }
+
+    private boolean checkTimeFrame() {
+        return datePickerStart.getValue().isBefore(datePickerEnd.getValue()) || datePickerStart.getValue().isEqual(datePickerEnd.getValue());
     }
 
 }
