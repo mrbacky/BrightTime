@@ -40,8 +40,8 @@
               </ScrollPane>
             <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <children>
-                  <JFXDatePicker fx:id="datePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onHiding="#handleFilterTasksStartDate" prefHeight="27.0" prefWidth="220.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER" />
-                  <JFXDatePicker fx:id="datePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onHiding="#handleFilterTasksEndDate" prefHeight="27.0" prefWidth="220.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER">
+                  <JFXDatePicker fx:id="datePickerStart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="220.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER" />
+                  <JFXDatePicker fx:id="datePickerEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="220.0" styleClass="datePickerTimeTracker" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
