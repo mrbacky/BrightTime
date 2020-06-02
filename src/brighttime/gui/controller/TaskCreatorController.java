@@ -261,9 +261,9 @@ public class TaskCreatorController implements Initializable {
         }
         TaskConcrete1 newTask = new TaskConcrete1(txtDescription.getText().trim(), cboProject.getSelectionModel().getSelectedItem(), billability, user);
         if (manualMode) {
-            newTask.setCreationTime(LocalDateTime.of(datePicker.getValue(), timePickerStart.getValue()));
+            newTask.setModifiedDateTime(LocalDateTime.of(datePicker.getValue(), timePickerStart.getValue()));
         } else {
-            newTask.setCreationTime(LocalDateTime.now());
+            newTask.setModifiedDateTime(LocalDateTime.now());
         }
         return newTask;
     }

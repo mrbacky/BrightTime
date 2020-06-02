@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 public class TaskConcrete1 extends TaskBase {
 
     private final ObjectProperty<List<TaskEntry>> taskEntryList = new SimpleObjectProperty<>();
-    private final ObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
+    private final ObjectProperty<LocalDateTime> modifiedDateTime = new SimpleObjectProperty<>();
     private final ObjectProperty<User> user = new SimpleObjectProperty<>();
 
     public TaskConcrete1(String description, Project project, Billability billability, User user) {
@@ -21,10 +21,10 @@ public class TaskConcrete1 extends TaskBase {
         this.user.set(user);
     }
 
-    public TaskConcrete1(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime creationTime, User user) {
+    public TaskConcrete1(int id, String description, Project project, Billability billability, List<TaskEntry> taskEntryList, LocalDateTime modifiedDateTime, User user) {
         super(id, description, project, billability);
         this.taskEntryList.set(taskEntryList);
-        this.creationTime.set(creationTime);
+        this.modifiedDateTime.set(modifiedDateTime);
         this.user.set(user);
     }
 
@@ -40,16 +40,16 @@ public class TaskConcrete1 extends TaskBase {
         return taskEntryList;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime.get();
+    public LocalDateTime getModifiedDateTime() {
+        return modifiedDateTime.get();
     }
 
-    public void setCreationTime(LocalDateTime value) {
-        creationTime.set(value);
+    public void setModifiedDateTime(LocalDateTime value) {
+        modifiedDateTime.set(value);
     }
 
-    public ObjectProperty creationTimeProperty() {
-        return creationTime;
+    public ObjectProperty ModifiedDateTimeProperty() {
+        return modifiedDateTime;
     }
 
     public User getUser() {

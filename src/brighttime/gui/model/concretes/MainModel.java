@@ -144,15 +144,15 @@ public class MainModel implements IMainModel {
             List<TaskEntry> entryList = new ArrayList();
             freshTask.setTaskEntryList(entryList);
         }
-        List<TaskConcrete1> taskList = taskMap.get(freshTask.getCreationTime().toLocalDate());
+        List<TaskConcrete1> taskList = taskMap.get(freshTask.getModifiedDateTime().toLocalDate());
         if (taskList == null) {
             taskList = new ArrayList<>();
             taskList.add(freshTask);
-            taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+            taskMap.put(freshTask.getModifiedDateTime().toLocalDate(), taskList);
         } else {
             taskList.add(0, freshTask);
-            taskMap.remove(freshTask.getCreationTime().toLocalDate());
-            taskMap.put(freshTask.getCreationTime().toLocalDate(), taskList);
+            taskMap.remove(freshTask.getModifiedDateTime().toLocalDate());
+            taskMap.put(freshTask.getModifiedDateTime().toLocalDate(), taskList);
         }
     }
 
