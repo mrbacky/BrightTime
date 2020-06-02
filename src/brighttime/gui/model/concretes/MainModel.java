@@ -68,9 +68,9 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void loadTasks(User user, LocalDate startDate, LocalDate endDate) throws ModelException {
+    public void loadTasks(Filter filter) throws ModelException {
         try {
-            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(user, startDate, endDate);
+            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(filter);
             //  Temp removal of listener becouse putAll is not one action. It is loop of put commands onto task map.
             taskMap.removeListener(taskMapListener);
             taskMap.clear();

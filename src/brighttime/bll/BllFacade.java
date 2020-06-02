@@ -72,11 +72,10 @@ public interface BllFacade {
     /**
      * Gets the tasks logged between today and 30 days ago of the user.
      *
-     * @param user The user.
      * @return A map with a list of tasks (containing entries) for each day.
      * @throws BllException
      */
-    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws BllException;
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(Filter filter) throws BllException;
 
     Duration calculateDuration(TaskEntry taskEntry);
 

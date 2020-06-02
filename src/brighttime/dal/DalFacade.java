@@ -90,13 +90,11 @@ public interface DalFacade {
     /**
      * Gets the tasks logged by the user between a start date and an end date.
      *
-     * @param user The user.
-     * @param start The start date.
-     * @param end The end date.
+     * @param filter A filter with the parameters user, start date and end date.
      * @return A map with a list of tasks (containing entries) for each date.
      * @throws DalException
      */
-    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException;
+    Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(Filter filter) throws DalException;
 
     /**
      * Creates a task entry in the database.

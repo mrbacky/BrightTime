@@ -1,5 +1,6 @@
 package brighttime.gui.controller;
 
+import brighttime.be.Filter;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.User;
 import brighttime.gui.model.ModelCreator;
@@ -100,7 +101,7 @@ public class TimeTrackerController implements Initializable {
 
     public void loadAndInitTasks() {
         try {
-            mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
+            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
             initTasks();
 
         } catch (ModelException ex) {
@@ -206,7 +207,7 @@ public class TimeTrackerController implements Initializable {
     @FXML
     private void handleFilterTasksStartDate(Event event) {
         try {
-            mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
+            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
             initTasks();
         } catch (ModelException ex) {
             alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
@@ -217,7 +218,7 @@ public class TimeTrackerController implements Initializable {
     @FXML
     private void handleFilterTasksEndDate(Event event) {
         try {
-            mainModel.loadTasks(user, datePickerStart.getValue(), datePickerEnd.getValue());
+            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
             initTasks();
         } catch (ModelException ex) {
             alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());

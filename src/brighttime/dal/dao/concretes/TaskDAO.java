@@ -8,7 +8,6 @@ import brighttime.be.TaskBase;
 import brighttime.be.TaskEntry;
 import brighttime.be.TaskConcrete1;
 import brighttime.be.TaskConcrete2;
-import brighttime.be.User;
 import brighttime.dal.ConnectionManager;
 import brighttime.dal.DalException;
 import brighttime.dal.IConnectionManager;
@@ -88,7 +87,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(Filter filter) throws DalException {
         Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
         Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
@@ -122,12 +121,12 @@ public class TaskDAO implements ITaskDAO {
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, user.getId());
-            pstmt.setDate(2, Date.valueOf(start));
-            pstmt.setDate(3, Date.valueOf(end.plusDays(1)));
-            pstmt.setInt(4, user.getId());
-            pstmt.setDate(5, Date.valueOf(start));
-            pstmt.setDate(6, Date.valueOf(end.plusDays(1)));
+            pstmt.setInt(1, filter.getUser().getId());
+            pstmt.setDate(2, Date.valueOf(filter.getStartDate()));
+            pstmt.setDate(3, Date.valueOf(filter.getEndDate().plusDays(1)));
+            pstmt.setInt(4, filter.getUser().getId());
+            pstmt.setDate(5, Date.valueOf(filter.getStartDate()));
+            pstmt.setDate(6, Date.valueOf(filter.getEndDate().plusDays(1)));
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -159,7 +158,7 @@ public class TaskDAO implements ITaskDAO {
                             billability,
                             entryList,
                             modifiedDate,
-                            user);
+                            filter.getUser());
                     taskMap.put(taskId, newTask);
                 } else {
                     newTask = taskMap.get(taskId);

@@ -115,9 +115,9 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException {
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(Filter filter) throws DalException {
         try {
-            return taskDAO.getAllTasksWithEntries(user, start, end);
+            return taskDAO.getAllTasksWithEntries(filter);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
