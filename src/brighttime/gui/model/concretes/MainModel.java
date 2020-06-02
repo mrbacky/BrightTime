@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -123,19 +128,17 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
-        Thread t = new Thread(() -> {
-            try {
-                TaskConcrete1 freshTask = bllManager.createTask(task);
-                Platform.runLater(() -> {
-                    addLocally(freshTask);
-                });
-            } catch (BllException ex) {
-                Logger.getLogger(MainModel.class.getName()).log(Level.SEVERE, null, ex); // TODO
-            }
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        Future<TaskConcrete1> future = executorService.submit(() -> bllManager.createTask(task));
+        executorService.shutdown();
+        try {
+            addLocally(future.get());
+        } catch (InterruptedException ex) {
+            throw new ModelException(ex.getMessage());
+        } catch (ExecutionException ex) {
+            throw new ModelException(ex.getMessage());
         }
-        );
-        t.setDaemon(true);
-        t.start();
 
     }
 
