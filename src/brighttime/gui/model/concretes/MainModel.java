@@ -129,7 +129,6 @@ public class MainModel implements IMainModel {
     @Override
     public void addTask(TaskConcrete1 task) throws ModelException {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-
         Future<TaskConcrete1> future = executorService.submit(() -> bllManager.createTask(task));
         executorService.shutdown();
         try {
@@ -139,7 +138,6 @@ public class MainModel implements IMainModel {
         } catch (ExecutionException ex) {
             throw new ModelException(ex.getMessage());
         }
-
     }
 
     private void addLocally(TaskConcrete1 freshTask) {
