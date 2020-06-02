@@ -203,7 +203,7 @@ public class TaskDAO implements ITaskDAO {
 
     /**
      * Builds the data structure (map) which is needed to display the tasks in
-     * the TimeTracker View. *
+     * the TimeTracker View.
      *
      * @return A map with a list of tasks (containing entries) for each day.
      */
@@ -302,7 +302,7 @@ public class TaskDAO implements ITaskDAO {
                 + "	ON T.id = TE.taskId "
                 + "	WHERE ";
 
-        String sqlFinal = buildSql(sql, filter);
+        String sqlFinal = buildSqlConditions(sql, filter);
 
         try (Connection con = connection.getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(sqlFinal);
@@ -363,7 +363,7 @@ public class TaskDAO implements ITaskDAO {
         }
     }
 
-    private String buildSql(String sql, Filter filter) {
+    private String buildSqlConditions(String sql, Filter filter) {
         if (filter.getUser() != null) {
             sql += "T.userId = ? ";
         }

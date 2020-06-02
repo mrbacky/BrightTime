@@ -34,9 +34,23 @@ public interface DalFacade {
      */
     List<Client> getClients() throws DalException;
 
-    Client updateClient(Client selectedClient) throws DalException;
+    /**
+     * Updates a client in the database.
+     *
+     * @param client The client to be updated.
+     * @return The updated client.
+     * @throws DalException
+     */
+    Client updateClient(Client client) throws DalException;
 
-    Client deleteClient(Client selectedClient) throws DalException;
+    /**
+     * Deletes a client in the database.
+     *
+     * @param client The client to be deleted.
+     * @return The deleted client.
+     * @throws DalException
+     */
+    Client deleteClient(Client client) throws DalException;
 
     /**
      * Creates a new project in the database.
@@ -56,6 +70,12 @@ public interface DalFacade {
      */
     List<Project> getProjectsForAClient(Client client) throws DalException;
 
+    /**
+     * Gets all the projects from the database.
+     *
+     * @return A list of all projects.
+     * @throws DalException
+     */
     List<Project> getAllProjects() throws DalException;
 
     /**
@@ -68,11 +88,11 @@ public interface DalFacade {
     TaskConcrete1 createTask(TaskConcrete1 task) throws DalException;
 
     /**
-     * Gets the tasks logged between the start date and end date of the user.
+     * Gets the tasks logged by the user between a start date and an end date.
      *
      * @param user The user.
-     * @param start
-     * @param end
+     * @param start The start date.
+     * @param end The end date.
      * @return A map with a list of tasks (containing entries) for each date.
      * @throws DalException
      */
@@ -87,22 +107,85 @@ public interface DalFacade {
      */
     TaskEntry createTaskEntry(TaskEntry taskEntry) throws DalException;
 
+    /**
+     * Updates the start time of a time entry.
+     *
+     * @param taskEntry The task entry to be updated.
+     * @return The updated task entry.
+     * @throws DalException
+     */
     TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
 
+    /**
+     * Updates the end time of a time entry.
+     *
+     * @param taskEntry The task entry to be updated.
+     * @return The updated task entry.
+     * @throws DalException
+     */
     TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
 
+    /**
+     * Gets all the tasks for the Overview.
+     *
+     * @return A list of tasks.
+     * @throws DalException
+     */
     List<TaskConcrete2> getAllTasks() throws DalException;
 
+    /**
+     * Gets the tasks which satisfies the filter condition for the Overview.
+     *
+     * @param filter The filter.
+     * @return A list of filtered tasks.
+     * @throws DalException
+     */
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
+    /**
+     * Creates the new user in the database.
+     *
+     * @param user The user to create.
+     * @return The created user.
+     * @throws DalException
+     */
     User createUser(User user) throws DalException;
 
+    /**
+     * Gets all the active users from the database.
+     *
+     * @return A list of active users.
+     * @throws DalException
+     */
     List<User> getUsers() throws DalException;
 
+    /**
+     * Authenticates the user.
+     *
+     * @param username The username.
+     * @param password The password.
+     * @return The authenticated user.
+     * @throws DalException
+     */
     User authenticateUser(String username, String password) throws DalException;
 
-    User updateUserDetails(User updatedUser) throws DalException;
+    /**
+     * Updates the user.
+     *
+     * @param user The user to be updated.
+     * @return The updated user.
+     * @throws DalException
+     */
+    User updateUserDetails(User user) throws DalException;
 
-    User deleteUser(User selectedUser) throws DalException;
+    /**
+     * Deletes the user. Users with tasks are permanently deleted, while users
+     * with tasks are marked as inactive and removed from the application.
+     *
+     * @param user The user to be deleted.
+     * @return The deleted user.
+     * @throws DalException
+     */
+    User deleteUser(User user) throws DalException;
 
 }

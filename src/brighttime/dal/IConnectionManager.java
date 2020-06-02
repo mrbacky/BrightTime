@@ -9,6 +9,12 @@ import java.sql.Connection;
  */
 public interface IConnectionManager {
 
+    /**
+     * Attempts to establish a connection with the data source.
+     *
+     * @return A connection to the data source.
+     * @throws SQLServerException
+     */
     Connection getConnection() throws SQLServerException;
 
 }

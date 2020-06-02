@@ -163,7 +163,6 @@ public class UserDAO implements IUserDAO {
 
             pstmt.executeUpdate();
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Updated the information of the user: " + user.getUsername() + ".");
-            //  TODO: change return type
             return user;
         } catch (SQLException ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful information update of the user: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace()));
@@ -172,7 +171,6 @@ public class UserDAO implements IUserDAO {
             }
             throw new DalException(ex.getMessage());
         }
-
     }
 
     @Override
@@ -194,8 +192,7 @@ public class UserDAO implements IUserDAO {
             } else {
                 logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
                 throw new DalException(ex.getMessage());
-            }
-
+                }
         }
     }
 

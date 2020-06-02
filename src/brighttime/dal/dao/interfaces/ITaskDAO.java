@@ -35,8 +35,21 @@ public interface ITaskDAO {
      */
     Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(User user, LocalDate start, LocalDate end) throws DalException;
 
+    /**
+     * Gets all the tasks for the Overview.
+     *
+     * @return A list of tasks.
+     * @throws DalException
+     */
     List<TaskConcrete2> getAllTasks() throws DalException;
 
+    /**
+     * Gets the tasks which satisfies the filter condition for the Overview.
+     *
+     * @param filter The filter.
+     * @return A list of filtered tasks.
+     * @throws DalException
+     */
     List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException;
 
 }
