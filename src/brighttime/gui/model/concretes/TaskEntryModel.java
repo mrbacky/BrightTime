@@ -50,11 +50,13 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public void setupStartTimeListener() {
         startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
-            if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
+            if (newValue.isBefore(taskEntry.getEndTime().toLocalTime()) && !newValue.equals(taskEntry.getEndTime())) {
                 LocalDateTime startTimeFull = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeFull);
                 stringDuration.set(secToFormat((int) calculateDuration(taskEntry).toSeconds()));
             }
+            else
+                stringDuration.set("00:00:00");
         });
     }
 

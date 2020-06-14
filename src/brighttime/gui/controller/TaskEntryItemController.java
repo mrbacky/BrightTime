@@ -103,7 +103,8 @@ public class TaskEntryItemController implements Initializable {
                 taskEntryModel.setStartTime(initialStartTime);
                 alertManager.showAlert("Unable to edit start time of task entry", "Check your internet connection. " + ex.getMessage());
             }
-        } else if (updatedStartTime.isAfter(taskEntryModel.getEndTime())) {
+
+        } else if (updatedStartTime.isAfter(taskEntryModel.getEndTime()) || updatedStartTime.equals(taskEntryModel.getEndTime())) {
             Platform.runLater(() -> {
                 alertManager.showAlert("Invalid input", "Start time has to be before end time");
                 timePickerStartTime.show();
@@ -122,7 +123,7 @@ public class TaskEntryItemController implements Initializable {
                 taskEntryModel.setEndTime(initialEndTime);
                 alertManager.showAlert("Unable to edit end time of task entry", "Check your internet connection." + ex.getMessage());
             }
-        } else if (updatedEndTime.isBefore(taskEntryModel.getStartTime())) {
+        } else if (updatedEndTime.isBefore(taskEntryModel.getStartTime()) || updatedEndTime.equals(taskEntryModel.getStartTime())) {
             Platform.runLater(() -> {
                 alertManager.showAlert("Invalid input", "End time has to be after start time");
                 timePickerEndTime.show();
