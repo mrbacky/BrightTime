@@ -23,21 +23,22 @@ import javafx.fxml.Initializable;
 public class UserCreatorController implements Initializable {
 
     @FXML
-    private JFXTextField textFieldFirstName;
+    private JFXTextField txtFirstName;
     @FXML
-    private JFXButton btnAdd;
+    private JFXTextField txtLastName;
     @FXML
-    private JFXTextField textFieldUserName;
-    @FXML
-    private JFXTextField textFieldLastName;
+    private JFXTextField txtUsername;
     @FXML
     private JFXComboBox<String> cboUserType;
     @FXML
+    private JFXPasswordField passwordField1;
+    @FXML
+    private JFXPasswordField passwordField2;
+    @FXML
+    private JFXButton btnAdd;
+    @FXML
     private JFXButton btnClearInfo;
-    @FXML
-    private JFXPasswordField passField2;
-    @FXML
-    private JFXPasswordField passField1;
+
     private final AlertManager alertManager;
     private final InputValidator inputValidator;
     private IMainModel mainModel;
@@ -61,30 +62,31 @@ public class UserCreatorController implements Initializable {
         this.mainModel = mainModel;
     }
 
+    void injectContr(UsersManagerController contr) {
+        this.contr = contr;
+    }
+
     void initializeView() {
         initUserTypeComboBox();
-
         handleCreateUser();
     }
 
     private void handleCreateUser() {
         btnAdd.setOnAction((ActionEvent event) -> {
-
             try {
-                String firstName = textFieldFirstName.getText();
-                String lastName = textFieldLastName.getText();
-                password1 = passField1.getText();
-                password2 = passField2.getText();
+                String firstName = txtFirstName.getText();
+                String lastName = txtLastName.getText();
 
-                String userName = textFieldUserName.getText();
+                String username = txtUsername.getText();
                 String userType = cboUserType.getValue();
 
+                password1 = passwordField1.getText();
+                password2 = passwordField2.getText();
                 if (validateInput()) {
                     if (userType.equals("Administrator")) {
-                        mainModel.createUser(new User(firstName, lastName, userName, password1, User.UserType.ADMINISTRATOR));
+                        mainModel.createUser(new User(firstName, lastName, username, password1, User.UserType.ADMINISTRATOR));
                     } else {
-                        mainModel.createUser(new User(firstName, lastName, userName, password1, User.UserType.STANDARD));
-
+                        mainModel.createUser(new User(firstName, lastName, username, password1, User.UserType.STANDARD));
                     }
                     handleClearInfo(event);
                     alertManager.showSuccess("User was successfully created.", firstName + " " + lastName);
@@ -93,9 +95,7 @@ public class UserCreatorController implements Initializable {
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not create the user.", "An error occured: " + ex.getMessage());
             }
-
         });
-
     }
 
     private void initUserTypeComboBox() {
@@ -105,21 +105,20 @@ public class UserCreatorController implements Initializable {
 
     @FXML
     private void handleClearInfo(ActionEvent event) {
-        textFieldFirstName.clear();
-        textFieldLastName.clear();
-        passField1.clear();
-        passField2.clear();
-        textFieldUserName.clear();
+        txtFirstName.clear();
+        txtLastName.clear();
+        passwordField1.clear();
+        passwordField2.clear();
+        txtUsername.clear();
         cboUserType.getSelectionModel().clearSelection();
-
     }
 
     private boolean validateInput() {
-        if (textFieldFirstName.getText().isEmpty()) {
+        if (txtFirstName.getText().isEmpty()) {
             alertManager.showAlert("No first name was entered.", "Please enter a first name of the new user.");
             return false;
         }
-        if (textFieldLastName.getText().isEmpty()) {
+        if (txtLastName.getText().isEmpty()) {
             alertManager.showAlert("No last name was entered.", "Please enter a last name of the new user.");
             return false;
         }
@@ -127,16 +126,14 @@ public class UserCreatorController implements Initializable {
             alertManager.showAlert("No user type is selected.", "Please select a user type.");
             return false;
         }
-        if (textFieldUserName.getText().isEmpty()) {
+        if (txtUsername.getText().isEmpty()) {
             alertManager.showAlert("No username was entered.", "Please enter a username.");
             return false;
         }
-
-        if (!inputValidator.usernameCheck(textFieldUserName.getText())) {
+        if (!inputValidator.usernameCheck(txtUsername.getText())) {
             alertManager.showAlert("The username is invalid.", "Please try another username.");
             return false;
         }
-
         if (password1.isEmpty()) {
             alertManager.showAlert("No password was entered.", "Please enter a password.");
             return false;
@@ -146,9 +143,6 @@ public class UserCreatorController implements Initializable {
             return false;
         }
         if (!password1.equals(password2)) {
-            System.out.println("p1: " + password1);
-            System.out.println("p2: " + password2);
-
             alertManager.showAlert("The password didn't match.", "Try again.");
             return false;
         }
@@ -157,11 +151,6 @@ public class UserCreatorController implements Initializable {
             return false;
         }
         return true;
-    }
-
-    void injectContr(UsersManagerController contr) {
-        this.contr = contr;
-
     }
 
 }

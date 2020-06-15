@@ -26,18 +26,18 @@
       <RowConstraints vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <JFXTextField fx:id="textFieldFirstName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="First name" styleClass="txtCommon">
+      <JFXTextField fx:id="txtFirstName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="First name" styleClass="txtCommon">
          <GridPane.margin>
             <Insets bottom="5.0" />
          </GridPane.margin>
       </JFXTextField>
-      <JFXTextField fx:id="textFieldUserName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Email address" styleClass="txtCommon" GridPane.rowIndex="1" />
-      <JFXPasswordField fx:id="passField1" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Password" styleClass="txtCommon" GridPane.rowIndex="2">
+      <JFXTextField fx:id="txtUsername" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Email address" styleClass="txtCommon" GridPane.rowIndex="1" />
+      <JFXPasswordField fx:id="passwordField1" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Password" styleClass="txtCommon" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets top="5.0" />
          </GridPane.margin>
       </JFXPasswordField>
-      <JFXTextField fx:id="textFieldLastName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Last name" styleClass="txtCommon" GridPane.columnIndex="1">
+      <JFXTextField fx:id="txtLastName" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Last name" styleClass="txtCommon" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets bottom="5.0" />
          </GridPane.margin>
@@ -47,7 +47,7 @@
             <String fx:value="txtCommon" />
             <String fx:value="cboCommon" />
          </styleClass></JFXComboBox>
-      <JFXPasswordField fx:id="passField2" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Password confirmation" styleClass="txtCommon" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <JFXPasswordField fx:id="passwordField2" labelFloat="true" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="300.0" promptText="Password confirmation" styleClass="txtCommon" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets top="5.0" />
          </GridPane.margin>

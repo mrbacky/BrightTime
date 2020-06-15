@@ -100,11 +100,11 @@ public class TaskCreatorController implements Initializable {
     void initializeView() throws IOException {
         timeTrackerContr.injectCreateTaskController(this);
         setUser();
+        normalMode();
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
         setValidators();
         addTask();
-        normalMode();
         setDateRestrictions();
         setTimeRestriction();
         display24HourView();
@@ -118,11 +118,8 @@ public class TaskCreatorController implements Initializable {
         this.timeTrackerContr = timeTrackerContr;
     }
 
-    void manualMode() {
-        manualMode = true;
-        grid.add(datePicker, 0, 1, 1, 1);
-        grid.add(timePickerStart, 1, 1, 1, 1);
-        grid.add(timePickerEnd, 2, 1, 1, 1);
+    private void setUser() {
+        user = mainModel.getUser();
     }
 
     void normalMode() {
@@ -132,8 +129,11 @@ public class TaskCreatorController implements Initializable {
         grid.getChildren().remove(timePickerEnd);
     }
 
-    private void setUser() {
-        user = mainModel.getUser();
+    void manualMode() {
+        manualMode = true;
+        grid.add(datePicker, 0, 1, 1, 1);
+        grid.add(timePickerStart, 1, 1, 1, 1);
+        grid.add(timePickerEnd, 2, 1, 1, 1);
     }
 
     /**
@@ -171,7 +171,7 @@ public class TaskCreatorController implements Initializable {
     }
 
     /**
-     * Sets all validator.
+     * Sets all validators.
      */
     private void setValidators() {
         validationManager.inputValidation(txtDescription, "No description added.");
@@ -206,15 +206,6 @@ public class TaskCreatorController implements Initializable {
 
             }
         });
-    }
-
-    private void clearInputs() {
-        txtDescription.clear();
-        cboClient.getSelectionModel().clearSelection();
-        cboProject.getSelectionModel().clearSelection();
-        datePicker.setValue(null);
-        timePickerStart.setValue(null);
-        timePickerEnd.setValue(null);
     }
 
     private boolean validateInput() {
@@ -277,6 +268,15 @@ public class TaskCreatorController implements Initializable {
         return newTask;
     }
 
+    private void clearInputs() {
+        txtDescription.clear();
+        cboClient.getSelectionModel().clearSelection();
+        cboProject.getSelectionModel().clearSelection();
+        datePicker.setValue(null);
+        timePickerStart.setValue(null);
+        timePickerEnd.setValue(null);
+    }
+    
     private void setDateRestrictions() {
         datePickerCustomizer.disableFutureDates(datePicker);
         datePickerCustomizer.changeWrittenFutureDateToCurrentDate(datePicker);

@@ -42,36 +42,37 @@ public class TaskItemController implements Initializable {
     private final Image EXPANDED_ICON_IMAGE = new Image("/brighttime/gui/view/assets/collapse.png");
 
     @FXML
-    private ToggleButton btnExpandTask;
-    @FXML
-    private VBox vBoxTaskEntries;
-    @FXML
-    private JFXTextField textFieldProject;
+    private JFXTextField textFieldTaskDesc;
     @FXML
     private JFXTextField textFieldClient;
     @FXML
-    private JFXTextField textFieldTaskDesc;
+    private JFXTextField textFieldProject;
+    @FXML
+    private Label lblStartTime;
+    @FXML
+    private Label lblEndTime;
+    @FXML
+    private Label lblDuration;
     @FXML
     private ToggleButton btnPlayPause;
     @FXML
     private ImageView imgPlayPause;
     @FXML
-    private ImageView imgExpandCollapse;
-    @FXML
-    private Label lblEndTime;
-    @FXML
-    private Label lblStartTime;
-    @FXML
-    private Label lblDuration;
-    @FXML
     private ImageView imgMoneyBag;
 
+    @FXML
+    private ToggleButton btnExpandTask;
+    @FXML
+    private ImageView imgExpandCollapse;
+    @FXML
+    private VBox vBoxTaskEntries;
+
+    private ITaskModel taskModel;
+    private TimeTrackerController timeTracker;
     private final AlertManager alertManager;
 
     private LocalDateTime tempStartTime;
     private LocalDateTime tempEndTime;
-    private TimeTrackerController timeTracker;
-    private ITaskModel taskModel;
 
     public TaskItemController() {
         this.alertManager = new AlertManager();
@@ -90,13 +91,25 @@ public class TaskItemController implements Initializable {
 
     public void injectModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
-
     }
 
     void initializeView() {
         setTaskDetails(taskModel.getTask());
         setEmptyTaskStyle();
         setNonBillableTaskStyle();
+    }
+
+    public void setTaskDetails(TaskConcrete1 task) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TIME_FORMAT);
+
+        textFieldTaskDesc.setText(task.getDescription());
+        textFieldClient.setText(task.getProject().getClient().getName());
+        textFieldProject.setText(task.getProject().getName());
+        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
+        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
+                -> dtf.format(taskModel.getEndTime()), taskModel.endTimeProperty()));
+        lblDuration.textProperty().bind(taskModel.stringDurationProperty());
     }
 
     private void setEmptyTaskStyle() {
@@ -112,29 +125,13 @@ public class TaskItemController implements Initializable {
         }
     }
 
-    public void setTaskDetails(TaskConcrete1 task) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TIME_FORMAT);
-
-        textFieldTaskDesc.setText(task.getDescription());
-        textFieldClient.setText(task.getProject().getClient().getName());
-        textFieldProject.setText(task.getProject().getName());
-        lblStartTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getStartTime()), taskModel.startTimeProperty()));
-        lblEndTime.textProperty().bind(Bindings.createStringBinding(()
-                -> dtf.format(taskModel.getEndTime()), taskModel.endTimeProperty()));
-        lblDuration.textProperty().bind(taskModel.stringDurationProperty());
-
-    }
-
     @FXML
     private void handleExpandAndCollapseTask(ActionEvent event) {
-
         if (btnExpandTask.isSelected()) {
             showTaskEntries();
         } else {
             hideTaskEntries();
         }
-
     }
 
     private void showTaskEntries() {

@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="apManageUsers" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.UsersManagerController">
+<AnchorPane prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.UsersManagerController">
    <children>
-      <ScrollPane id="spTasks" fx:id="spManageUsers" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <VBox id="vBoxMain" fx:id="vBox" maxHeight="1.7976931348623157E308" spacing="10.0">
+            <VBox id="vBoxMain" maxHeight="1.7976931348623157E308" spacing="10.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

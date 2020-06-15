@@ -42,19 +42,14 @@ public class UsersManagerController implements Initializable {
     private final String CREATE_USER_FXML = "/brighttime/gui/view/UserCreator.fxml";
 
     @FXML
-    private VBox vBox;
+    private ToggleButton btnExpandCreateUser;
     @FXML
     private ImageView imgExpandCollapse;
     @FXML
-    private ScrollPane spManageUsers;
+    private VBox vboxCreateUsers;
+
     @FXML
     private TableView<User> tbvUsers;
-    @FXML
-    private AnchorPane apManageUsers;
-    @FXML
-    private ToggleButton btnExpandCreateUser;
-    @FXML
-    private VBox vboxCreateUsers;
     @FXML
     private TableColumn<User, String> colFirstName;
     @FXML
@@ -63,19 +58,19 @@ public class UsersManagerController implements Initializable {
     private TableColumn<User, String> colUserName;
     @FXML
     private TableColumn<User, User.UserType> colUserType;
+
     @FXML
     private ContextMenu contextMenu;
     @FXML
     private MenuItem menuItemDeleteUser;
 
+    private IMainModel mainModel;
     private final AlertManager alertManager;
     private final InputValidator inputValidator;
 
-    private IMainModel mainModel;
-
     public UsersManagerController() {
-        this.alertManager = new AlertManager();
-        this.inputValidator = new InputValidator();
+        alertManager = new AlertManager();
+        inputValidator = new InputValidator();
     }
 
     /**
@@ -87,7 +82,6 @@ public class UsersManagerController implements Initializable {
 
     void injectMainModel(IMainModel mainModel) {
         this.mainModel = mainModel;
-
     }
 
     public void initializeView() {
@@ -165,7 +159,6 @@ public class UsersManagerController implements Initializable {
                 });
             }
         });
-
     }
 
     private void setupUsernameCol() {
@@ -173,15 +166,15 @@ public class UsersManagerController implements Initializable {
         colUserName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
             User u = tbvUsers.getItems().get(e.getTablePosition().getRow());
             String oldUserName = e.getOldValue();
-            if (inputValidator.usernameCheck(u.getUsername())) {
+            if (inputValidator.usernameCheck(e.getNewValue())) {
                 try {
                     u.setUsername(e.getNewValue());
                     mainModel.updateUserDetails(u);
                 } catch (ModelException ex) {
                     Platform.runLater(() -> {
                         u.setUsername(oldUserName);
-                        e.getTableView().getColumns().get(2).setVisible(false);
-                        e.getTableView().getColumns().get(2).setVisible(true);
+//                        e.getTableView().getColumns().get(2).setVisible(false);
+//                        e.getTableView().getColumns().get(2).setVisible(true);
                         alertManager.showAlert("Could not edit user name", "Error: " + ex.getMessage());
                     });
                 }
@@ -255,18 +248,16 @@ public class UsersManagerController implements Initializable {
     @FXML
     private void handleDeleteUser(ActionEvent event) {
         User u = tbvUsers.getSelectionModel().getSelectedItem();
-        boolean deleteUser = alertManager.showConfirmation("Deleting User " + u.getFirstName() + " " + u.getLastName(),
+        boolean deleteUser = alertManager.showConfirmation("Delete the user: " + u.getFirstName() + " " + u.getLastName(),
                 "Are you sure you want to delete the user?");
 
-        if (u != null && deleteUser) {
+        if (deleteUser) {
             try {
                 mainModel.deleteUser(u);
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not delete the user.", "An error occured: " + ex.getMessage());
-
             }
         }
-
     }
 
 }
