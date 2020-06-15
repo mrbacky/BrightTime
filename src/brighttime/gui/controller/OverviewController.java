@@ -19,7 +19,6 @@ import com.jfoenix.controls.JFXNodesList;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAdjusters;
@@ -51,7 +50,6 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import javafx.util.converter.LocalDateStringConverter;
-import javafx.util.converter.LocalTimeStringConverter;
 
 /**
  * FXML Controller class
@@ -62,6 +60,8 @@ public class OverviewController implements Initializable {
 
     @FXML
     private HBox hBoxFilter;
+    @FXML
+    private Label lblUser;
     @FXML
     private Label lblProject;
     @FXML
@@ -102,6 +102,8 @@ public class OverviewController implements Initializable {
     @FXML
     private GridPane grid;
     @FXML
+    private BarChart<String, Double> barChartTasks;
+    @FXML
     private TableView<TaskConcrete2> tbvTasks;
     @FXML
     private TableColumn<TaskConcrete2, String> colTaskDescription;
@@ -110,27 +112,17 @@ public class OverviewController implements Initializable {
     @FXML
     private TableColumn<TaskConcrete2, String> colCost;
     @FXML
-    private BarChart<String, Double> barChartTasks;
+    private JFXButton btnTableSize;
 
+    private User currentUser;
     private IMainModel mainModel;
     private final AlertManager alertManager;
     private final ToolTipManager toolTipManager;
     private final ValidationManager validationManager;
     private final DatePickerCustomizer datePickerCustomizer;
-
-    //TODO: Move to CSS.
-    private final String defaultColor = "-fx-text-fill: #435A9A";
-    private final String highlightColor = "-fx-text-fill: #F0C326";
-
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.US);
-    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
-
-    @FXML
-    private Label lblUser;
-    @FXML
-    private JFXButton btnTableSize;
-
-    private User currentUser;
+    private final String defaultColor = "labelFilterTextColorDefault";
+    private final String highlightColor = "labelFilterTextColorHighlight";
     int i = 0;
 
     public OverviewController() {
@@ -148,16 +140,16 @@ public class OverviewController implements Initializable {
     }
 
     void initializeView() {
-//      displayUserFilter();      this one is called in setUpUserRules();
-        displayProjectFilter();
-        displayTimeFrameFilter();
-
         setUsersIntoComboBox();
         setClientsIntoComboBox();
         setProjectsIntoComboBox();
         setDateRestrictions();
         setValidators();
         setTable();
+
+        setUpUserRules();
+        displayProjectFilter();
+        displayTimeFrameFilter();
 
         selectUser();
         selectClient();
@@ -170,24 +162,12 @@ public class OverviewController implements Initializable {
         removeTimeFrameFilter();
         clearAllFilters();
 
-        //  this is important for hiding user combo box and stuff
-        setUpUserRules();
-
-        //vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
-        scrollPane.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                grid.setPrefWidth(newValue.doubleValue() - (oldValue.doubleValue() - scrollPane.getViewportBounds().getWidth()));
-            }
-        });
-
-        //TODO: Refactor this.
         setUpBarChart();
-        tbvTasks.getItems().addListener((ListChangeListener.Change<? extends TaskConcrete2> c) -> {
-            setUpBarChart();
-        });
+        listenToTableAndReflectInBarChart();
 
         setToolTipsForButtons();
         changeTableSize();
+        makeNodesInScrollPaneResponsive();
     }
 
     void injectMainModel(IMainModel mainModel) {
@@ -268,12 +248,58 @@ public class OverviewController implements Initializable {
         }
     }
 
+    private void setUpUserRules() {
+        currentUser = mainModel.getUser();
+        if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
+            displayUserFilter();
+
+        } else {
+            tbvTasks.getColumns().remove(2);
+            cboUsers.getSelectionModel().select(currentUser);
+            lblUser.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+            nodesListUser.setDisable(true);
+            lblUser.setStyle("-fx-opacity: 1");
+        }
+    }
+
+    private void displayUserFilter() {
+        nodesListUser.setOnMouseEntered((event) -> {
+            nodesListUser.animateList();
+        });
+        nodesListUser.setOnMouseExited((event) -> {
+            if (!cboUsers.isShowing()) {
+                nodesListUser.animateList(false);
+            }
+        });
+    }
+
+    private void displayProjectFilter() {
+        nodesListProject.setOnMouseEntered((event) -> {
+            nodesListProject.animateList();
+        });
+        nodesListProject.setOnMouseExited((event) -> {
+            if (!cboClients.isShowing() && !cboProjects.isShowing()) {
+                nodesListProject.animateList(false);
+            }
+        });
+    }
+
+    private void displayTimeFrameFilter() {
+        nodesListTimeFrame.setOnMouseEntered((event) -> {
+            nodesListTimeFrame.animateList();
+        });
+        nodesListTimeFrame.setOnMouseExited((event) -> {
+            if (!datePickerStart.isShowing() && !datePickerEnd.isShowing()) {
+                nodesListTimeFrame.animateList(false);
+            }
+        });
+    }
+
     private void selectUser() {
         cboUsers.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
             if (newVal != null) {
                 try {
                     mainModel.loadOverviewTasksFiltered(new Filter(newVal, cboProjects.getValue(), datePickerStart.getValue(), datePickerEnd.getValue()));
-                    //  added rule ------------------------------------------------------------------------------------------------------------
                     if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
                         StringProperty selectedFilter = new SimpleStringProperty();
                         selectedFilter.bind(Bindings.concat(newVal.firstNameProperty(), " ", newVal.lastNameProperty()));
@@ -411,39 +437,6 @@ public class OverviewController implements Initializable {
         datePickerEnd.setValue(lastDayOfLastMonth);
     }
 
-    private void displayUserFilter() {
-        nodesListUser.setOnMouseEntered((event) -> {
-            nodesListUser.animateList();
-        });
-        nodesListUser.setOnMouseExited((event) -> {
-            if (!cboUsers.isShowing()) {
-                nodesListUser.animateList(false);
-            }
-        });
-    }
-
-    private void displayProjectFilter() {
-        nodesListProject.setOnMouseEntered((event) -> {
-            nodesListProject.animateList();
-        });
-        nodesListProject.setOnMouseExited((event) -> {
-            if (!cboClients.isShowing() && !cboProjects.isShowing()) {
-                nodesListProject.animateList(false);
-            }
-        });
-    }
-
-    private void displayTimeFrameFilter() {
-        nodesListTimeFrame.setOnMouseEntered((event) -> {
-            nodesListTimeFrame.animateList();
-        });
-        nodesListTimeFrame.setOnMouseExited((event) -> {
-            if (!datePickerStart.isShowing() && !datePickerEnd.isShowing()) {
-                nodesListTimeFrame.animateList(false);
-            }
-        });
-    }
-
     private void removeUserFilter() {
         btnFilterUser.getBtn().setOnAction((event) -> {
             cboUsers.getSelectionModel().clearSelection();
@@ -486,26 +479,25 @@ public class OverviewController implements Initializable {
     private void clearAllFilters() {
         btnClearFilters.setOnAction((event) -> {
             try {
+                if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
+                    hBoxFilter.getChildren().remove(btnFilterUser);
+                    cboUsers.getSelectionModel().clearSelection();
+
+                    mainModel.loadOverviewTasks();
+                } else if (currentUser.getType() == User.UserType.STANDARD) {
+                    mainModel.loadOverviewTasksFiltered(new Filter(currentUser, null, null, null));
+                }
+
                 changeLabel(lblProject, "Project", defaultColor);
                 changeLabel(lblTimeFrame, "Time frame", defaultColor);
                 hBoxFilter.getChildren().remove(btnFilterProject);
                 hBoxFilter.getChildren().remove(btnFilterTimeFrame);
-                //  added rules --------------------------------------------------------------------------------------------------------------------
-                if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
-                    hBoxFilter.getChildren().remove(btnFilterUser);
-                    cboUsers.getSelectionModel().clearSelection();
-                }
+
                 cboClients.getSelectionModel().clearSelection();
                 cboProjects.getSelectionModel().clearSelection();
                 cboProjects.getItems().clear();
                 datePickerStart.setValue(null);
                 datePickerEnd.setValue(null);
-                //  added rule --------------------------------------------------------------------------------------------------------------------
-                if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
-                    mainModel.loadOverviewTasks();
-                } else if (currentUser.getType() == User.UserType.STANDARD) {
-                    mainModel.loadOverviewTasksFiltered(new Filter(currentUser, null, null, null));
-                }
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not clear the filters.", "An error occured: " + ex.getMessage());
             }
@@ -518,7 +510,9 @@ public class OverviewController implements Initializable {
 
     private void changeLabel(Label label, String text, String style) {
         label.setText(text);
-        label.setStyle(style);
+        label.getStyleClass().clear();
+        label.getStyleClass().add("labelFilter");
+        label.getStyleClass().add(style);
     }
 
     private void makeCustomActiveFilterButton(ActiveFilterButton button, ObservableValue text) {
@@ -552,6 +546,12 @@ public class OverviewController implements Initializable {
         barChartTasks.setLegendVisible(false);
     }
 
+    private void listenToTableAndReflectInBarChart() {
+        tbvTasks.getItems().addListener((ListChangeListener.Change<? extends TaskConcrete2> c) -> {
+            setUpBarChart();
+        });
+    }
+
     private void createToolTip(XYChart.Data<String, Double> xyPlot, TaskConcrete2 task) {
         String projectInfo = task.getProject().getName() + " (" + task.getProject().getClient().getName() + ")";
         String text
@@ -564,20 +564,6 @@ public class OverviewController implements Initializable {
 
         xyPlot.getNode().setOnMouseEntered(mEvent -> xyPlot.getNode().getStyleClass().add("onBarchartColumnHover"));
         xyPlot.getNode().setOnMouseExited(mEvent -> xyPlot.getNode().getStyleClass().remove("onBarchartColumnHover"));
-    }
-
-    private void setUpUserRules() {
-        currentUser = mainModel.getUser();
-        if (currentUser.getType() == User.UserType.ADMINISTRATOR) {
-            displayUserFilter();
-
-        } else {
-            tbvTasks.getColumns().remove(2);
-            cboUsers.getSelectionModel().select(currentUser);
-            lblUser.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
-            nodesListUser.setDisable(true);
-            lblUser.setStyle("-fx-opacity: 1");
-        }
     }
 
     private void setToolTipsForButtons() {
@@ -597,6 +583,14 @@ public class OverviewController implements Initializable {
                 btnTableSize.setText("Extend table");
             }
             i++;
+        });
+    }
+
+    private void makeNodesInScrollPaneResponsive() {
+        scrollPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                grid.setPrefWidth(newValue.doubleValue() - (oldValue.doubleValue() - scrollPane.getViewportBounds().getWidth()));
+            }
         });
     }
 

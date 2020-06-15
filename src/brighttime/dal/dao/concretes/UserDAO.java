@@ -142,7 +142,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public User updateUserDetails(User user) throws DalException {
+    public void updateUserDetails(User user) throws DalException {
         String sql = "UPDATE [User] "
                 + "SET firstName = ?, lastName = ?, username = ?, userTypeId = ? "
                 + "WHERE id = ?";
@@ -163,7 +163,6 @@ public class UserDAO implements IUserDAO {
 
             pstmt.executeUpdate();
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION, "Updated the information of the user: " + user.getUsername() + ".");
-            return user;
         } catch (SQLException ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful information update of the user: " + user.getUsername() + ". " + Arrays.toString(ex.getStackTrace()));
             if (ex.getErrorCode() == 2627) {
@@ -192,7 +191,7 @@ public class UserDAO implements IUserDAO {
             } else {
                 logDAO.logEvent(EventLogDAO.EventType.ERROR, "Unsuccessful deleting the user \"" + user.getUsername() + "\". " + Arrays.toString(ex.getStackTrace()));
                 throw new DalException(ex.getMessage());
-                }
+            }
         }
     }
 

@@ -84,7 +84,7 @@ public class ClientDAO implements IClientDAO {
     }
 
     @Override
-    public Client updateClient(Client client) throws DalException {
+    public void updateClient(Client client) throws DalException {
         String sql = "UPDATE Client SET name = ?, hourlyRate = ? WHERE id = ?";
 
         try (Connection con = connection.getConnection()) {
@@ -96,8 +96,6 @@ public class ClientDAO implements IClientDAO {
 
             logDAO.logEvent(EventLogDAO.EventType.INFORMATION,
                     "Updated the client \"" + client.getName() + "\".");
-
-            return client;
         } catch (SQLException ex) {
             logDAO.logEvent(EventLogDAO.EventType.ERROR,
                     "Unsuccessful updating the client \"" + client.getName() + "\". " + Arrays.toString(ex.getStackTrace()));

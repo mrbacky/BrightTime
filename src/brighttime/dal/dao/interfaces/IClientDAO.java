@@ -31,10 +31,9 @@ public interface IClientDAO {
      * Updates a client in the database.
      *
      * @param client The client to update.
-     * @return The updated client.
      * @throws DalException
      */
-    Client updateClient(Client client) throws DalException;
+    void updateClient(Client client) throws DalException;
 
     /**
      * Deletes a client.

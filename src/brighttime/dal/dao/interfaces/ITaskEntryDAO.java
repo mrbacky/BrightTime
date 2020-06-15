@@ -22,18 +22,16 @@ public interface ITaskEntryDAO {
      * Updates the start time of a task entry.
      *
      * @param taskEntry
-     * @return The updated task entry.
      * @throws DalException
      */
-    TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
+    void updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
 
     /**
      * Updates the end time of a task entry.
      *
      * @param taskEntry
-     * @return The updated task entry.
      * @throws DalException
      */
-    TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
+    void updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
 
 }

@@ -16,14 +16,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -133,9 +129,7 @@ public class MainModel implements IMainModel {
         executorService.shutdown();
         try {
             addLocally(future.get());
-        } catch (InterruptedException ex) {
-            throw new ModelException(ex.getMessage());
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             throw new ModelException(ex.getMessage());
         }
     }
@@ -159,7 +153,6 @@ public class MainModel implements IMainModel {
 
     @Override
     public void addClient(Client client) throws ModelException {
-        //TODO: EventLog: Same try catch for two BLL methods?
         try {
             Client newClient = bllManager.createClient(client);
             clientList.add(newClient);
@@ -201,7 +194,7 @@ public class MainModel implements IMainModel {
     @Override
     public void loadProjects(Client client) throws ModelException {
         try {
-            List<Project> allProjects = bllManager.getProjects(client);
+            List<Project> allProjects = bllManager.getProjectsForAClient(client);
             projectList.clear();
             projectList.addAll(allProjects);
         } catch (BllException ex) {
@@ -252,9 +245,9 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public User updateUserDetails(User updatedUser) throws ModelException {
-        try {// TODO: Change to void
-            return bllManager.updateUserDetails(updatedUser);
+    public void updateUserDetails(User updatedUser) throws ModelException {
+        try {
+            bllManager.updateUserDetails(updatedUser);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
@@ -272,8 +265,8 @@ public class MainModel implements IMainModel {
 
     @Override
     public void updateClient(Client selectedClient) throws ModelException {
-        try {// TODO: change to void
-            Client updatedClient = bllManager.updateClient(selectedClient);
+        try {
+            bllManager.updateClient(selectedClient);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
@@ -287,7 +280,6 @@ public class MainModel implements IMainModel {
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
-
     }
 
 }

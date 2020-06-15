@@ -17,7 +17,6 @@ public class TaskEntry {
     private final ObjectProperty<LocalDateTime> startTime = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDateTime> endTime = new SimpleObjectProperty<>();
 
-    // put calculated properties inside the TaskModel
     public TaskEntry(int id, TaskConcrete1 task, LocalDateTime startTime, LocalDateTime endTime) {
         this.id.set(id);
         this.task.set(task);

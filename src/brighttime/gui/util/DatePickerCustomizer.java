@@ -31,10 +31,7 @@ public class DatePickerCustomizer {
             public LocalDate fromString(String string) {
                 LocalDate date = super.fromString(string);
                 if (date.isAfter(LocalDate.now())) {
-                    //TODO: Why does the alert crash the program?
-                    //alertManager.showAlert("The date is in the future.", "Please write or select a valid date.");
                     return LocalDate.now();
-                    //return lastVal;
                 } else {
                     return date;
                 }

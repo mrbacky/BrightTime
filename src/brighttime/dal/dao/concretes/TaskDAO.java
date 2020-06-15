@@ -91,7 +91,9 @@ public class TaskDAO implements ITaskDAO {
         Map<Integer, TaskConcrete1> taskMap = new HashMap<>();
         Map<LocalDate, List<TaskConcrete1>> dateMap = new HashMap<>();
 
-        String sql = "SELECT	T.id AS taskId, T.description, T.modifiedDate, T.billability, "
+        String sql =
+                //Select tasks with entries
+                "SELECT	T.id AS taskId, T.description, T.modifiedDate, T.billability, "
                 + "		P.id AS projectId, P.name AS projectName, "
                 + "		C.id AS clientId, C.name AS clientName, "
                 + "		TE.id AS taskEntryId, TE.startTime, TE.endTime "
@@ -105,6 +107,7 @@ public class TaskDAO implements ITaskDAO {
                 + " "
                 + "UNION "
                 + " "
+                //Select tasks without entries
                 + "SELECT	T.id AS taskId, T.description, T.modifiedDate, T.billability, "
                 + "		P.id AS projectId, P.name AS projectName, "
                 + "		C.id AS clientId, C.name AS clientName, "
@@ -115,7 +118,8 @@ public class TaskDAO implements ITaskDAO {
                 + "WHERE	T.userId = ? "
                 + "		AND ? <= T.modifiedDate "
                 + "		AND T.modifiedDate < ? "
-                + "		AND NOT EXISTS (SELECT * FROM TaskEntry TE WHERE T.id = TE.taskId) "
+                                //manually added "old" tasks may appear, so must check if they are really empty.
+                + "		AND NOT EXISTS (SELECT * FROM TaskEntry TE WHERE T.id = TE.taskId) " 
                 + " "
                 + "ORDER BY startTime DESC, modifiedDate DESC";
 
@@ -170,7 +174,7 @@ public class TaskDAO implements ITaskDAO {
                     startTime = rs.getTimestamp("startTime").toLocalDateTime();
                 }
 
-                int taskEntryId = rs.getInt("taskEntryId");
+                int taskEntryId = rs.getInt("taskEntryId"); //If the tuple is an empty task, it will return 0.
                 if (taskEntryId > 0) {
                     if (rs.getTimestamp("endTime") != null) {
                         LocalDateTime endTime = rs.getTimestamp("endTime").toLocalDateTime();
@@ -277,29 +281,21 @@ public class TaskDAO implements ITaskDAO {
     public List<TaskConcrete2> getAllTasksFiltered(Filter filter) throws DalException {
         List<TaskConcrete2> filtered = new ArrayList<>();
 
-        String sql = "SELECT A2.id, A2.description, "
-                + "	A1.clientId, A1.clientName, "
-                + "	A1.projectId, A1.projectName, "
-                + "	SUM(A2.totalDuration) AS totalDuration, "
-                + "	A2.billability, A1.clientRate, A1.projectRate "
-                + "FROM "
-                + "	( "
-                + "	SELECT C.id AS clientId, C.name AS clientName, c.hourlyRate AS clientRate, "
-                + "	P.hourlyRate AS projectRate, P.id AS projectId, P.name AS projectName "
-                + "	FROM Client C "
-                + "	JOIN Project P "
-                + "	ON C.id = P.clientId "
-                + "	) "
-                + "	AS A1 "
-                + "JOIN "
-                + "	( "
-                + "	SELECT T.id, T.description, "
-                + "	(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
-                + "	T.billability, T.projectId "
-                + "	FROM Task T "
-                + "	JOIN TaskEntry TE "
-                + "	ON T.id = TE.taskId "
-                + "	WHERE ";
+        String sql = "SELECT T.id, T.description, "
+                + "	C.id AS clientId, C.[name] AS clientName, "
+                + "	P.id AS projectId, P.name AS projectName, "
+                + "	SUM(DATEDIFF(SECOND,TE.startTime,TE.endTime)) AS totalDuration, "
+                + "	T.billability, "
+                + "	c.hourlyRate AS clientRate, "
+                + "	P.hourlyRate AS projectRate "
+                + "FROM Client C "
+                + "JOIN Project P "
+                + "ON C.id = P.clientId "
+                + "JOIN Task T "
+                + "ON P.id = T.projectId "
+                + "LEFT JOIN TaskEntry TE "
+                + "ON T.id = TE.taskId "
+                + "WHERE ";
 
         String sqlFinal = buildSqlConditions(sql, filter);
 
@@ -366,6 +362,7 @@ public class TaskDAO implements ITaskDAO {
         if (filter.getUser() != null) {
             sql += "T.userId = ? ";
         }
+
         if (filter.getProject() != null) {
             if (filter.getUser() != null) {
                 sql += "AND ";
@@ -379,13 +376,11 @@ public class TaskDAO implements ITaskDAO {
             }
             sql += "? <= TE.startTime AND TE.startTime < ? ";
         }
-        sql += "	) AS A2 "
-                + "ON A1.projectId = A2.projectId "
-                + "GROUP BY A2.id, A2.description, A2.billability, "
-                + "	A1.clientId, A1.clientName, "
-                + "	A1.projectId, A1.projectName, "
-                + "	A1.clientRate, A1.projectRate "
-                + "ORDER BY A2.description";
+
+        sql += "GROUP BY T.id, T.description, T.billability, "
+                + "	C.id, C.name, C.hourlyRate, "
+                + "	P.id, P.Name, P.hourlyRate "
+                + "ORDER BY T.description";
         return sql;
     }
 

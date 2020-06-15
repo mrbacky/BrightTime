@@ -91,7 +91,7 @@ public interface IMainModel {
 
     void createUser(User user) throws ModelException;
 
-    User updateUserDetails(User updatedUser) throws ModelException;
+    void updateUserDetails(User updatedUser) throws ModelException;
 
     void deleteUser(User selectedUser) throws ModelException;
 

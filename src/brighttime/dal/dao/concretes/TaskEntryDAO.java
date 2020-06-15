@@ -66,7 +66,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
     }
 
     @Override
-    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException {
+    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException {
         String sql = "UPDATE TaskEntry "
                 + "SET startTime = ?  "
                 + "WHERE id = ? ";
@@ -78,8 +78,6 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.executeUpdate();
 
             logEvent(taskEntry);
-
-            return taskEntry;
         } catch (SQLException ex) {
             logError(taskEntry, "start time", ex);
             throw new DalException(ex.getMessage());
@@ -87,7 +85,7 @@ public class TaskEntryDAO implements ITaskEntryDAO {
     }
 
     @Override
-    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
+    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
         String sql = "UPDATE TaskEntry "
                 + "SET endTime = ?  "
                 + "WHERE id = ? ";
@@ -99,8 +97,6 @@ public class TaskEntryDAO implements ITaskEntryDAO {
             ps.executeUpdate();
 
             logEvent(taskEntry);
-
-            return taskEntry;
         } catch (SQLException ex) {
             logError(taskEntry, "end time", ex);
             throw new DalException(ex.getMessage());

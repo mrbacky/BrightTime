@@ -41,10 +41,9 @@ public interface IUserDAO {
      * Updates the user.
      *
      * @param user The user to be updated.
-     * @return The updated user.
      * @throws DalException
      */
-    User updateUserDetails(User user) throws DalException;
+    void updateUserDetails(User user) throws DalException;
 
     /**
      * Deletes the user. Users with tasks are permanently deleted, while users

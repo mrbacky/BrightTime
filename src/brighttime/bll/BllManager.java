@@ -29,9 +29,8 @@ import java.util.Map;
  */
 public class BllManager implements BllFacade {
 
-    private final DurationConverter durationConverter;
     private final DalFacade dalManager;
-
+    private final DurationConverter durationConverter;
     private final EntryDurationCalculator entryDurationCalculator;
     private final TaskDurationCalculator taskDurationCalculator;
     private final TaskIntervalCalculator taskIntervalCalculator;
@@ -67,9 +66,9 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Client updateClient(Client selectedClient) throws BllException {
+    public void updateClient(Client selectedClient) throws BllException {
         try {
-            return dalManager.updateClient(selectedClient);
+            dalManager.updateClient(selectedClient);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
@@ -94,7 +93,7 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public List<Project> getProjects(Client client) throws BllException {
+    public List<Project> getProjectsForAClient(Client client) throws BllException {
         try {
             return dalManager.getProjectsForAClient(client);
         } catch (DalException ex) {
@@ -115,6 +114,15 @@ public class BllManager implements BllFacade {
     public TaskConcrete1 createTask(TaskConcrete1 task) throws BllException {
         try {
             return dalManager.createTask(task);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(Filter filter) throws BllException {
+        try {
+            return dalManager.getAllTasksWithEntries(filter);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
@@ -160,27 +168,18 @@ public class BllManager implements BllFacade {
     }
 
     @Override
-    public Map<LocalDate, List<TaskConcrete1>> getAllTasksWithEntries(Filter filter) throws BllException {
+    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws BllException {
         try {
-            return dalManager.getAllTasksWithEntries(filter);
+            dalManager.updateTaskEntryStartTime(taskEntry);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
     }
 
     @Override
-    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws BllException {
+    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws BllException {
         try {
-            return dalManager.updateTaskEntryStartTime(taskEntry);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws BllException {
-        try {
-            return dalManager.updateTaskEntryEndTime(taskEntry);
+            dalManager.updateTaskEntryEndTime(taskEntry);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }
@@ -234,6 +233,15 @@ public class BllManager implements BllFacade {
     }
 
     @Override
+    public User createUser(User user) throws BllException {
+        try {
+            return dalManager.createUser(user);
+        } catch (DalException ex) {
+            throw new BllException(ex.getMessage());
+        }
+    }
+
+    @Override
     public List<User> getUsers() throws BllException {
         try {
             return dalManager.getUsers();
@@ -251,25 +259,10 @@ public class BllManager implements BllFacade {
         }
     }
 
-    /**
-     *
-     * @param user
-     * @return
-     * @throws BllException
-     */
     @Override
-    public User createUser(User user) throws BllException {
+    public void updateUserDetails(User user) throws BllException {
         try {
-            return dalManager.createUser(user);
-        } catch (DalException ex) {
-            throw new BllException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public User updateUserDetails(User updatedUser) throws BllException {
-        try {
-            return dalManager.updateUserDetails(updatedUser);
+            dalManager.updateUserDetails(user);
         } catch (DalException ex) {
             throw new BllException(ex.getMessage());
         }

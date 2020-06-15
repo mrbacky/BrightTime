@@ -38,10 +38,9 @@ public interface DalFacade {
      * Updates a client in the database.
      *
      * @param client The client to be updated.
-     * @return The updated client.
      * @throws DalException
      */
-    Client updateClient(Client client) throws DalException;
+    void updateClient(Client client) throws DalException;
 
     /**
      * Deletes a client in the database.
@@ -109,19 +108,17 @@ public interface DalFacade {
      * Updates the start time of a time entry.
      *
      * @param taskEntry The task entry to be updated.
-     * @return The updated task entry.
      * @throws DalException
      */
-    TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
+    void updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException;
 
     /**
      * Updates the end time of a time entry.
      *
      * @param taskEntry The task entry to be updated.
-     * @return The updated task entry.
      * @throws DalException
      */
-    TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
+    void updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException;
 
     /**
      * Gets all the tasks for the Overview.
@@ -171,10 +168,9 @@ public interface DalFacade {
      * Updates the user.
      *
      * @param user The user to be updated.
-     * @return The updated user.
      * @throws DalException
      */
-    User updateUserDetails(User user) throws DalException;
+    void updateUserDetails(User user) throws DalException;
 
     /**
      * Deletes the user. Users with tasks are permanently deleted, while users

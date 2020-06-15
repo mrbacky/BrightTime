@@ -87,7 +87,11 @@
                <children>
                   <JFXNodesList fx:id="nodesListProject" alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <children>
-                        <Label fx:id="lblProject" prefHeight="35.0" prefWidth="210.0" styleClass="labelFilter" text="Project" />
+                        <Label fx:id="lblProject" prefHeight="35.0" prefWidth="210.0" text="Project">
+                           <styleClass>
+                              <String fx:value="labelFilter" />
+                              <String fx:value="labelFilterTextColorDefault" />
+                           </styleClass></Label>
                         <GridPane styleClass="createItem" vgap="5.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -123,7 +127,11 @@
                   </JFXNodesList>
                   <JFXNodesList fx:id="nodesListTimeFrame" alignment="TOP_RIGHT" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                      <children>
-                        <Label fx:id="lblTimeFrame" prefHeight="35.0" prefWidth="210.0" styleClass="labelFilter" text="Time frame" />
+                        <Label fx:id="lblTimeFrame" prefHeight="35.0" prefWidth="210.0" text="Time frame">
+                           <styleClass>
+                              <String fx:value="labelFilter" />
+                              <String fx:value="labelFilterTextColorDefault" />
+                           </styleClass></Label>
                         <GridPane prefWidth="210.0" styleClass="createItem" vgap="3.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -180,7 +188,11 @@
                   </JFXNodesList>
                   <JFXNodesList fx:id="nodesListUser" alignment="TOP_RIGHT" GridPane.halignment="CENTER">
                      <children>
-                        <Label fx:id="lblUser" prefHeight="35.0" prefWidth="210.0" styleClass="labelFilter" text="User" />
+                        <Label fx:id="lblUser" prefHeight="35.0" prefWidth="210.0" text="User">
+                           <styleClass>
+                              <String fx:value="labelFilter" />
+                              <String fx:value="labelFilterTextColorDefault" />
+                           </styleClass></Label>
                         <GridPane styleClass="createItem">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

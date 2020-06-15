@@ -61,9 +61,9 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public Client updateClient(Client client) throws DalException {
+    public void updateClient(Client client) throws DalException {
         try {
-            return clientDAO.updateClient(client);
+            clientDAO.updateClient(client);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
@@ -133,18 +133,18 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public TaskEntry updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException {
+    public void updateTaskEntryStartTime(TaskEntry taskEntry) throws DalException {
         try {
-            return taskEntryDAO.updateTaskEntryStartTime(taskEntry);
+            taskEntryDAO.updateTaskEntryStartTime(taskEntry);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
     }
 
     @Override
-    public TaskEntry updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
+    public void updateTaskEntryEndTime(TaskEntry taskEntry) throws DalException {
         try {
-            return taskEntryDAO.updateTaskEntryEndTime(taskEntry);
+            taskEntryDAO.updateTaskEntryEndTime(taskEntry);
         } catch (DalException ex) {
             throw new DalException(ex.getMessage());
         }
@@ -193,8 +193,8 @@ public class DalManager implements DalFacade {
     }
 
     @Override
-    public User updateUserDetails(User updatedUser) throws DalException {
-        return userDAO.updateUserDetails(updatedUser);
+    public void updateUserDetails(User updatedUser) throws DalException {
+        userDAO.updateUserDetails(updatedUser);
     }
 
     @Override

@@ -42,7 +42,6 @@ import javafx.util.converter.LocalTimeStringConverter;
  */
 public class TaskCreatorController implements Initializable {
 
-    //TODO: Change all to 24HourView!
     private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
     private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE); //Locale determines the format in the text field.
 
@@ -204,7 +203,7 @@ public class TaskCreatorController implements Initializable {
                         alertManager.showAlert("Could not create the task.", "An error occured: " + ex.getMessage());
                     }
                 }
-                
+
             }
         });
     }
@@ -284,7 +283,6 @@ public class TaskCreatorController implements Initializable {
     }
 
     private void setTimeRestriction() {
-        //TODO: If a future time is written or chosen, show alert and write the current time.
         datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && newValue.isEqual(LocalDate.now())) {
                 StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter() {

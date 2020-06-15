@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 public class InputValidator {
 
     public boolean usernameCheck(String username) {
-        //TODO: Has to contain @grumsendev.com or just an email?
         //"/w" matches any single letter (upper and lower case), number or underscore.
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);

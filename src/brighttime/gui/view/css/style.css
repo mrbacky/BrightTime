@@ -6,6 +6,12 @@
 
 
 
+.btnLogin{
+    -fx-background-color: white;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color:#F0C326
+}
+
 .anchorPaneRoot{
     -fx-background-color: #435A9A;
     -fx-border-top-color: black;
@@ -15,7 +21,6 @@
 
 .rootButtons{
     -fx-background-color: transparent;
-    /*-fx-background-color: #435A9A;*/
     -fx-background-radius: 20 20 20 20;
     -fx-padding: 0 0 0 -1;
 }
@@ -80,11 +85,6 @@
     -fx-padding: -8 0 0 00;
     -fx-text-fill: white;
     -fx-font-size: 8pt;
-}
-
-.scroll-pane{
-    /*-fx-background: white;
-    -fx-border-color: purple;*/
 }
 
 .labelHeaderTitle{
@@ -165,24 +165,22 @@
     -jfx-label-float: false; 
 }
 
-.gridFilterMenu{
-    -fx-background-color: orange;
-}
-
-.scroll-pane{
-    /*-fx-background-color: blue;*/
-}
-
 .labelFilter{
     -fx-border-radius: 10px;
     -fx-background-radius: 10 10 10 10;
     -fx-background-color: white;
-    -fx-label-padding: 4 0 4 8;
-    -fx-text-fill: #435A9A;
+    -fx-label-padding: 4 0 4 8;    
     -fx-font-weight: bold;
     -fx-alignment: CENTER;
 }
 
+.labelFilterTextColorDefault{
+    -fx-text-fill: #435A9A;
+}
+
+.labelFilterTextColorHighlight{
+    -fx-text-fill: #F0C326;
+}
 
 .buttonFilter{
     -fx-border-radius: 10px;
@@ -229,12 +227,6 @@
     -fx-padding: 0 10 0 0;
 }
 
-.btnLogin{
-    -fx-background-color: white;
-    -fx-background-radius: 10 10 10 10;
-    -fx-background-color:#F0C326
-}
-
 .chart{
     -fx-border-style: solid;
     -fx-border-width: 0.1;
@@ -242,31 +234,11 @@
     -fx-border-color: #435A9A;
 }
 
-.lblActiveFilter{
-    -fx-text-fill: white;
-    -fx-font-size: 10;
-}
-
 .onBarchartColumnHover{
     -fx-background-color: #435A9A;
 }
 
-.btnUserExpand{
-    -fx-background-color: #435A9A;
-    -fx-background-radius: 15 15 15 15;
-    -fx-font-weight: bold;
+.lblActiveFilter{
     -fx-text-fill: white;
-
-
-
-}
-
-
-
-
-.labelForms{
-    /*-fx-padding: 10 0 0 0;*/
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-font-size: 10;
 }

@@ -11,14 +11,14 @@ import java.util.List;
 public class TaskIntervalCalculator {
 
     public LocalDateTime getStartTime(List<TaskEntry> specificEntryList) {
-        TaskEntry firstTaskEntry = specificEntryList.get(0);
-        LocalDateTime taskStartTime = firstTaskEntry.getStartTime();
+        TaskEntry firstEntry = specificEntryList.get(0);
+        LocalDateTime taskStartTime = firstEntry.getStartTime();
         return taskStartTime;
     }
 
     public LocalDateTime getEndTime(List<TaskEntry> specificEntryList) {
-        TaskEntry latestTaskEntry = specificEntryList.get(specificEntryList.size() - 1);
-        LocalDateTime taskEndTime = latestTaskEntry.getEndTime();
+        TaskEntry lastEntry = specificEntryList.get(specificEntryList.size() - 1);
+        LocalDateTime taskEndTime = lastEntry.getEndTime();
         return taskEndTime;
     }
 

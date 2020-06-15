@@ -35,7 +35,6 @@ public class User {
         }
     }
 
-    //  contructor for creating User
     public User(String firstName, String lastName, String username, String password, UserType type) {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
@@ -44,16 +43,14 @@ public class User {
         this.type = type;
 
     }
-    //contructor for viewing users in Administration section
 
-    //  constructor for getting user from DB
     public User(int id, String firstName, String lastName, String username, UserType type) {
         this.id.set(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.username.set(username);
         this.type = type;
-        //  setting String usertype from enum
+        //Setting String usertype from enum
         this.userType.set(type.toString());
     }
 

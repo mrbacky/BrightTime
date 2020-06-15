@@ -72,7 +72,6 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public void updateTaskEntryStartTime() throws ModelException {
         try {
-            //  TODO: We don't need to return TASK ENTRY, change to void ------------------------------------------------------------
             bllManager.updateTaskEntryStartTime(taskEntry);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
@@ -82,7 +81,6 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public void updateTaskEntryEndTime() throws ModelException {
         try {
-            //  TODO: We don't need to return TASK ENTRY, change to void ------------------------------------------------------------
             bllManager.updateTaskEntryEndTime(taskEntry);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
