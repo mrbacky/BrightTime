@@ -19,6 +19,10 @@ import javafx.collections.ObservableMap;
  */
 public interface IMainModel {
 
+    void setUser(User user);
+
+    User getUser();
+
     /**
      * Adds a new client.
      *
@@ -41,6 +45,10 @@ public interface IMainModel {
      */
     ObservableList<Client> getClientList();
 
+    void updateClient(Client client) throws ModelException;
+
+    void deleteClient(Client client) throws ModelException;
+
     /**
      * Adds a new project.
      *
@@ -58,6 +66,11 @@ public interface IMainModel {
      */
     void loadProjects(Client client) throws ModelException;
 
+    /**
+     * Gets all projects and adds them to an ObservableList.
+     *
+     * @throws ModelException
+     */
     void loadAllProjects() throws ModelException;
 
     /**
@@ -69,34 +82,26 @@ public interface IMainModel {
 
     void addTask(TaskConcrete1 task) throws ModelException;
 
-    ObservableMap<LocalDate, List<TaskConcrete1>> getTaskMap();
-
     void loadTasks(Filter filter) throws ModelException;
 
-    ObservableList<TaskConcrete2> getOverviewTaskList();
+    ObservableMap<LocalDate, List<TaskConcrete1>> getTaskMap();
+
+    void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
 
     void loadOverviewTasks() throws ModelException;
 
     void loadOverviewTasksFiltered(Filter filter) throws ModelException;
 
+    ObservableList<TaskConcrete2> getOverviewTaskList();
+
+    void createUser(User user) throws ModelException;
+
     void loadUsers() throws ModelException;
 
     ObservableList<User> getUserList();
 
-    void setUser(User user);
+    void updateUserDetails(User user) throws ModelException;
 
-    User getUser();
-
-    void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener);
-
-    void createUser(User user) throws ModelException;
-
-    void updateUserDetails(User updatedUser) throws ModelException;
-
-    void deleteUser(User selectedUser) throws ModelException;
-
-    void updateClient(Client selectedClient) throws ModelException;
-
-    void deleteClient(Client c) throws ModelException;
+    void deleteUser(User user) throws ModelException;
 
 }

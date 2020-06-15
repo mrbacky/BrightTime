@@ -165,7 +165,6 @@ public class TaskEntryModel implements ITaskEntryModel {
     @Override
     public String secToFormat(int sec) {
         return bllManager.secToFormat(sec);
-
     }
 
 }

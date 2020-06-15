@@ -106,27 +106,11 @@ public class TaskModel implements ITaskModel {
     @Override
     public void setTask(TaskConcrete1 task) {
         this.task = task;
-
     }
 
     @Override
     public TaskConcrete1 getTask() {
         return task;
-    }
-
-    @Override
-    public LocalDateTime getEndTime() {
-        return endTime.get();
-    }
-
-    @Override
-    public void setEndTime(LocalDateTime value) {
-        endTime.set(value);
-    }
-
-    @Override
-    public ObjectProperty endTimeProperty() {
-        return endTime;
     }
 
     @Override
@@ -142,6 +126,21 @@ public class TaskModel implements ITaskModel {
     @Override
     public ObjectProperty startTimeProperty() {
         return startTime;
+    }
+    
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime.get();
+    }
+
+    @Override
+    public void setEndTime(LocalDateTime value) {
+        endTime.set(value);
+    }
+
+    @Override
+    public ObjectProperty endTimeProperty() {
+        return endTime;
     }
 
     @Override

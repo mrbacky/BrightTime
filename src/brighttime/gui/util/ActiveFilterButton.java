@@ -23,6 +23,10 @@ public class ActiveFilterButton extends StackPane {
 
     public ActiveFilterButton() {
         super();
+        createButton();
+    }
+
+    private void createButton() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ActiveFilterButton.fxml"));
             controller = new ActiveFilterButtonController();

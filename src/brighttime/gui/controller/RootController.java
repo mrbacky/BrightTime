@@ -113,7 +113,6 @@ public class RootController implements Initializable {
                 controller.initializeView();
             } else if (module.equals(ADMIN_MENU_MODULE)) {
                 AdministrationController controller = fxmlLoader.getController();
-                controller.injectMainModel(mainModel);
                 controller.initializeView();
                 controller.setContr(this);
             } else if (module.equals(ADMIN_CLIENTS_MODULE)) {

@@ -15,27 +15,35 @@ import javafx.collections.ObservableList;
  */
 public interface ITaskModel {
 
+    void initializeTaskModel();
+
+    void setupDayEntryList();
+
+    void setUpDayEntryListListener();
+
+    void setTaskModelDetails();
+
+    void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException;
+
+    LocalDate getDate();
+
+    void setDate(LocalDate date);
+
     void setTask(TaskConcrete1 task);
 
     TaskConcrete1 getTask();
 
     LocalDateTime getStartTime();
 
-    LocalDateTime getEndTime();
-
     void setStartTime(LocalDateTime value);
+
+    ObjectProperty startTimeProperty();
+
+    LocalDateTime getEndTime();
 
     void setEndTime(LocalDateTime value);
 
     ObjectProperty endTimeProperty();
-
-    ObjectProperty startTimeProperty();
-
-    void addTaskEntry(LocalDateTime tempStartTime, LocalDateTime tempEndTime) throws ModelException;
-
-    void setDate(LocalDate date);
-
-    LocalDate getDate();
 
     String getStringDuration();
 
@@ -43,14 +51,6 @@ public interface ITaskModel {
 
     StringProperty stringDurationProperty();
 
-    public void initializeTaskModel();
-
     ObservableList<TaskEntry> getDayEntryList();
-
-    void setupDayEntryList();
-
-    void setUpDayEntryListListener();
-
-    void setTaskModelDetails();
 
 }

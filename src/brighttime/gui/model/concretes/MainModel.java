@@ -45,19 +45,6 @@ public class MainModel implements IMainModel {
         this.bllManager = bllManager;
     }
 
-    /**
-     * @param taskMapListener Setting up "Singleton" for listener so there is
-     * always one instance of listener attached to task map.
-     */
-    @Override
-    public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener) {
-        if (this.taskMapListener != null) {
-            taskMap.removeListener(this.taskMapListener);
-        }
-        this.taskMapListener = taskMapListener;
-        taskMap.addListener(taskMapListener);
-    }
-
     @Override
     public void setUser(User user) {
         this.user = user;
@@ -66,89 +53,6 @@ public class MainModel implements IMainModel {
     @Override
     public User getUser() {
         return user;
-    }
-
-    @Override
-    public void loadTasks(Filter filter) throws ModelException {
-        try {
-            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(filter);
-            //  Temp removal of listener becouse putAll is not one action. It is loop of put commands onto task map.
-            taskMap.removeListener(taskMapListener);
-            taskMap.clear();
-            taskMap.putAll(allTasks);
-            taskMap.addListener(taskMapListener);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public void loadOverviewTasks() throws ModelException {
-        try {
-            List<TaskConcrete2> allTasks = bllManager.getAllTasks();
-            for (TaskConcrete2 task : allTasks) {
-                task.setTotalCostString(bllManager.formatCost(task.getTotalCost()));
-                task.setTotalDurationString(bllManager.formatDuration(task.getTotalDurationSeconds()));
-            }
-            taskList.clear();
-            taskList.addAll(allTasks);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public void loadOverviewTasksFiltered(Filter filter) throws ModelException {
-        try {
-            List<TaskConcrete2> temp = bllManager.getAllTasksFiltered(filter);
-            for (TaskConcrete2 task : temp) {
-                task.setTotalCostString(bllManager.formatCost(task.getTotalCost()));
-                task.setTotalDurationString(bllManager.formatDuration(task.getTotalDurationSeconds()));
-            }
-            taskList.clear();
-            taskList.addAll(temp);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public ObservableMap<LocalDate, List<TaskConcrete1>> getTaskMap() {
-        return taskMap;
-    }
-
-    @Override
-    public ObservableList<TaskConcrete2> getOverviewTaskList() {
-        return taskList;
-    }
-
-    @Override
-    public void addTask(TaskConcrete1 task) throws ModelException {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<TaskConcrete1> future = executorService.submit(() -> bllManager.createTask(task));
-        executorService.shutdown();
-        try {
-            addLocally(future.get());
-        } catch (InterruptedException | ExecutionException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    private void addLocally(TaskConcrete1 freshTask) {
-        if (freshTask.getTaskEntryList() == null) {
-            List<TaskEntry> entryList = new ArrayList();
-            freshTask.setTaskEntryList(entryList);
-        }
-        List<TaskConcrete1> taskList = taskMap.get(freshTask.getModifiedDateTime().toLocalDate());
-        if (taskList == null) {
-            taskList = new ArrayList<>();
-            taskList.add(freshTask);
-            taskMap.put(freshTask.getModifiedDateTime().toLocalDate(), taskList);
-        } else {
-            taskList.add(0, freshTask);
-            taskMap.remove(freshTask.getModifiedDateTime().toLocalDate());
-            taskMap.put(freshTask.getModifiedDateTime().toLocalDate(), taskList);
-        }
     }
 
     @Override
@@ -177,6 +81,25 @@ public class MainModel implements IMainModel {
     @Override
     public ObservableList<Client> getClientList() {
         return clientList;
+    }
+
+    @Override
+    public void updateClient(Client client) throws ModelException {
+        try {
+            bllManager.updateClient(client);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteClient(Client client) throws ModelException {
+        try {
+            Client deletedClient = bllManager.deleteClient(client);
+            clientList.remove(deletedClient);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
     @Override
@@ -219,6 +142,114 @@ public class MainModel implements IMainModel {
     }
 
     @Override
+    public void addTask(TaskConcrete1 task) throws ModelException {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<TaskConcrete1> future = executorService.submit(() -> bllManager.createTask(task));
+        executorService.shutdown();
+        try {
+            addLocally(future.get());
+        } catch (InterruptedException | ExecutionException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    private void addLocally(TaskConcrete1 task) {
+        if (task.getTaskEntryList() == null) {
+            List<TaskEntry> entryList = new ArrayList();
+            task.setTaskEntryList(entryList);
+        }
+        List<TaskConcrete1> taskLst = taskMap.get(task.getModifiedDateTime().toLocalDate());
+        if (taskLst == null) {
+            taskLst = new ArrayList<>();
+            taskLst.add(task);
+            taskMap.put(task.getModifiedDateTime().toLocalDate(), taskLst);
+        } else {
+            taskLst.add(0, task);
+            taskMap.remove(task.getModifiedDateTime().toLocalDate());
+            taskMap.put(task.getModifiedDateTime().toLocalDate(), taskLst);
+        }
+    }
+
+    @Override
+    public void loadTasks(Filter filter) throws ModelException {
+        try {
+            Map<LocalDate, List<TaskConcrete1>> allTasks = bllManager.getAllTasksWithEntries(filter);
+            //  Temp removal of listener becouse putAll is not one action. It is loop of put commands onto task map.
+            taskMap.removeListener(taskMapListener);
+            taskMap.clear();
+            taskMap.putAll(allTasks);
+            taskMap.addListener(taskMapListener);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public ObservableMap<LocalDate, List<TaskConcrete1>> getTaskMap() {
+        return taskMap;
+    }
+
+    /**
+     * @param taskMapListener Setting up "Singleton" for listener so there is
+     * always one instance of listener attached to task map.
+     */
+    @Override
+    public void addTaskMapListener(MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener) {
+        if (this.taskMapListener != null) {
+            taskMap.removeListener(this.taskMapListener);
+        }
+        this.taskMapListener = taskMapListener;
+        taskMap.addListener(taskMapListener);
+    }
+
+    @Override
+    public void loadOverviewTasks() throws ModelException {
+        try {
+            List<TaskConcrete2> allTasks = bllManager.getAllTasks();
+            for (TaskConcrete2 task : allTasks) {
+                task.setTotalCostString(bllManager.formatCost(task.getTotalCost()));
+                task.setTotalDurationString(bllManager.formatDuration(task.getTotalDurationSeconds()));
+            }
+            taskList.clear();
+            taskList.addAll(allTasks);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void loadOverviewTasksFiltered(Filter filter) throws ModelException {
+        try {
+            List<TaskConcrete2> temp = bllManager.getAllTasksFiltered(filter);
+            for (TaskConcrete2 task : temp) {
+                task.setTotalCostString(bllManager.formatCost(task.getTotalCost()));
+                task.setTotalDurationString(bllManager.formatDuration(task.getTotalDurationSeconds()));
+            }
+            taskList.clear();
+            taskList.addAll(temp);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public ObservableList<TaskConcrete2> getOverviewTaskList() {
+        return taskList;
+    }
+
+    @Override
+    public void createUser(User user) throws ModelException {
+        try {
+            User newUser = bllManager.createUser(user);
+            userList.add(newUser);
+            Comparator<User> byName = Comparator.comparing(User::getFirstName);
+            FXCollections.sort(userList, byName);
+        } catch (BllException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
+    @Override
     public void loadUsers() throws ModelException {
         try {
             List<User> allUsers = bllManager.getUsers();
@@ -235,48 +266,19 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void createUser(User user) throws ModelException {
+    public void updateUserDetails(User user) throws ModelException {
         try {
-            User newUser = bllManager.createUser(user);
-            userList.add(newUser);
+            bllManager.updateUserDetails(user);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }
     }
 
     @Override
-    public void updateUserDetails(User updatedUser) throws ModelException {
+    public void deleteUser(User user) throws ModelException {
         try {
-            bllManager.updateUserDetails(updatedUser);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public void deleteUser(User selectedUser) throws ModelException {
-        try {
-            User deletedUser = bllManager.deleteUser(selectedUser);
+            User deletedUser = bllManager.deleteUser(user);
             userList.remove(deletedUser);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public void updateClient(Client selectedClient) throws ModelException {
-        try {
-            bllManager.updateClient(selectedClient);
-        } catch (BllException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    @Override
-    public void deleteClient(Client selectedClient) throws ModelException {
-        try {
-            Client deletedClient = bllManager.deleteClient(selectedClient);
-            clientList.remove(deletedClient);
         } catch (BllException ex) {
             throw new ModelException(ex.getMessage());
         }

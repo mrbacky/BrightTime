@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXToggleNode?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="apManageUsers" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.UsersManagerController">
+<AnchorPane fx:id="apManageUsers" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brighttime.gui.controller.UsersManagerController">
    <children>
       <ScrollPane id="spTasks" fx:id="spManageUsers" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" stylesheets="@css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -38,7 +39,7 @@
                            <children>
                               <StackPane AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                                  <children>
-                                    <JFXToggleNode fx:id="btnExpandCreateUser" alignment="CENTER_LEFT" graphicTextGap="5.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleExpandCreateUser" prefHeight="35.0" styleClass="btnUserExpand" text="Create user" StackPane.alignment="CENTER">
+                                    <JFXToggleNode fx:id="btnExpandCreateUser" alignment="CENTER_LEFT" graphicTextGap="5.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleExpandCreateUser" prefHeight="35.0" text="Create user" StackPane.alignment="CENTER">
                                        <graphic>
                                           <ImageView fx:id="imgExpandCollapse" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -46,6 +47,10 @@
                                              </image>
                                           </ImageView>
                                        </graphic>
+                                       <styleClass>
+                                          <String fx:value="createItem" />
+                                          <String fx:value="createItemUser" />
+                                       </styleClass>
                                     </JFXToggleNode>
                                  </children>
                               </StackPane>

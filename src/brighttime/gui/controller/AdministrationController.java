@@ -1,6 +1,5 @@
 package brighttime.gui.controller;
 
-import brighttime.gui.model.interfaces.IMainModel;
 import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,7 +27,6 @@ public class AdministrationController implements Initializable {
     @FXML
     private JFXButton btnUsers;
 
-    private IMainModel mainModel;
     private RootController rootContr;
 
     /**
@@ -38,12 +36,8 @@ public class AdministrationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-    public void injectMainModel(IMainModel mainModel) {
-        this.mainModel = mainModel;
-    }
-
     void initializeView() {
-        centervBox();
+        centerVBox();
         showAdminClientModule();
         showAdminProjectModule();
         showAdminUserModule();
@@ -53,7 +47,7 @@ public class AdministrationController implements Initializable {
         this.rootContr = con;
     }
 
-    private void centervBox() {
+    private void centerVBox() {
         vBox.translateXProperty().bind((scrollPane.widthProperty().subtract(vBox.widthProperty())).divide(2));
     }
 

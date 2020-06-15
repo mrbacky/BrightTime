@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brighttime.gui.model.interfaces;
 
 import brighttime.be.TaskEntry;
@@ -19,37 +14,9 @@ import javafx.beans.property.StringProperty;
  */
 public interface ITaskEntryModel {
 
-    String getStringDuration();
+    void initializeTaskEntryModel();
 
-    void setStringDuration(String value);
-
-    StringProperty stringDurationProperty();
-
-    Duration calculateDuration(TaskEntry taskEntry);
-
-    String secToFormat(int sec);
-
-    public void setTaskEntry(TaskEntry taskEntry);
-
-    TaskEntry getTaskEntry();
-
-    LocalTime getStartTime();
-
-    void setStartTime(LocalTime value);
-
-    ObjectProperty startTimeProperty();
-
-    ObjectProperty dateProperty();
-
-    void setDate(LocalDate value);
-
-    LocalDate getDate();
-
-    LocalTime getEndTime();
-
-    void setEndTime(LocalTime value);
-
-    ObjectProperty endTimeProperty();
+    void setTaskEntryModelDetails();
 
     void setupStartTimeListener();
 
@@ -59,8 +26,36 @@ public interface ITaskEntryModel {
 
     void updateTaskEntryEndTime() throws ModelException;
 
-    void initializeTaskEntryModel();
+    void setTaskEntry(TaskEntry taskEntry);
 
-    void setTaskEntryModelDetails();
+    TaskEntry getTaskEntry();
+
+    LocalDate getDate();
+
+    void setDate(LocalDate value);
+
+    ObjectProperty dateProperty();
+
+    LocalTime getStartTime();
+
+    void setStartTime(LocalTime value);
+
+    ObjectProperty startTimeProperty();
+
+    LocalTime getEndTime();
+
+    void setEndTime(LocalTime value);
+
+    ObjectProperty endTimeProperty();
+
+    String getStringDuration();
+
+    void setStringDuration(String value);
+
+    StringProperty stringDurationProperty();
+
+    Duration calculateDuration(TaskEntry taskEntry);
+
+    String secToFormat(int sec);
 
 }
