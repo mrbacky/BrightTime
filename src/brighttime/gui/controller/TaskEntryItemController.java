@@ -27,8 +27,6 @@ import javafx.util.converter.LocalTimeStringConverter;
  */
 public class TaskEntryItemController implements Initializable {
 
-    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
-
     @FXML
     private JFXTextField textFieldTaskEntryDesc;
     @FXML
@@ -40,11 +38,11 @@ public class TaskEntryItemController implements Initializable {
     @FXML
     private JFXButton btnRemoveTask;
 
+    private ITaskEntryModel taskEntryModel;
     private final AlertManager alertManager;
-
     private LocalTime initialStartTime;
     private LocalTime initialEndTime;
-    private ITaskEntryModel taskEntryModel;
+    private final StringConverter<LocalTime> timeConverter = new LocalTimeStringConverter(FormatStyle.SHORT, Locale.FRANCE);
 
     public TaskEntryItemController() {
         this.alertManager = new AlertManager();
@@ -59,23 +57,13 @@ public class TaskEntryItemController implements Initializable {
 
     public void injectTaskEntryModel(ITaskEntryModel taskEntryModel) {
         this.taskEntryModel = taskEntryModel;
-
     }
 
     void initializeView() {
+        display24HourView();
         setTaskEntryDetails(taskEntryModel.getTaskEntry());
         setInitialStartTime();
         setInitialEndTime();
-        display24HourView();
-    }
-
-    private void setInitialStartTime() {
-        initialStartTime = taskEntryModel.getStartTime();
-    }
-
-    private void setInitialEndTime() {
-        initialEndTime = taskEntryModel.getEndTime();
-
     }
 
     private void display24HourView() {
@@ -90,6 +78,14 @@ public class TaskEntryItemController implements Initializable {
         timePickerStartTime.valueProperty().bindBidirectional(taskEntryModel.startTimeProperty());
         timePickerEndTime.valueProperty().bindBidirectional(taskEntryModel.endTimeProperty());
         lblDuration.textProperty().bind(taskEntryModel.stringDurationProperty());
+    }
+
+    private void setInitialStartTime() {
+        initialStartTime = taskEntryModel.getStartTime();
+    }
+
+    private void setInitialEndTime() {
+        initialEndTime = taskEntryModel.getEndTime();
     }
 
     @FXML

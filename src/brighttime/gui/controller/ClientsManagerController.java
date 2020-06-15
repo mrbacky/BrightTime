@@ -116,11 +116,11 @@ public class ClientsManagerController implements Initializable {
 
     @FXML
     private void handleDeleteClient(ActionEvent event) {
-        Client c = tblClients.getSelectionModel().getSelectedItem();
-        boolean deleteClient = alertManager.showConfirmation("Deleting client " + c.getName(), "Are you sure you want to delete the client?");
-        if (c != null && deleteClient) {
+        Client client = tblClients.getSelectionModel().getSelectedItem();
+        boolean deleteClient = alertManager.showConfirmation("Deleting client " + client.getName(), "Are you sure you want to delete the client?");
+        if (deleteClient) {
             try {
-                mainModel.deleteClient(c);
+                mainModel.deleteClient(client);
             } catch (ModelException ex) {
                 alertManager.showAlert("Could not delete the client.", "An error occured: " + ex.getMessage());
             }
