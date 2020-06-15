@@ -7,17 +7,16 @@ import brighttime.gui.model.interfaces.IAuthenticationModel;
 import brighttime.gui.model.interfaces.IMainModel;
 import brighttime.gui.util.AlertManager;
 import brighttime.gui.util.InputValidator;
+import brighttime.gui.util.ValidationManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,15 +44,17 @@ public class LoginController implements Initializable {
     private JFXPasswordField txtPassword;
     @FXML
     private JFXButton btnLogIn;
-    
+
     private final AlertManager alertManager;
     private final InputValidator inputValidator;
+    private final ValidationManager validationManager;
     private IAuthenticationModel authenticationModel;
     private User user;
 
     public LoginController() throws ModelException {
         alertManager = new AlertManager();
-        this.inputValidator = new InputValidator();
+        inputValidator = new InputValidator();
+        validationManager = new ValidationManager();
         try {
             authenticationModel = ModelCreator.getInstance().createAuthenticationModel();
         } catch (IOException ex) {
@@ -67,12 +68,15 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        fieldValidator();
     }
 
     @FXML
     private void EnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            authenticateUser();
+            if (validateInput()) {
+                authenticateUser();
+            }
         }
     }
 
@@ -81,25 +85,6 @@ public class LoginController implements Initializable {
         if (validateInput()) {
             authenticateUser();
         }
-    }
-
-    private void fieldValidator() {
-        RequiredFieldValidator usernameValidator = new RequiredFieldValidator();
-        RequiredFieldValidator passwordValidator = new RequiredFieldValidator();
-        txtUsername.getValidators().add(usernameValidator);
-        usernameValidator.setMessage("Please fill out username.");
-        txtPassword.getValidators().add(passwordValidator);
-        passwordValidator.setMessage("Please fill out password");
-        txtUsername.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                txtUsername.validate();
-            }
-        });
-        txtPassword.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                txtPassword.validate();
-            }
-        });
     }
 
     private void initializeRoot(User user) {
@@ -116,7 +101,7 @@ public class LoginController implements Initializable {
             Scene scene = new Scene(root);
             Image icon = new Image(getClass().getResourceAsStream(APP_ICON));
             stage.getIcons().add(icon);
-            stage.setTitle("BrightTime");
+            stage.setTitle("bright time");
             stage.setMinWidth(850);
             stage.setMinHeight(400);
             stage.setScene(scene);
@@ -128,25 +113,9 @@ public class LoginController implements Initializable {
         }
     }
 
-    private void authenticateUser() {
-        try {
-            user = authenticationModel.authenticateUser(txtUsername.getText(), txtPassword.getText());
-            if (user != null) {
-                Platform.runLater(() -> {
-                    initializeRoot(user);
-                    closeLogin();
-                });
-            }
-        } catch (ModelException ex) {
-            alertManager.showAlert("Could not authenticate user.", "An error occured: " + ex.getMessage());
-        }
-
-    }
-
-    private void closeLogin() {
-        Stage loginStage;
-        loginStage = (Stage) btnLogIn.getScene().getWindow();
-        loginStage.close();
+    private void fieldValidator() {
+        validationManager.inputValidation(txtUsername, "Please fill out username.");
+        validationManager.inputValidationPassword(txtPassword, "Please fill out password");
     }
 
     private boolean validateInput() {
@@ -167,6 +136,27 @@ public class LoginController implements Initializable {
             return false;
         }
         return true;
+    }
+
+    private void authenticateUser() {
+        try {
+            user = authenticationModel.authenticateUser(txtUsername.getText().trim(), txtPassword.getText().trim());
+            if (user != null) {
+                Platform.runLater(() -> {
+                    initializeRoot(user);
+                    closeLogin();
+                });
+            }
+        } catch (ModelException ex) {
+            alertManager.showAlert("Could not authenticate user.", "An error occured: " + ex.getMessage());
+        }
+
+    }
+
+    private void closeLogin() {
+        Stage loginStage;
+        loginStage = (Stage) btnLogIn.getScene().getWindow();
+        loginStage.close();
     }
 
 }

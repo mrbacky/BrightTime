@@ -33,18 +33,20 @@ import javafx.stage.Stage;
 public class RootController implements Initializable {
 
     private final String TIME_TRACKER_MODULE = "/brighttime/gui/view/TimeTracker.fxml";
+    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
     private final String ADMIN_MENU_MODULE = "/brighttime/gui/view/Administration.fxml";
     private final String ADMIN_CLIENTS_MODULE = "/brighttime/gui/view/ClientsManager.fxml";
     private final String ADMIN_PROJECTS_MODULE = "/brighttime/gui/view/ProjectsManager.fxml";
-    private final String OVERVIEW_MODULE = "/brighttime/gui/view/Overview.fxml";
+    private final String ADMIN_USERS_MODULE = "/brighttime/gui/view/UsersManager.fxml";
     private final String LOGIN_VIEW = "/brighttime/gui/view/Login.fxml";
     private final String APP_ICON = "/brighttime/gui/view/assets/sun_48px.png";
-    private final String ADMIN_USERS_MODULE = "/brighttime/gui/view/UsersManager.fxml";
 
     @FXML
     private AnchorPane anchorPaneRoot;
     @FXML
     private BorderPane rootBorderPane;
+    @FXML
+    private VBox vBoxRootButtons;
     @FXML
     private JFXButton btnTimeTracker;
     @FXML
@@ -52,7 +54,7 @@ public class RootController implements Initializable {
     @FXML
     private JFXNodesList nodesList;
     @FXML
-    private JFXButton btnCreator;
+    private JFXButton btnAdministration;
     @FXML
     private JFXButton btnClients;
     @FXML
@@ -61,10 +63,9 @@ public class RootController implements Initializable {
     private JFXButton btnUsers;
     @FXML
     private JFXButton btnLogout;
-    @FXML
-    private VBox vBoxRootButtons;
-    private final ToolTipManager toolTipManager;
+
     private final AlertManager alertManager;
+    private final ToolTipManager toolTipManager;
 
     private IMainModel mainModel;
     private User user;
@@ -82,14 +83,6 @@ public class RootController implements Initializable {
         this.mainModel = mainModel;
     }
 
-    private void setUser() {
-        user = mainModel.getUser();
-        if (user.getType().equals(User.UserType.STANDARD)) {
-            Node nodeList = vBoxRootButtons.getChildren().get(2);
-            vBoxRootButtons.getChildren().remove(nodeList);
-        }
-    }
-
     public void initializeView() {
         setUser();
         loadModule(TIME_TRACKER_MODULE);
@@ -98,7 +91,14 @@ public class RootController implements Initializable {
         showAdminClientModule();
         showAdminProjectModule();
         showAdminUserModule();
+    }
 
+    private void setUser() {
+        user = mainModel.getUser();
+        if (user.getType().equals(User.UserType.STANDARD)) {
+            Node nodeList = vBoxRootButtons.getChildren().get(2);
+            vBoxRootButtons.getChildren().remove(nodeList);
+        }
     }
 
     public void loadModule(String module) {
@@ -149,20 +149,8 @@ public class RootController implements Initializable {
     }
 
     @FXML
-    private void loadCreatorModule(ActionEvent event) {
+    private void loadAdminModule(ActionEvent event) {
         loadModule(ADMIN_MENU_MODULE);
-    }
-
-    void loadAdminClientModule() {
-        loadModule(ADMIN_CLIENTS_MODULE);
-    }
-
-    void loadAdminProjectModule() {
-        loadModule(ADMIN_PROJECTS_MODULE);
-    }
-
-    void loadAdminUserModule() {
-        loadModule(ADMIN_USERS_MODULE);
     }
 
     void displayAdminMenuItems() {
@@ -172,18 +160,6 @@ public class RootController implements Initializable {
             } else {
                 nodesList.animateList(false);
             }
-        });
-    }
-
-    void showAdminMenu() {
-        nodesList.setOnMouseEntered((event) -> {
-            nodesList.animateList();
-        });
-    }
-
-    void hideAdminMenu() {
-        nodesList.setOnMouseExited((event) -> {
-            nodesList.animateList(false);
         });
     }
 
@@ -205,12 +181,25 @@ public class RootController implements Initializable {
         });
     }
 
+    void loadAdminClientModule() {
+        loadModule(ADMIN_CLIENTS_MODULE);
+    }
+
+    void loadAdminProjectModule() {
+        loadModule(ADMIN_PROJECTS_MODULE);
+    }
+
+    void loadAdminUserModule() {
+        loadModule(ADMIN_USERS_MODULE);
+    }
+
     private void setToolTipsForButtons() {
         toolTipManager.setToolTipForOneButton(btnTimeTracker, "Time Tracker");
         toolTipManager.setToolTipForOneButton(btnOverview, "Overview");
-        toolTipManager.setToolTipForOneButton(btnCreator, "Administration");
+        toolTipManager.setToolTipForOneButton(btnAdministration, "Administration");
         toolTipManager.setToolTipForOneButton(btnClients, "Manage Clients");
         toolTipManager.setToolTipForOneButton(btnProjects, "Manage Projects");
+        toolTipManager.setToolTipForOneButton(btnUsers, "Manage Users");
         toolTipManager.setToolTipForOneButton(btnLogout, "Logout");
     }
 
