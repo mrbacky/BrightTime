@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import javafx.collections.MapChangeListener;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,34 +43,37 @@ import javafx.util.converter.LocalDateStringConverter;
  */
 public class TimeTrackerController implements Initializable {
 
-    private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final String TASK_CREATOR_FXML = "/brighttime/gui/view/TaskCreator.fxml";
+    private final String TASK_ITEM_FXML = "/brighttime/gui/view/TaskItem.fxml";
     private final StringConverter<LocalDate> dateConverter = new LocalDateStringConverter(FormatStyle.FULL, Locale.ENGLISH, Chronology.ofLocale(Locale.ENGLISH));
 
     @FXML
-    private VBox vBoxMain;
+    private GridPane grid;
+
     @FXML
     private JFXButton btnSwitchMode;
-    @FXML
-    private GridPane grid;
+
     @FXML
     private JFXDatePicker datePickerStart;
     @FXML
     private JFXDatePicker datePickerEnd;
 
-    private final DatePickerCustomizer datePickerCustomizer;
+    @FXML
+    private VBox vBoxTasks;
 
+    private User user;
+    private IMainModel mainModel;
+    private final AlertManager alertManager;
+
+    private TaskCreatorController createTaskContr;
+
+    private final DatePickerCustomizer datePickerCustomizer;
     private LocalDate taskFilterStartDate;
     private LocalDate taskFilterEndDate;
 
-    private final AlertManager alertManager;
-    private TaskCreatorController createTaskContr;
-    private LocalDate date = LocalDate.MIN;
-    private User user;
-
     private MapChangeListener<LocalDate, List<TaskConcrete1>> taskMapListener;
-    private IMainModel mainModel;
-    int i = 0;
+
+    private int i = 0;
 
     public TimeTrackerController() {
         this.alertManager = new AlertManager();
@@ -94,7 +96,6 @@ public class TimeTrackerController implements Initializable {
     }
 
     public void initializeView() {
-
         setUser();
         setDateRestrictions();
         setInitialFilter();
@@ -104,17 +105,6 @@ public class TimeTrackerController implements Initializable {
         setUpTaskCreator();
         loadAndInitTasks();
         switchLoggingMode();
-
-    }
-
-    public void loadAndInitTasks() {
-        try {
-            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
-            initTasks();
-
-        } catch (ModelException ex) {
-            alertManager.showAlert("Unable to load tasks.", "Error: " + ex.getMessage());
-        }
     }
 
     public void setUser() {
@@ -135,6 +125,81 @@ public class TimeTrackerController implements Initializable {
         datePickerEnd.setValue(taskFilterEndDate);
         datePickerStart.converterProperty().setValue(dateConverter);
         datePickerEnd.converterProperty().setValue(dateConverter);
+    }
+
+    private void listenStartDate() {
+        datePickerStart.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && datePickerEnd.getValue() != null) {
+                filterByTimeFrame();
+            }
+        });
+    }
+
+    private void listenEndDate() {
+        datePickerEnd.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && datePickerStart.getValue() != null) {
+                filterByTimeFrame();
+            }
+        });
+    }
+
+    private void filterByTimeFrame() {
+        if (checkTimeFrame()) {
+            loadAndInitTasks();
+        } else {
+            alertManager.showAlert("The time frame is invalid.", "The end date is before the start date. Please check the selection.");
+        }
+    }
+
+    private boolean checkTimeFrame() {
+        return datePickerStart.getValue().isBefore(datePickerEnd.getValue()) || datePickerStart.getValue().isEqual(datePickerEnd.getValue());
+    }
+
+    public void loadAndInitTasks() {
+        try {
+            mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
+            initTasks();
+        } catch (ModelException ex) {
+            alertManager.showAlert("Unable to load tasks.", "Error: " + ex.getMessage());
+        }
+    }
+
+    public void initTasks() {
+        vBoxTasks.getChildren().clear();
+        Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTaskMap();
+        Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
+        orderedMap.putAll(taskList);
+        for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
+            LocalDate dateKey = entry.getKey();
+            List<TaskConcrete1> taskListValue = entry.getValue();
+
+            String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+            Label label = new Label(formatted);
+            label.getStyleClass().add("labelMenuItem");
+            vBoxTasks.getChildren().add(label);
+            label.translateXProperty().set(25);
+            for (TaskConcrete1 task : taskListValue) {
+                addTaskItem(task, dateKey);
+            }
+        }
+    }
+
+    public void addTaskItem(TaskConcrete1 task, LocalDate dateKey) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
+            Parent root = fxmlLoader.load();
+            ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
+            taskModel.setTask(task);
+            taskModel.setDate(dateKey);
+            taskModel.initializeTaskModel();
+            TaskItemController controller = fxmlLoader.getController();
+            controller.injectTimeTrackerController(this);
+            controller.injectModel(taskModel);
+            controller.initializeView();
+            vBoxTasks.getChildren().add(root);
+        } catch (IOException ex) {
+            alertManager.showAlert("Could not create a task", "Error: " + ex.getMessage());
+        }
     }
 
     public void setUpTaskMapListener() {
@@ -161,48 +226,6 @@ public class TimeTrackerController implements Initializable {
         }
     }
 
-    public void initTasks() {
-        date = LocalDate.MIN;
-        vBoxMain.getChildren().clear();
-        Map<LocalDate, List<TaskConcrete1>> taskList = mainModel.getTaskMap();
-        Map<LocalDate, List<TaskConcrete1>> orderedMap = new TreeMap<>(Collections.reverseOrder());
-        orderedMap.putAll(taskList);
-        for (Map.Entry<LocalDate, List<TaskConcrete1>> entry : orderedMap.entrySet()) {
-            LocalDate dateKey = entry.getKey();
-            List<TaskConcrete1> taskListValue = entry.getValue();
-            if (!dateKey.equals(date)) {
-                String formatted = dateKey.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
-                Label label = new Label(formatted);
-                label.getStyleClass().add("labelMenuItem");
-                vBoxMain.getChildren().add(label);
-                label.translateXProperty().set(25);
-                date = dateKey;
-            }
-            for (TaskConcrete1 task : taskListValue) {
-                addTaskItem(task);
-            }
-        }
-    }
-
-    public void addTaskItem(TaskConcrete1 task) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(TASK_ITEM_FXML));
-            Parent root = fxmlLoader.load();
-            ITaskModel taskModel = ModelCreator.getInstance().createTaskModel();
-            taskModel.setTask(task);
-            taskModel.setDate(date);
-            taskModel.initializeTaskModel();
-            TaskItemController controller = fxmlLoader.getController();
-            controller.injectTimeTrackerController(this);
-            controller.injectModel(taskModel);
-            controller.initializeView();
-            vBoxMain.getChildren().add(root);
-        } catch (IOException ex) {
-            alertManager.showAlert("Could not create a task", "Error: " + ex.getMessage());
-        }
-
-    }
-
     public void switchLoggingMode() {
         btnSwitchMode.setText("Switch to manual logging");
         btnSwitchMode.getStyleClass().add("buttonSwitchMode");
@@ -216,41 +239,6 @@ public class TimeTrackerController implements Initializable {
             }
             i++;
         });
-
-    }
-
-    private void listenStartDate() {
-        datePickerStart.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && datePickerEnd.getValue() != null) {
-                filterByTimeFrame();
-            }
-        });
-    }
-
-    private void listenEndDate() {
-        datePickerEnd.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && datePickerStart.getValue() != null) {
-                filterByTimeFrame();
-            }
-        });
-    }
-
-    private void filterByTimeFrame() {
-        if (checkTimeFrame()) {
-            try {
-                mainModel.loadTasks(new Filter(user, null, datePickerStart.getValue(), datePickerEnd.getValue()));
-                initTasks();
-            } catch (ModelException ex) {
-                alertManager.showAlert("Could not load filter based tasks.", "Error: " + ex.getMessage());
-            }
-        } else {
-            alertManager.showAlert("The time frame is invalid.", "The end date is before the start date. Please check the selection.");
-
-        }
-    }
-
-    private boolean checkTimeFrame() {
-        return datePickerStart.getValue().isBefore(datePickerEnd.getValue()) || datePickerStart.getValue().isEqual(datePickerEnd.getValue());
     }
 
 }

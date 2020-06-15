@@ -28,7 +28,7 @@
          <children>
               <ScrollPane id="spTasks" fitToHeight="true" fitToWidth="true" stylesheets="@css/style.css" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
                   <content>
-                      <VBox id="vBoxMain" fx:id="vBoxMain" prefHeight="10000.0">
+                      <VBox id="vBoxMain" fx:id="vBoxTasks" prefHeight="10000.0">
                           <padding>
                               <Insets top="10.0" />
                           </padding>
