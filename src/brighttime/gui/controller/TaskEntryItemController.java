@@ -94,7 +94,7 @@ public class TaskEntryItemController implements Initializable {
 
     @FXML
     private void handleEditStartTime(Event event) throws ModelException {
-        LocalTime updatedStartTime = timePickerStartTime.getValue();
+        LocalTime updatedStartTime = taskEntryModel.getStartTime();
         if (updatedStartTime.isBefore(taskEntryModel.getEndTime())) {
             try {
                 taskEntryModel.updateTaskEntryStartTime();
@@ -114,7 +114,7 @@ public class TaskEntryItemController implements Initializable {
 
     @FXML
     private void handleEditEndTime(Event event) throws ModelException {
-        LocalTime updatedEndTime = timePickerEndTime.getValue();
+        LocalTime updatedEndTime = taskEntryModel.getEndTime();
         if (updatedEndTime.isAfter(taskEntryModel.getStartTime())) {
             try {
                 taskEntryModel.updateTaskEntryEndTime();
