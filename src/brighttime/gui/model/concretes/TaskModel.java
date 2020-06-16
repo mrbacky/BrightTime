@@ -21,7 +21,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
-
 public class TaskModel implements ITaskModel {
 
     private final BllFacade bllManager;
@@ -54,8 +53,9 @@ public class TaskModel implements ITaskModel {
 
     @Override
     public void setupDayEntryList() {
-        List<TaskEntry> dayEntries = task.getTaskEntryList().stream().filter(allEntries
-                -> allEntries.getStartTime().toLocalDate().equals(date)).collect(Collectors.toList());
+        List<TaskEntry> dayEntries = task.getTaskEntryList().stream()
+                .filter(singleTaskEntry -> singleTaskEntry.getStartTime().toLocalDate().equals(date))
+                .collect(Collectors.toList());
         dayEntries.sort(Comparator.comparing(o -> o.getStartTime()));
         dayEntryList.clear();
         dayEntryList.addAll(dayEntries);
