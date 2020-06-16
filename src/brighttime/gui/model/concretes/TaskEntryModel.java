@@ -51,7 +51,6 @@ public class TaskEntryModel implements ITaskEntryModel {
     public void setupStartTimeListener() {
         startTime.addListener((ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) -> {
             if (newValue.isBefore(taskEntry.getEndTime().toLocalTime())) {
-                System.out.println("new val: " + newValue);
                 LocalDateTime startTimeFull = LocalDateTime.of(getDate(), newValue);
                 taskEntry.setStartTime(startTimeFull);
                 stringDuration.set(secToFormat((int) calculateDuration(taskEntry).toSeconds()));
