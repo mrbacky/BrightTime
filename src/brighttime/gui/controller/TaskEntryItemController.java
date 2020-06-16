@@ -95,7 +95,7 @@ public class TaskEntryItemController implements Initializable {
     @FXML
     private void handleEditStartTime(Event event) throws ModelException {
         LocalTime updatedStartTime = timePickerStartTime.getValue();
-        if (updatedStartTime.isBefore(taskEntryModel.getEndTime()) && !updatedStartTime.equals(initialStartTime)) {
+        if (updatedStartTime.isBefore(taskEntryModel.getEndTime())) {
             try {
                 taskEntryModel.updateTaskEntryStartTime();
                 initialStartTime = taskEntryModel.getStartTime();
@@ -103,9 +103,9 @@ public class TaskEntryItemController implements Initializable {
                 taskEntryModel.setStartTime(initialStartTime);
                 alertManager.showAlert("Unable to edit start time of task entry", "Check your internet connection. " + ex.getMessage());
             }
-
-        } else if (updatedStartTime.isAfter(taskEntryModel.getEndTime()) || updatedStartTime.equals(taskEntryModel.getEndTime())) {
+        } else {
             Platform.runLater(() -> {
+                taskEntryModel.setStartTime(initialStartTime);
                 alertManager.showAlert("Invalid input", "Start time has to be before end time");
                 timePickerStartTime.show();
             });
@@ -115,7 +115,7 @@ public class TaskEntryItemController implements Initializable {
     @FXML
     private void handleEditEndTime(Event event) throws ModelException {
         LocalTime updatedEndTime = timePickerEndTime.getValue();
-        if (updatedEndTime.isAfter(taskEntryModel.getStartTime()) && !updatedEndTime.equals(initialEndTime)) {
+        if (updatedEndTime.isAfter(taskEntryModel.getStartTime())) {
             try {
                 taskEntryModel.updateTaskEntryEndTime();
                 initialEndTime = taskEntryModel.getEndTime();
@@ -123,8 +123,9 @@ public class TaskEntryItemController implements Initializable {
                 taskEntryModel.setEndTime(initialEndTime);
                 alertManager.showAlert("Unable to edit end time of task entry", "Check your internet connection." + ex.getMessage());
             }
-        } else if (updatedEndTime.isBefore(taskEntryModel.getStartTime()) || updatedEndTime.equals(taskEntryModel.getStartTime())) {
+        } else {
             Platform.runLater(() -> {
+                taskEntryModel.setEndTime(initialEndTime);
                 alertManager.showAlert("Invalid input", "End time has to be after start time");
                 timePickerEndTime.show();
             });
