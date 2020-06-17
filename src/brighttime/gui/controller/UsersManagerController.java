@@ -180,23 +180,19 @@ public class UsersManagerController implements Initializable {
         colUserName.setOnEditCommit((TableColumn.CellEditEvent<User, String> e) -> {
             User u = tbvUsers.getItems().get(e.getTablePosition().getRow());
             String oldUserName = e.getOldValue();
-            if (inputValidator.usernameCheck(u.getUsername())) {
+            if (inputValidator.usernameCheck(e.getNewValue())) {//  checking the new value of username
                 try {
                     u.setUsername(e.getNewValue());
                     mainModel.updateUserDetails(u);
                 } catch (ModelException ex) {
                     Platform.runLater(() -> {
                         u.setUsername(oldUserName);
-                        e.getTableView().getColumns().get(2).setVisible(false);
-                        e.getTableView().getColumns().get(2).setVisible(true);
                         alertManager.showAlert("Could not edit user name", "Error: " + ex.getMessage());
                     });
                 }
             } else {
                 Platform.runLater(() -> {
                     u.setUsername(oldUserName);
-                    e.getTableView().getColumns().get(2).setVisible(false);
-                    e.getTableView().getColumns().get(2).setVisible(true);
                     alertManager.showAlert("The username is invalid.", "Please try another username.");
                 });
 
